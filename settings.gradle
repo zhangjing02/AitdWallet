@@ -1,0 +1,4 @@
+include ':cryptolib'
+include ':baselib'
+include ':app'
+rootProject.name = "AitdWallet"
