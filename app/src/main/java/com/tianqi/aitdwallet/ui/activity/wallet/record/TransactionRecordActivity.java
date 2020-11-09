@@ -333,6 +333,13 @@ public class TransactionRecordActivity extends BaseActivity {
                 }
             }
         }
+
+        //如果是转出，但是在output中没找到不是自己的地址，则应该是自己给自己转账，我们就拿第一比输出作为转金额。
+        if (type == Constant.TRANSACTION_TYPE_SEND&&spend_value==0){
+            if (data.get(i).getTxs().get(j).getOutputs().size()>0){
+                spend_value=Double.valueOf(data.get(i).getTxs().get(j).getOutputs().get(0).getValue());
+            }
+        }
         //创建（转出）数据库交易，存入数据库
         TransactionRecord tx_record = new TransactionRecord();
         tx_record.setAddress(coinInfo.getCoin_address());
@@ -363,7 +370,6 @@ public class TransactionRecordActivity extends BaseActivity {
             refreshLayout.finishRefresh();
         }
     }
-
 
     private void initBtcLoadingRecord(CoinInfo coinInfo) {
         String coin_type_params = null;

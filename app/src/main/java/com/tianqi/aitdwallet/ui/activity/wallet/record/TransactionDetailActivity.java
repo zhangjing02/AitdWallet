@@ -177,6 +177,14 @@ public class TransactionDetailActivity extends BaseActivity {
                                             receive_value=receive_value+Double.valueOf(data.getOutputs().get(i).getValue());
                                         }
                                     }
+
+                                    //如果是转出，但是在output中没找到不是自己的地址，则应该是自己给自己转账，我们就拿第一比输出作为转金额。
+                                    if (receive_value==0){
+                                        if (data.getOutputs().size()>0){
+                                            receive_value=Double.valueOf(data.getOutputs().get(0).getValue());
+                                        }
+                                    }
+
                                     SpannableString spannableString = new SpannableString(DataReshape.doubleBig(receive_value,8) +" "+ txFrId.getUnit());
                                     //  SpannableString spannableString = new SpannableString(34.256478222555+" BTC");
                                     ForegroundColorSpan colorSpan = new ForegroundColorSpan(getResources().getColor(R.color.textLightGrey));
