@@ -18,6 +18,7 @@ import com.tianqi.aitdwallet.utils.statusbar.StatusBarCompat;
 import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dbManager.CoinInfoManager;
+import com.tianqi.baselib.utils.Constant;
 import com.tianqi.baselib.utils.display.GlideUtils;
 import com.tianqi.baselib.utils.display.ToastUtil;
 import com.tianqi.baselib.utils.eventbus.EventMessage;
@@ -58,6 +59,8 @@ public class WalletSettingFrImportActivity extends BaseActivity {
     TextView tvDeleteWallet;
     @BindView(R.id.line_down_mnemonic)
     View lineDownMnemonic;
+    @BindView(R.id.line_down_keystore)
+    View lineDownKeystore;
     private String wallet_name;
     private String coin_id;
 
@@ -88,6 +91,16 @@ public class WalletSettingFrImportActivity extends BaseActivity {
         tvBackUpMnemonic.setVisibility(View.GONE);
         tvDeleteWallet.setVisibility(View.VISIBLE);
         lineDownMnemonic.setVisibility(View.GONE);
+
+
+        if (wallet_name.contains(Constant.TRANSACTION_COIN_NAME_ETH)) {
+            tvExportKeystore.setVisibility(View.VISIBLE);
+            lineDownKeystore.setVisibility(View.VISIBLE);
+        } else {
+            tvExportKeystore.setVisibility(View.GONE);
+            lineDownKeystore.setVisibility(View.GONE);
+        }
+
     }
 
     private void getToolBar() {
@@ -131,6 +144,10 @@ public class WalletSettingFrImportActivity extends BaseActivity {
                 startActivity(intent);
                 break;
             case R.id.tv_export_keystore:
+                intent = new Intent(this, VerifySecurityPsdActivity.class);
+                intent.putExtra(Constants.INTENT_PUT_TAG, Constants.INTENT_PUT_EXPORT_KEYSTORE);
+                intent.putExtra(Constants.TRANSACTION_COIN_NAME, wallet_name);
+                startActivity(intent);
                 break;
             case R.id.tv_back_up_mnemonic:
                 //INTENT_PUT_BACK_UP_MNEMONIC

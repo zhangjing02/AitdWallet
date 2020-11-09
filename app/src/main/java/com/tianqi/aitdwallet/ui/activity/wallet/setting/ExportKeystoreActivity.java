@@ -106,7 +106,7 @@ public class ExportKeystoreActivity extends BaseActivity {
         wallet_psd = getIntent().getStringExtra(Constants.INTENT_PUT_COIN_PASSWORD);
 
         mainCoinFrCoinId = CoinInfoManager.getMainCoinFrCoinId(wallet_name);
-        // TODO: 2020/11/9 keystore生成
+        //一般在创建钱包的时候，都已经存储了keystore，如果没有keystore就自己再生成一遍。
         if (TextUtils.isEmpty(mainCoinFrCoinId.getKeystoreStr())){
             Observable.create((ObservableOnSubscribe<String>) emitter -> {
                 emitter.onNext(mainCoinFrCoinId.getPrivateKey());
@@ -132,7 +132,7 @@ public class ExportKeystoreActivity extends BaseActivity {
             tvCoinPrivateKey.setText(mainCoinFrCoinId.getKeystoreStr());
         }
 
-        Bitmap qrCodeBitmap = CodeEncoder.createImage(mainCoinFrCoinId.getPrivateKey(), ivShowKeyQr.getLayoutParams().width, ivShowKeyQr.getLayoutParams().height, null);
+        Bitmap qrCodeBitmap = CodeEncoder.createImage(mainCoinFrCoinId.getKeystoreStr(), ivShowKeyQr.getLayoutParams().width, ivShowKeyQr.getLayoutParams().height, null);
         ivShowKeyQr.setImageBitmap(qrCodeBitmap);
         for (int i = 0; i < titles.length; i++) {
             tablayout.addTab(tablayout.newTab());
@@ -166,7 +166,6 @@ public class ExportKeystoreActivity extends BaseActivity {
                         btnKeyCopy.setVisibility(View.GONE);
 
                         break;
-
                 }
             }
 

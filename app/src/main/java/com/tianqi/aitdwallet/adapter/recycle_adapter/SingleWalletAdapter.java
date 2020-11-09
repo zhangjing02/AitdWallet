@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.ui.activity.wallet.importwallet.ImportBtcCoinActivity;
+import com.tianqi.aitdwallet.ui.activity.wallet.importwallet.ImportEthCoinActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.importwallet.ImportUsdtCoinActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.record.TransactionRecordActivity;
 import com.tianqi.aitdwallet.utils.Constants;
@@ -95,9 +96,13 @@ public class SingleWalletAdapter extends RecyclerView.Adapter<SingleWalletAdapte
                         intent.putExtra(Constants.TRANSACTION_COIN_NAME, mMessageBeans.get(position).getCoin_name());
                         mContext.startActivity(intent);
                         break;
-
                     case Constant.TRANSACTION_COIN_NAME_USDT:
                         intent = new Intent(mContext, ImportUsdtCoinActivity.class);
+                        intent.putExtra(Constants.TRANSACTION_COIN_NAME, mMessageBeans.get(position).getCoin_name());
+                        mContext.startActivity(intent);
+                        break;
+                    case Constant.TRANSACTION_COIN_NAME_ETH:
+                        intent = new Intent(mContext, ImportEthCoinActivity.class);
                         intent.putExtra(Constants.TRANSACTION_COIN_NAME, mMessageBeans.get(position).getCoin_name());
                         mContext.startActivity(intent);
                         break;

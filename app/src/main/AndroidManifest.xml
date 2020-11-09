@@ -78,6 +78,7 @@
         <activity android:name=".ui.activity.wallet.usdt.UsdtTransactionActivity002" />
         <activity android:name=".ui.activity.wallet.record.TransactionRecordActivity" />
         <activity android:name=".ui.activity.wallet.setting.ExportKeystoreActivity" />
+        <activity android:name=".ui.activity.wallet.importwallet.ImportEthCoinActivity" />
     </application>
 
 </manifest>

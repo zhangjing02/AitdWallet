@@ -29,6 +29,34 @@
         app:tabTextAppearance="@style/TabLayoutTextStyle"
         app:tabTextColor="@color/textLightGrey" />
 
+
+    <LinearLayout
+        android:id="@+id/layout_import_keystore_notice"
+        android:layout_width="match_parent"
+        android:layout_height="67dp"
+        android:background="@drawable/bg_set_psd_notice"
+        app:layout_constraintTop_toBottomOf="@+id/tablayout"
+        android:paddingHorizontal="15dp"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginTop="30dp"
+        android:visibility="gone"
+        android:paddingVertical="12dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:src="@mipmap/ic_yellow_reminder"/>
+
+        <TextView
+            android:id="@+id/tv_import_keystore_notice"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="7dp"
+            android:text="@string/text_copy_keystore__notice"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
     <EditText
         android:id="@+id/et_input_key"
         android:layout_width="match_parent"
@@ -40,7 +68,32 @@
         android:paddingLeft="20dp"
         android:paddingTop="15dp"
         android:textSize="12sp"
-        app:layout_constraintTop_toBottomOf="@+id/tablayout" />
+        app:layout_constraintTop_toBottomOf="@+id/layout_import_keystore_notice" />
+
+    <EditText
+        android:id="@+id/et_keystore_psd"
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        app:layout_constraintTop_toBottomOf="@+id/et_input_key"
+        android:layout_marginTop="15dp"
+        style="@style/bg_edit_grey"
+        android:hint="@string/text_input_psd_hint"
+        android:visibility="gone"
+        android:textColorHint="@color/text_main_30_grey"
+        android:paddingLeft="15dp"
+        android:layout_marginHorizontal="15dp"/>
+
+
+    <ImageView
+        android:id="@+id/iv_psd_show"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:src="@mipmap/ic_close_eye"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/et_keystore_psd"
+        app:layout_constraintRight_toRightOf="@+id/et_keystore_psd"
+        app:layout_constraintTop_toTopOf="@+id/et_keystore_psd" />
 
 
     <GridView

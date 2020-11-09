@@ -94,6 +94,7 @@ public interface Constant {
 
     String TRANSACTION_COIN_NAME_BTC = "BTC";
     String IMPORT_BTC_ID = "BTC_IMPORT"; //导入的比特币id。
+    String IMPORT_ETH_ID = "ETH_IMPORT"; //导入的比特币id。
     String TRANSACTION_COIN_NAME_ETH = "ETH";
     String TRANSACTION_COIN_NAME_USDT = "USDT-OMNI";
     String IMPORT_USDT_ID = "USDT_IMPORT"; //导入的USDT的id。

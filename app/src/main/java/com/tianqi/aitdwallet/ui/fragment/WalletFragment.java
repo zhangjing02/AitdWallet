@@ -480,6 +480,8 @@ public class WalletFragment extends BaseFragment {
             rcvHomeWallet.setAdapter(homeWalletAdapter);
         } else if (event.getType() == EventMessage.NEW_COIN_UPDATE) {
             // TODO: 2020/11/2 导入了币种，不知道该更新点啥？
+            homeWalletAdapter = new HomeWalletAdapter(R.layout.layout_adapter_home_wallet_for_shadow, mWalletBeans);
+            rcvHomeWallet.setAdapter(homeWalletAdapter);
         }
     }
 

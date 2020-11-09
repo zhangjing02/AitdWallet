@@ -42,10 +42,10 @@ public class ImportSingleWalletFragment extends BaseFragment {
         coinInfo.setCoin_name(Constant.TRANSACTION_COIN_NAME_BTC);
         coinInfo.setResourceId(R.mipmap.ic_circle_btc);
         mMessageBeans.add(coinInfo);
-//        CoinInfo coinInfo2=new CoinInfo();
-//        coinInfo2.setCoin_name(Constant.TRANSACTION_COIN_NAME_ETH);
-//        coinInfo2.setResourceId(R.mipmap.ic_circle_eth);
-//        mMessageBeans.add(coinInfo2);
+        CoinInfo coinInfo2=new CoinInfo();
+        coinInfo2.setCoin_name(Constant.TRANSACTION_COIN_NAME_ETH);
+        coinInfo2.setResourceId(R.mipmap.ic_circle_eth);
+        mMessageBeans.add(coinInfo2);
 //        CoinInfo coinInfo3=new CoinInfo();
 //        coinInfo3.setCoin_name("AITD");
 //        coinInfo3.setResourceId(R.mipmap.ic_circle_aitd);

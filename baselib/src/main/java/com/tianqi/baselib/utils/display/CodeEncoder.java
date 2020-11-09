@@ -216,7 +216,7 @@ public final class CodeEncoder {
             Hashtable<EncodeHintType, Object> hints = new Hashtable<EncodeHintType, Object>();
             hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
             //容错级别
-            hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+            hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
             //设置空白边距的宽度
             hints.put(EncodeHintType.MARGIN, 0);
             BitMatrix bitMatrix = new QRCodeWriter().encode(text, BarcodeFormat.QR_CODE, w, h, hints);
@@ -243,7 +243,7 @@ public final class CodeEncoder {
                 }
             }
             Bitmap bitmap = Bitmap.createBitmap(w, h,
-                    Bitmap.Config.ARGB_8888);
+                    Bitmap.Config.ARGB_4444);
             bitmap.setPixels(pixels, 0, w, 0, 0, w, h);
             return bitmap;
         } catch (WriterException e) {

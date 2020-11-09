@@ -251,4 +251,8 @@
     <string name="text_psd_manage_tool_content">建议使用密码管理工具管理</string>
     <string name="btn_copy_keystore_text">复制Keystore</string>
     <string name="btn_copy_private_key_text">复制Private Key</string>
+    <string name="notice_same_keystore_text">已有同样的keystore</string>
+    <string name="notice_keystore_error_text">keystore不正确</string>
+    <string name="notice_keystore_psd_error_text">keystore密码不正确</string>
+    <string name="text_copy_keystore__notice">复制粘贴ETH钱包KeyStore文件内容至输入框，或者通过扫描Keystore二维码录入</string>
 </resources>
