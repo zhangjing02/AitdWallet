@@ -70,8 +70,11 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-
-
+/**
+ * @author zhangjing
+ * @date 2020/11/9
+ * @description btc原始的交易类。
+ */
 public class BitcoinTransactionActivity extends BaseActivity {
 
     private static final String TAG = "BitcoinWalletActivity";
@@ -358,7 +361,7 @@ public class BitcoinTransactionActivity extends BaseActivity {
 
                             //  tx_record.setId(0);
                             tx_record.setCoin_type(Constant.TRANSACTION_COIN_BTC);//0代表比特币。
-                            tx_record.setStatus(Constant.TRANSACTION_STATE_SUCCESS);
+                            tx_record.setStatus(Constant.TRANSACTION_STATE_WAITING);
                             tx_record.setTransType(Constant.TRANSACTION_TYPE_SEND);//0转账，1收款
                             tx_record.setCoin_id(walletBtcFrAddress.getCoin_id());
                             if (!TextUtils.isEmpty(etPaymentRemark.getText().toString())) {

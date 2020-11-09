@@ -322,7 +322,13 @@ public class WalletFragment extends BaseFragment {
                                 spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.text_main_yellow)), 0, end1, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                                 textView2.setText(spannableString);
                                 if (height <= 1920) {
-                                    int xx = (1920 - height) / 2;
+                                    int xx =0;
+                                    if (height<=1600){
+                                        xx = (1920 - height) /30;
+                                    }else {
+                                        xx = (1920 - height) / 2;
+                                    }
+
                                     LinearLayout.LayoutParams layoutParams002 = (LinearLayout.LayoutParams) textView9.getLayoutParams();
                                     layoutParams002.setMargins(0, 0, 0, 160 - xx);
                                     textView9.setLayoutParams(layoutParams002);
@@ -333,7 +339,6 @@ public class WalletFragment extends BaseFragment {
 //                                    layoutParams003.setMargins(0,0,0,500);
 //                                    textView4.setLayoutParams(layoutParams003);
                                 }
-
                             }
                         }))
                 .addGuidePage(GuidePage.newInstance()
@@ -355,7 +360,12 @@ public class WalletFragment extends BaseFragment {
                                 spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.text_main_yellow)), 0, end1, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                                 textView2.setText(spannableString);
                                 if (height <= 1920) {
-                                    int xx = (1920 - height) / 2;
+                                    int xx =0;
+                                    if (height<=1600){
+                                        xx = (1920 - height) /30;
+                                    }else {
+                                        xx = (1920 - height) / 2;
+                                    }
                                     LinearLayout.LayoutParams layoutParams002 = (LinearLayout.LayoutParams) textView9.getLayoutParams();
                                     layoutParams002.setMargins(0, 0, 0, 100);
                                     textView9.setLayoutParams(layoutParams002);

@@ -1,6 +1,5 @@
 package com.tianqi.aitdwallet.ui.activity.wallet.record;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -67,6 +66,12 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+
+/**
+ * @author zhangjing
+ * @date 2020/11/9
+ * @description  交易记录的类，此处还缺少分页加载的逻辑。
+ */
 
 public class TransactionRecordActivity extends BaseActivity {
 

@@ -75,8 +75,11 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-
-
+/**
+ * @author zhangjing
+ * @date 2020/11/9
+ * @description btc原始的交易类。
+ */
 public class UsdtTransactionActivity extends BaseActivity {
 
     private static final String TAG = "UsdtTransactionActivity";

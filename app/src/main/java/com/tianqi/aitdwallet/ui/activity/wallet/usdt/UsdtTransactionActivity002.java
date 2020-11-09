@@ -77,7 +77,11 @@ import io.reactivex.ObservableOnSubscribe;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-
+/**
+ * @author zhangjing
+ * @date 2020/11/9
+ * @description usdt交易暂时使用类，这里加入了listunspent过滤逻辑，防止第三方服务没有及时清理listunspent交易，导致双花的问题。
+ */
 public class UsdtTransactionActivity002 extends BaseActivity {
 
     private static final String TAG = "UsdtTransactionActivity";

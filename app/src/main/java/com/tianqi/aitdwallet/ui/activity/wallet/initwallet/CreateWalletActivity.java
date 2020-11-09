@@ -89,9 +89,9 @@ public class CreateWalletActivity extends BaseActivity {
         map.put(Constant.ACTION_IMAGE, R.mipmap.ic_circle_unloading_btc);
         coin_list.add(map);
 
-//        map = new HashMap();
-//        map.put(Constant.ACTION_IMAGE, R.mipmap.ic_circle_unloading_eth);
-//        coin_list.add(map);
+        map = new HashMap();
+        map.put(Constant.ACTION_IMAGE, R.mipmap.ic_circle_unloading_eth);
+        coin_list.add(map);
 
 
         map = new HashMap();
@@ -126,21 +126,6 @@ public class CreateWalletActivity extends BaseActivity {
             emitter.onNext(master);
         }).map(master -> {
             //获取各个币种的汇率，存入币种汇率的数据库中。
-            gson = new Gson();
-//            Response response = HttpClientUtil.getInstance().getJson("https://fxhapi.feixiaohao.com/public/v1/ticker?limit=10&convert=CNY");
-//            if (response != null && response.isSuccessful()) {
-//                Type listType = new TypeToken<List<CoinRateInfo>>() {
-//                }.getType();
-//                coinRateBeans = gson.fromJson(response.body().string(), listType);
-//                Log.i("WalletFragment", "initData: 插入001" + coinRateBeans.size());
-//                CoinRateInfoManager.insertOrUpdateList(coinRateBeans);
-//            } else {
-//                Type listType = new TypeToken<List<CoinRateInfo>>() {
-//                }.getType();
-//                coinRateBeans = gson.fromJson(Constant.COIN_RATE_JSON, listType);
-//                Log.i("WalletFragment", "initData: 插入002" + coinRateBeans.size());
-//                CoinRateInfoManager.insertOrUpdateList(coinRateBeans);
-//            }
             //1.创建btc币种。
             //钱包数据库
             WalletInfo walletInfo = createWalletInfo(master.getAddress(), Constant.TRANSACTION_COIN_NAME_BTC);
@@ -152,34 +137,34 @@ public class CreateWalletActivity extends BaseActivity {
             });
             return walletInfo;
         })
-//                .map(walletInfo -> {
-//            //创建ETH币种。
-//            //钱包数据库
-//            ECKeyPair master = WalletUtils.createCoinMaser(CoinTypes.Ethereum);
-//            WalletInfo eht_walletInfo = createWalletInfo(master.getAddress(), Constant.TRANSACTION_COIN_NAME_ETH);
-//            //币种数据库
-//            insertCoinInfo(master, eht_walletInfo);
-//
-//            // TODO: 2020/10/10 随后应该加入盼错逻辑，即使报错，也应该继续更新进度。
-//            runOnUiThread(() -> {   //只能在主线程更新ui
-//                index_loading++;
-//                walletCoinAdapter.loadingIndex(index_loading);
-//            });
-//            return eht_walletInfo;
-//        })
                 .map(walletInfo -> {
-            //创建USDT币种。
-            //币种数据库,USDT用的东西都是比特币那一套，所以都用bitcoin的方式创建
-            ECKeyPair master = WalletUtils.createCoinMaser(CoinTypes.Bitcoin);
-            WalletInfo usdt_walletInfo = createWalletInfo(master.getAddress(), Constant.TRANSACTION_COIN_NAME_USDT);
-            insertCoinInfo(master, usdt_walletInfo);
+                    //创建ETH币种。
+                    //钱包数据库
+                    ECKeyPair master = WalletUtils.createCoinMaser(CoinTypes.Ethereum);
+                    WalletInfo eht_walletInfo = createWalletInfo(master.getAddress(), Constant.TRANSACTION_COIN_NAME_ETH);
+                    //币种数据库
+                    insertCoinInfo(master, eht_walletInfo);
 
-            runOnUiThread(() -> {  //只能在主线程更新ui
-                index_loading++;
-                walletCoinAdapter.loadingIndex(index_loading);
-            });
-            return usdt_walletInfo;
-        }).compose(RxHelper.pool_main())
+                    // TODO: 2020/10/10 随后应该加入盼错逻辑，即使报错，也应该继续更新进度。
+                    runOnUiThread(() -> {   //只能在主线程更新ui
+                        index_loading++;
+                        walletCoinAdapter.loadingIndex(index_loading);
+                    });
+                    return eht_walletInfo;
+                })
+                .map(walletInfo -> {
+                    //创建USDT币种。
+                    //币种数据库,USDT用的东西都是比特币那一套，所以都用bitcoin的方式创建
+                    ECKeyPair master = WalletUtils.createCoinMaser(CoinTypes.Bitcoin);
+                    WalletInfo usdt_walletInfo = createWalletInfo(master.getAddress(), Constant.TRANSACTION_COIN_NAME_USDT);
+                    insertCoinInfo(master, usdt_walletInfo);
+
+                    runOnUiThread(() -> {  //只能在主线程更新ui
+                        index_loading++;
+                        walletCoinAdapter.loadingIndex(index_loading);
+                    });
+                    return usdt_walletInfo;
+                }).compose(RxHelper.pool_main())
                 .subscribe(baseEntity -> {
                     //模拟新建多个币种的，依次进行loading的效果，实际项目中，以创建初始化完一个币种后，再进行下一个币种的创建和初始化。
 //                    RxToolUtil.interval(5000, number -> {
@@ -193,7 +178,7 @@ public class CreateWalletActivity extends BaseActivity {
 //                        }
 //                    });
                     tvCreateWalletNotice.setText(R.string.notice_create_success);
-                    GlideUtils.loadResourceImage(this,R.mipmap.ic_create_wallet_finish,ivCreateWalletTittle);
+                    GlideUtils.loadResourceImage(this, R.mipmap.ic_create_wallet_finish, ivCreateWalletTittle);
                     RxToolUtil.cancel();
                     btnCreateWallet.setVisibility(View.VISIBLE);
                 });
@@ -272,7 +257,6 @@ public class CreateWalletActivity extends BaseActivity {
         Log.i("WalletFragment", "insertBtcCoinInfo: 我们看插入的币种信息是？" + coinInfo.toString());
         CoinInfoManager.insertOrUpdate(coinInfo);
     }
-
 
 
     @OnClick(R.id.btn_create_wallet)
