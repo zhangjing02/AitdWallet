@@ -4,8 +4,6 @@ package com.tianqi.aitdwallet.ui.activity.wallet.initwallet;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -31,12 +29,14 @@ import com.tianqi.baselib.rxhttp.base.RxHelper;
 import com.tianqi.baselib.utils.ButtonUtils;
 import com.tianqi.baselib.utils.Constant;
 import com.tianqi.baselib.utils.LogUtil;
-import com.tianqi.baselib.utils.digital.MD5;
+import com.tianqi.baselib.utils.digital.AESCipher;
 import com.tianqi.baselib.utils.display.ToastUtil;
 import com.tianqi.baselib.utils.rxtool.RxToolUtil;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 
@@ -339,9 +339,18 @@ public class SetSecurityPsdActivity extends BaseActivity {
             case R.id.btn_create_wallet:
                 if (judgeSelectInput()) {
                     Observable.just(true).map(s -> {
+                        String accountPwd=AESCipher.encrypt(Constant.PSD_KEY, etInputPassword.getText().toString().trim());
+                        Log.i(TAG, "onViewClicked: 001存入的密码是？  "+accountPwd);
                         UserInformation userInformation = new UserInformation();
                         userInformation.setUserId(RxToolUtil.readFingerprintFromFile(this));
-                        userInformation.setPasswordStr(MD5.Md5(etInputPassword.getText().toString().trim()));
+                      //  userInformation.setPasswordStr(MD5.Md5(etInputPassword.getText().toString().trim()));
+                        userInformation.setPasswordStr(accountPwd);
+
+                        //解密
+                        String aes_decode_str = AESCipher.decrypt(Constant.PSD_KEY,accountPwd);
+
+                        Log.i(TAG, "onViewClicked: 002存入的密码是？  "+aes_decode_str);
+
                         userInformation.setNoCenter(true);
                         // TODO: 2020/10/29 此处加入一些判语言和币种单位的逻辑。
                         if (getResources().getConfiguration().locale.getCountry().equals("US")) {
@@ -421,5 +430,6 @@ public class SetSecurityPsdActivity extends BaseActivity {
         }
         editText.setSelection(editText.getText().toString().trim().length());
     }
+
 
 }

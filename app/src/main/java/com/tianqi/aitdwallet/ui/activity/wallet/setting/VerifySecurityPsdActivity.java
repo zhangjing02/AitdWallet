@@ -18,15 +18,12 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.ui.activity.GuidePageActivity;
-import com.tianqi.aitdwallet.ui.activity.GuideWalletActivity;
 import com.tianqi.aitdwallet.ui.activity.MainActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.importwallet.ImportWalletActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.initwallet.BackupMemoryWordActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.initwallet.SetSecurityPsdActivity;
-import com.tianqi.aitdwallet.ui.activity.wallet.setting.ExportPrivateKeyActivity;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.aitdwallet.widget.dialog.ForgetPsdNoticeDialog;
-import com.tianqi.aitdwallet.widget.dialog.ScreenShotNoticeDialog;
 import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dao.UserInformation;
@@ -36,8 +33,9 @@ import com.tianqi.baselib.dbManager.UserInfoManager;
 import com.tianqi.baselib.dbManager.WalletInfoManager;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
 import com.tianqi.baselib.utils.ButtonUtils;
+import com.tianqi.baselib.utils.Constant;
 import com.tianqi.baselib.utils.LogUtil;
-import com.tianqi.baselib.utils.digital.MD5;
+import com.tianqi.baselib.utils.digital.AESCipher;
 import com.tianqi.baselib.utils.display.LoadingDialogUtils;
 import com.tianqi.baselib.utils.display.ToastUtil;
 import com.tianqi.baselib.utils.eventbus.EventMessage;
@@ -45,7 +43,6 @@ import com.tianqi.baselib.utils.eventbus.EventMessage;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
-import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 import butterknife.BindView;
@@ -157,7 +154,13 @@ public class VerifySecurityPsdActivity extends BaseActivity {
                         String wallet_name = getIntent().getStringExtra(Constants.TRANSACTION_COIN_NAME);
                         intent.putExtra(Constants.TRANSACTION_COIN_NAME, wallet_name);
                         startActivity(intent);
-                    } else if (intent_target.equals(Constants.INTENT_PUT_BACK_UP_MNEMONIC)) {
+                    }  else if (intent_target.equals(Constants.INTENT_PUT_EXPORT_KEYSTORE)) {
+                        Intent intent = new Intent(this, ExportKeystoreActivity.class);
+                        String wallet_name = getIntent().getStringExtra(Constants.TRANSACTION_COIN_NAME);
+                        intent.putExtra(Constants.TRANSACTION_COIN_NAME, wallet_name);
+                        intent.putExtra(Constants.INTENT_PUT_COIN_PASSWORD, etInputPassword.getText().toString());
+                        startActivity(intent);
+                    }else if (intent_target.equals(Constants.INTENT_PUT_BACK_UP_MNEMONIC)) {
                         Intent intent = new Intent(this, BackupMemoryWordActivity.class);
 //                        String wallet_name = getIntent().getStringExtra(Constants.TRANSACTION_COIN_NAME);
                         intent.putExtra(Constants.INTENT_PUT_TAG,Constants.INTENT_PUT_ALREADY_MNEMONIC );
@@ -300,10 +303,11 @@ public class VerifySecurityPsdActivity extends BaseActivity {
      * @return 判断输入是否合法
      */
     private boolean judgeSelectInput() {
+        String aes_decode_str = AESCipher.decrypt(Constant.PSD_KEY, userInfoManager.getPasswordStr());
         if (TextUtils.isEmpty(etInputPassword.getText().toString())) {
             ToastUtil.showToast(this, getString(R.string.notice_input_psd));
             return false;
-        } else if (!MD5.Md5(etInputPassword.getText().toString().trim()).equals(userInfoManager.getPasswordStr())) {
+        } else if (!aes_decode_str.equals(etInputPassword.getText().toString())) {
             ToastUtil.showToast(this, getString(R.string.notice_psd_error));
             return false;
         }

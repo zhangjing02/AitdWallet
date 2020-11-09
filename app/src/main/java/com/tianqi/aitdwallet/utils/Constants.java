@@ -26,6 +26,7 @@ public class Constants {
 
     public static final String TRANSACTION_COIN_NAME = "transaction_coin_name";
     public static final String INTENT_PUT_COIN_ID = "intent_coin_id";
+    public static final String INTENT_PUT_COIN_PASSWORD = "intent_coin_psd";
     public static final String INTENT_PUT_COIN_TYPE = "intent_coin_type";
     public static final String TRANSACTION_COIN_ADDRESS = "transaction_coin_address";
 
@@ -35,6 +36,7 @@ public class Constants {
     public static final String INTENT_PUT_EXPORT_PRIVATE_KEY= "导出私钥";
     public static final String INTENT_PUT_DELETE_COIN= "删除该币种（钱包）";
     public static final String INTENT_PUT_BACK_UP_MNEMONIC= "备份助记词";
+    public static final String INTENT_PUT_EXPORT_KEYSTORE= "导出keystore";
     public static final String INTENT_PUT_CREATE_WALLET= "创建钱包";
     public static final String INTENT_PUT_TRANSACTION_ID= "交易id";
     public static final String INTENT_PUT_TRANSACTION_TYPE= "交易类型";

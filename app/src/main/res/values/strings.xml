@@ -46,6 +46,7 @@
     <string name="notice_third_word_error">第3个助记词错误</string>
     <string name="tittle_btc_receive">BTC收款</string>
     <string name="tittle_usdt_receive">USDT收款</string>
+    <string name="tittle_eth_receive">ETHT收款</string>
     <string name="tittle_share_sth">分享</string>
     <string name="notice_copy_success">复制成功</string>
     <string name="tittle_transaction_detail">交易详情</string>
@@ -190,6 +191,7 @@
     <string name="tittle_create_wallet_text">已创建</string>
     <string name="tittle_import_wallet_text">已导入</string>
     <string name="tittle_private_key_text">         私钥         </string>
+    <string name="tittle_keystore_text">         Keystore         </string>
     <string name="tittle_qr_code_text">            二维码            </string>
     <string name="tittle_mnemonic_word_text">助记词</string>
     <string name="tittle_forget_psd">忘记密码</string>
@@ -240,4 +242,12 @@
     <string name="exist_procedure">再按一次退出</string>
     <string name="btn_create_hd_wallet_text">创建HD多链钱包</string>
     <string name="text_waiting_tx">等待打包中</string>
+    <string name="text_save_offline_tittle">离线保存</string>
+    <string name="text_save_offline_content">切勿保存至邮箱、记事本、网盘、聊天工具等，非常危险</string>
+    <string name="text_trans_network_tittle">请勿使用网络传输</string>
+    <string name="text_trans_network_content">请勿通过网络工具传输，一旦被黑客获取将可能造成不可挽回的资产损失。（建议离线设备通过扫二维码方式传输）</string>
+    <string name="text_psd_manage_tool_tittle">密码管理工具保存</string>
+    <string name="text_psd_manage_tool_content">建议使用密码管理工具管理</string>
+    <string name="btn_copy_keystore_text">复制Keystore</string>
+    <string name="btn_copy_private_key_text">复制Private Key</string>
 </resources>

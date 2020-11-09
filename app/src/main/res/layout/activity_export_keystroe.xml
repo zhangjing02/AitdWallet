@@ -25,6 +25,7 @@
         app:tabMode="fixed"
         app:tabPaddingEnd="5dp"
         app:tabPaddingStart="5dp"
+        app:tabTextAppearance="@style/TabLayoutTextStyle"
         app:tabSelectedTextColor="@color/text_main_black"
         app:tabTextColor="@color/text_main_60_black" />
 
@@ -105,7 +106,7 @@
     <LinearLayout
         android:id="@+id/layout_export_qr_notice"
         android:layout_width="match_parent"
-        android:layout_height="179dp"
+        android:layout_height="201dp"
         android:layout_marginHorizontal="15dp"
         android:layout_marginTop="30dp"
         android:background="@drawable/bg_export_key_notice"
@@ -117,7 +118,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="12dp"
-            android:text="@string/text_support_scan"
+            android:text="@string/text_save_offline_tittle"
             android:textColor="@color/text_main_90_black"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -127,7 +128,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="15dp"
             android:layout_marginTop="6dp"
-            android:text="@string/text_copy_qr_warn1"
+            android:text="@string/text_save_offline_content"
             android:textColor="@color/text_main_60_black"
             android:textSize="12sp" />
 
@@ -136,7 +137,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="12dp"
-            android:text="@string/text_use_in_safe"
+            android:text="@string/text_trans_network_tittle"
             android:textColor="@color/text_main_90_black"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -147,9 +148,30 @@
             android:layout_marginHorizontal="15dp"
             android:layout_marginTop="6dp"
             android:layout_marginRight="12dp"
-            android:text="@string/text_copy_qr_warn2"
+            android:text="@string/text_trans_network_content"
             android:textColor="@color/text_main_60_black"
             android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/text_psd_manage_tool_tittle"
+            android:textColor="@color/text_main_90_black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginTop="6dp"
+            android:text="@string/text_psd_manage_tool_content"
+            android:textColor="@color/text_main_60_black"
+            android:layout_marginBottom="20dp"
+            android:textSize="12sp" />
+
     </LinearLayout>
 
 
@@ -157,10 +179,10 @@
         android:id="@+id/tv_coin_private_key"
         style="@style/bg_edit_grey"
         android:layout_width="match_parent"
-        android:layout_height="67dp"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="15dp"
         android:layout_marginTop="23dp"
-        android:gravity="center"
+        android:gravity="left"
         android:paddingHorizontal="15dp"
         android:paddingVertical="14dp"
         android:textSize="12sp"
@@ -173,10 +195,10 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginHorizontal="15dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.8"
+        app:layout_constraintTop_toBottomOf="@+id/tv_coin_private_key"
+        app:layout_constraintVertical_bias="0.5"
         android:gravity="center"
-        android:text="@string/btn_copy_private_key_text"
+        android:text="@string/btn_copy_keystore_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />

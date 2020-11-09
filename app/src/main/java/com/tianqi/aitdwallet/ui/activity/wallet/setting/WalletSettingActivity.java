@@ -4,7 +4,7 @@ package com.tianqi.aitdwallet.ui.activity.wallet.setting;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,15 +13,16 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.utils.Constants;
-import com.tianqi.aitdwallet.utils.statusbar.StatusBarCompat;
 import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dbManager.CoinInfoManager;
+import com.tianqi.baselib.utils.Constant;
 import com.tianqi.baselib.utils.display.GlideUtils;
 import com.tianqi.baselib.utils.display.ToastUtil;
 import com.tianqi.baselib.utils.eventbus.EventMessage;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class WalletSettingActivity extends BaseActivity {
@@ -54,6 +55,10 @@ public class WalletSettingActivity extends BaseActivity {
     TextView tvBackUpMnemonic;
     @BindView(R.id.tv_delete_wallet)
     TextView tvDeleteWallet;
+    @BindView(R.id.line_down_keystore)
+    View lineDownKeystore;
+    @BindView(R.id.line_down_mnemonic)
+    View lineDownMnemonic;
     private String wallet_name;
     private String coin_id;
     private CoinInfo coinFrWalletId;
@@ -65,18 +70,26 @@ public class WalletSettingActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-       // StatusBarCompat.translucentStatusBar(this, true);
+        // StatusBarCompat.translucentStatusBar(this, true);
         getToolBar();
-        wallet_name=getIntent().getStringExtra(Constants.TRANSACTION_COIN_NAME);
-        coin_id=getIntent().getStringExtra(Constants.INTENT_PUT_COIN_ID);
+        wallet_name = getIntent().getStringExtra(Constants.TRANSACTION_COIN_NAME);
+
+        coin_id = getIntent().getStringExtra(Constants.INTENT_PUT_COIN_ID);
         //WalletInfo wallet_info = WalletInfoManager.getWalletFrName(wallet_name);
         coinFrWalletId = CoinInfoManager.getMainCoinFrCoinId(coin_id);
 
-        GlideUtils.loadResourceImage(this,coinFrWalletId.getResourceId(),ivWalletCoin);
+        GlideUtils.loadResourceImage(this, coinFrWalletId.getResourceId(), ivWalletCoin);
 
-        tvWalletCoinName.setText(coinFrWalletId.getAlias_name()+"");
+        tvWalletCoinName.setText(coinFrWalletId.getAlias_name() + "");
         tvCoinAddress.setText(coinFrWalletId.getCoin_address());
-        tvExportKeystore.setVisibility(View.GONE);
+        if (wallet_name.contains(Constant.TRANSACTION_COIN_NAME_ETH)) {
+            tvExportKeystore.setVisibility(View.VISIBLE);
+            lineDownKeystore.setVisibility(View.VISIBLE);
+        } else {
+            tvExportKeystore.setVisibility(View.GONE);
+            lineDownKeystore.setVisibility(View.GONE);
+        }
+
     }
 
     private void getToolBar() {
@@ -95,10 +108,10 @@ public class WalletSettingActivity extends BaseActivity {
 
     @Override
     public void onDataSynEvent(EventMessage event) {
-      if (event.getType()==EventMessage.COIN_NAME_UPDATE){
-          CoinInfo coinFrWalletId = CoinInfoManager.getMainCoinFrCoinId(coin_id);
-          tvWalletCoinName.setText(coinFrWalletId.getAlias_name()+"");
-      }
+        if (event.getType() == EventMessage.COIN_NAME_UPDATE) {
+            CoinInfo coinFrWalletId = CoinInfoManager.getMainCoinFrCoinId(coin_id);
+            tvWalletCoinName.setText(coinFrWalletId.getAlias_name() + "");
+        }
     }
 
     @OnClick({R.id.iv_coin_address_copy, R.id.tv_change_wallet_name, R.id.tv_psd_notice, R.id.tv_export_private_key, R.id.tv_export_keystore, R.id.tv_back_up_mnemonic, R.id.tv_delete_wallet})
@@ -107,40 +120,52 @@ public class WalletSettingActivity extends BaseActivity {
             case R.id.iv_coin_address_copy:
                 ClipboardManager cmb = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 cmb.setText(tvCoinAddress.getText().toString());
-                ToastUtil.showToast(this,getString(R.string.notice_copy_success));
+                ToastUtil.showToast(this, getString(R.string.notice_copy_success));
                 break;
             case R.id.tv_change_wallet_name:
-                Intent intent=new Intent(this,ChangeWalletNameActivity.class);
-                intent.putExtra(Constants.INTENT_PUT_COIN_ID,  coin_id);
-                intent.putExtra(Constants.TRANSACTION_COIN_NAME,wallet_name);
+                Intent intent = new Intent(this, ChangeWalletNameActivity.class);
+                intent.putExtra(Constants.INTENT_PUT_COIN_ID, coin_id);
+                intent.putExtra(Constants.TRANSACTION_COIN_NAME, wallet_name);
                 startActivity(intent);
                 break;
             case R.id.tv_psd_notice:
-                intent=new Intent(this,PasswordPromptActivity.class);
-               // intent.putExtra(Constants.TRANSACTION_COIN_NAME,wallet_name);
+                intent = new Intent(this, PasswordPromptActivity.class);
+                // intent.putExtra(Constants.TRANSACTION_COIN_NAME,wallet_name);
                 startActivity(intent);
                 break;
             case R.id.tv_export_private_key:
-                intent=new Intent(this, VerifySecurityPsdActivity.class);
-                intent.putExtra(Constants.INTENT_PUT_TAG,Constants.INTENT_PUT_EXPORT_PRIVATE_KEY);
-                intent.putExtra(Constants.TRANSACTION_COIN_NAME,wallet_name);
+                intent = new Intent(this, VerifySecurityPsdActivity.class);
+                intent.putExtra(Constants.INTENT_PUT_TAG, Constants.INTENT_PUT_EXPORT_PRIVATE_KEY);
+                intent.putExtra(Constants.TRANSACTION_COIN_NAME, wallet_name);
                 startActivity(intent);
                 break;
             case R.id.tv_export_keystore:
+                intent = new Intent(this, VerifySecurityPsdActivity.class);
+                intent.putExtra(Constants.INTENT_PUT_TAG, Constants.INTENT_PUT_EXPORT_KEYSTORE);
+                intent.putExtra(Constants.TRANSACTION_COIN_NAME, wallet_name);
+                startActivity(intent);
+
                 break;
             case R.id.tv_back_up_mnemonic:
                 //INTENT_PUT_BACK_UP_MNEMONIC
-                intent=new Intent(this, VerifySecurityPsdActivity.class);
-                intent.putExtra(Constants.INTENT_PUT_TAG,Constants.INTENT_PUT_BACK_UP_MNEMONIC);
-                intent.putExtra(Constants.TRANSACTION_COIN_NAME,wallet_name);
+                intent = new Intent(this, VerifySecurityPsdActivity.class);
+                intent.putExtra(Constants.INTENT_PUT_TAG, Constants.INTENT_PUT_BACK_UP_MNEMONIC);
+                intent.putExtra(Constants.TRANSACTION_COIN_NAME, wallet_name);
                 startActivity(intent);
                 break;
             case R.id.tv_delete_wallet:
-                intent=new Intent(this, VerifySecurityPsdActivity.class);
-                intent.putExtra(Constants.INTENT_PUT_TAG,Constants.INTENT_PUT_DELETE_COIN);
-                intent.putExtra(Constants.INTENT_PUT_COIN_ID,coin_id);
+                intent = new Intent(this, VerifySecurityPsdActivity.class);
+                intent.putExtra(Constants.INTENT_PUT_TAG, Constants.INTENT_PUT_DELETE_COIN);
+                intent.putExtra(Constants.INTENT_PUT_COIN_ID, coin_id);
                 startActivity(intent);
                 break;
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 }

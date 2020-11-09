@@ -84,6 +84,9 @@ public class CoinAddressQrActivity extends BaseActivity {
         }else if (stringExtra_name.equals(Constant.TRANSACTION_COIN_NAME_USDT)){
             toolbarTitle.setText(R.string.tittle_usdt_receive);
             ivCoin.setImageDrawable(getResources().getDrawable(R.mipmap.ic_circle_usdt));
+        }else if (stringExtra_name.equals(Constant.TRANSACTION_COIN_NAME_ETH)){
+            ivCoin.setImageDrawable(getResources().getDrawable(R.mipmap.ic_circle_eth));
+            toolbarTitle.setText(R.string.tittle_eth_receive);
         }
 
         toolbar.setBackgroundColor(getResources().getColor(R.color.bg_pager_grey));

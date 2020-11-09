@@ -40,8 +40,21 @@ public interface Constant {
     String ACCESS_TOKEN = "chain_access_token";
     String ACCESS_PASSWORD = "tianqixuda20200821";
     public final static String Select_Key = "5287gexopi45956dtexuyhtng5986214";
-    public final static String PUBLIC_KEY_STR = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC6xXyWXD5bHdmNGLmp2T6ZDgDi30tZhLUoIyHbstRCybnmnZ420qcF7hCHHMKKbjvAyYXeAZm95USF6zx0NIB1hOPlUswl0aWH7b23WFTcyY97NsLMIfnjU2SN3i8NPBfQslXT7zsU9f6aY5BIZWNu3IUdYSR8aBkBVjz2VYy29wIDAQAB";
-
+    String PUBLIC_KEY_STR = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC6xXyWXD5bHdmNGLmp2T6ZDgDi30tZhLUoIyHbstRCybnmnZ420qcF7hCHHMKKbjvAyYXeAZm95USF6zx0NIB1hOPlUswl0aWH7b23WFTcyY97NsLMIfnjU2SN3i8NPBfQslXT7zsU9f6aY5BIZWNu3IUdYSR8aBkBVjz2VYy29wIDAQAB";
+    String PRIVATE_KEY_STR = "MIICdAIBADALBgkqhkiG9w0BAQEEggJgMIICXAIBAAKBgQDlTNEZ9qsKr09+u1gl" +
+            "2VKG5DOPF37sU+S1AmnA4fwCJRiM5jFCbXoF84Y5TyCvvMJXKgYylQW+J1EPlUVS" +
+            "5x1Rd8wMLxqKRffeioF4AZ0KDRuMcO65F+XZIuan+ZYAgarTVRjmp5rXBzWEyhMJ" +
+            "qUI7DAcUkbdIr1yxCDr9kqzjAwIDAQABAoGBAKE93Eh6qZow3yDKEtlCsgLDE/KK" +
+            "XilHcStMEBufjfvgJBxofrksjMMElR1VpDGP9cUfew40tr4ZnansmLwMYxMjAFwJ" +
+            "d3/xa6iCCGLsGD7SDD4Qm8Qc7e2+gHH7JX/r3L36pN8sdZfUj7aOY5n0GTIzw1IG" +
+            "pec8I7bj3hru+VOhAkEA8rmTPCshrQ/X3DaeQSw2AvRow3edQkxAisKKvksMg1Dx" +
+            "XZ/dxsKqX3KzFmHi63qcBSic2HAme2/TDnKuUdK9EQJBAPHXR1axkCHghZGbcS1T" +
+            "9xhoE33FeVezyhvXpzPGNimCaC2Bs5BBJQ+TEtxnQ1QrDZ10kEyNGVCORvYJ16vi" +
+            "LtMCQE+cDC2E3AO+GYeRpnArxv9LGH1b4wlWpyibzBPD27PKPY/+mifRuz2ZCiIC" +
+            "MwIW8ctDWcYnaoe70pZ/iKsvmnECQAu/2cdseQQsVFDurGD3Y1ncNJY3sd2A7qDL" +
+            "qWPqjVcW7tjHJGItyA8pphDvM2YzcUXlE92kPUacovXxJHlFU+ECQCVDYulXHDC1" +
+            "2TD6vEKFWpc+ydwSG82thTPPrkzadcOdVDKxVSqxAsDw3BgP2KcNenHU2UW7rfbw" +
+            "wMP70QooaDM=";
 
     String ACTION_IMAGE = "image";
     String ACTION_TEXT = "text";
@@ -117,6 +130,9 @@ public interface Constant {
     String COIN_UNIT_BTC = "BTC";
     String COIN_UNIT_ETH = "ETH";
     String COIN_UNIT_USDT = "USDT";
+
+    String PSD_KEY = "12345678abcdefgh";
+    String PSD_IV = "0123456789876543";
 
 
     String COIN_RATE_JSON = "[\n" +

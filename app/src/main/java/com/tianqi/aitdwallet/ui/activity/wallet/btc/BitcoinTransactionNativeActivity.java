@@ -41,8 +41,8 @@ import com.tianqi.baselib.rxhttp.HttpClientUtil;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
 import com.tianqi.baselib.rxhttp.bean.GetSimpleRpcBean;
 import com.tianqi.baselib.utils.Constant;
+import com.tianqi.baselib.utils.digital.AESCipher;
 import com.tianqi.baselib.utils.digital.DataReshape;
-import com.tianqi.baselib.utils.digital.MD5;
 import com.tianqi.baselib.utils.display.LoadingDialogUtils;
 import com.tianqi.baselib.utils.display.ScreenUtils;
 import com.tianqi.baselib.utils.display.ToastUtil;
@@ -99,7 +99,7 @@ public class BitcoinTransactionNativeActivity extends BaseActivity {
     // private ECKey key;
     private double pay_amount;
     double miner_fee_single = 0.000003;//单个input的最佳手续费
-    double miner_fee_total=0.000003 ;//最终总和手续费
+    double miner_fee_total = 0.000003;//最终总和手续费
 
     double cushion_fee = 0.0000055;//留有余量防止粉尘交易。
     double total_value = 0;//用于交易的未交易总余额
@@ -121,7 +121,7 @@ public class BitcoinTransactionNativeActivity extends BaseActivity {
         seekBarMinerCost.setEnabled(true);
         seekBarMinerCost.setMax(100);
         seekBarMinerCost.setProgress(10);
-        walletInfo= WalletInfoManager.getHdWalletInfo();
+        walletInfo = WalletInfoManager.getHdWalletInfo();
         setMinerFeeText(miner_fee_single);
 
         seekBarMinerCost.setOnChangeListener(new CustomSeekBar.OnChangeListener() {
@@ -131,6 +131,7 @@ public class BitcoinTransactionNativeActivity extends BaseActivity {
                 miner_fee_single = select_miner / 100000000f;
                 setMinerFeeText(miner_fee_single);
             }
+
             @Override
             public void onTrackingTouchFinish(CustomSeekBar seekBar) {
             }
@@ -139,15 +140,15 @@ public class BitcoinTransactionNativeActivity extends BaseActivity {
 
     private void setMinerFeeText(double miner) {
         double miner_fee_show = miner * 100000000;
-        UserInformation userInformation= UserInfoManager.getUserInfo();
-        if (userInformation.getFiatUnit().equals(Constants.FIAT_USD)){
+        UserInformation userInformation = UserInfoManager.getUserInfo();
+        if (userInformation.getFiatUnit().equals(Constants.FIAT_USD)) {
             String miner_fee_str = getString(R.string.text_miner_fee) + DataReshape.double2int(miner_fee_show, 0) +
                     "sat" + " ≈$" + DataReshape.doubleBig(miner_fee_show * walletInfo.getCoin_USDPrice() / 100000000, 2);
             SpannableString spannableString = new SpannableString(miner_fee_str);
             ForegroundColorSpan colorSpan = new ForegroundColorSpan(getResources().getColor(R.color.textLightGrey));
             spannableString.setSpan(colorSpan, spannableString.toString().indexOf("sat") + 3, spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
             etPaymentMinerFee.setText(spannableString);
-        }else {
+        } else {
             String miner_fee_str = getString(R.string.text_miner_fee) + DataReshape.double2int(miner_fee_show, 0) +
                     "sat" + " ≈￥" + DataReshape.doubleBig(miner_fee_show * walletInfo.getCoin_CNYPrice() / 100000000, 2);
             SpannableString spannableString = new SpannableString(miner_fee_str);
@@ -163,8 +164,8 @@ public class BitcoinTransactionNativeActivity extends BaseActivity {
     }
 
     private void initWallet() {
-        String coin_address=getIntent().getStringExtra(Constants.TRANSACTION_COIN_ADDRESS);
-        walletBtcFrAddress = CoinInfoManager.getCoinFrAddress(Constant.TRANSACTION_COIN_NAME_BTC,coin_address);
+        String coin_address = getIntent().getStringExtra(Constants.TRANSACTION_COIN_ADDRESS);
+        walletBtcFrAddress = CoinInfoManager.getCoinFrAddress(Constant.TRANSACTION_COIN_NAME_BTC, coin_address);
 
 // TODO: 2020/10/7 此处应该用列表里面穿过来的私钥去生成三件套，去进行转账。
         try {
@@ -310,7 +311,7 @@ public class BitcoinTransactionNativeActivity extends BaseActivity {
             pay_param.put("sequence", 0);
             pay_param.put("txid", utxo_for_pay_list.get(i).getTxid());
             pay_param.put("vout", utxo_for_pay_list.get(i).getVout());
-            vin_id=utxo_for_pay_list.get(i).getVout();
+            vin_id = utxo_for_pay_list.get(i).getVout();
             pay_params.add(pay_param);
         }
 
@@ -356,13 +357,13 @@ public class BitcoinTransactionNativeActivity extends BaseActivity {
             case R.id.btn_create_wallet://开始转账
                 if (judgeSelectInput()) {
                     String fiat_value;
-                    UserInformation userInformation= UserInfoManager.getUserInfo();
-                    if (userInformation.getFiatUnit().equals(Constants.FIAT_USD)){
-                        fiat_value=DataReshape.doubleBig(miner_fee_total, 8) + " ≈$"
-                                + DataReshape.doubleBig(miner_fee_total* walletInfo.getCoin_USDPrice(), 2);
-                    }else {
-                        fiat_value=DataReshape.doubleBig(miner_fee_total, 8) + " ≈￥"
-                                + DataReshape.doubleBig(miner_fee_total* walletInfo.getCoin_CNYPrice(), 2);
+                    UserInformation userInformation = UserInfoManager.getUserInfo();
+                    if (userInformation.getFiatUnit().equals(Constants.FIAT_USD)) {
+                        fiat_value = DataReshape.doubleBig(miner_fee_total, 8) + " ≈$"
+                                + DataReshape.doubleBig(miner_fee_total * walletInfo.getCoin_USDPrice(), 2);
+                    } else {
+                        fiat_value = DataReshape.doubleBig(miner_fee_total, 8) + " ≈￥"
+                                + DataReshape.doubleBig(miner_fee_total * walletInfo.getCoin_CNYPrice(), 2);
                     }
 
                     BottomDialog bottomDialog = new BottomDialog(this, etPaymentAmount.getText().toString(),
@@ -378,7 +379,10 @@ public class BitcoinTransactionNativeActivity extends BaseActivity {
                             bottomDialog.dismiss();
                             UserInformation userInfo = UserInfoManager.getUserInfo();
                             userInfo.getPasswordStr();
-                            if (password != null && userInfo.getPasswordStr().equals(MD5.Md5(password))) {
+
+                            //解密后是：
+                            String aes_decode_str = AESCipher.decrypt(Constant.PSD_KEY, password);
+                            if (password != null && userInfo.getPasswordStr().equals(aes_decode_str)) {
                                 mLoadDialog = LoadingDialogUtils.createLoadingDialog(this, "");
                                 createTxToBroadcastApi();
                             } else {
@@ -396,9 +400,9 @@ public class BitcoinTransactionNativeActivity extends BaseActivity {
         //1.首先计算出用于支付的utxo需要几个。
         double amount_value = 0;
         utxo_for_pay = new ArrayList<>();
-        double R_miner_fee=0;
+        double R_miner_fee = 0;
         for (int i = 0; i < utxo_list.size(); i++) {
-            miner_fee_total=miner_fee_single*(i+1);
+            miner_fee_total = miner_fee_single * (i + 1);
             if (pay_amount + miner_fee_total < amount_value) {//如果支付金额+交易费小于拼装的utxo，就可以进行支付了，此时可以跳出循环。
                 break;
             } else {
@@ -423,6 +427,7 @@ public class BitcoinTransactionNativeActivity extends BaseActivity {
         Log.i(TAG, "makeOutputApiParams: 002我们拼接的请求体是？" + new Gson().toJson(listunspentParams));
         return new Gson().toJson(listunspentParams);
     }
+
     /**
      * @return 判断输入是否合法
      */

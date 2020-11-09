@@ -135,6 +135,7 @@ public class TransactionRecordActivity extends BaseActivity {
         coin_id = getIntent().getStringExtra(Constants.TRANSACTION_COIN_ID);
         walletBtcInfo = CoinInfoManager.getCoinFrAddress(coin_tittle, coin_address);
         walletInfo = WalletInfoManager.getWalletFrName(walletBtcInfo.getCoin_name());
+        Log.i("ttttttttttttt", "initView: 我们看以太坊的私钥是？"+walletBtcInfo.getPrivateKey());
 
         mMessageBeans = TransactionRecordManager.getTxFrAddressAndCoinId(coin_address, coin_id);
         mLayoutManager = new LinearLayoutManager(this,
@@ -287,6 +288,8 @@ public class TransactionRecordActivity extends BaseActivity {
             coin_type_params = "btc";
         } else if (coinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT)) {
             coin_type_params = "usdt";
+        } else if (coinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT)){
+            coin_type_params = "eth";
         }
         if (!TextUtils.isEmpty(coin_type_params)) {
             Map<String, Object> map = new HashMap<>();
@@ -316,6 +319,7 @@ public class TransactionRecordActivity extends BaseActivity {
 
                         @Override
                         protected void onFailure(int code, String msg) {
+                            refreshLayout.finishRefresh();
                         }
                     });
         }
@@ -410,6 +414,7 @@ public class TransactionRecordActivity extends BaseActivity {
 
                     @Override
                     protected void onFailure(int code, String msg) {
+                        refreshLayout.finishRefresh();
                     }
                 });
     }

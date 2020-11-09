@@ -13,9 +13,14 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.quincysx.crypto.CoinTypes;
 import com.quincysx.crypto.ECKeyPair;
+import com.quincysx.crypto.bip32.ValidationException;
+import com.quincysx.crypto.ethereum.EthECKeyPair;
+import com.quincysx.crypto.ethereum.keystore.CipherException;
+import com.quincysx.crypto.ethereum.keystore.KeyStore;
+import com.quincysx.crypto.ethereum.keystore.KeyStoreFile;
+import com.quincysx.crypto.utils.HexUtils;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.adapter.list_adapter.WalletCoinAdapter;
 import com.tianqi.aitdwallet.ui.activity.MainActivity;
@@ -29,13 +34,12 @@ import com.tianqi.baselib.dbManager.CoinInfoManager;
 import com.tianqi.baselib.dbManager.CoinRateInfoManager;
 import com.tianqi.baselib.dbManager.UserInfoManager;
 import com.tianqi.baselib.dbManager.WalletInfoManager;
-import com.tianqi.baselib.rxhttp.HttpClientUtil;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
 import com.tianqi.baselib.utils.Constant;
+import com.tianqi.baselib.utils.digital.AESCipher;
 import com.tianqi.baselib.utils.display.GlideUtils;
 import com.tianqi.baselib.utils.rxtool.RxToolUtil;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,7 +49,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
-import okhttp3.Response;
 
 public class CreateWalletActivity extends BaseActivity {
 
@@ -142,9 +145,9 @@ public class CreateWalletActivity extends BaseActivity {
                     //钱包数据库
                     ECKeyPair master = WalletUtils.createCoinMaser(CoinTypes.Ethereum);
                     WalletInfo eht_walletInfo = createWalletInfo(master.getAddress(), Constant.TRANSACTION_COIN_NAME_ETH);
+
                     //币种数据库
                     insertCoinInfo(master, eht_walletInfo);
-
                     // TODO: 2020/10/10 随后应该加入盼错逻辑，即使报错，也应该继续更新进度。
                     runOnUiThread(() -> {   //只能在主线程更新ui
                         index_loading++;
@@ -239,6 +242,20 @@ public class CreateWalletActivity extends BaseActivity {
             coinInfo.setCoin_type(Constant.COIN_BIP_TYPE_USDT);
             coinInfo.setAlias_name(Constant.TRANSACTION_COIN_NAME_ETH);
             coinInfo.setResourceId(R.mipmap.ic_circle_eth);
+            UserInformation information=UserInfoManager.getUserInfo();
+            Log.i("tttttttttttt", "insertCoinInfo: 我们得到的密码是？"+information.getPasswordStr());
+            String aes_decode_str = AESCipher.decrypt(Constant.PSD_KEY, information.getPasswordStr());
+            EthECKeyPair ethECKeyPair= null;
+            try {
+                ethECKeyPair = new EthECKeyPair(HexUtils.fromHex(master.getPrivateKey()));
+                KeyStoreFile light = KeyStore.createLight(aes_decode_str,  ethECKeyPair);
+                String keystore_str=light.toString();
+                coinInfo.setKeystoreStr(keystore_str);
+            } catch (ValidationException e) {
+                e.printStackTrace();
+            } catch (CipherException e) {
+                e.printStackTrace();
+            }
         } else if (walletInfo.getWallet_id().equals(Constant.TRANSACTION_COIN_NAME_USDT)) {
             coinInfo.setCoin_fullName(Constant.COIN_FULL_NAME_USDT);
             coinInfo.setCoin_ComeType(Constant.COIN_SOURCE_CREATE);

@@ -48,8 +48,8 @@ import com.tianqi.baselib.rxhttp.bean.GetListUnspentBean;
 import com.tianqi.baselib.rxhttp.bean.GetSimpleRpcBean;
 import com.tianqi.baselib.utils.ButtonUtils;
 import com.tianqi.baselib.utils.Constant;
+import com.tianqi.baselib.utils.digital.AESCipher;
 import com.tianqi.baselib.utils.digital.DataReshape;
-import com.tianqi.baselib.utils.digital.MD5;
 import com.tianqi.baselib.utils.display.LoadingDialogUtils;
 import com.tianqi.baselib.utils.display.ScreenUtils;
 import com.tianqi.baselib.utils.display.ToastUtil;
@@ -546,7 +546,8 @@ public class UsdtTransactionActivity extends BaseActivity {
                             bottomDialog.dismiss();
                             UserInformation userInfo = UserInfoManager.getUserInfo();
                             userInfo.getPasswordStr();
-                            if (password != null && userInfo.getPasswordStr().equals(MD5.Md5(password))) {
+                            String aes_decode_str = AESCipher.decrypt(Constant.PSD_KEY, password);
+                            if (password != null && userInfo.getPasswordStr().equals(aes_decode_str)) {
                                 mLoadDialog = LoadingDialogUtils.createLoadingDialog(this, "");
                                 createTxToBroadcastApi();
                             } else {
