@@ -701,6 +701,9 @@ public class UsdtTransactionActivity extends BaseActivity {
         } else if (TextUtils.isEmpty(etPaymentAmount.getText().toString())) {
             ToastUtil.showToast(this, getString(R.string.input_transaction_amount));
             return false;
+        }else if (etPaymentAddress.getText().toString().equals(master.getAddress())){
+            ToastUtil.showToast(this, getString(R.string.notice_trans_to_me_refuse));
+            return false;
         }
         return true;
     }

@@ -240,4 +240,5 @@
     <string name="exist_procedure">再按一次退出</string>
     <string name="btn_create_hd_wallet_text">创建HD多链钱包</string>
     <string name="text_waiting_tx">等待打包中</string>
+    <string name="notice_trans_to_me_refuse">请不要给自己转账</string>
 </resources>
