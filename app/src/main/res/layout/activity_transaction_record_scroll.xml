@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/toolbar_layout"
+        layout="@layout/toolbar_menu"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/main_refreshView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.tianqi.baselib.widget.scrollview.DetailScrollView
+            android:id="@+id/main_SvFirst"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:layout_marginTop="20dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <include layout="@layout/view_main_header"
+                    android:id="@+id/tab_viewPager_HeaderView"
+                    />
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/main_TabLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:background="@color/white"
+                    app:layout_constraintTop_toBottomOf="@+id/toolbar_layout"
+                    android:layout_marginTop="40dp"
+                    app:tabIndicatorColor="@color/color_tab_line_black"
+                    app:tabIndicatorFullWidth="false"
+                    app:tabIndicatorHeight="2dp"
+                    app:tabMode="fixed"
+                    app:tabPaddingEnd="15dp"
+                    app:tabPaddingStart="15dp"
+                    app:tabSelectedTextColor="@color/text_main_black"
+                    app:tabTextColor="@color/text_main_60_black" />
+
+
+                <com.tianqi.baselib.widget.scrollview.MatchViewPager
+                    android:id="@+id/main_VpMain"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    app:targetId="@id/main_TabLayout" />
+
+
+            </LinearLayout>
+        </com.tianqi.baselib.widget.scrollview.DetailScrollView>
+
+
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+</LinearLayout>

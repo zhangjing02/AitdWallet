@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingHorizontal="5dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="542dp">
+
+        <TextView
+            android:id="@+id/tv_tittle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:gravity="center"
+            android:text="@string/tittle_confirm_transaction_msg"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:textColor="@color/text_main_black"
+            android:textSize="18sp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_dialog_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:src="@mipmap/ic_dialog_cancel"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_tittle"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_tittle" />
+
+        <TextView
+            android:id="@+id/tv_transaction_amount_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="30dp"
+            android:text="@string/text_transaction_amount_tag"
+            android:textColor="@color/text_main_60_black"
+            android:textSize="16sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_tittle" />
+
+        <LinearLayout
+            android:id="@+id/layout_transaction_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_transaction_amount_tag"
+            >
+
+            <TextView
+                android:id="@+id/tv_transaction_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="7dp"
+                android:text="0.03186954"
+                android:textColor="@color/text_main_black"
+                android:textSize="26sp"
+                />
+
+            <TextView
+                android:id="@+id/tv_transaction_amount_unit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:layout_marginBottom="2dp"
+                android:text="BTC"
+                android:textColor="@color/text_main_black"
+                android:textSize="16sp"
+                android:layout_gravity="bottom"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_transaction_amount"
+                app:layout_constraintLeft_toRightOf="@+id/tv_transaction_amount" />
+
+
+        </LinearLayout>
+
+
+
+
+        <TextView
+            android:id="@+id/tv_transaction_msg_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="30dp"
+            android:text="@string/text_transaction_type_tag"
+            android:textColor="@color/text_main_60_black"
+            android:textSize="14sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_transaction_amount" />
+
+
+        <TextView
+            android:id="@+id/tv_transaction_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="30dp"
+            android:text="@string/text_btc_transaction_type"
+            android:textColor="@color/text_main_80_grey"
+            android:textSize="14sp"
+            app:layout_constraintLeft_toRightOf="@+id/tv_transaction_msg_tag"
+            app:layout_constraintTop_toBottomOf="@+id/layout_transaction_amount" />
+
+        <View
+            android:id="@+id/line1"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/color_line_10_grey"
+            app:layout_constraintTop_toBottomOf="@+id/tv_transaction_msg_tag" />
+
+        <TextView
+            android:id="@+id/tv_transaction_address_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/text_receive_address_tag"
+            android:textColor="@color/text_main_60_black"
+            android:textSize="14sp"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_transaction_msg_tag"
+            app:layout_constraintTop_toBottomOf="@+id/line1" />
+
+        <TextView
+            android:id="@+id/tv_transaction_address"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:text="L3fUHBGkBNBCnHfDfrjmK4Qpak13YLnPpp3pwDk2tUo9urXuC8Yr"
+            android:textColor="#FF161A27"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_transaction_address_tag"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_transaction_msg"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_transaction_address_tag" />
+
+        <View
+            android:id="@+id/line2"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/color_line_10_grey"
+            app:layout_constraintTop_toBottomOf="@+id/tv_transaction_address_tag" />
+
+
+        <TextView
+            android:id="@+id/tv_payment_address_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/text_send_address_tag"
+            android:textColor="@color/text_main_60_black"
+            android:textSize="14sp"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_transaction_msg_tag"
+            app:layout_constraintTop_toBottomOf="@+id/line2" />
+
+        <TextView
+            android:id="@+id/tv_payment_address"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:text="L3fUHBGkBNBCnHfDfrjmK4Qpak13YLnPpp3pwDk2tUo9urXuC8Yr"
+            android:textColor="#FF161A27"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_payment_address_tag"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_transaction_msg"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_payment_address_tag" />
+
+        <View
+            android:id="@+id/line3"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/color_line_10_grey"
+            app:layout_constraintTop_toBottomOf="@+id/tv_payment_address_tag" />
+
+        <TextView
+            android:id="@+id/tv_transaction_miner_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/text_miner_fee_tag"
+            android:textColor="@color/text_main_60_black"
+            android:textSize="14sp"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_transaction_msg_tag"
+            app:layout_constraintTop_toBottomOf="@+id/line3" />
+
+        <TextView
+            android:id="@+id/tv_transaction_miner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:text="0.0050 BTC ≈ $ 15.1620"
+            android:textColor="#FF161A27"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_transaction_miner_tag"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_transaction_msg"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_transaction_miner_tag" />
+
+        <TextView
+            android:id="@+id/btn_transaction"
+            style="@style/bg_button_blue"
+            android:layout_width="match_parent"
+            android:layout_height="47dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginBottom="30dp"
+            android:text="@string/btn_confirm_text"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</FrameLayout>

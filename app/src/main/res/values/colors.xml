@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#2A67FE</color>
+    <color name="grey">#747474</color>
+    <color name="bg_grey">#687086</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="bg_word_blue">#8CA8EF</color>
+    <color name="colorPrimaryGrey">#586883</color>
+    <color name="textGrey">#505667</color>
+    <color name="textLightGrey">#A1A0A0</color>
+    <color name="bg_button_grey">#586883</color>
+    <color name="bg_button_blue">#FF6380F2</color>
+    <color name="bg_button_green">#32C49C</color>
+    <color name="bg_button_yellow">#FFF4DC</color>
+    <color name="bg_button_stroke_yellow">#FABF44</color>
+
+    <color name="bg_button_wallet_green">#E0F9E8</color>
+    <color name="bg_button_stroke_green">#7AEC9E</color>
+
+    <color name="bg_button_wallet_orange">#FFDFCA</color>
+    <color name="bg_button_stroke_orange">#E19C6F</color>
+
+    <color name="bg_button_wallet_purple">#F3E5FF</color>
+    <color name="bg_button_stroke_purple">#BB82EC</color>
+    <color name="bg_pager_grey">#fff3f3f3</color>
+    <color name="bg_text_yellow">#FFFBC9</color>
+    <color name="bg_edit_grey">#0D5E6992</color>
+    <color name="bg_circle_write">#596680</color>
+    <color name="color_notice_red">#B52D30</color>
+    <color name="color_text_thin_grey">#CED5DD</color>
+
+    <color name="color_toolbar_top_line">#FFF7F7F7</color>
+    <color name="bg_circle_light_grey">#EBEDF1</color>
+    <color name="bg_circle_transparent">#85939292</color>
+    <color name="theme_color">#4371FF</color>
+    <color name="color_coin_text_thin_grey">#F5F8FB</color>
+    <color name="bg_dialog_submit_success">#B3000000</color>
+    <color name="color_tab_line_black">#161A27</color>
+
+
+    <color name="text_main_black">#FF161A27</color>
+    <color name="text_main_70_black">#FF161A27</color>
+    <color name="text_main_60_black">#99161A27</color>
+    <color name="text_main_90_black">#E6161A27</color>
+    <color name="text_main2_black">#FF1E1F31</color>
+    <color name="text_main_60_grey">#991E1F31</color>
+    <color name="text_main_10_grey">#66161A27</color>
+    <color name="text_main_80_grey">#CC161A27</color>
+    <color name="text_main_30_grey">#4D161A27</color>
+    <color name="text_main_70_grey">#B3161A27</color>
+    <color name="text_main_blue">#FF6380F2</color>
+    <color name="text_light_blue">#FF5E6992</color>
+    <color name="text_light_50_blue">#805E6992</color>
+    <color name="bg_word_light_blue">#1A5E6992</color>
+    <color name="bg_word_select_cover_blue">#1A5E6992</color>
+    <color name="bg_button_20_grey">#335E6992</color>
+    <color name="color_home_coin_solid">#293B6AF3</color>
+    <color name="color_home_coin_shadow">#293B6AF3</color>
+    <color name="color_home_coin_solid2">#4D3B6AF3</color>
+    <color name="white_80_tran">#CCFFFFFF</color>
+    <color name="text_main_80_blue">#CC5E6992</color>
+    <color name="color_line_10_blue">#0D5E6992</color>
+    <color name="color_line_5_blue">#0D5E6992</color>
+    <color name="color_line_5_grey">#0D5E6992</color>
+    <color name="color_line_10_grey">#1A5E6992</color>
+    <color name="color_transaction_fail">#FF6B6B</color>
+    <color name="color_transaction_success">#32C49C</color>
+    <color name="text_main_80_white">#CCFFFFFF</color>
+    <color name="text_main_50_white">#80FFFFFF</color>
+    <color name="bg_button_xxx_grey">#CD5E6992</color>
+    <color name="text_main_yellow">#FF8944</color>
+    <color name="text_main2_yellow">#FFB744</color>
+</resources>

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.activity.wallet.importwallet.ImportBtcCoinActivity">
+
+    <include
+        android:id="@+id/toolbar_layout"
+        layout="@layout/toolbar_menu"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tablayout"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/white"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_layout"
+        app:tabIndicatorColor="@color/colorPrimaryGrey"
+        app:tabIndicatorFullWidth="false"
+        app:tabIndicatorHeight="2dp"
+        app:tabMode="fixed"
+        app:tabPaddingEnd="15dp"
+        app:tabPaddingStart="15dp"
+        android:layout_marginTop="10dp"
+        app:tabSelectedTextColor="@color/colorPrimaryGrey"
+        app:tabTextAppearance="@style/TabLayoutTextStyle"
+        app:tabTextColor="@color/textLightGrey" />
+
+    <EditText
+        android:id="@+id/et_input_key"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/bg_pager_grey"
+        android:gravity="top"
+        android:paddingLeft="20dp"
+        android:paddingTop="15dp"
+        android:textSize="12sp"
+        app:layout_constraintTop_toBottomOf="@+id/tablayout" />
+
+
+    <GridView
+        android:id="@+id/gv_mnemonic_word"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="10dp"
+        android:columnWidth="70dp"
+        android:horizontalSpacing="6dp"
+        android:numColumns="4"
+        android:padding="5dp"
+        android:visibility="gone"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="6dp"
+        android:gravity="left"
+        app:layout_constraintTop_toBottomOf="@+id/et_input_key" />
+
+    <TextView
+        android:id="@+id/tv_input_error_notice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/gv_mnemonic_word"
+        app:layout_constraintLeft_toLeftOf="@+id/gv_mnemonic_word"
+        android:text="当前助记词输入错误，请检查"
+        android:textColor="@color/color_notice_red"
+        android:textSize="11sp"
+        android:drawableLeft="@drawable/vector_red_warning"
+        android:visibility="gone"
+        />
+
+
+<!--    <CheckBox-->
+<!--        android:id="@+id/checkbox_read_term"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginBottom="40dp"-->
+<!--        android:button="@drawable/chk_agree_provision_background"-->
+<!--        android:text="我已仔细阅读并同意 服务及隐私条款"-->
+<!--        android:textColor="@color/textGrey"-->
+<!--        android:textSize="12sp"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/btn_import_wallet"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintRight_toRightOf="parent" />-->
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btn_import_wallet">
+
+        <CheckBox
+            android:id="@+id/checkbox_read_term"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:button="@drawable/chk_agree_provision_background"
+            android:text="@string/text_read_and_agree_terms"
+            android:textColor="@color/text_main_black"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_service_privacy_terms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_service_privacy_terms"
+            android:textColor="@color/text_light_blue"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/checkbox_read_term"
+            app:layout_constraintLeft_toRightOf="@+id/checkbox_read_term"
+            app:layout_constraintTop_toTopOf="@+id/checkbox_read_term" />
+
+    </LinearLayout>
+
+
+
+
+<!--    <TextView-->
+<!--        android:id="@+id/btn_import_wallet"-->
+<!--        style="@style/bg_button_grey"-->
+<!--        android:layout_width="150dp"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:layout_marginBottom="140dp"-->
+<!--        android:text="开始导入"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintRight_toRightOf="parent" />-->
+
+    <TextView
+        android:id="@+id/btn_import_wallet"
+        style="@style/bg_button_20_grey"
+        android:layout_width="match_parent"
+        android:layout_marginHorizontal="15dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="45dp"
+        android:text="@string/btn_start_import_wallet"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginBottom="140dp"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_explain_private_key"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/btn_import_wallet"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:text="@string/btn_what_is_private_key_text"
+        android:textSize="12sp"
+        android:textColor="@color/text_light_blue"
+        android:drawableLeft="@mipmap/ic_blue_question"
+        android:drawablePadding="6dp"
+        android:layout_marginTop="15dp" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

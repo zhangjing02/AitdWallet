@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.activity.wallet.initwallet.VerifyMemoryWordActivity">
+
+    <include
+        android:id="@+id/toolbar_layout"
+        layout="@layout/toolbar_menu"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_layout"
+        app:layout_constraintHeight_percent="1"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="30dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_verify_word_notice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/notice_verify_mnemonic_word_text"
+                android:textColor="@color/text_main_80_grey"
+                android:textSize="14sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/tv_select_word1_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="@string/text_verify_word1_tag"
+                android:textColor="@color/text_main_black"
+                android:textSize="15sp"
+                app:layout_constraintLeft_toLeftOf="@+id/tv_verify_word_notice"
+                app:layout_constraintTop_toBottomOf="@+id/tv_verify_word_notice" />
+
+
+            <TextView
+                android:id="@+id/tv_select_word1"
+                style="@style/bg_words_grey"
+                android:layout_width="108dp"
+                android:layout_height="44dp"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/text_main_black"
+                android:textSize="17sp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_select_word1_tag"
+                app:layout_constraintHorizontal_bias="0.6"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_select_word1_tag" />
+
+            <TextView
+                android:id="@+id/tv_select_word2_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="43dp"
+                android:text="@string/text_verify_word2_tag"
+                android:textColor="@color/text_main_black"
+                android:textSize="15sp"
+                app:layout_constraintLeft_toLeftOf="@+id/tv_select_word1_tag"
+                app:layout_constraintTop_toBottomOf="@+id/tv_select_word1_tag" />
+
+
+            <TextView
+                android:id="@+id/tv_select_word2"
+                style="@style/bg_words_grey"
+                android:layout_width="108dp"
+                android:layout_height="44dp"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/text_main_black"
+                android:textSize="17sp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_select_word2_tag"
+                app:layout_constraintLeft_toLeftOf="@+id/tv_select_word1"
+                app:layout_constraintRight_toRightOf="@+id/tv_select_word1"
+                app:layout_constraintTop_toTopOf="@+id/tv_select_word2_tag" />
+
+
+            <TextView
+                android:id="@+id/tv_select_word3_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="43dp"
+                android:text="@string/text_verify_word3_tag"
+                android:textColor="@color/text_main_black"
+                android:textSize="15sp"
+                app:layout_constraintLeft_toLeftOf="@+id/tv_select_word1_tag"
+                app:layout_constraintTop_toBottomOf="@+id/tv_select_word2_tag" />
+
+
+            <TextView
+                android:id="@+id/tv_select_word3"
+                style="@style/bg_words_grey"
+                android:layout_width="108dp"
+                android:layout_height="44dp"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/text_main_black"
+                android:textSize="17sp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_select_word3_tag"
+                app:layout_constraintLeft_toLeftOf="@+id/tv_select_word1"
+                app:layout_constraintRight_toRightOf="@+id/tv_select_word1"
+                app:layout_constraintTop_toTopOf="@+id/tv_select_word3_tag" />
+
+
+            <GridView
+                android:id="@+id/gv_mnemonic_word"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginTop="45dp"
+                android:columnWidth="108dp"
+                android:horizontalSpacing="11dp"
+                android:numColumns="3"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="6dp"
+                app:layout_constraintTop_toBottomOf="@+id/tv_select_word3_tag" />
+
+
+            <TextView
+                android:id="@+id/btn_create_wallet"
+                style="@style/bg_button_20_grey"
+                android:layout_width="match_parent"
+                android:layout_height="47dp"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginTop="45dp"
+                android:text="确定"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/gv_mnemonic_word" />
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+    </ScrollView>
+
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

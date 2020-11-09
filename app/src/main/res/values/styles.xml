@@ -1,0 +1,275 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="AppTheme.ActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="actionMenuTextColor">@color/white</item>
+    </style>
+
+    <style name="bg_button_grey">
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="bl_corners_radius">6dp</item>
+        <item name="bl_solid_color">@color/bg_button_grey</item>
+    </style>
+
+    <style name="bg_button_20_grey">
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="bl_corners_radius">6dp</item>
+        <item name="bl_solid_color">@color/bg_button_20_grey</item>
+    </style>
+
+    <style name="bg_button_blue">
+        <item name="android:textSize">16sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="bl_corners_radius">6dp</item>
+        <item name="bl_solid_color">@color/bg_button_blue</item>
+    </style>
+
+    <style name="bg_button_hollow_blue">
+        <item name="android:textSize">16sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/bg_button_blue</item>
+        <item name="bl_corners_radius">6dp</item>
+        <item name="bl_solid_color">@color/white</item>
+        <item name="bl_stroke_width">1dp</item>
+        <item name="bl_stroke_color">@color/bg_button_blue</item>
+    </style>
+
+    <style name="bg_button_hollow_white">
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="bl_corners_radius">6dp</item>
+        <item name="bl_solid_color">@color/white_transparent</item>
+        <item name="bl_stroke_width">1dp</item>
+        <item name="bl_stroke_color">@color/white</item>
+    </style>
+
+    <style name="bg_button_green">
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="bl_corners_radius">6dp</item>
+        <item name="bl_solid_color">@color/bg_button_green</item>
+    </style>
+
+    <style name="bg_button_wallet_yellow">
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/textGrey</item>
+        <item name="bl_corners_radius">6dp</item>
+        <item name="bl_solid_color">@color/bg_button_yellow</item>
+        <item name="bl_stroke_width">1dp</item>
+        <item name="bl_stroke_color">@color/bg_button_stroke_yellow</item>
+    </style>
+
+    <style name="bg_button_wallet_green">
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/textGrey</item>
+        <item name="bl_corners_radius">6dp</item>
+        <item name="bl_solid_color">@color/bg_button_wallet_green</item>
+        <item name="bl_stroke_width">1dp</item>
+        <item name="bl_stroke_color">@color/bg_button_stroke_green</item>
+    </style>
+
+    <style name="bg_button_wallet_orange">
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/textGrey</item>
+        <item name="bl_corners_radius">6dp</item>
+        <item name="bl_solid_color">@color/bg_button_wallet_orange</item>
+        <item name="bl_stroke_width">1dp</item>
+        <item name="bl_stroke_color">@color/bg_button_stroke_orange</item>
+    </style>
+
+    <style name="bg_button_wallet_purple">
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/textGrey</item>
+        <item name="bl_corners_radius">6dp</item>
+        <item name="bl_solid_color">@color/bg_button_wallet_purple</item>
+        <item name="bl_stroke_width">1dp</item>
+        <item name="bl_stroke_color">@color/bg_button_stroke_purple</item>
+    </style>
+
+    <style name="bg_edit_grey">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/textGrey</item>
+        <item name="android:paddingLeft">20dp</item>
+        <item name="bl_corners_radius">6dp</item>
+        <item name="bl_solid_color">@color/bg_edit_grey</item>
+    </style>
+    <style name="bg_edit_round_grey">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/textGrey</item>
+        <item name="android:paddingLeft">20dp</item>
+        <item name="bl_corners_radius">17dp</item>
+        <item name="bl_solid_color">@color/bg_edit_grey</item>
+    </style>
+
+    <style name="bg_pager_grey">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/textGrey</item>
+        <item name="bl_corners_radius">6dp</item>
+        <item name="bl_solid_color">@color/bg_edit_grey</item>
+    </style>
+
+    <style name="bg_words_white">
+        <item name="bl_corners_radius">4dp</item>
+        <item name="bl_solid_color">@color/white</item>
+    </style>
+
+    <style name="bg_words_white_down">
+        <item name="bl_corners_bottomLeftRadius">4dp</item>
+        <item name="bl_corners_bottomRightRadius">4dp</item>
+        <item name="bl_solid_color">@color/white</item>
+    </style>
+
+    <style name="bg_pager_white">
+        <item name="bl_corners_radius">6dp</item>
+        <item name="bl_solid_color">@color/white</item>
+    </style>
+    <style name="bg_recycle_round_white">
+        <item name="bl_corners_topLeftRadius">18dp</item>
+        <item name="bl_corners_topRightRadius">18dp</item>
+        <item name="bl_solid_color">@color/white</item>
+    </style>
+
+    <style name="bg_words_blue">
+        <item name="bl_corners_radius">4dp</item>
+        <item name="bl_solid_color">@color/bg_word_blue</item>
+    </style>
+
+
+    <style name="bg_words_grey">
+        <item name="android:textColor">@color/textGrey</item>
+        <item name="bl_corners_radius">6dp</item>
+        <item name="bl_solid_color">@color/white</item>
+        <item name="bl_stroke_width">1dp</item>
+        <item name="bl_stroke_color">@color/bg_word_light_blue</item>
+    </style>
+
+    <style name="bg_word_select_cover">
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/textGrey</item>
+        <item name="bl_corners_radius">6dp</item>
+        <item name="bl_solid_color">@color/bg_word_select_cover_blue</item>
+        <item name="bl_stroke_width">1dp</item>
+        <item name="bl_stroke_color">@color/white</item>
+    </style>
+
+
+    <style name="bg_text_words_grey">
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/textGrey</item>
+        <item name="bl_corners_radius">6dp</item>
+        <item name="bl_solid_color">@color/white</item>
+        <item name="bl_stroke_width">1dp</item>
+        <item name="bl_stroke_color">@color/black</item>
+    </style>
+
+
+    <style name="bg_circle_grey">
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center</item>
+        <item name="bl_corners_radius">56dp</item>
+        <item name="bl_solid_color">@color/bg_word_select_cover_blue</item>
+        <item name="bl_stroke_width">0dp</item>
+        <item name="bl_stroke_color">@color/black</item>
+    </style>
+
+
+    <style name="bg_wallet_grey">
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/textGrey</item>
+        <item name="bl_corners_radius">6dp</item>
+        <item name="bl_solid_color">@color/colorPrimaryGrey</item>
+        <item name="bl_stroke_width">0dp</item>
+        <item name="bl_stroke_color">@color/black</item>
+    </style>
+
+    <style name="bg_text_coin_grey">
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/textGrey</item>
+        <item name="bl_corners_radius">6dp</item>
+        <item name="bl_solid_color">@color/color_coin_text_thin_grey</item>
+        <item name="bl_stroke_width">0dp</item>
+        <item name="bl_stroke_color">@color/black</item>
+    </style>
+
+    <style name="bg_home_coin_grey">
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/text_main2_black</item>
+        <item name="bl_corners_radius">6dp</item>
+        <item name="bl_solid_color">@color/white</item>
+        <item name="bl_stroke_width">1dp</item>
+        <item name="bl_stroke_color">@color/color_home_coin_solid</item>
+    </style>
+
+    <style name="MyDialog2" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimAmount">0.5</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+    <style name="MyDialogInput" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimAmount">0.5</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowSoftInputMode">stateAlwaysVisible</item>
+    </style>
+    <style name="MyDialog3" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimAmount">0</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+
+    <style name="TabLayoutTextStyle" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">15sp</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+
+    <style name="AppThemeTrans" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowBackground">@color/white_transparent</item>
+    </style>
+
+    <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/bg_splash_activity02</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+</resources>

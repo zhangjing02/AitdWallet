@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="406dp"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/tv_tile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginTop="25dp"
+        android:gravity="center"
+        android:text="@string/tittle_input_psd"
+        android:textColor="@color/text_main_black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_dialog_cancel"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginLeft="15dp"
+        android:src="@mipmap/ic_dialog_cancel"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_tile"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_tile" />
+
+
+    <TextView
+        android:id="@+id/tv_input_psd_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="72dp"
+        android:text="@string/notice_input_safe_psd_text"
+        android:textColor="@color/text_main_black"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_tile" />
+
+
+    <EditText
+        android:id="@+id/et_pay_password"
+        style="@style/bg_edit_grey"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginTop="15dp"
+        android:inputType="textPassword"
+        android:paddingLeft="11dp"
+        android:textColor="#FF333333"
+        android:textColorHint="#FF999999"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@+id/tv_input_psd_tag" />
+
+    <ImageView
+        android:id="@+id/iv_open_eye"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="15dp"
+        android:src="@mipmap/ic_close_eye"
+        app:layout_constraintBottom_toBottomOf="@+id/et_pay_password"
+        app:layout_constraintRight_toRightOf="@+id/et_pay_password"
+        app:layout_constraintTop_toTopOf="@+id/et_pay_password" />
+
+
+    <TextView
+        android:id="@+id/btn_transaction"
+        style="@style/bg_button_blue"
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginBottom="60dp"
+        android:text="@string/btn_confirm_text"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+
+    <TextView
+        android:id="@+id/tv_forget_psd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginTop="15dp"
+        android:drawableLeft="@mipmap/ic_light_blue_question"
+        android:drawablePadding="6dp"
+        android:gravity="center"
+        android:text="@string/btn_forget_psd_text"
+        android:textColor="@color/text_main_blue"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_transaction" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

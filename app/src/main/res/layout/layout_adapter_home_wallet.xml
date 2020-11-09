@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="15dp"
+    android:layout_marginBottom="10dp"
+    android:background="@color/color_home_coin_shadow"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    app:cardCornerRadius="6dp"
+    app:cardElevation="2dp"
+    app:cardPreventCornerOverlap="true"
+    app:cardUseCompatPadding="true">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_virtual_currency"
+            android:layout_width="match_parent"
+            android:layout_height="73dp"
+            android:layout_gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/iv_currency"
+                android:layout_width="37dp"
+                android:layout_height="37dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="15dp"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/ic_circle_btc"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_currency_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:text="BTC"
+                android:textColor="@color/text_main2_black"
+                android:textSize="17sp"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_currency"
+                app:layout_constraintLeft_toRightOf="@+id/iv_currency"
+                app:layout_constraintRight_toLeftOf="@+id/tv_coin_balance"
+                app:layout_constraintTop_toTopOf="@+id/iv_currency" />
+
+            <TextView
+                android:id="@+id/tv_coin_balance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="48dp"
+                android:text="0"
+                android:textColor="@color/text_main2_black"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.3" />
+
+            <TextView
+                android:id="@+id/tv_fiat_balance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="≈ ￥0.000"
+                android:textColor="@color/text_main_60_grey"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="@+id/tv_coin_balance"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.7" />
+
+            <ImageView
+                android:id="@+id/iv_coin_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15dp"
+                android:src="@mipmap/ic_down_black_indicator"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_currency_name"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_currency_name" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <com.tianqi.baselib.widget.ExpandableLayout
+            android:id="@+id/expand_coin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:el_duration="500"
+            app:el_expanded="false"
+            app:el_parallax="0.1">
+
+            <com.tianqi.baselib.widget.WrapListView
+                android:id="@+id/lv_coin_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@null"
+                android:dividerHeight="0dp"
+                android:paddingHorizontal="20dp" />
+
+        </com.tianqi.baselib.widget.ExpandableLayout>
+
+    </LinearLayout>
+
+    <!--    <androidx.cardview.widget.CardView-->
+    <!--        style="@style/bg_home_coin_grey"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="73dp"-->
+    <!--        android:layout_marginHorizontal="15dp"-->
+    <!--        app:cardMaxElevation="30dp"-->
+    <!--        app:cardElevation="15dp">-->
+    <!--        -->
+    <!--        -->
+    <!--    </androidx.cardview.widget.CardView>-->
+
+
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_pager_grey"
+    tools:context=".ui.fragment.Fragment1">
+
+    <TextView
+        android:id="@+id/property_tittle"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:background="@color/bg_grey"
+        android:gravity="center_horizontal"
+        android:paddingTop="50dp"
+        android:text="全球自由流动的\n数字货币钱包"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintHeight_percent="0.25"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/property_slogan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/property_tittle"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="60dp"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:text="安全易用的去中心化钱包"/>
+
+    <TextView
+        android:id="@+id/property_slogan2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/property_slogan"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:textSize="30sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:text="私钥完全由用户自主掌控"/>
+
+
+    <TextView
+        android:id="@+id/btn_create_wallet"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="145dp"
+        android:text="创建钱包"
+        app:layout_constraintTop_toBottomOf="@+id/property_slogan2"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        style="@style/bg_button_grey" />
+
+    <TextView
+        android:id="@+id/btn_import_wallet"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="25dp"
+        android:text="导入钱包"
+        app:layout_constraintTop_toBottomOf="@+id/btn_create_wallet"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        style="@style/bg_button_green" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

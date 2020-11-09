@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    tools:context=".ui.activity.GuideWalletActivity">
+
+
+    <ImageView
+        android:id="@+id/iv_coin"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
+        android:layout_centerInParent="true"
+        android:src="@mipmap/ic_circle_btc" />
+
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:id="@+id/card_coin"-->
+<!--        android:layout_width="40dp"-->
+<!--        android:layout_height="40dp"-->
+<!--        app:cardCornerRadius="20dp"-->
+<!--        android:padding="20dp"-->
+<!--        android:layout_centerInParent="true"-->
+<!--        android:layout_gravity="center"-->
+<!--        app:cardBackgroundColor="@color/bg_circle_transparent"-->
+<!--        app:cardPreventCornerOverlap="true"/>-->
+
+
+    <ProgressBar
+        android:id="@+id/progressBar1"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_gravity="center"
+        android:indeterminateBehavior="repeat"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:indeterminateTint="@color/white"
+        android:indeterminateOnly="true" />
+
+
+</RelativeLayout>

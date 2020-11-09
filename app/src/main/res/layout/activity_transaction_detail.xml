@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context=".ui.activity.wallet.record.TransactionDetailActivity">
+    <include
+        android:id="@+id/toolbar_layout"
+        layout="@layout/toolbar_menu"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/text_main_blue">
+
+            <ImageView
+                android:id="@+id/iv_transaction_state"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="30dp"
+                android:src="@mipmap/ic_transction_white_success"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_transaction_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:text="@string/text_waiting_tx"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_transaction_state" />
+
+            <TextView
+                android:id="@+id/tv_transaction_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/tv_transaction_state"
+                android:layout_marginTop="30dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:text="0.000"
+                android:textSize="26sp"
+                android:textColor="@color/white"/>
+
+<!--            <TextView-->
+<!--                android:id="@+id/tv_transaction_amount_unit"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/tv_transaction_amount"-->
+<!--                app:layout_constraintLeft_toRightOf="@+id/tv_transaction_amount"-->
+<!--                android:text="BTC"-->
+<!--                android:textSize="16sp"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:layout_marginLeft="5dp"-->
+<!--                android:layout_marginBottom="2dp"/>-->
+
+            <TextView
+                android:id="@+id/tv_transaction_fiat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/tv_transaction_amount"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginTop="9dp"
+                android:text="≈ $ 0.00"
+                android:textSize="14sp"
+                android:textColor="@color/white"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="630dp"
+                app:layout_constraintHeight_percent="1"
+                app:layout_constraintTop_toBottomOf="@+id/tv_transaction_fiat"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="30dp"
+                android:orientation="vertical"
+                android:background="@color/bg_pager_grey">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="9dp"
+                    android:background="@color/white"
+                    android:layout_height="137dp">
+
+                    <TextView
+                        android:id="@+id/tv_payment_address_tag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_send_address_tag"
+                        android:textSize="13sp"
+                        android:textColor="@color/text_main_60_black"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="10dp"/>
+
+
+                    <TextView
+                        android:id="@+id/tv_payment_address"
+                        android:layout_width="223dp"
+                        android:singleLine="true"
+                        android:ellipsize="middle"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_payment_address_tag"
+                        app:layout_constraintLeft_toLeftOf="@+id/tv_payment_address_tag"
+                        android:layout_marginTop="9dp"
+                        android:text="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                        android:textSize="13sp"
+                        android:textColor="@color/text_light_blue"/>
+
+
+                    <ImageView
+                        android:id="@+id/tv_payment_address_copy"
+                        android:layout_width="13dp"
+                        android:layout_height="13dp"
+                        app:layout_constraintTop_toTopOf="@+id/tv_payment_address"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_payment_address"
+                        app:layout_constraintLeft_toRightOf="@+id/tv_payment_address"
+                        android:src="@mipmap/ic_text_blue_copy"
+                        android:layout_marginLeft="8dp"/>
+
+                    <TextView
+                        android:id="@+id/tv_receive_address_tag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_receive_address_tag"
+                        android:textSize="13sp"
+                        android:textColor="@color/text_main_60_black"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_payment_address"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="20dp"/>
+
+                    <TextView
+                        android:id="@+id/tv_receive_address"
+                        android:layout_width="223dp"
+                        android:singleLine="true"
+                        android:ellipsize="middle"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_receive_address_tag"
+                        app:layout_constraintLeft_toLeftOf="@+id/tv_receive_address_tag"
+                        android:layout_marginTop="9dp"
+                        android:text="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                        android:textSize="13sp"
+                        android:textColor="@color/text_light_blue"/>
+
+
+                    <ImageView
+                        android:id="@+id/tv_receive_address_copy"
+                        android:layout_width="13dp"
+                        android:layout_height="13dp"
+                        app:layout_constraintTop_toTopOf="@+id/tv_receive_address"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_receive_address"
+                        app:layout_constraintLeft_toRightOf="@+id/tv_receive_address"
+                        android:src="@mipmap/ic_text_blue_copy"
+                        android:layout_marginLeft="8dp"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="9dp"
+                    android:background="@color/white"
+                    android:layout_height="76dp">
+
+                    <TextView
+                        android:id="@+id/tv_miner_tag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_miner_fee_tag"
+                        android:textSize="13sp"
+                        android:textColor="@color/text_main_60_black"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="10dp"/>
+
+
+                    <TextView
+                        android:id="@+id/tv_miner_fee"
+                        android:layout_width="223dp"
+                        android:singleLine="true"
+                        android:ellipsize="middle"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_miner_tag"
+                        app:layout_constraintLeft_toLeftOf="@+id/tv_miner_tag"
+                        android:layout_marginTop="9dp"
+                        android:text=""
+                        android:textSize="13sp"
+                        android:textColor="@color/text_light_blue"/>
+
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="9dp"
+                    android:background="@color/white"
+                    android:layout_height="76dp">
+
+                    <TextView
+                        android:id="@+id/tv_chain_record_tag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_chain_record_tag"
+                        android:textSize="13sp"
+                        android:textColor="@color/text_main_60_black"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="10dp"/>
+
+
+                    <TextView
+                        android:id="@+id/tv_chain_record"
+                        android:layout_width="223dp"
+                        android:singleLine="true"
+                        android:ellipsize="middle"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_chain_record_tag"
+                        app:layout_constraintLeft_toLeftOf="@+id/tv_chain_record_tag"
+                        android:layout_marginTop="9dp"
+                        android:text="L3fUHBGkBNBCnH...2tUo9urXuC8Yr"
+                        android:textSize="13sp"
+                        android:textColor="@color/text_main_blue"/>
+
+                    <ImageView
+                        android:id="@+id/tv_chain_record_copy"
+                        android:layout_width="13dp"
+                        android:layout_height="13dp"
+                        app:layout_constraintTop_toTopOf="@+id/tv_chain_record"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_chain_record"
+                        app:layout_constraintLeft_toRightOf="@+id/tv_chain_record"
+                        android:src="@mipmap/ic_text_blue_copy"
+                        android:layout_marginLeft="8dp"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="9dp"
+                    android:background="@color/white"
+                    android:layout_height="142dp">
+
+                    <TextView
+                        android:id="@+id/tv_arrive_time_tag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_arrive_time_tag"
+                        android:textSize="13sp"
+                        android:textColor="@color/text_main_60_black"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="10dp"/>
+
+                    <TextView
+                        android:id="@+id/tv_arrive_time"
+                        android:layout_width="223dp"
+                        android:singleLine="true"
+                        android:ellipsize="middle"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_arrive_time_tag"
+                        app:layout_constraintLeft_toLeftOf="@+id/tv_arrive_time_tag"
+                        android:layout_marginTop="9dp"
+                        android:text=""
+                        android:textSize="13sp"
+                        android:textColor="@color/text_main_80_grey"/>
+                    <TextView
+                        android:id="@+id/tv_transaction_note_tag"
+                        android:layout_width="223dp"
+                        android:singleLine="true"
+                        android:ellipsize="middle"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_arrive_time"
+                        app:layout_constraintLeft_toLeftOf="@+id/tv_arrive_time"
+                        android:layout_marginTop="9dp"
+                        android:text="备注"
+                        android:textSize="13sp"
+                        android:textColor="@color/text_main_80_grey"/>
+
+                    <TextView
+                        android:id="@+id/tv_transaction_note"
+                        android:layout_width="223dp"
+                        android:singleLine="true"
+                        android:ellipsize="middle"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_transaction_note_tag"
+                        app:layout_constraintLeft_toLeftOf="@+id/tv_arrive_time"
+                        android:layout_marginTop="9dp"
+                        android:text=""
+                        android:textSize="13sp"
+                        android:textColor="@color/text_main_80_grey"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="9dp"
+                    android:background="@color/white"
+                    android:layout_height="76dp">
+
+                    <TextView
+                        android:id="@+id/tv_block_height_tag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_coin_block_height_tag"
+                        android:textSize="13sp"
+                        android:textColor="@color/text_main_60_black"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="10dp"/>
+
+                    <TextView
+                        android:id="@+id/tv_block_height"
+                        android:layout_width="223dp"
+                        android:singleLine="true"
+                        android:ellipsize="middle"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_block_height_tag"
+                        app:layout_constraintLeft_toLeftOf="@+id/tv_block_height_tag"
+                        android:layout_marginTop="9dp"
+                        android:text="3878995"
+                        android:textSize="13sp"
+                        android:textColor="@color/text_main_80_grey"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+    </ScrollView>
+
+
+
+
+</LinearLayout>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:title=""
+        android:theme="@style/AppTheme.ActionBar"
+        android:background="@color/white"
+        app:navigationIcon="@mipmap/ic_arrow_back">
+
+        <TextView
+            android:id="@+id/toolbarTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Day"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="18sp"/>
+
+        <ImageView
+            android:id="@+id/btn_collect"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_gravity="right"
+            android:layout_marginRight="15dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/btn_finish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="15dp"
+            android:textSize="15sp"
+            android:text="@string/btn_finish_text"
+            android:textColor="@color/black"
+            android:visibility="gone"
+            />
+
+
+    </androidx.appcompat.widget.Toolbar>
+</LinearLayout>

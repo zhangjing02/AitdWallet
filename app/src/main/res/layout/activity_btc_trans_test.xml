@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context=".ui.activity.wallet.btc.BtcTransTestActivity">
+
+
+
+    <TextView
+        android:id="@+id/tv_tx_send1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center"
+        android:text="转账过去001 "/>
+    <TextView
+        android:id="@+id/tv_tx_send2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:textSize="20sp"
+        android:layout_gravity="center"
+        android:text="转账过去002 "/>
+
+    <EditText
+        android:id="@+id/et_send_value"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="30dp"
+        android:hint="转账金额"/>
+
+
+    <TextView
+        android:id="@+id/tv_tx_send3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:textSize="20sp"
+        android:layout_gravity="center"
+        android:text="转账过去003 "/>
+
+
+    <TextView
+        android:id="@+id/btn_version_update"
+        android:layout_width="149dp"
+        android:layout_height="44dp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/corner_blue_change"
+        android:text="立即更新111111"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+
+</LinearLayout>

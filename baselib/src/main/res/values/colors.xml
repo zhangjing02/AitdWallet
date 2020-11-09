@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg_edit_thin_gray">#FFEFF1FF</color>
+    <color name="bg_edit_thin_gray2">#EEEEEE</color>
+    <color name="bg_select_thin_gray">#FFEEEEEE</color>
+    <color name="color_green">#3CC879</color>
+    <color name="color_light_green">#AFBFF2</color>
+    <color name="color_progress_gray">#707070</color>
+    <color name="color_progress_light_blue">#A0B5FB</color>
+    <color name="color_progress_blue">#053FF1</color>
+    <color name="color_progress_text">#7194FF</color>
+    <color name="color_progress_black_text">#222222</color>
+    <color name="white">#F6F6F6</color>
+    <color name="white_transparent">#00F6F6F6</color>
+
+    <color name="progress_miner_fee_fast">#1A161A27</color>
+    <color name="progress_miner_fee_slow">#6380F2</color>
+    <color name="color_progress_slow_text">#99161A27</color>
+    <color name="color_progress_fast_text">#5B6782</color>
+
+
+    <color name="color_blue">#4371FF</color>
+    <color name="bg_toast_center">#B35E6992</color>
+
+</resources>

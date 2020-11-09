@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_virtual_currency"
+        android:layout_width="match_parent"
+        android:layout_height="84dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginHorizontal="18dp">
+
+        <ImageView
+            android:id="@+id/iv_transaction_state"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="19dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/ic_transcation_success"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_transaction_address"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:ellipsize="middle"
+            android:text="rMiWotmgxUFN7oHfdfdfffdfddfdfdf1dEdyYpisCyRRk3uGqd"
+            android:textColor="@color/black"
+            android:singleLine="true"
+            android:textSize="14sp"
+            android:layout_marginRight="30dp"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintLeft_toRightOf="@+id/iv_transaction_state"
+            app:layout_constraintRight_toLeftOf="@+id/tv_currency_balance"
+            app:layout_constraintTop_toTopOf="@+id/iv_transaction_state" />
+
+        <TextView
+            android:id="@+id/tv_transaction_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:text="2018 0603 20:45:00"
+            android:textColor="@color/text_main_60_black"
+            android:textSize="10sp"
+            android:layout_marginTop="9dp"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_transaction_address"
+            app:layout_constraintTop_toBottomOf="@+id/tv_transaction_address" />
+
+        <TextView
+            android:id="@+id/tv_currency_balance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_10"
+            android:text="-0.0025Btc"
+            android:textColor="@color/text_main_black"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.35" />
+
+        <TextView
+            android:id="@+id/tv_transaction_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_10"
+            android:text="@string/text_transaction_receive_success"
+            android:textColor="@color/text_light_blue"
+            android:textSize="10sp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_transaction_time"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_transaction_time"/>
+
+
+        <View
+            android:id="@+id/line_middle"
+            android:layout_width="wrap_content"
+            android:layout_height="0.5dp"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_transaction_address"
+            android:background="@color/color_line_10_grey"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</LinearLayout>

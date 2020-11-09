@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TopView">
+        <attr name="title" format="string" />
+        <attr name="rightText" format="string" />
+        <attr name="rightTextColor" format="color" />
+        <attr name="leftText" format="string" />
+        <attr name="leftTextColor" format="color" />
+        <attr name="leftIcon" format="reference" />
+        <attr name="rightIcon" format="reference" />
+        <attr name="rightTextEnbale" format="boolean" />
+        <attr name="titleColor" format="color" />
+        <attr name="topBackground" format="color" />
+        <attr name="leftBackClick" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="ExpandableLayout">
+        <attr name="el_duration" format="integer" />
+        <attr name="el_expanded" format="boolean" />
+        <attr name="el_parallax" format="float" />
+        <attr name="android:orientation"/>
+    </declare-styleable>
+
+    <declare-styleable name="MyChartView">
+        <attr name="bargrapColor" format="color"/>
+        <attr name="selectRightColor" format="color"/>
+        <attr name="xyColor" format="color"/>
+        <attr name="textSize" format="dimension"/>
+        <attr name="textColor" format="color"/>
+    </declare-styleable>
+
+
+    <declare-styleable name="CustomSeekBar">
+        <attr name="progress_start_color" format="color" />
+        <attr name="progress_end_color" format="color" />
+        <attr name="progress_text_color" format="color" />
+        <attr name="android:orientation"/>
+    </declare-styleable>
+
+
+    <attr name="mainBackground" format="color|reference" />
+    <attr name="mainBackground1" format="color|reference" />
+    <attr name="bg_main_bottom" format="reference"/>
+    <attr name="background1" format="color|reference"/>
+    <attr name="background2" format="color|reference"/>
+    <attr name="background3" format="color|reference"/>
+    <attr name="text_color" format="color|reference" />
+    <attr name="text_color1" format="color|reference" />
+    <attr name="mine_icon1" format="reference" />
+    <attr name="mine_icon2" format="reference" />
+    <attr name="mine_icon3" format="reference" />
+    <attr name="mine_icon4" format="reference" />
+    <attr name="mine_icon5" format="reference" />
+    <attr name="mine_icon6" format="reference" />
+    <attr name="mine_icon7" format="reference" />
+    <attr name="line" format="color|reference" />
+
+
+
+</resources>

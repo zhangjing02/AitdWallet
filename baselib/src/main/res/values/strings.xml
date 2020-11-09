@@ -1,0 +1,57 @@
+<resources>
+    <string name="app_name">AITDTest01</string>
+
+    <!--网络请求异常提示-->
+<!--    <string name="network_error">Network Issue</string>-->
+<!--    <string name="json_error">Parsing exception</string>-->
+<!--    <string name="network_timeout">Network timeout</string>-->
+    <string name="network_error">网络异常</string>
+    <string name="json_error">解析异常</string>
+    <string name="network_timeout">请求超时</string>
+
+
+    <string name="copy_success">复制成功</string>
+
+    <string name="take_currency_slow">慢</string>
+    <string name="take_currency_fast">快</string>
+
+
+
+    <!--二维码扫描-->
+    <string name="scan1">将条码放入框内，即可自动扫描</string>
+    <string name="scan2">将二维码/条码放入框内，即可自动扫描</string>
+
+    <string name="settingdakai">请到设置打开权限</string>
+    <string name="seal_select_chat_bg_cancel">取消</string>
+    <string name="goseeting">去设置</string>
+    <string name="getfailse">获取权限失败</string>
+    <string name="toastsaoma">请扫描用户的二维码!</string>
+    <string name="shanguandeng">\n环境过暗，请打开闪光灯</string>
+    <string name="toastdakai">打开相机出错，请重试</string>
+
+
+    <string name="scanning_des2">将二维码放入扫描框内</string>
+    <string name="photo">相册</string>
+    <string name="scan_code">扫二维码</string>
+
+
+
+    <string name="save_successful">保存成功</string>
+    <string name="save_failed">保存失败</string>
+
+    <!--下拉刷新，上啦加载更多提示语-->
+<!--    <string name="listview_header_hint_normal">Pull to refresh</string>-->
+<!--    <string name="listview_header_hint_release">Refresh when release</string>-->
+<!--    <string name="refreshing">Refreshing…</string>-->
+<!--    <string name="refresh_done">Refresh done</string>-->
+<!--    <string name="loading_notice2">Loading</string>-->
+<!--    <string name="loading_finish2">Loading Completed</string>-->
+<!--    <string name="listview_header_hint_normal">Pull to refresh</string>-->
+<!--    <string name="listview_header_hint_release">Refresh when release</string>-->
+<!--    <string name="refreshing">Refreshing…</string>-->
+<!--    <string name="refresh_done">Refresh done</string>-->
+<!--    <string name="loading_notice2">Loading</string>-->
+<!--    <string name="loading_finish2">Loading Completed</string>-->
+
+
+</resources>

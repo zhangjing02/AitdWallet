@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:autofit="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@mipmap/bg_home_fragment_head"
+    android:layout_height="281dp">
+
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:background="@color/color_blue"/>-->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+<!--        <ImageView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:src="@mipmap/bg_home_fragment_head"-->
+<!--            android:scaleType="fitXY" />-->
+
+        <TextView
+            android:id="@+id/tv_wallet_tittle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="24dp"
+            android:text="@string/text_local_wallet"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <ImageView
+            android:id="@+id/iv_add_wallet"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="15dp"
+            android:src="@mipmap/ic_home_wallet_manage"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_wallet_tittle"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_currency_saving_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_total_property"
+            android:textColor="#FFF2F2F2"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_wallet_tittle"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.32" />
+
+        <ImageView
+            android:id="@+id/iv_balance_hide"
+            android:layout_width="19dp"
+            android:layout_height="19dp"
+            android:layout_marginLeft="9dp"
+            android:src="@mipmap/ic_open_white_eye"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_currency_saving_tag"
+            app:layout_constraintLeft_toRightOf="@+id/tv_currency_saving_tag"
+            app:layout_constraintTop_toTopOf="@+id/tv_currency_saving_tag" />
+
+
+        <TextView
+            android:id="@+id/tv_fiat_balance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$59121362"
+            android:textColor="#FFFFFFFF"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_wallet_tittle"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.45" />
+
+        <TextView
+            android:id="@+id/tv_fiat_hide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@+id/tv_fiat_balance"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_fiat_balance"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_wallet_tittle"
+            android:text="* * * * * * "
+            android:visibility="gone"
+            android:textColor="@color/white"
+            android:textSize="24sp"/>
+
+
+
+        <TextView
+            android:id="@+id/tv_btc_balance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="$59121362"
+            android:textColor="#FFFFFFFF"
+            android:textSize="15sp"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_wallet_tittle"
+            app:layout_constraintTop_toBottomOf="@+id/tv_fiat_balance" />
+
+
+        <TextView
+            android:id="@+id/btn_transaction_receive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_available_property_tag"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_currency_saving_tag"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.74" />
+
+        <TextView
+            android:id="@+id/tv_available_capital"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:text="123456"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_currency_saving_tag"
+            app:layout_constraintTop_toBottomOf="@+id/btn_transaction_receive" />
+
+        <TextView
+            android:id="@+id/tv_hide_available_capital"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:text="* * * * * * "
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_currency_saving_tag"
+            app:layout_constraintTop_toBottomOf="@+id/btn_transaction_receive" />
+
+
+        <TextView
+            android:id="@+id/btn_transaction_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_frozen_property_tag"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_transaction_receive"
+            app:layout_constraintHorizontal_bias="0.55"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btn_transaction_receive" />
+
+        <TextView
+            android:id="@+id/tv_frozen_capital"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:text="456789"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintLeft_toLeftOf="@+id/btn_transaction_send"
+            app:layout_constraintTop_toBottomOf="@+id/btn_transaction_send" />
+
+        <TextView
+            android:id="@+id/tv_hide_frozen_capital"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:text="* * * * * * "
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="@+id/btn_transaction_send"
+            app:layout_constraintTop_toBottomOf="@+id/btn_transaction_send" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</LinearLayout>

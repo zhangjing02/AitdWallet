@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:layout_marginBottom="15dp"
+    tools:context=".ui.activity.wallet.property.CoinListActivity">
+
+    <include
+        android:id="@+id/toolbar_layout"
+        layout="@layout/toolbar_menu" />
+    <!--    <include layout="@layout/content_scrolling" />-->
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/refreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_layout"
+        app:layout_constraintHeight_percent="1"
+        app:srlAccentColor="@android:color/black">
+        <com.scwang.smartrefresh.layout.header.ClassicsHeader
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="600dp"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/view_pager_include"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                layout="@layout/header_coin_card"
+                app:layout_constraintTop_toBottomOf="@+id/toolbar_layout"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcv_home_coin"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                app:layout_constraintTop_toBottomOf="@+id/view_pager_include"
+                android:layout_marginTop="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </LinearLayout>
+
+
+
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.tianqi.aitdwallet">
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="MediaStore.Images.Media.INTERNAL_CONTENT_URI" />
+    <uses-permission android:name="MediaStore.Images.Media.EXTERNAL_CONTENT_URI" />
+
+    <application
+        android:name=".MyApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:supportsRtl="true"
+        android:theme="@style/AppThemeTrans">
+        <activity android:name=".ui.activity.wallet.property.SelectCoinToTransActivity"></activity>
+        <activity android:name=".ui.activity.setting.SafeCenterActivity" />
+        <activity android:name=".ui.activity.wallet.btc.BtcTransTestActivity" />
+        <activity android:name=".ui.activity.wallet.setting.CoinHiddenActivity" />
+        <activity android:name=".ui.activity.setting.SystemSettingActivity" />
+        <activity android:name=".ui.activity.wallet.setting.WalletHiddenActivity" />
+        <activity android:name=".ui.activity.wallet.setting.WalletManageActivity" />
+        <activity android:name=".ui.activity.wallet.record.TransactionDetailActivity" />
+        <activity android:name=".ui.activity.wallet.setting.PasswordPromptActivity" />
+        <activity android:name=".ui.activity.wallet.setting.ExportPrivateKeyActivity" />
+        <activity android:name=".ui.activity.wallet.property.CoinAddressQrActivity" />
+        <activity android:name=".ui.activity.wallet.setting.ChangeWalletNameActivity" />
+        <activity android:name=".ui.activity.wallet.setting.WalletSettingActivity" />
+        <activity
+            android:name=".ui.activity.wallet.importwallet.ImportBtcCoinActivity"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity android:name=".ui.activity.wallet.importwallet.ImportWalletActivity"
+            android:windowSoftInputMode="adjustNothing"/>
+        <activity android:name=".ui.activity.wallet.initwallet.CreateWalletActivity" />
+        <activity android:name=".ui.activity.wallet.TestBtcActivity" />
+        <activity android:name=".ui.activity.wallet.initwallet.BackupMemoryWordActivity" />
+        <activity android:name=".ui.activity.wallet.initwallet.SetSecurityPsdActivity" />
+        <activity android:name=".ui.activity.wallet.initwallet.SelectWalletTypeActivity" />
+        <activity android:name=".ui.activity.GuideWalletActivity" />
+        <activity
+            android:name=".ui.activity.SplashActivity"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.activity.tool.ScanActivity" />
+        <activity android:name=".ui.activity.MainActivity" />
+        <activity android:name=".ui.activity.wallet.btc.BitcoinTransactionNativeActivity" />
+        <activity android:name=".ui.activity.wallet.usdt.UsdtTransactionNativeActivity" />
+        <activity
+            android:name=".ui.activity.wallet.importwallet.ImportUsdtCoinActivity"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity android:name=".ui.activity.wallet.setting.VerifySecurityPsdActivity" />
+        <activity android:name=".ui.activity.wallet.property.CoinListActivity" />
+        <activity android:name=".ui.activity.wallet.initwallet.ImportWalletFrMnemonicActivity" />
+        <activity android:name=".ui.activity.wallet.initwallet.VerifyMemoryWordActivity" />
+        <activity android:name=".ui.activity.wallet.setting.WalletSettingFrImportActivity" />
+        <activity android:name=".ui.activity.setting.CoinUnitSettingActivity" />
+        <activity android:name=".ui.activity.wallet.btc.BitcoinTransactionActivity" />
+        <activity android:name=".ui.activity.wallet.usdt.UsdtTransactionActivity" />
+        <activity android:name=".ui.activity.GuidePageActivity" />
+        <activity android:name=".ui.activity.wallet.record.TransactionRecordScrollActivity" />
+        <activity android:name=".ui.activity.wallet.setting.PrivacyTermsWebActivity" />
+        <activity android:name=".ui.activity.wallet.btc.BitcoinTransactionActivity002" />
+        <activity android:name=".ui.activity.wallet.usdt.UsdtTransactionActivity002" />
+        <activity android:name=".ui.activity.wallet.record.TransactionRecordActivity" />
+    </application>
+
+</manifest>

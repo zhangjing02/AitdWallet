@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:autofit="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="261dp"
+    android:paddingTop="10dp"
+    android:background="@mipmap/bg_home_fragment_head">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_wallet_tittle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_local_wallet"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_add_wallet"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_marginRight="15dp"
+            android:src="@mipmap/ic_home_wallet_manage"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_wallet_tittle" />
+
+
+        <ImageView
+            android:id="@+id/iv_new_guide_step2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_new_guide_step2"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_wallet_tittle"
+            android:visibility="gone" />
+
+
+
+        <TextView
+            android:id="@+id/tv_currency_saving_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_total_property"
+            android:textColor="@color/text_main_80_white"
+            android:textSize="15sp"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_wallet_tittle"
+            app:layout_constraintRight_toRightOf="@+id/tv_wallet_tittle"
+            app:layout_constraintTop_toBottomOf="@+id/tv_wallet_tittle"
+            android:layout_marginTop="20dp"/>
+
+        <ImageView
+            android:id="@+id/iv_balance_hide"
+            android:layout_width="19dp"
+            android:layout_height="19dp"
+            android:layout_marginLeft="9dp"
+            android:src="@mipmap/ic_open_white_trans_eye"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_currency_saving_tag"
+            app:layout_constraintLeft_toRightOf="@+id/tv_currency_saving_tag"
+            app:layout_constraintTop_toTopOf="@+id/tv_currency_saving_tag" />
+
+
+        <TextView
+            android:id="@+id/tv_fiat_balance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.000"
+            android:textColor="#FFFFFFFF"
+            android:textSize="37sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_wallet_tittle"
+            app:layout_constraintRight_toRightOf="@+id/tv_wallet_tittle"
+            app:layout_constraintTop_toBottomOf="@+id/tv_currency_saving_tag" />
+
+        <com.tianqi.baselib.widget.RoundRectImageView
+            android:id="@+id/iv_new_guide_step"
+            android:layout_width="120dp"
+            android:layout_height="60dp"
+            android:src="@mipmap/ic_new_guide_img1"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_fiat_balance"
+            app:layout_constraintRight_toRightOf="@+id/tv_fiat_balance"
+            app:layout_constraintTop_toTopOf="@+id/tv_fiat_balance"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_fiat_balance"/>
+
+
+        <TextView
+            android:id="@+id/tv_fiat_hide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@+id/tv_fiat_balance"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_fiat_balance"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:text="* * * *"
+            android:visibility="gone"
+            android:textColor="@color/white"
+            android:textSize="24sp"/>
+
+        <TextView
+            android:id="@+id/tv_btc_balance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="$59121362"
+            android:textColor="#FFFFFFFF"
+            android:textSize="15sp"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_wallet_tittle"
+            app:layout_constraintTop_toBottomOf="@+id/tv_fiat_balance" />
+
+
+<!--        <TextView-->
+<!--            android:id="@+id/tv_available_capital"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="@dimen/dp_10"-->
+<!--            android:text="123456"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:textSize="15sp"-->
+<!--            app:layout_constraintLeft_toLeftOf="@+id/tv_currency_saving_tag"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/tv_available_capital_tag" />-->
+
+        <TextView
+            android:id="@+id/tv_hide_available_capital"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:text="* * * * * * "
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_currency_saving_tag"
+            app:layout_constraintTop_toBottomOf="@+id/btn_transaction_receive" />
+
+
+        <TextView
+            android:id="@+id/btn_transaction_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tittle_send_money_text"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintHorizontal_bias="0.30"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_fiat_balance"
+            android:layout_marginTop="31dp"/>
+
+        <ImageView
+            android:id="@+id/iv_transaction_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_home_white_send"
+            android:scaleType="fitXY"
+            app:layout_constraintTop_toTopOf="@+id/btn_transaction_send"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_transaction_send"
+            app:layout_constraintRight_toLeftOf="@+id/btn_transaction_send"
+            android:layout_marginRight="12dp"/>
+
+
+        <TextView
+            android:id="@+id/btn_transaction_receive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tittle_receive_money_text"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintHorizontal_bias="0.80"
+            app:layout_constraintTop_toTopOf="@+id/btn_transaction_send"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_transaction_send" />
+
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="20dp"
+            android:background="@color/text_main_50_white"
+            app:layout_constraintTop_toTopOf="@+id/btn_transaction_receive"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_transaction_receive"
+            android:layout_marginTop="2dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+
+        <ImageView
+            android:id="@+id/iv_transaction_receive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_white_receive"
+            android:scaleType="centerCrop"
+            app:layout_constraintTop_toTopOf="@+id/btn_transaction_send"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_transaction_send"
+            app:layout_constraintRight_toLeftOf="@+id/btn_transaction_receive"
+            android:layout_marginRight="12dp"/>
+
+<!--        <TextView-->
+<!--            android:id="@+id/tv_frozen_capital"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="@dimen/dp_10"-->
+<!--            android:text="456789"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:textSize="15sp"-->
+<!--            app:layout_constraintLeft_toLeftOf="@+id/tv_frozen_capital_tag"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/tv_frozen_capital_tag" />-->
+
+        <TextView
+            android:id="@+id/tv_hide_frozen_capital"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:text="* * * * * * "
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="@+id/btn_transaction_send"
+            app:layout_constraintTop_toBottomOf="@+id/btn_transaction_send" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</LinearLayout>
