@@ -35,14 +35,13 @@ public class TransactionRecord {
     private double input_spent;      //交易的输入信息花费了多少。（防止listunspent更新不及时，导致使用同一笔输入）
     private String list_unspent_consume;//未花费的交易，使用了多少
     private double miner_fee;          //交易花费了多少费用。
-
-
-    @Generated(hash = 907977045)
+    private String block_no;           //交易块的编号，即区块高度。
+    @Generated(hash = 102102260)
     public TransactionRecord(Long id, String txid, int transType, int status,
             int coin_type, String address, int confirmations, double amount,
             String timeStr, String unit, String coin_id, int vout_id, String remark,
             String targetAddress, String input_id, double input_spent,
-            String list_unspent_consume, double miner_fee) {
+            String list_unspent_consume, double miner_fee, String block_no) {
         this.id = id;
         this.txid = txid;
         this.transType = transType;
@@ -61,6 +60,7 @@ public class TransactionRecord {
         this.input_spent = input_spent;
         this.list_unspent_consume = list_unspent_consume;
         this.miner_fee = miner_fee;
+        this.block_no = block_no;
     }
     @Generated(hash = 1215017002)
     public TransactionRecord() {
@@ -173,28 +173,12 @@ public class TransactionRecord {
     public void setMiner_fee(double miner_fee) {
         this.miner_fee = miner_fee;
     }
-
-    @Override
-    public String toString() {
-        return "TransactionRecord{" +
-                "id=" + id +
-                ", txid='" + txid + '\'' +
-                ", transType=" + transType +
-                ", status=" + status +
-                ", coin_type=" + coin_type +
-                ", address='" + address + '\'' +
-                ", confirmations=" + confirmations +
-                ", amount=" + amount +
-                ", timeStr='" + timeStr + '\'' +
-                ", unit='" + unit + '\'' +
-                ", coin_id='" + coin_id + '\'' +
-                ", vout_id=" + vout_id +
-                ", remark='" + remark + '\'' +
-                ", targetAddress='" + targetAddress + '\'' +
-                ", input_id='" + input_id + '\'' +
-                ", input_spent=" + input_spent +
-                ", list_unspent_consume='" + list_unspent_consume + '\'' +
-                ", miner_fee=" + miner_fee +
-                '}';
+    public String getBlock_no() {
+        return this.block_no;
     }
+    public void setBlock_no(String block_no) {
+        this.block_no = block_no;
+    }
+
+    
 }

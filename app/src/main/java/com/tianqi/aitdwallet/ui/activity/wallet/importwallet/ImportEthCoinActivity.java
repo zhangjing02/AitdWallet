@@ -2,6 +2,7 @@ package com.tianqi.aitdwallet.ui.activity.wallet.importwallet;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -31,8 +32,10 @@ import com.tianqi.aitdwallet.adapter.list_adapter.MnemonicWordAdapter;
 import com.tianqi.aitdwallet.ui.activity.MainActivity;
 import com.tianqi.aitdwallet.ui.activity.tool.ScanActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.setting.PrivacyTermsWebActivity;
+import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.aitdwallet.utils.MnemonicUtils;
 import com.tianqi.aitdwallet.utils.WalletUtils;
+import com.tianqi.aitdwallet.utils.eth.EthWalletManager;
 import com.tianqi.aitdwallet.widget.dialog.ExplainPrivateKeyDialog;
 import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
@@ -52,6 +55,7 @@ import com.tianqi.baselib.utils.eventbus.EventMessage;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -396,40 +400,39 @@ public class ImportEthCoinActivity extends BaseActivity {
             if (walletInfo == null) {
                 walletInfo = createWalletInfo(Constant.TRANSACTION_COIN_NAME_ETH);
             }
-
             CoinRateInfo btc_rate = CoinRateInfoManager.getWalletBtcFrCoinId(Constant.COIN_RATE_ETH);
-
             //币种数据库
             CoinInfo coinInfo = new CoinInfo();
-            coinInfo.setCoin_address(master.getAddress());
+            coinInfo.setCoin_address(Constants.HEX_PREFIX+master.getAddress());
             if (btc_rate != null && walletInfo != null) {
                 walletInfo.setCoin_CNYPrice(btc_rate.getPrice_cny());
                 walletInfo.setCoin_USDPrice(btc_rate.getPrice_usd());
             }
-
             Log.i("WalletFragment", "importSingleCoin: 我们得到的钱包是什么？" + walletInfo.toString());
             coinInfo.setCoin_fullName(Constant.COIN_FULL_NAME_ETH);
 
-            List<CoinInfo> walletBtcInfo = CoinInfoManager.getWalletBtcInfo();
+            List<CoinInfo> walletBtcInfo = CoinInfoManager.getWalletEthInfo();
             coinInfo.setCoin_ComeType(Constant.COIN_SOURCE_IMPORT);
             coinInfo.setCoin_id(Constant.IMPORT_ETH_ID + walletBtcInfo.size());
+            // coinInfo.setIsCollect();
+            coinInfo.setPrivateKey(master.getPrivateKey());
+            //保存一个文件形式，方便加载的时候，能很快加载出钱包。否则每次去生成会很慢。
+            // TODO: 2020/11/10 此处写的不太合理，因为是线程在跑，所以，可能此页面一直进行完了，保存钱包的逻辑还没执行完。
+            EthWalletManager.getInstance().loadWallet(this, coinInfo, wallet -> {
+
+            });
             coinInfo.setCoin_name(Constant.TRANSACTION_COIN_NAME_ETH);
             coinInfo.setCoin_type(Constant.COIN_BIP_TYPE_ETH);
             coinInfo.setKeystoreStr(etInputKey.getText().toString());
             coinInfo.setAlias_name(Constant.TRANSACTION_COIN_NAME_ETH);
             coinInfo.setResourceId(R.mipmap.ic_circle_eth);
-            // coinInfo.setIsCollect();
-            coinInfo.setPrivateKey(master.getPrivateKey());
+
             coinInfo.setPublicKey(master.getPublicKey());
             coinInfo.setWallet_id(walletInfo.getWallet_id());
 
             //  coinInfo.setWalletLimit();  //不需要限制。
             CoinInfoManager.insertOrUpdate(coinInfo);
-//            if (response3.isSuccessful()) {
-//                return coinInfo;
-//            } else {
-//                return null;
-//            }
+
             return coinInfo;
         }).compose(RxHelper.pool_main())
                 .subscribe(baseEntity -> {

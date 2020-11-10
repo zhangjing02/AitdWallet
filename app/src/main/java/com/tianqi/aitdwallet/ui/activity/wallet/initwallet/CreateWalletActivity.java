@@ -24,7 +24,9 @@ import com.quincysx.crypto.utils.HexUtils;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.adapter.list_adapter.WalletCoinAdapter;
 import com.tianqi.aitdwallet.ui.activity.MainActivity;
+import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.aitdwallet.utils.WalletUtils;
+import com.tianqi.aitdwallet.utils.eth.EthWalletManager;
 import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dao.CoinRateInfo;
@@ -39,6 +41,8 @@ import com.tianqi.baselib.utils.Constant;
 import com.tianqi.baselib.utils.digital.AESCipher;
 import com.tianqi.baselib.utils.display.GlideUtils;
 import com.tianqi.baselib.utils.rxtool.RxToolUtil;
+
+import org.web3j.crypto.WalletFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -226,6 +230,10 @@ public class CreateWalletActivity extends BaseActivity {
     private void insertCoinInfo(ECKeyPair master, WalletInfo walletInfo) {
         CoinInfo coinInfo = new CoinInfo();
         coinInfo.setCoin_address(master.getAddress());
+        // coinInfo.setIsCollect();
+        coinInfo.setPrivateKey(master.getPrivateKey());
+        coinInfo.setPublicKey(master.getPublicKey());
+        coinInfo.setWallet_id(walletInfo.getWallet_id());
         if (walletInfo.getWallet_id().equals(Constant.TRANSACTION_COIN_NAME_BTC)) {
             coinInfo.setCoin_fullName(Constant.COIN_FULL_NAME_BTC);
             coinInfo.setCoin_ComeType(Constant.COIN_SOURCE_CREATE);
@@ -235,27 +243,33 @@ public class CreateWalletActivity extends BaseActivity {
             coinInfo.setAlias_name(Constant.TRANSACTION_COIN_NAME_BTC);
             coinInfo.setResourceId(R.mipmap.ic_circle_btc);
         } else if (walletInfo.getWallet_id().equals(Constant.TRANSACTION_COIN_NAME_ETH)) {
+            coinInfo.setCoin_id(Constant.TRANSACTION_COIN_NAME_ETH);
+            coinInfo.setCoin_address(Constants.HEX_PREFIX + master.getAddress());
             coinInfo.setCoin_fullName(Constant.COIN_FULL_NAME_ETH);
             coinInfo.setCoin_ComeType(Constant.COIN_SOURCE_CREATE);
-            coinInfo.setCoin_id(Constant.TRANSACTION_COIN_NAME_ETH);
             coinInfo.setCoin_name(Constant.TRANSACTION_COIN_NAME_ETH);
             coinInfo.setCoin_type(Constant.COIN_BIP_TYPE_USDT);
             coinInfo.setAlias_name(Constant.TRANSACTION_COIN_NAME_ETH);
             coinInfo.setResourceId(R.mipmap.ic_circle_eth);
-            UserInformation information=UserInfoManager.getUserInfo();
-            Log.i("tttttttttttt", "insertCoinInfo: 我们得到的密码是？"+information.getPasswordStr());
+            UserInformation information = UserInfoManager.getUserInfo();
+            Log.i("tttttttttttt", "insertCoinInfo: 我们得到的密码是？" + information.getPasswordStr());
             String aes_decode_str = AESCipher.decrypt(Constant.PSD_KEY, information.getPasswordStr());
-            EthECKeyPair ethECKeyPair= null;
+            EthECKeyPair ethECKeyPair = null;
             try {
                 ethECKeyPair = new EthECKeyPair(HexUtils.fromHex(master.getPrivateKey()));
-                KeyStoreFile light = KeyStore.createLight(aes_decode_str,  ethECKeyPair);
-                String keystore_str=light.toString();
+                KeyStoreFile light = KeyStore.createLight(aes_decode_str, ethECKeyPair);
+                String keystore_str = light.toString();
                 coinInfo.setKeystoreStr(keystore_str);
             } catch (ValidationException e) {
                 e.printStackTrace();
             } catch (CipherException e) {
                 e.printStackTrace();
             }
+            //保存一个文件形式，方便加载的时候，能很快加载出钱包。否则每次去生成会很慢。
+            // TODO: 2020/11/10 此处写的不太合理，因为是线程在跑，所以，可能此页面一直进行完了，保存钱包的逻辑还没执行完。
+            EthWalletManager.getInstance().loadWallet(this, coinInfo, wallet -> {
+                Log.i("ttttttttttttt", "onWalletLoaded: 我们看到了自己的eth地址是？"+wallet.getAddress());
+            });
         } else if (walletInfo.getWallet_id().equals(Constant.TRANSACTION_COIN_NAME_USDT)) {
             coinInfo.setCoin_fullName(Constant.COIN_FULL_NAME_USDT);
             coinInfo.setCoin_ComeType(Constant.COIN_SOURCE_CREATE);
@@ -265,16 +279,12 @@ public class CreateWalletActivity extends BaseActivity {
             coinInfo.setAlias_name(Constant.TRANSACTION_COIN_NAME_USDT);
             coinInfo.setResourceId(R.mipmap.ic_circle_usdt);
         }
-        // coinInfo.setIsCollect();
-        coinInfo.setPrivateKey(master.getPrivateKey());
-        coinInfo.setPublicKey(master.getPublicKey());
-        coinInfo.setWallet_id(walletInfo.getWallet_id());
+
 
         //  coinInfo.setWalletLimit();  //不需要限制。
         Log.i("WalletFragment", "insertBtcCoinInfo: 我们看插入的币种信息是？" + coinInfo.toString());
         CoinInfoManager.insertOrUpdate(coinInfo);
     }
-
 
     @OnClick(R.id.btn_create_wallet)
     public void onViewClicked() {

@@ -202,7 +202,7 @@ public class VerifySecurityPsdActivity extends BaseActivity {
                         if (WalletInfoManager.getWalletInfo().size() > 0) {
                             WalletInfo walletInfo = WalletInfoManager.getWalletInfo().get(0);
                             Log.i(TAG, walletInfo.getWalletType()+"+------onViewClicked: 我们看这次的钱包是？"+walletInfo.getIsImportToCreate());
-                            if (walletInfo != null && walletInfo.getWalletType() >= 0 && walletInfo.getIsImportToCreate()) {
+                            if (walletInfo != null && walletInfo.getWalletType() >= 0 && !walletInfo.getIsImportToCreate()) {
                                 Intent intent = new Intent(this, MainActivity.class);
                                 startActivity(intent);
                             } else if (userInfo != null && !TextUtils.isEmpty(userInfo.getPasswordStr())) {

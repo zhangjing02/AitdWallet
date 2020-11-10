@@ -76,8 +76,10 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
+import io.reactivex.functions.Function;
 
 public class WalletFragment extends BaseFragment {
 
@@ -151,7 +153,7 @@ public class WalletFragment extends BaseFragment {
     private PopupWindow mPopWindow;
     private int new_guide_step_index;
     private int btc_quest_count, usdt_quest_count;
-    private List<CoinInfo> allBtccCoinInfos, allusdtCoinInfos;
+    private List<CoinInfo> allBtccCoinInfos, allusdtCoinInfos,allEthcCoinInfos;
     private List<Disposable> disposableList;
    // private boolean is_request_btc,is_request_usdt;
 
@@ -458,13 +460,13 @@ public class WalletFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-
+        initWallet();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        initWallet();
+
     }
 
     @Override
@@ -502,9 +504,20 @@ public class WalletFragment extends BaseFragment {
                 emitter.onComplete();
             }
         }).map(index -> {
+            Log.i(TAG, "initWallet: 001");
              getBtcUtxo(allBtccCoinInfos.get(index));
             return "123";
+        }).map((Function<String, Object>) s -> {
+            Log.i(TAG, "initWallet: 002");
+            allEthcCoinInfos=CoinInfoManager.getSpecCoinInfo(Constant.TRANSACTION_COIN_NAME_ETH);
+            if (allEthcCoinInfos!=null&&allEthcCoinInfos.size()>0){
+                for (int i = 0; i <allEthcCoinInfos.size() ; i++) {
+                    getEthBalance(allEthcCoinInfos.get(i));
+                }
+            }
+            return "456";
         }).delay(2, TimeUnit.SECONDS).doOnComplete(() -> {
+            Log.i(TAG, "initWallet: 003");
             //当BTC调完后（但结果未必都返回了，所以要做2S延迟）完成的时候，我们做一个2S的延时，然后去循环调用usdt的余额。
             allusdtCoinInfos = CoinInfoManager.getSpecCoinInfo(Constant.TRANSACTION_COIN_NAME_USDT);
             if (allusdtCoinInfos!=null&&allusdtCoinInfos.size() > 0) {
@@ -516,6 +529,7 @@ public class WalletFragment extends BaseFragment {
             }
         }).compose(RxHelper.pool_main())
                 .subscribe(baseEntity -> {
+                    Log.i(TAG, "initWallet: 004");
                     //此处留空，方便后续拓展。
                 });
     }
@@ -576,13 +590,35 @@ public class WalletFragment extends BaseFragment {
                             updateWaletBalance(1);
                         }
                     }
-
                     @Override
                     public void onSubscribe(Disposable d) {
                         disposableList.add(d);
                     }
                 });
 
+    }
+
+    private void getEthBalance(CoinInfo specCoinInfo){
+        String mAddress=specCoinInfo.getCoin_address().startsWith("0x")?specCoinInfo.getCoin_address():Constants.HEX_PREFIX+specCoinInfo.getCoin_address();
+        Map<String, Object> map = new HashMap<>();
+        map.put("apikey", "AnqHS6Rs2WX0hwFXlrv");
+        RetrofitFactory.getInstence(getActivity()).API()
+                .getEthAddressBalance("eth",mAddress, map).compose(RxHelper.io_main())
+                .subscribe(new BaseObserver<String>(getActivity()) {
+                    @Override
+                    public void onSuccess(String data, String msg) {
+                        Log.i(TAG, "onSuccess: 我们看得到的数据是？"+data);
+                        specCoinInfo.setCoin_totalAmount(Double.valueOf(data));
+                        CoinInfoManager.insertOrUpdate(specCoinInfo);
+                    }
+                    @Override
+                    protected void onFailure(int code, String msg) {
+                    }
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposableList.add(d);
+                    }
+                });
     }
 
     private void updateWaletBalance(int coin_type) {
@@ -622,7 +658,11 @@ public class WalletFragment extends BaseFragment {
             }
         }
         mWalletBeans = WalletInfoManager.getWalletInfoNoHidden(false);
-        homeWalletAdapter.setNewData(mWalletBeans);
+
+        //暂时用，重新创建adapter的方法，否则用刷新方法，会导致展开的数据，错乱显示。
+        homeWalletAdapter = new HomeWalletAdapter(R.layout.layout_adapter_home_wallet_for_shadow, mWalletBeans);
+        rcvHomeWallet.setAdapter(homeWalletAdapter);
+     //   homeWalletAdapter.setNewData(mWalletBeans);
         refreshLayout.finishRefresh();
         //获取了新的余额，去更新头部的卡片的余额数值。
         showHeadData();

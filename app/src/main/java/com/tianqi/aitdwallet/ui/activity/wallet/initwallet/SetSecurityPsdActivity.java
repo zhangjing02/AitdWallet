@@ -349,7 +349,7 @@ public class SetSecurityPsdActivity extends BaseActivity {
                         //解密
                         String aes_decode_str = AESCipher.decrypt(Constant.PSD_KEY,accountPwd);
 
-                        Log.i(TAG, "onViewClicked: 002存入的密码是？  "+aes_decode_str);
+                       // Log.i(TAG, "onViewClicked: 002存入的密码是？  "+aes_decode_str);
 
                         userInformation.setNoCenter(true);
                         // TODO: 2020/10/29 此处加入一些判语言和币种单位的逻辑。

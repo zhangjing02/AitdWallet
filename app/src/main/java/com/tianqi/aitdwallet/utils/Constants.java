@@ -58,4 +58,7 @@ public class Constants {
     public static final int LANGUAGE_ENGLISH= 1;
 
 
+    public static final String HEX_PREFIX = "0x";
+
+
 }

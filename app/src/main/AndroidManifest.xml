@@ -23,7 +23,8 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppThemeTrans">
-        <activity android:name=".ui.activity.wallet.property.SelectCoinToTransActivity"></activity>
+        <activity android:name=".ui.activity.wallet.eth.EthTransactionTestActivity"></activity>
+        <activity android:name=".ui.activity.wallet.property.SelectCoinToTransActivity" />
         <activity android:name=".ui.activity.setting.SafeCenterActivity" />
         <activity android:name=".ui.activity.wallet.btc.BtcTransTestActivity" />
         <activity android:name=".ui.activity.wallet.setting.CoinHiddenActivity" />
@@ -39,8 +40,9 @@
         <activity
             android:name=".ui.activity.wallet.importwallet.ImportBtcCoinActivity"
             android:windowSoftInputMode="adjustNothing" />
-        <activity android:name=".ui.activity.wallet.importwallet.ImportWalletActivity"
-            android:windowSoftInputMode="adjustNothing"/>
+        <activity
+            android:name=".ui.activity.wallet.importwallet.ImportWalletActivity"
+            android:windowSoftInputMode="adjustNothing" />
         <activity android:name=".ui.activity.wallet.initwallet.CreateWalletActivity" />
         <activity android:name=".ui.activity.wallet.TestBtcActivity" />
         <activity android:name=".ui.activity.wallet.initwallet.BackupMemoryWordActivity" />
@@ -79,6 +81,7 @@
         <activity android:name=".ui.activity.wallet.record.TransactionRecordActivity" />
         <activity android:name=".ui.activity.wallet.setting.ExportKeystoreActivity" />
         <activity android:name=".ui.activity.wallet.importwallet.ImportEthCoinActivity" />
+        <activity android:name=".ui.activity.wallet.eth.EthTransactionNativeActivity" />
     </application>
 
 </manifest>

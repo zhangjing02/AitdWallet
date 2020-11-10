@@ -20,10 +20,14 @@ import com.quincysx.crypto.ECKeyPair;
 import com.quincysx.crypto.bip32.ValidationException;
 import com.quincysx.crypto.bitcoin.BTCTransaction;
 import com.quincysx.crypto.bitcoin.BitCoinECKeyPair;
+import com.quincysx.crypto.ethereum.keystore.KeyStore;
+import com.quincysx.crypto.ethereum.keystore.KeyStoreFile;
 import com.quincysx.crypto.utils.HexUtils;
 import com.tianqi.aitdwallet.R;
+import com.tianqi.aitdwallet.bean.BaibeiWallet;
 import com.tianqi.aitdwallet.bean.GetUtxoBean;
 import com.tianqi.aitdwallet.ui.activity.tool.ScanActivity;
+import com.tianqi.aitdwallet.utils.BaiBeiWalletUtils;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.aitdwallet.widget.dialog.BottomDialog;
 import com.tianqi.aitdwallet.widget.dialog.PaymentDialog;
@@ -50,8 +54,13 @@ import com.tianqi.baselib.utils.eventbus.EventMessage;
 import com.tianqi.baselib.widget.CustomSeekBar;
 
 import org.greenrobot.eventbus.EventBus;
+import org.web3j.crypto.CipherException;
+import org.web3j.crypto.Wallet;
+import org.web3j.crypto.WalletFile;
 
 import java.io.IOException;
+import java.security.KeyPair;
+import java.security.PublicKey;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;

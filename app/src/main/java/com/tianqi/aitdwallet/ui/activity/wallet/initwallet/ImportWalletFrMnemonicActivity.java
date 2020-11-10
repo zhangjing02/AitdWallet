@@ -15,11 +15,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.quincysx.crypto.CoinTypes;
 import com.quincysx.crypto.ECKeyPair;
+import com.quincysx.crypto.bip32.ValidationException;
+import com.quincysx.crypto.ethereum.EthECKeyPair;
+import com.quincysx.crypto.ethereum.keystore.CipherException;
+import com.quincysx.crypto.ethereum.keystore.KeyStore;
+import com.quincysx.crypto.ethereum.keystore.KeyStoreFile;
+import com.quincysx.crypto.utils.HexUtils;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.adapter.list_adapter.WalletCoinAdapter;
 import com.tianqi.aitdwallet.ui.activity.MainActivity;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.aitdwallet.utils.WalletUtils;
+import com.tianqi.aitdwallet.utils.eth.EthWalletManager;
 import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dao.CoinRateInfo;
@@ -31,6 +38,7 @@ import com.tianqi.baselib.dbManager.UserInfoManager;
 import com.tianqi.baselib.dbManager.WalletInfoManager;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
 import com.tianqi.baselib.utils.Constant;
+import com.tianqi.baselib.utils.digital.AESCipher;
 import com.tianqi.baselib.utils.display.GlideUtils;
 import com.tianqi.baselib.utils.rxtool.RxToolUtil;
 
@@ -87,10 +95,9 @@ public class ImportWalletFrMnemonicActivity extends BaseActivity {
         map.put(Constant.ACTION_IMAGE, R.mipmap.ic_circle_unloading_btc);
         coin_list.add(map);
 
-//        map = new HashMap();
-//        map.put(Constant.ACTION_IMAGE, R.mipmap.ic_circle_unloading_eth);
-//        coin_list.add(map);
-
+        map = new HashMap();
+        map.put(Constant.ACTION_IMAGE, R.mipmap.ic_circle_unloading_eth);
+        coin_list.add(map);
 
         map = new HashMap();
         map.put(Constant.ACTION_IMAGE, R.mipmap.ic_circle_unloading_usdt);
@@ -137,21 +144,21 @@ public class ImportWalletFrMnemonicActivity extends BaseActivity {
             });
             return walletInfo;
         })
-//                .map(walletInfo -> {
-//            //创建ETH币种。
-//            //钱包数据库
-//            ECKeyPair master = WalletUtils.importCoinMaser(CoinTypes.Ethereum,list);
-//            WalletInfo eht_walletInfo = createWalletInfo(master.getAddress(), Constant.TRANSACTION_COIN_NAME_ETH);
-//            //币种数据库
-//            insertCoinInfo(master, eht_walletInfo);
-//
-//            // TODO: 2020/10/10 随后应该加入盼错逻辑，即使报错，也应该继续更新进度。
-//            runOnUiThread(() -> {   //只能在主线程更新ui
-//                index_loading++;
-//                walletCoinAdapter.loadingIndex(index_loading);
-//            });
-//            return eht_walletInfo;
-//        })
+                .map(walletInfo -> {
+                    //创建ETH币种。
+                    //钱包数据库
+                    ECKeyPair master = WalletUtils.createCoinMaser(CoinTypes.Ethereum);
+                    WalletInfo eht_walletInfo = createWalletInfo(master.getAddress(), Constant.TRANSACTION_COIN_NAME_ETH);
+
+                    //币种数据库
+                    insertCoinInfo(master, eht_walletInfo);
+                    // TODO: 2020/10/10 随后应该加入盼错逻辑，即使报错，也应该继续更新进度。
+                    runOnUiThread(() -> {   //只能在主线程更新ui
+                        index_loading++;
+                        walletCoinAdapter.loadingIndex(index_loading);
+                    });
+                    return eht_walletInfo;
+        })
                 .map(walletInfo -> {
             //创建USDT币种。
             //币种数据库,USDT用的东西都是比特币那一套，所以都用bitcoin的方式创建
@@ -167,16 +174,20 @@ public class ImportWalletFrMnemonicActivity extends BaseActivity {
         }).compose(RxHelper.pool_main())
                 .subscribe(baseEntity -> {
                     //模拟新建多个币种的，依次进行loading的效果，实际项目中，以创建初始化完一个币种后，再进行下一个币种的创建和初始化。
-                    RxToolUtil.interval(5000, number -> {
-                        index_loading++;
-                        walletCoinAdapter.loadingIndex(index_loading);
-                        if (index_loading >= coin_list.size()) {
-                            tvCreateWalletNotice.setText(R.string.notice_import_success);
-                            GlideUtils.loadResourceImage(this, R.mipmap.ic_create_wallet_finish,ivCreateWalletTittle);
-                            RxToolUtil.cancel();
-                            btnCreateWallet.setVisibility(View.VISIBLE);
-                        }
-                    });
+//                    RxToolUtil.interval(5000, number -> {
+//                        index_loading++;
+//                        walletCoinAdapter.loadingIndex(index_loading);
+//                        if (index_loading >= coin_list.size()) {
+//                            tvCreateWalletNotice.setText(R.string.notice_create_success);
+//                            GlideUtils.loadResourceImage(this,R.mipmap.ic_create_wallet_finish,ivCreateWalletTittle);
+//                            RxToolUtil.cancel();
+//                            btnCreateWallet.setVisibility(View.VISIBLE);
+//                        }
+//                    });
+                    tvCreateWalletNotice.setText(R.string.notice_create_success);
+                    GlideUtils.loadResourceImage(this, R.mipmap.ic_create_wallet_finish, ivCreateWalletTittle);
+                    RxToolUtil.cancel();
+                    btnCreateWallet.setVisibility(View.VISIBLE);
                 });
     }
 
@@ -220,6 +231,9 @@ public class ImportWalletFrMnemonicActivity extends BaseActivity {
     private void insertCoinInfo(ECKeyPair master, WalletInfo walletInfo) {
         CoinInfo coinInfo = new CoinInfo();
         coinInfo.setCoin_address(master.getAddress());
+        coinInfo.setPrivateKey(master.getPrivateKey());
+        coinInfo.setPublicKey(master.getPublicKey());
+        coinInfo.setWallet_id(walletInfo.getWallet_id());
         if (walletInfo.getWallet_id().equals(Constant.TRANSACTION_COIN_NAME_BTC)) {
             List<CoinInfo> walletBtcInfo = CoinInfoManager.getWalletBtcInfo();
             coinInfo.setCoin_fullName(Constant.COIN_FULL_NAME_BTC);
@@ -230,14 +244,34 @@ public class ImportWalletFrMnemonicActivity extends BaseActivity {
             coinInfo.setAlias_name(Constant.TRANSACTION_COIN_NAME_BTC);
             coinInfo.setResourceId(R.mipmap.ic_circle_btc);
         } else if (walletInfo.getWallet_id().equals(Constant.TRANSACTION_COIN_NAME_ETH)) {
-            List<CoinInfo> walletEthInfo = CoinInfoManager.getWalletEthInfo();
+            List<CoinInfo> walletBtcInfo = CoinInfoManager.getWalletEthInfo();
+            coinInfo.setCoin_id(Constant.TRANSACTION_COIN_NAME_ETH+walletBtcInfo.size());
+            coinInfo.setCoin_address(Constants.HEX_PREFIX + master.getAddress());
             coinInfo.setCoin_fullName(Constant.COIN_FULL_NAME_ETH);
-            coinInfo.setCoin_ComeType(Constant.COIN_SOURCE_IMPORT);
-            coinInfo.setCoin_id(Constant.TRANSACTION_COIN_NAME_ETH+walletEthInfo.size());
+            coinInfo.setCoin_ComeType(Constant.COIN_SOURCE_CREATE);
             coinInfo.setCoin_name(Constant.TRANSACTION_COIN_NAME_ETH);
             coinInfo.setCoin_type(Constant.COIN_BIP_TYPE_USDT);
             coinInfo.setAlias_name(Constant.TRANSACTION_COIN_NAME_ETH);
             coinInfo.setResourceId(R.mipmap.ic_circle_eth);
+            UserInformation information = UserInfoManager.getUserInfo();
+            Log.i("tttttttttttt", "insertCoinInfo: 我们得到的密码是？" + information.getPasswordStr());
+            String aes_decode_str = AESCipher.decrypt(Constant.PSD_KEY, information.getPasswordStr());
+            EthECKeyPair ethECKeyPair = null;
+            try {
+                ethECKeyPair = new EthECKeyPair(HexUtils.fromHex(master.getPrivateKey()));
+                KeyStoreFile light = KeyStore.createLight(aes_decode_str, ethECKeyPair);
+                String keystore_str = light.toString();
+                coinInfo.setKeystoreStr(keystore_str);
+            } catch (ValidationException e) {
+                e.printStackTrace();
+            } catch (CipherException e) {
+                e.printStackTrace();
+            }
+            //保存一个文件形式，方便加载的时候，能很快加载出钱包。否则每次去生成会很慢。
+            // TODO: 2020/11/10 此处写的不太合理，因为是线程在跑，所以，可能此页面一直进行完了，保存钱包的逻辑还没执行完。
+            EthWalletManager.getInstance().loadWallet(this, coinInfo, wallet -> {
+                Log.i("ttttttttttttt", "onWalletLoaded: 我们看到了自己的eth地址是？"+wallet.getAddress());
+            });
         } else if (walletInfo.getWallet_id().equals(Constant.TRANSACTION_COIN_NAME_USDT)) {
             List<CoinInfo> walletUsdtInfo = CoinInfoManager.getWalletUsdtInfo();
             coinInfo.setCoin_fullName(Constant.COIN_FULL_NAME_USDT);
@@ -249,9 +283,7 @@ public class ImportWalletFrMnemonicActivity extends BaseActivity {
             coinInfo.setResourceId(R.mipmap.ic_circle_usdt);
         }
         // coinInfo.setIsCollect();
-        coinInfo.setPrivateKey(master.getPrivateKey());
-        coinInfo.setPublicKey(master.getPublicKey());
-        coinInfo.setWallet_id(walletInfo.getWallet_id());
+
 
         //  coinInfo.setWalletLimit();  //不需要限制。
         Log.i("WalletFragment", "insertBtcCoinInfo: 我们看插入的币种信息是？" + coinInfo.toString());
