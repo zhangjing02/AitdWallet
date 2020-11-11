@@ -62,7 +62,7 @@ public class EthWalletManager {
             @Override
             public void run() {
                 try {
-                    File walletDir = contextWrapper.getDir(coinInfo.getCoin_id()+coinInfo.getCoin_address().substring(10,15), Context.MODE_PRIVATE);
+                    File walletDir = contextWrapper.getDir(coinInfo.getCoin_id()+coinInfo.getCoin_address(), Context.MODE_PRIVATE);
                     if (walletDir.exists() && walletDir.listFiles().length > 0) {
                         File[] files = walletDir.listFiles();
                         wallet = objectMapper.readValue(files[0], WalletFile.class);

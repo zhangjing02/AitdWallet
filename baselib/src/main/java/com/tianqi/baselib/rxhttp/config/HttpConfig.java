@@ -23,7 +23,7 @@ public class HttpConfig {
 
     public static final String BASE_BTC_FORMAL_URL = "https://services.tokenview.com/vipapi/onchainwallet/btc?apikey=AnqHS6Rs2WX0hwFXlrv"; //btc钱包正式网广播交易地址。
     public static final String BASE_USDT_FORMAL_URL = "https://services.tokenview.com/vipapi/onchainwallet/usdt?apikey=AnqHS6Rs2WX0hwFXlrv"; //usdt钱包正式网广播交易地址。
-
+    public static final String BASE_ETH_FORMAL_URL = "https://services.tokenview.com/vipapi/onchainwallet/eth?apikey=AnqHS6Rs2WX0hwFXlrv"; //btc钱包正式网广播交易地址。
 
     public static final String BASE_BTC_URL = "http://192.168.1.16:18332"; //钱包开发域名
     public static final String BASE_USDT_URL = "http://192.168.1.16:18332"; //钱包开发域名

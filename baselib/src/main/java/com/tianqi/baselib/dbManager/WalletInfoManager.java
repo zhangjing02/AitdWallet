@@ -62,7 +62,6 @@ public class WalletInfoManager {
         }else {
             return null;
         }
-
     }
     //查询用户
     public static WalletInfo getHdWalletInfoFrId(String wallet_id) {
@@ -82,7 +81,6 @@ public class WalletInfoManager {
 
         return walletInfo;
     }
-
 
     //查询用户
     public static WalletInfo getWalletFrName(String wallet_name) {

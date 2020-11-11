@@ -71,7 +71,6 @@ public class SplashActivity extends BaseActivity {
                             WalletInfoManager.insertOrUpdate(walletInfo);
                         }
 
-
                         walletInfo= WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_ETH);
                         coinRateInfo=new CoinRateInfo();
                         coinRateInfo.setId(Constant.TRANSACTION_COIN_NAME_ETH);

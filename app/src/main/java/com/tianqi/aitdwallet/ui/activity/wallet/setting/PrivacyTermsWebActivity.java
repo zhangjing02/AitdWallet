@@ -45,7 +45,6 @@ public class PrivacyTermsWebActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_privacy_terms_web);
         ButterKnife.bind(this);
-        Intent intent = getIntent();
 
         getToolBar();
 

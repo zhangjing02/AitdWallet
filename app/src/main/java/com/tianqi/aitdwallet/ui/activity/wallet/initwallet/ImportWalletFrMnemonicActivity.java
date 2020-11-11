@@ -147,7 +147,7 @@ public class ImportWalletFrMnemonicActivity extends BaseActivity {
                 .map(walletInfo -> {
                     //创建ETH币种。
                     //钱包数据库
-                    ECKeyPair master = WalletUtils.createCoinMaser(CoinTypes.Ethereum);
+                    ECKeyPair master = WalletUtils.importCoinMaser(CoinTypes.Ethereum, list);
                     WalletInfo eht_walletInfo = createWalletInfo(master.getAddress(), Constant.TRANSACTION_COIN_NAME_ETH);
 
                     //币种数据库
@@ -244,13 +244,18 @@ public class ImportWalletFrMnemonicActivity extends BaseActivity {
             coinInfo.setAlias_name(Constant.TRANSACTION_COIN_NAME_BTC);
             coinInfo.setResourceId(R.mipmap.ic_circle_btc);
         } else if (walletInfo.getWallet_id().equals(Constant.TRANSACTION_COIN_NAME_ETH)) {
-            List<CoinInfo> walletBtcInfo = CoinInfoManager.getWalletEthInfo();
+            List<CoinInfo> walletBtcInfo = CoinInfoManager.getCoinEthImportInfo();
             coinInfo.setCoin_id(Constant.TRANSACTION_COIN_NAME_ETH+walletBtcInfo.size());
             coinInfo.setCoin_address(Constants.HEX_PREFIX + master.getAddress());
+            //保存一个文件形式，方便加载的时候，能很快加载出钱包。否则每次去生成会很慢。
+            // TODO: 2020/11/10 此处写的不太合理，因为是线程在跑，所以，可能此页面一直进行完了，保存钱包的逻辑还没执行完。
+            EthWalletManager.getInstance().loadWallet(this, coinInfo, wallet -> {
+                Log.i("ttttttttttttt", coinInfo.getCoin_address()+"onWalletLoaded: 我们看到了自己的eth地址是？"+wallet.getAddress());
+            });
             coinInfo.setCoin_fullName(Constant.COIN_FULL_NAME_ETH);
-            coinInfo.setCoin_ComeType(Constant.COIN_SOURCE_CREATE);
+            coinInfo.setCoin_ComeType(Constant.COIN_SOURCE_IMPORT);
             coinInfo.setCoin_name(Constant.TRANSACTION_COIN_NAME_ETH);
-            coinInfo.setCoin_type(Constant.COIN_BIP_TYPE_USDT);
+            coinInfo.setCoin_type(Constant.COIN_BIP_TYPE_ETH);
             coinInfo.setAlias_name(Constant.TRANSACTION_COIN_NAME_ETH);
             coinInfo.setResourceId(R.mipmap.ic_circle_eth);
             UserInformation information = UserInfoManager.getUserInfo();
@@ -267,11 +272,7 @@ public class ImportWalletFrMnemonicActivity extends BaseActivity {
             } catch (CipherException e) {
                 e.printStackTrace();
             }
-            //保存一个文件形式，方便加载的时候，能很快加载出钱包。否则每次去生成会很慢。
-            // TODO: 2020/11/10 此处写的不太合理，因为是线程在跑，所以，可能此页面一直进行完了，保存钱包的逻辑还没执行完。
-            EthWalletManager.getInstance().loadWallet(this, coinInfo, wallet -> {
-                Log.i("ttttttttttttt", "onWalletLoaded: 我们看到了自己的eth地址是？"+wallet.getAddress());
-            });
+
         } else if (walletInfo.getWallet_id().equals(Constant.TRANSACTION_COIN_NAME_USDT)) {
             List<CoinInfo> walletUsdtInfo = CoinInfoManager.getWalletUsdtInfo();
             coinInfo.setCoin_fullName(Constant.COIN_FULL_NAME_USDT);

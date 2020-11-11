@@ -91,11 +91,12 @@
     <string name="text_miner_fee_tag">矿工费</string>
     <string name="notice_miner_fee_text">推荐矿工费(根据区块链网络波动)</string>
     <string name="text_recommend_miner_fee">推荐:1000sat</string>
+    <string name="text_recommend_eth_miner_fee">推荐:59.00GWEI</string>
     <string name="text_expect_arrive_time">预计到账时间:10分钟</string>
     <string name="notice_remark_hint">备注</string>
     <string name="notice_change_wallet_name">1-12位字符，可包含中文，英文字符</string>
     <string name="btn_finish_text">完成</string>
-    <string name="text_receive_address_copy">复制收款码地址</string>
+    <string name="text_receive_address_copy">复制收款地址</string>
     <string name="notice_search_erc20_hint">搜索你想添加的ERC20币名称</string>
     <string name="btn_cancel_text">取消</string>
     <string name="text_create_wallet_loading">钱包正在创建中\n请稍后片刻</string>
@@ -255,4 +256,6 @@
     <string name="notice_keystore_error_text">keystore不正确</string>
     <string name="notice_keystore_psd_error_text">keystore密码不正确</string>
     <string name="text_copy_keystore__notice">复制粘贴ETH钱包KeyStore文件内容至输入框，或者通过扫描Keystore二维码录入</string>
+    <string name="notice_address_error">地址错误</string>
+    <string name="notice_balance_not_enough">余额不足</string>
 </resources>

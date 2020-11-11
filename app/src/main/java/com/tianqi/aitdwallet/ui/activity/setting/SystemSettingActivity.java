@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 
 import com.tianqi.aitdwallet.R;
+import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.UserInformation;
 import com.tianqi.baselib.dbManager.UserInfoManager;
@@ -56,7 +57,6 @@ public class SystemSettingActivity extends BaseActivity {
 
     }
 
-
     private void getToolBar() {
         toolbarTitle.setText(R.string.sys_setting_tittle);
         toolbar.setNavigationOnClickListener(v -> {
@@ -74,8 +74,18 @@ public class SystemSettingActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        userInformation = UserInfoManager.getUserInfo();
+        switch (userInformation.getLanguageId()) {
+            case Constants.LANGUAGE_CHINA:
+                tvLanguage.setText(getString(R.string.text_simple_chinese));
+                break;
+            case Constants.LANGUAGE_ENGLISH:
+                tvLanguage.setText(getString(R.string.text_english));
+                break;
+            default:
+                break;
+        }
     }
-
 
     @OnClick({R.id.layout_currency_unit, R.id.layout_language})
     public void onViewClicked(View view) {
@@ -85,6 +95,8 @@ public class SystemSettingActivity extends BaseActivity {
                 startActivity(intent);
                 break;
             case R.id.layout_language:
+                intent=new Intent(this,LanguageSettingActivity.class);
+                startActivity(intent);
                 break;
         }
     }

@@ -60,6 +60,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -348,7 +349,7 @@ public class ImportEthCoinActivity extends BaseActivity {
                     case TITTLE_PRIVATE_KEY_INDEX:
                         if (judgeSelectInput()) {
                             mLoadDialog = LoadingDialogUtils.createLoadingDialog(this, "");
-                            ECKeyPair ecKeyPair = WalletUtils.importCoinMaser(CoinTypes.Bitcoin, etInputKey.getText().toString());
+                            ECKeyPair ecKeyPair = WalletUtils.importCoinMaser(CoinTypes.Ethereum, etInputKey.getText().toString());
                             importSingleCoin(ecKeyPair);
                         }
 
@@ -358,7 +359,7 @@ public class ImportEthCoinActivity extends BaseActivity {
                     case TITTLE_MNEMONIC_WORD_INDEX:
                         String[] mn_words = etInputKey.getText().toString().split("\\s+");
                         if (judeMnwordsCorrect(mn_words) && checkboxReadTerm.isChecked()) {
-                            ECKeyPair ecKeyPair02 = WalletUtils.importCoinMaser(CoinTypes.Bitcoin, Arrays.asList(mn_words));
+                            ECKeyPair ecKeyPair02 = WalletUtils.importCoinMaser(CoinTypes.Ethereum, Arrays.asList(mn_words));
                             importSingleCoin(ecKeyPair02);
                         } else {
                             ToastUtil.showToast(this, getString(R.string.notice_mnemonic_wore_error));
@@ -391,6 +392,7 @@ public class ImportEthCoinActivity extends BaseActivity {
 
     @SuppressLint("CheckResult")
     private void importSingleCoin(ECKeyPair ecKeyPair) {
+        mLoadDialog = LoadingDialogUtils.createLoadingDialog(this, "");
         Observable.create((ObservableOnSubscribe<ECKeyPair>) emitter -> {
             //此处的文件夹只做临时存储，便于后两个页面获取wallet，正式的wallet存储文件夹，不用这个。
             emitter.onNext(ecKeyPair);
@@ -411,7 +413,7 @@ public class ImportEthCoinActivity extends BaseActivity {
             Log.i("WalletFragment", "importSingleCoin: 我们得到的钱包是什么？" + walletInfo.toString());
             coinInfo.setCoin_fullName(Constant.COIN_FULL_NAME_ETH);
 
-            List<CoinInfo> walletBtcInfo = CoinInfoManager.getWalletEthInfo();
+            List<CoinInfo> walletBtcInfo = CoinInfoManager.getCoinEthImportInfo();
             coinInfo.setCoin_ComeType(Constant.COIN_SOURCE_IMPORT);
             coinInfo.setCoin_id(Constant.IMPORT_ETH_ID + walletBtcInfo.size());
             // coinInfo.setIsCollect();
@@ -434,7 +436,7 @@ public class ImportEthCoinActivity extends BaseActivity {
             CoinInfoManager.insertOrUpdate(coinInfo);
 
             return coinInfo;
-        }).compose(RxHelper.pool_main())
+        }).delay(2, TimeUnit.SECONDS).compose(RxHelper.pool_main())
                 .subscribe(baseEntity -> {
                     if (mLoadDialog != null) {
                         mLoadDialog.dismiss();
@@ -483,7 +485,6 @@ public class ImportEthCoinActivity extends BaseActivity {
 
     private WalletInfo createWalletInfo(String wallet_id) {
         //钱包数据库。
-
         CoinRateInfo coinRateInfo = CoinRateInfoManager.getWalletBtcFrCoinId(Constant.TRANSACTION_COIN_NAME_ETH);
         UserInformation userInfo = UserInfoManager.getUserInfo();
         WalletInfo walletInfo = new WalletInfo();

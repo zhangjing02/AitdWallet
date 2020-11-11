@@ -1,38 +1,27 @@
 package com.tianqi.aitdwallet.ui.activity.wallet.eth;
 
 import android.annotation.SuppressLint;
-import android.os.AsyncTask;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.tianqi.aitdwallet.R;
-import com.tianqi.aitdwallet.bean.BaibeiWallet;
-import com.tianqi.aitdwallet.bean.GetUtxoBean;
-import com.tianqi.aitdwallet.ui.activity.MainActivity;
-import com.tianqi.aitdwallet.utils.BaiBeiWalletUtils;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.aitdwallet.utils.eth.EthWalletManager;
 import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dbManager.CoinInfoManager;
-import com.tianqi.baselib.rxhttp.HttpClientUtil;
 import com.tianqi.baselib.rxhttp.RetrofitFactory;
 import com.tianqi.baselib.rxhttp.base.BaseObserver;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
-import com.tianqi.baselib.rxhttp.bean.GetLoadingTxBean;
 import com.tianqi.baselib.utils.Constant;
 import com.tianqi.baselib.utils.display.ToastUtil;
 
 import org.web3j.abi.FunctionEncoder;
-import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Bool;
 import org.web3j.abi.datatypes.Function;
-import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
@@ -41,13 +30,9 @@ import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
 import org.web3j.crypto.Wallet;
 import org.web3j.crypto.WalletFile;
-import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.core.DefaultBlockParameterName;
-import org.web3j.protocol.core.methods.request.Transaction;
-import org.web3j.protocol.core.methods.response.EthCall;
-import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.utils.Convert;
 import org.web3j.utils.Numeric;
@@ -55,21 +40,13 @@ import org.web3j.utils.Numeric;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Observable;
-import io.reactivex.ObservableOnSubscribe;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 public class EthTransactionTestActivity extends BaseActivity {
     @BindView(R.id.tv_eth_balance)
@@ -84,7 +61,7 @@ public class EthTransactionTestActivity extends BaseActivity {
 
     @Override
     protected int getContentView() {
-        return R.layout.activity_eth_transaction;
+        return R.layout.activity_eth_test_transaction;
     }
 
     @Override
@@ -112,7 +89,11 @@ public class EthTransactionTestActivity extends BaseActivity {
     protected void initData() {
         EthWalletManager.getInstance().loadWallet(this, coinEthFrAddress, wallet -> {
             initWeb3j("http://192.168.1.16:8545");
-            mWalletFile=wallet;
+            Log.i(TAG, coinEthFrAddress.getCoin_address()+"initData: 001我们看看加载出来的钱包是啥？");
+            if (coinEthFrAddress.getCoin_address().substring(2).toLowerCase().equals(wallet.getAddress())){
+                mWalletFile=wallet;
+                Log.i(TAG, "initData: 002我们看看加载出来的钱包是啥？"+mWalletFile.getAddress());
+            }
         });
     }
     private Web3j initWeb3j(String url) {

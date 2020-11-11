@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context=".ui.activity.wallet.eth.EthTransactionTestActivity">
+
+    <TextView
+        android:id="@+id/tv_eth_balance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="余额111" />
+
+
+    <TextView
+        android:id="@+id/tv_eth_token_balance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="余额2222" />
+
+
+    <Button
+        android:id="@+id/btn_get_balance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="获取余额"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/white"
+        />
+    <Button
+        android:id="@+id/btn_transaction_send"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="开始转账"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/white"
+        />
+    <Button
+        android:id="@+id/btn_erc20_transaction_send"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="开始Erc20转账"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/white"
+        />
+
+
+
+</LinearLayout>

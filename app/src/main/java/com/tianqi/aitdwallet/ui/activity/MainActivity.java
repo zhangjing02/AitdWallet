@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -66,6 +67,7 @@ public class MainActivity extends BaseActivity {
 
     private String[] titles;
     private ArrayList<Fragment> fragments = new ArrayList<>();
+    private  WalletFragment fragment1;
 
     @Override
     protected int getContentView() {
@@ -76,7 +78,7 @@ public class MainActivity extends BaseActivity {
     protected void initView() {
         titles = new String[]{getString(R.string.tittle_property), getString(R.string.tittle_financial), getString(R.string.tittle_browse), getString(R.string.tittle_setting)};
         StatusBarCompat.translucentStatusBar(MainActivity.this, true);
-        WalletFragment fragment1 = new WalletFragment();
+        fragment1 = new WalletFragment();
         fragments.add(fragment1);
         for (int i = 0; i < titles.length - 2; i++) {
             Fragment1 fragment2 = new Fragment1();
@@ -255,6 +257,9 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if  (fragment1!=null){
+                fragment1.hiddenPopWindow();
+            }
             if ((System.currentTimeMillis() - mExitTime) > 2000) {
                 ToastUtil.showToast(this,getString(R.string.exist_procedure));
                 mExitTime = System.currentTimeMillis();
@@ -265,6 +270,14 @@ public class MainActivity extends BaseActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+     if  (fragment1!=null){
+         fragment1.hiddenPopWindow();
+        }
+        return super.onTouchEvent(event);
     }
 
 }

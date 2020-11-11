@@ -82,6 +82,8 @@
         <activity android:name=".ui.activity.wallet.setting.ExportKeystoreActivity" />
         <activity android:name=".ui.activity.wallet.importwallet.ImportEthCoinActivity" />
         <activity android:name=".ui.activity.wallet.eth.EthTransactionNativeActivity" />
+        <activity android:name=".ui.activity.wallet.eth.EthTransactionActivity" />
+        <activity android:name=".ui.activity.setting.LanguageSettingActivity" />
     </application>
 
 </manifest>

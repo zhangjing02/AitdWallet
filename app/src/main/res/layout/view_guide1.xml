@@ -47,9 +47,12 @@
 <!--            android:layout_centerInParent="true" />-->
         <TextView
             android:id="@+id/textView3"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="总资产包含主链和代币的数字资产法币折算总和。"
+            android:layout_marginHorizontal="20dp"
+            android:text="@string/text_guide_content1"
+            android:paddingHorizontal="20dp"
+            android:gravity="center"
             app:layout_constraintLeft_toRightOf="@+id/textView2"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -61,7 +64,7 @@
             android:id="@+id/textView4"
             android:layout_width="139dp"
             android:layout_height="44dp"
-            android:text="下一步"
+            android:text="@string/btn_next_step_text"
             style="@style/bg_button_hollow_white"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

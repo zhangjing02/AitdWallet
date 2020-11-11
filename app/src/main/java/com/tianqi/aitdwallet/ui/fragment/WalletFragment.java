@@ -12,6 +12,7 @@ import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -150,7 +151,7 @@ public class WalletFragment extends BaseFragment {
     private Typeface typeFace;
     private boolean isHideBalance;
 
-    private PopupWindow mPopWindow;
+    private PopupWindow mPopWindow,mPopWindowTop;
     private int new_guide_step_index;
     private int btc_quest_count, usdt_quest_count;
     private List<CoinInfo> allBtccCoinInfos, allusdtCoinInfos,allEthcCoinInfos;
@@ -172,7 +173,7 @@ public class WalletFragment extends BaseFragment {
         StatusBarCompat.translucentStatusBar(getActivity(), true);
 
         int first_open = PrefUtils.getInt(getActivity(), PrefUtils.FIRST_START_APP, -1);
-        if (first_open < 0) {
+        if (first_open != 0) {
             NewGuideStartDialog shotNoticeDialog = new NewGuideStartDialog(getActivity(), R.style.MyDialog2);
             shotNoticeDialog.setOnDialogClickListener((view1, password, type) -> {
                 showGuide();
@@ -184,6 +185,12 @@ public class WalletFragment extends BaseFragment {
                 }
             });
             shotNoticeDialog.show();
+        }
+    }
+
+    public void hiddenPopWindow(){
+        if (mPopWindowTop!=null){
+            mPopWindowTop.dismiss();
         }
     }
 
@@ -207,7 +214,6 @@ public class WalletFragment extends BaseFragment {
                     @Override
                     public void onShowed(Controller controller) {
                     }
-
                     @Override
                     public void onRemoved(Controller controller) {
                         Log.i(TAG, new_guide_step_index + "-----onShowed: 002我们看到了啥？" + controller.toString());
@@ -272,7 +278,11 @@ public class WalletFragment extends BaseFragment {
                                 // TextView textView2 = view.findViewById(R.id.textView2);
                                 TextView textView4 = view.findViewById(R.id.textView4);
                                 SpannableString spannableString = new SpannableString(textView3.getText().toString());
-                                spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.text_main_yellow)), 0, 3, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                                int end=3;
+                                if (getResources().getConfiguration().locale.getCountry().equals("US")){
+                                    end=12;
+                                }
+                                spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.text_main_yellow)), 0, end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                                 textView3.setText(spannableString);
                                 if (height <= 1920) {
 //                                    ViewGroup.LayoutParams layoutParams = textView3.getLayoutParams();
@@ -690,12 +700,14 @@ public class WalletFragment extends BaseFragment {
                 getActivity().getWindow().setAttributes(lp);
 
                 View contentView = LayoutInflater.from(getActivity()).inflate(R.layout.pop_share_select, null);
-                PopupWindow mPopWindow = new PopupWindow(contentView);
-
+                if (mPopWindowTop!=null&&mPopWindowTop.isShowing()){
+                    mPopWindowTop.dismiss();
+                }
+                mPopWindowTop = new PopupWindow(contentView);
                 //130和112是设计尺寸。
-                mPopWindow.setWidth(ScreenUtils.dip2px(getActivity(), 130));
-                mPopWindow.setHeight(ScreenUtils.dip2px(getActivity(), 112));
-                mPopWindow.setOutsideTouchable(true);
+                mPopWindowTop.setWidth(ScreenUtils.dip2px(getActivity(), 130));
+                mPopWindowTop.setHeight(ScreenUtils.dip2px(getActivity(), 112));
+
                 TextView tv_share_facebook = contentView.findViewById(R.id.tv_import_wallet);
                 TextView tv_share_other = contentView.findViewById(R.id.tv_wallet_manage);
 
@@ -703,21 +715,26 @@ public class WalletFragment extends BaseFragment {
                     Intent intent = new Intent(getActivity(), VerifySecurityPsdActivity.class);
                     intent.putExtra(Constants.INTENT_PUT_TAG, Constants.INTENT_PUT_IMPORT_WALLET);
                     startActivity(intent);
-                    mPopWindow.dismiss();
+                    mPopWindowTop.dismiss();
                 });
                 tv_share_other.setOnClickListener(v -> {
                     Intent intent = new Intent(getActivity(), WalletManageActivity.class);
                     startActivity(intent);
-                    mPopWindow.dismiss();
+                    mPopWindowTop.dismiss();
                 });
                 //130是pop的宽度，10是整体右边距，15是view控件的宽度。
-                mPopWindow.showAsDropDown(view, -ScreenUtils.dip2px(getActivity(), 130 - 10 - 15), 0);
+                mPopWindowTop.showAsDropDown(view, -ScreenUtils.dip2px(getActivity(), 130 - 10 - 15), 0);
 
-                mPopWindow.setOnDismissListener(() -> {
+                mPopWindowTop.setOnDismissListener(() -> {
                     WindowManager.LayoutParams lp1 = getActivity().getWindow().getAttributes();
                     lp1.alpha = 1f;
                     getActivity().getWindow().setAttributes(lp1);
                 });
+
+//                // 设置PopupWindow是否能响应外部点击事件
+//                mPopWindowTop.setFocusable(true);
+//                mPopWindowTop.setOutsideTouchable(true);
+//                mPopWindowTop.update();
 
                 break;
             case R.id.iv_balance_hide:

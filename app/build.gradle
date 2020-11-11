@@ -106,5 +106,7 @@ dependencies {
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
     implementation 'com.github.zhpanvip:viewpagerindicator:1.0.6'
     implementation 'com.github.huburt-Hu:NewbieGuide:v2.4.0'
+    implementation 'me.grantland:autofittextview:0.2.+'
+
 
 }

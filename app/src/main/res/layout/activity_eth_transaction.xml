@@ -1,54 +1,319 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white"
-    tools:context=".ui.activity.wallet.eth.EthTransactionTestActivity">
+    android:background="@color/bg_pager_grey"
+    tools:context=".ui.activity.wallet.initwallet.VerifyMemoryWordActivity">
 
-    <TextView
-        android:id="@+id/tv_eth_balance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="余额111" />
+    <include
+        android:id="@+id/toolbar_layout"
+        layout="@layout/toolbar_menu"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="1"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_layout"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_transaction_msg"
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="204dp"
+                android:layout_marginTop="6dp"
+                app:layout_constraintTop_toBottomOf="@+id/toolbar_layout">
+
+                <TextView
+                    android:id="@+id/tv_receive_address_tag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/text_receive_address"
+                    android:textColor="@color/text_main_80_grey"
+                    android:textSize="15sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/et_payment_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@null"
+                    android:hint="@string/notice_input_receive_address_hint"
+                    android:textColor="@color/text_main_80_grey"
+                    android:textColorHint="@color/text_main_30_grey"
+                    android:textSize="15sp"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_receive_address_tag" />
+
+                <TextView
+                    android:id="@+id/tv_payment_amount_tag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="30dp"
+                    android:text="@string/text_transaction_amount"
+                    android:textColor="@color/text_main_80_grey"
+                    android:textSize="15sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/et_payment_address" />
+
+                <EditText
+                    android:id="@+id/et_payment_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@null"
+                    android:hint="@string/notice_input_receive_value_hint"
+                    android:inputType="numberDecimal"
+                    android:textColor="@color/text_main_80_grey"
+                    android:textColorHint="@color/text_main_30_grey"
+                    android:textSize="15sp"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_payment_amount_tag" />
 
 
-    <TextView
-        android:id="@+id/tv_eth_token_balance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="余额2222" />
+                <TextView
+                    android:id="@+id/tv_balance_tag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/text_coin_balance"
+                    android:textColor="@color/text_main_60_black"
+                    android:textSize="12sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/et_payment_amount" />
+
+                <TextView
+                    android:id="@+id/tv_balance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:text="0"
+                    android:textColor="@color/text_main_60_black"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_balance_tag"
+                    app:layout_constraintLeft_toRightOf="@+id/tv_balance_tag"
+                    app:layout_constraintTop_toTopOf="@+id/tv_balance_tag" />
+
+                <TextView
+                    android:id="@+id/btn_balance_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/btn_all_value_text"
+                    android:textColor="@color/text_main_blue"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_balance_tag"
+                    app:layout_constraintRight_toLeftOf="@+id/tv_transaction_request"
+                    app:layout_constraintTop_toTopOf="@+id/tv_balance_tag" />
+
+                <ImageView
+                    android:id="@+id/tv_transaction_request"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:src="@mipmap/ic_grey_question"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_balance_tag"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tv_balance_tag" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <Button
-        android:id="@+id/btn_get_balance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="获取余额"
-        android:layout_marginTop="10dp"
-        android:textColor="@color/white"
-        />
-    <Button
-        android:id="@+id/btn_transaction_send"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="开始转账"
-        android:layout_marginTop="10dp"
-        android:textColor="@color/white"
-        />
-    <Button
-        android:id="@+id/btn_erc20_transaction_send"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="开始Erc20转账"
-        android:layout_marginTop="10dp"
-        android:textColor="@color/white"
-        />
+            <EditText
+                android:id="@+id/et_payment_remark"
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="47dp"
+                android:layout_marginTop="6dp"
+                android:hint="@string/notice_input_remark_hint"
+                android:paddingLeft="15dp"
+                android:textColor="@color/text_main_80_grey"
+                android:textColorHint="@color/text_main_30_grey"
+                android:textSize="14sp"
+                app:layout_constraintTop_toBottomOf="@+id/layout_transaction_msg" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_transaction_miner"
+                android:layout_width="match_parent"
+                android:layout_height="184dp"
+                android:layout_marginTop="6dp"
+                android:background="@color/white"
+                app:layout_constraintTop_toBottomOf="@+id/et_payment_remark">
+
+                <TextView
+                    android:id="@+id/tv_transaction_miner_tag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/text_miner_fee_tag"
+                    android:textColor="@color/text_main_60_black"
+                    android:textSize="13sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/et_payment_miner_fee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="0.00157001 BTC ≈ $ 2.63"
+                    android:textColor="@color/text_main_black"
+                    android:textSize="14sp"
+                    app:layout_constraintLeft_toLeftOf="@+id/tv_transaction_miner_tag"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_transaction_miner_tag" />
+
+                <com.tianqi.baselib.widget.CustomSeekBar
+                    android:id="@+id/seek_bar_miner_cost"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintTop_toBottomOf="@+id/et_payment_miner_fee" />
+
+                <TextView
+                    android:id="@+id/tv_miner_fee_notice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:text="@string/notice_miner_fee_text"
+                    android:textColor="@color/text_main_60_black"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="@+id/tv_transaction_miner_tag" />
+
+                <TextView
+                    android:id="@+id/tv_miner_fee_recommend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:text="@string/text_recommend_eth_miner_fee"
+                    android:textColor="@color/text_main_blue"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_miner_fee_notice"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tv_miner_fee_notice" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/tv_transaction_arrive_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/text_expect_arrive_time"
+                android:textColor="@color/text_main_60_black"
+                android:textSize="12sp"
+                android:layout_gravity="center_horizontal"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layout_transaction_miner" />
+
+            <TextView
+                android:id="@+id/btn_transaction_send"
+                style="@style/bg_button_20_grey"
+                android:layout_width="match_parent"
+                android:layout_height="47dp"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginBottom="30dp"
+                android:text="@string/btn_next_step_text"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginTop="50dp"
+                app:layout_constraintTop_toBottomOf="@+id/tv_transaction_arrive_time"/>
+
+<!--            <TextView-->
+<!--                android:id="@+id/btn_transaction_send1"-->
+<!--                style="@style/bg_button_20_grey"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="47dp"-->
+<!--                android:layout_marginHorizontal="30dp"-->
+<!--                android:text="@string/btn_next_step_text"-->
+<!--                app:layout_constraintLeft_toLeftOf="parent"-->
+<!--                app:layout_constraintRight_toRightOf="parent"-->
+<!--                android:layout_marginTop="50dp"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/tv_transaction_arrive_time"/>-->
 
 
+<!--            <TextView-->
+<!--                android:id="@+id/btn_transaction_send11"-->
+<!--                style="@style/bg_button_20_grey"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="47dp"-->
+<!--                android:layout_marginHorizontal="30dp"-->
+<!--                android:text="@string/btn_next_step_text"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintLeft_toLeftOf="parent"-->
+<!--                app:layout_constraintRight_toRightOf="parent"-->
+<!--                android:layout_marginTop="50dp"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/tv_transaction_arrive_time"/>-->
+<!--            <TextView-->
+<!--                android:id="@+id/btn_transaction_send111"-->
+<!--                style="@style/bg_button_20_grey"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="47dp"-->
+<!--                android:layout_marginHorizontal="30dp"-->
+<!--                android:text="@string/btn_next_step_text"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintLeft_toLeftOf="parent"-->
+<!--                app:layout_constraintRight_toRightOf="parent"-->
+<!--                android:layout_marginTop="50dp"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/tv_transaction_arrive_time"/>-->
+<!--            <TextView-->
+<!--                android:id="@+id/btn_transaction_send11111"-->
+<!--                style="@style/bg_button_20_grey"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="47dp"-->
+<!--                android:layout_marginHorizontal="30dp"-->
+<!--                android:text="@string/btn_next_step_text"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintLeft_toLeftOf="parent"-->
+<!--                app:layout_constraintRight_toRightOf="parent"-->
+<!--                android:layout_marginTop="50dp"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/tv_transaction_arrive_time"/>-->
+<!--            <TextView-->
+<!--                android:id="@+id/btn_transaction_send111111"-->
+<!--                style="@style/bg_button_20_grey"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="47dp"-->
+<!--                android:layout_marginHorizontal="30dp"-->
+<!--                android:text="@string/btn_next_step_text"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintLeft_toLeftOf="parent"-->
+<!--                app:layout_constraintRight_toRightOf="parent"-->
+<!--                android:layout_marginTop="50dp"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/tv_transaction_arrive_time"/>-->
+<!--            <TextView-->
+<!--                android:id="@+id/btn_transaction_send1111111111"-->
+<!--                style="@style/bg_button_20_grey"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="47dp"-->
+<!--                android:layout_marginHorizontal="30dp"-->
+<!--                android:text="@string/btn_next_step_text"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintLeft_toLeftOf="parent"-->
+<!--                app:layout_constraintRight_toRightOf="parent"-->
+<!--                android:layout_marginTop="50dp"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/tv_transaction_arrive_time"/>-->
 
-</LinearLayout>
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

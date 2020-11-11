@@ -22,6 +22,7 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.adapter.recycle_adapter.TransRecordAdapter;
 import com.tianqi.aitdwallet.ui.activity.wallet.btc.BitcoinTransactionActivity002;
+import com.tianqi.aitdwallet.ui.activity.wallet.eth.EthTransactionActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.eth.EthTransactionTestActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.property.CoinAddressQrActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.usdt.UsdtTransactionActivity002;
@@ -565,7 +566,7 @@ public class TransactionRecordActivity extends BaseActivity {
                     startActivity(intent);
                     break;
                 case Constant.TRANSACTION_COIN_NAME_ETH:
-                    intent = new Intent(this, EthTransactionTestActivity.class);
+                    intent = new Intent(this, EthTransactionActivity.class);
                     intent.putExtra(Constants.TRANSACTION_COIN_ADDRESS, coin_address);
                     startActivity(intent);
                     break;
