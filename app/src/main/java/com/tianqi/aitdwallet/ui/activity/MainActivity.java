@@ -209,6 +209,10 @@ public class MainActivity extends BaseActivity {
                 }
                 FunctionNotOpenDialog shotNoticeDialog = new FunctionNotOpenDialog(this, R.style.MyDialog2);
                 shotNoticeDialog.show();
+                if (getResources().getConfiguration().locale.getCountry().equals("US")){
+                    shotNoticeDialog.setImageView(R.mipmap.ic_function_not_open_en);
+                }
+
 //                StatusBarCompat.translucentStatusBar(MainActivity.this, false);
 //                StatusBarCompat.setStatusBarColor(MainActivity.this, getResources().getColor(R.color.white_transparent));
                 //   ToastUtil.showSimpleToast(this,getString(R.string.notice_function_not_open));

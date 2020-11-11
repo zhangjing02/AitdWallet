@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.tianqi.aitdwallet.R;
+import com.tianqi.baselib.utils.display.GlideUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,6 +47,11 @@ public class FunctionNotOpenDialog extends Dialog {
            // mOnDialogClickListener.onItemClick(v, etPayPassword.getText().toString(), DIALOG_CONFIRM);
             dismiss();
         });
+    }
+
+    public void setImageView(int res_id){
+        GlideUtils.loadResourceImage(mContext,res_id,ivShotWarning);
+
     }
 
 

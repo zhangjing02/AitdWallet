@@ -18,7 +18,7 @@
 	<string name="input_private_key_hint">Plaintext private key</string>
 	<string name="input_keystore_hint">Plaintext keystore</string>
 	<string name="input_mnemonic_word_hint">Clear mnemonic words, separated by spaces</string>
-	<string name="tittle_import_wallet">Import wallet</string>
+	<string name="tittle_import_wallet">Import Wallet</string>
 	<string name="notice_mnemonic_wore_error">Incorrect mnemonic</string>
 	<string name="notice_import_success">Imported successfully</string>
 	<string name="notice_input_content">Please enter relevant content</string>

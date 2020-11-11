@@ -173,7 +173,7 @@ public class WalletFragment extends BaseFragment {
         StatusBarCompat.translucentStatusBar(getActivity(), true);
 
         int first_open = PrefUtils.getInt(getActivity(), PrefUtils.FIRST_START_APP, -1);
-        if (first_open != 0) {
+        if (first_open <0) {
             NewGuideStartDialog shotNoticeDialog = new NewGuideStartDialog(getActivity(), R.style.MyDialog2);
             shotNoticeDialog.setOnDialogClickListener((view1, password, type) -> {
                 showGuide();
@@ -467,17 +467,11 @@ public class WalletFragment extends BaseFragment {
         }
     }
 
-
     @Override
     protected void initData() {
         initWallet();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    }
 
     @Override
     public void onDataSynEvent(EventMessage event) {

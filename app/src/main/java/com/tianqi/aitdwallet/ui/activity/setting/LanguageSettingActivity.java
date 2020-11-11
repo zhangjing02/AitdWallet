@@ -24,7 +24,6 @@ import butterknife.OnClick;
 
 public class LanguageSettingActivity extends BaseActivity {
 
-
     @BindView(R.id.toolbarTitle)
     TextView toolbarTitle;
     @BindView(R.id.btn_collect)
@@ -67,13 +66,13 @@ public class LanguageSettingActivity extends BaseActivity {
         rbSelectSimpleChinese.setOnCheckedChangeListener((compoundButton, b) -> {
             if (b) {
                 userInformation.setLanguageId(Constants.LANGUAGE_CHINA);
-                UserInfoManager.insertOrUpdate(userInformation);
+                //UserInfoManager.insertOrUpdate(userInformation);
             }
         });
         rbSelectEnglish.setOnCheckedChangeListener((compoundButton, b) -> {
             if (b) {
                 userInformation.setLanguageId(Constants.LANGUAGE_ENGLISH);
-                UserInfoManager.insertOrUpdate(userInformation);
+              //  UserInfoManager.insertOrUpdate(userInformation);
             }
         });
     }
