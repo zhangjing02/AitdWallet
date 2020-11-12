@@ -507,7 +507,7 @@ public class WalletFragment002 extends BaseFragment {
             return "123";
         }).delay(2, TimeUnit.SECONDS).doOnComplete(() -> {
             //当BTC调完后（但结果未必都返回了，所以要做2S延迟）完成的时候，我们做一个2S的延时，然后去循环调用usdt的余额。
-            allusdtCoinInfos = CoinInfoManager.getSpecCoinInfo(Constant.TRANSACTION_COIN_NAME_USDT);
+            allusdtCoinInfos = CoinInfoManager.getSpecCoinInfo(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
             if (allusdtCoinInfos!=null&&allusdtCoinInfos.size() > 0) {
                 usdt_quest_count = 0;
                 for (int i = 0; i < allusdtCoinInfos.size(); i++) {
@@ -527,7 +527,7 @@ public class WalletFragment002 extends BaseFragment {
     private void getBtcUtxo(CoinInfo specCoinInfo) {
         if (specCoinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_BTC)) {
             coin_type_params = "btc";
-        } else if (specCoinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT)) {
+        } else if (specCoinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_OMNI)) {
             coin_type_params = "usdt";
         }
         Map<String, Object> map = new HashMap<>();

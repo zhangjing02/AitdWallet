@@ -11,6 +11,7 @@
     <string name="sys_setting_tittle">系统设置</string>
     <string name="btc_transaction_tittle">BTC转账</string>
     <string name="usdt_transaction_tittle">USDT转账</string>
+    <string name="eth_transaction_tittle">ETH转账</string>
     <string name="input_receive_address_notice">请输入您要转入的地址</string>
     <string name="input_transaction_amount">请输入转账金额</string>
     <string name="notice_trans_to_me_refuse">请不要给自己转账</string>
@@ -46,8 +47,9 @@
     <string name="notice_second_word_error">第2个助记词错误</string>
     <string name="notice_third_word_error">第3个助记词错误</string>
     <string name="tittle_btc_receive">BTC收款</string>
-    <string name="tittle_usdt_receive">USDT收款</string>
+    <string name="tittle_usdt_omni_receive">USDT-OMNI收款</string>
     <string name="tittle_eth_receive">ETHT收款</string>
+    <string name="tittle_usdt_erc20_receive">USDT-ERC20收款</string>
     <string name="tittle_share_sth">分享</string>
     <string name="notice_copy_success">复制成功</string>
     <string name="tittle_transaction_detail">交易详情</string>

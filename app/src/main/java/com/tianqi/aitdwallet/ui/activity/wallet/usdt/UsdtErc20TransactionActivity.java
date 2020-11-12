@@ -1,4 +1,4 @@
-package com.tianqi.aitdwallet.ui.activity.wallet.eth;
+package com.tianqi.aitdwallet.ui.activity.wallet.usdt;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -16,20 +16,12 @@ import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.gson.Gson;
-import com.quincysx.crypto.ECKeyPair;
-import com.quincysx.crypto.bip32.ValidationException;
-import com.quincysx.crypto.bitcoin.BTCTransaction;
-import com.quincysx.crypto.bitcoin.BitCoinECKeyPair;
-import com.quincysx.crypto.bitcoin.BitcoinException;
-import com.quincysx.crypto.utils.HexUtils;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.ui.activity.tool.ScanActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.record.TransactionRecordActivity;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.aitdwallet.utils.eth.EthWalletManager;
-import com.tianqi.aitdwallet.widget.dialog.BottomDialog;
 import com.tianqi.aitdwallet.widget.dialog.ExplainTxMinerFeeDialog;
-import com.tianqi.aitdwallet.widget.dialog.PaymentDialog;
 import com.tianqi.aitdwallet.widget.dialog.SuccessDialog;
 import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
@@ -44,24 +36,27 @@ import com.tianqi.baselib.rxhttp.HttpClientUtil;
 import com.tianqi.baselib.rxhttp.RetrofitFactory;
 import com.tianqi.baselib.rxhttp.base.BaseObserver;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
-import com.tianqi.baselib.rxhttp.bean.GetLoadingTxBean;
 import com.tianqi.baselib.rxhttp.bean.GetSimpleRpcBean;
-import com.tianqi.baselib.rxhttp.bean.GetUnspentTxBean;
 import com.tianqi.baselib.utils.ButtonUtils;
 import com.tianqi.baselib.utils.Constant;
 import com.tianqi.baselib.utils.NetworkUtil;
 import com.tianqi.baselib.utils.digital.AESCipher;
 import com.tianqi.baselib.utils.digital.DataReshape;
-import com.tianqi.baselib.utils.display.LoadingDialogUtils;
 import com.tianqi.baselib.utils.display.ScreenUtils;
 import com.tianqi.baselib.utils.display.ToastUtil;
 import com.tianqi.baselib.utils.eventbus.EventMessage;
 import com.tianqi.baselib.widget.CustomSeekBar;
 
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONObject;
+import org.web3j.abi.FunctionEncoder;
+import org.web3j.abi.TypeReference;
+import org.web3j.abi.datatypes.Address;
+import org.web3j.abi.datatypes.Bool;
+import org.web3j.abi.datatypes.Function;
+import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
+import org.web3j.crypto.ECKeyPair;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
 import org.web3j.crypto.Wallet;
@@ -78,7 +73,9 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -94,10 +91,10 @@ import okhttp3.ResponseBody;
 /**
  * @author zhangjing
  * @date 2020/11/9
- * @description eth的交易。
+ * @description eth的代币erc20交易。
  */
 
-public class EthTransactionActivity extends BaseActivity {
+public class UsdtErc20TransactionActivity extends BaseActivity {
 
     private static final String TAG = "BitcoinWalletActivity";
     @BindView(R.id.toolbarTitle)
@@ -153,7 +150,7 @@ public class EthTransactionActivity extends BaseActivity {
         seekBarMinerCost.setEnabled(true);
         seekBarMinerCost.setMax(100);
         seekBarMinerCost.setProgress(15);
-        walletInfo= WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_ETH);
+        walletInfo= WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_USDT_ERC20);
         Log.i(TAG, walletInfo.getCoin_CNYPrice()+"------initView: 汇率是多少？"+walletInfo.getCoin_USDPrice());
         setMinerFeeText(miner_fee_single);
 
@@ -250,7 +247,7 @@ public class EthTransactionActivity extends BaseActivity {
 
     private void initWallet() {
         String coin_address = getIntent().getStringExtra(Constants.TRANSACTION_COIN_ADDRESS);
-        walletBtcFrAddress = CoinInfoManager.getCoinFrAddress(Constant.TRANSACTION_COIN_NAME_ETH, coin_address);
+        walletBtcFrAddress = CoinInfoManager.getCoinFrAddress(Constant.TRANSACTION_COIN_NAME_USDT_ERC20, coin_address);
         tvBalance.setText(DataReshape.doubleBig(walletBtcFrAddress.getCoin_totalAmount(), 8));
         EthWalletManager.getInstance().loadWallet(this, walletBtcFrAddress, wallet -> {
             initWeb3j("http://192.168.1.16:8545");
@@ -319,35 +316,31 @@ public class EthTransactionActivity extends BaseActivity {
         Observable.create((ObservableOnSubscribe<String>) emitter -> {
             emitter.onNext("123");
         }).map(resultBeans -> {
-            //把得到的未交易数据，去请求创建交易。得到本次交易的hex。
+            String to_address=etPaymentAddress.getText().toString().toLowerCase();
+            // String to = "0x05c5d1b89d0d4b5bddb424c991db94557977c01c";              //转账地址
+            String to = to_address.startsWith("0x")?to_address:"0x"+to_address;
+            String to_credential="0x952edadb1709d976e85af33fa8f9030207b7af3e";
+           // String amount = "123";
+
+            BigDecimal value = Convert.toWei(etPaymentAmount.getText().toString(), Convert.Unit.KWEI);  //转账金额。
+            //BigDecimal value = BigDecimal.valueOf(Long.valueOf(etPaymentAmount.getText().toString()));  //转账金额。
+            Log.i(TAG, to+"-------createTxToBroadcastApi: 我们计算的金额是多少？"+value);
+
+            Function transfer = transfer(to, value.toBigInteger());
+            ECKeyPair ecKeyPair = null;
             try {
-                BigInteger transactionCount = mWeb3j.ethGetTransactionCount(walletBtcFrAddress.getCoin_address(), DefaultBlockParameterName.LATEST).send().getTransactionCount();
-                BigInteger gasPrice = null;
-                //gasPrice = mWeb3j.ethGasPrice().send().getGasPrice();  //单价费用，需要我们自己设定。
-                gasPrice = BigInteger.valueOf(miner_fee_single*1000000000l) ;//单价费用，需要我们自己设定。单位是：wei。
 
-                Log.d(TAG, "run: " + transactionCount + ", " + gasPrice);
-                BigInteger gasLimit = new BigInteger("200000");
-                BigDecimal value = Convert.toWei(etPaymentAmount.getText().toString(), Convert.Unit.ETHER);  //转账金额。
-                Log.d(TAG, "run: value wei" + value.toPlainString());
-
-                String to_address=etPaymentAddress.getText().toString();
-               // String to = "0x05c5d1b89d0d4b5bddb424c991db94557977c01c";              //转账地址
-                String to = to_address.startsWith("0x")?to_address:"0x"+to_address;              //转账地址
-                RawTransaction etherTransaction = RawTransaction.createEtherTransaction(transactionCount, gasPrice, gasLimit, to, value.toBigInteger());
                 UserInformation userInformation=UserInfoManager.getUserInfo();
-
-                org.web3j.crypto.ECKeyPair ecKeyPair = Wallet.decrypt(AESCipher.decrypt(Constant.PSD_KEY,userInformation.getPasswordStr()), mWalletFile);
+                ecKeyPair = Wallet.decrypt(AESCipher.decrypt(Constant.PSD_KEY,userInformation.getPasswordStr()), mWalletFile);
                 Credentials credentials = Credentials.create(ecKeyPair);
-                byte[] bytes = TransactionEncoder.signMessage(etherTransaction, credentials);
-                String hexValue = Numeric.toHexString(bytes);
-                Log.d(TAG, "--------run: 001transactionHash "+hexValue );
-                return hexValue;
-            } catch (IOException e) {
-                Log.d(TAG, "--------run: 002transactionHash "+e.getMessage() );
-                e.printStackTrace();
+                String transactionHash = execute(credentials, transfer, to_credential);
+                Log.d(TAG, "--------run: 004transactionHash "+transactionHash );
+
             } catch (CipherException e) {
-                Log.d(TAG, "--------run: 003transactionHash "+e.getMessage() );
+                Log.d(TAG, "--------run: 005transactionHash "+e.getMessage() );
+                e.printStackTrace();
+            } catch (Exception e) {
+                Log.d(TAG, "--------run: 006transactionHash "+e.getMessage() );
                 e.printStackTrace();
             }
             return Constant.HTTP_ERROR;
@@ -461,5 +454,40 @@ public class EthTransactionActivity extends BaseActivity {
 //            return false;
 //        }
         return true;
+    }
+
+
+    private Function transfer(String to, BigInteger value) {
+        return new Function(
+                "transfer",
+                Arrays.asList(new Address(to), new Uint256(value)),
+                Collections.singletonList(new TypeReference<Bool>() {}));
+    }
+
+
+    private String execute(
+            Credentials credentials, Function function, String contractAddress) throws Exception {
+        BigInteger nonce =  mWeb3j.ethGetTransactionCount(walletBtcFrAddress.getCoin_address(), DefaultBlockParameterName.LATEST).send().getTransactionCount();
+       // BigInteger gasPrice = mWeb3j.ethGasPrice().send().getGasPrice();
+      //  BigInteger gasPrice = BigInteger.valueOf(miner_fee_single*1000000000l) ;//单价费用，需要我们自己设定。单位是：wei。
+        BigInteger gasPrice = BigInteger.valueOf(miner_fee_single*1000000000l) ;//单价费用，需要我们自己设定。单位是：wei。
+        BigInteger gasLimit = new BigInteger("200000");
+        String encodedFunction = FunctionEncoder.encode(function);
+
+        Log.i(TAG, walletBtcFrAddress.getCoin_address()+"------------execute: 我们看erc20的值是多少？"+encodedFunction);
+
+        RawTransaction rawTransaction = RawTransaction.createTransaction(
+                nonce,
+                gasPrice,
+                gasLimit,
+                contractAddress,
+                encodedFunction);
+
+        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
+        String hexValue = Numeric.toHexString(signedMessage);
+        // TODO: 2020/11/10 这里就是只能合约的，生成和广播？
+//        EthSendTransaction transactionResponse = mWeb3j.ethSendRawTransaction(hexValue)
+//                .sendAsync().get();
+        return hexValue;
     }
 }

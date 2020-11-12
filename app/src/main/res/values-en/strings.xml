@@ -10,8 +10,9 @@
 	<string name="coin_unit_tittle">currency unit</string>
 	<string name="setting_language_tittle">Language</string>
 	<string name="sys_setting_tittle">System settings</string>
-	<string name="btc_transaction_tittle">BTC transfer</string>
-	<string name="usdt_transaction_tittle">USDT transfer</string>
+	<string name="btc_transaction_tittle">BTC Transfer</string>
+	<string name="usdt_transaction_tittle">USDT Transfer</string>
+	<string name="eth_transaction_tittle">ETH Transfer</string>
 	<string name="input_receive_address_notice">Please enter the address </string>
 	<string name="input_transaction_amount">Please enter the transfer amount</string>
 	<string name="notice_trans_to_me_refuse">Please don\'t transfer money to yourself</string>
@@ -47,8 +48,9 @@
 	<string name="notice_second_word_error">Second mnemonic error</string>
 	<string name="notice_third_word_error">Third mnemonic error</string>
 	<string name="tittle_btc_receive">BTC Receive</string>
-	<string name="tittle_usdt_receive">USDT Receive</string>
+	<string name="tittle_usdt_omni_receive">USDT-OMNI Receive</string>
 	<string name="tittle_eth_receive">ETH Receive</string>
+	<string name="tittle_usdt_erc20_receive">USDT-ERC20 Receive</string>
 	<string name="tittle_share_sth">Share</string>
 	<string name="notice_copy_success">Copy successfully</string>
 	<string name="tittle_transaction_detail">Transaction Details</string>

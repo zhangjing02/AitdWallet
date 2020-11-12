@@ -23,8 +23,8 @@ import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.adapter.recycle_adapter.TransRecordAdapter;
 import com.tianqi.aitdwallet.ui.activity.wallet.btc.BitcoinTransactionActivity002;
 import com.tianqi.aitdwallet.ui.activity.wallet.eth.EthTransactionActivity;
-import com.tianqi.aitdwallet.ui.activity.wallet.eth.EthTransactionTestActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.property.CoinAddressQrActivity;
+import com.tianqi.aitdwallet.ui.activity.wallet.usdt.UsdtErc20TransactionActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.usdt.UsdtTransactionActivity002;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.baselib.base.BaseActivity;
@@ -177,7 +177,7 @@ public class TransactionRecordActivity extends BaseActivity {
 
         if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_BTC)) {
             tvCurrencyBalance.setText(DataReshape.doubleBig(walletBtcInfo.getCoin_totalAmount(), 8, 8));
-        } else if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT)) {
+        } else if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_OMNI)) {
             tvCurrencyBalance.setText(DataReshape.doubleBig(walletBtcInfo.getCoin_totalAmount(), 8, 4));
         }
         UserInformation userInformation = UserInfoManager.getUserInfo();
@@ -196,11 +196,7 @@ public class TransactionRecordActivity extends BaseActivity {
 
     private void getToolBar() {
         coin_tittle = getIntent().getStringExtra(Constants.TRANSACTION_COIN_NAME);
-        if (coin_tittle.equals(Constant.TRANSACTION_COIN_NAME_USDT)) {
-            toolbarTitle.setText(R.string.tittle_usdt_tx_record_text);
-        } else {
-            toolbarTitle.setText(coin_tittle);
-        }
+        toolbarTitle.setText(coin_tittle);
 
         toolbar.setNavigationOnClickListener(v -> {
             finish();//返回
@@ -271,7 +267,7 @@ public class TransactionRecordActivity extends BaseActivity {
     protected void initData() {
          if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_ETH)){
             initEthTxRecord(walletBtcInfo);
-        }else if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_BTC)||walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT)){
+        }else if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_BTC)||walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_OMNI)){
              initBtcTxRecord(walletBtcInfo);
              initBtcLoadingRecord(walletBtcInfo);
          }
@@ -340,7 +336,7 @@ public class TransactionRecordActivity extends BaseActivity {
         String coin_type_params = null;
         if (coinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_BTC)) {
             coin_type_params = "btc";
-        } else if (coinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT)) {
+        } else if (coinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_OMNI)) {
             coin_type_params = "usdt";
         }
 
@@ -421,7 +417,7 @@ public class TransactionRecordActivity extends BaseActivity {
 
         if (coinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_BTC)) {
             tx_record.setUnit(Constant.COIN_UNIT_BTC);
-        } else if (coinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT)) {
+        } else if (coinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_OMNI)) {
             tx_record.setUnit(Constant.COIN_UNIT_USDT);
         }
         TransactionRecordManager.insertOrUpdate(tx_record);
@@ -439,7 +435,7 @@ public class TransactionRecordActivity extends BaseActivity {
         String coin_type_params = null;
         if (coinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_BTC)) {
             coin_type_params = "btc";
-        } else if (coinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT)) {
+        } else if (coinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_OMNI)) {
             coin_type_params = "usdt";
         }
         Map<String, Object> map = new HashMap<>();
@@ -501,7 +497,7 @@ public class TransactionRecordActivity extends BaseActivity {
         tx_record.setTimeStr(format.format(calendar.getTime()));
         if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_BTC)) {
             tx_record.setUnit(Constant.COIN_UNIT_BTC);
-        } else if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT)) {
+        } else if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_OMNI)) {
             tx_record.setUnit(Constant.COIN_UNIT_USDT);
         }
         TransactionRecordManager.insertOrUpdate(tx_record);
@@ -560,13 +556,18 @@ public class TransactionRecordActivity extends BaseActivity {
                     intent.putExtra(Constants.TRANSACTION_COIN_ADDRESS, coin_address);
                     startActivity(intent);
                     break;
-                case Constant.TRANSACTION_COIN_NAME_USDT:
+                case Constant.TRANSACTION_COIN_NAME_USDT_OMNI:
                     intent = new Intent(this, UsdtTransactionActivity002.class);
                     intent.putExtra(Constants.TRANSACTION_COIN_ADDRESS, coin_address);
                     startActivity(intent);
                     break;
                 case Constant.TRANSACTION_COIN_NAME_ETH:
                     intent = new Intent(this, EthTransactionActivity.class);
+                    intent.putExtra(Constants.TRANSACTION_COIN_ADDRESS, coin_address);
+                    startActivity(intent);
+                    break;
+                case Constant.TRANSACTION_COIN_NAME_USDT_ERC20:
+                    intent = new Intent(this, UsdtErc20TransactionActivity.class);
                     intent.putExtra(Constants.TRANSACTION_COIN_ADDRESS, coin_address);
                     startActivity(intent);
                     break;

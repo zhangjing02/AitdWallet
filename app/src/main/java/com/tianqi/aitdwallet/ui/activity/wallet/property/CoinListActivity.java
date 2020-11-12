@@ -1,7 +1,6 @@
 package com.tianqi.aitdwallet.ui.activity.wallet.property;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import com.github.jdsjlzx.interfaces.OnRefreshListener;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.adapter.pager_adapter.ViewPagerCardAdapter;
@@ -37,7 +35,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class CoinListActivity extends BaseActivity {
@@ -148,10 +145,10 @@ public class CoinListActivity extends BaseActivity {
             }
         }
 
-        List<CoinInfo> specCoinInfo3 = CoinInfoManager.getSpecCoinInfo(Constant.TRANSACTION_COIN_NAME_USDT);
+        List<CoinInfo> specCoinInfo3 = CoinInfoManager.getSpecCoinInfo(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
         if (specCoinInfo3.size()>0){
             CoinInfo coin_usdt = specCoinInfo3.get(0);
-            WalletInfo wallet_usdt = WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_USDT);
+            WalletInfo wallet_usdt = WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
             if (wallet_usdt != null) {
                 CurrencyCardBean  mCurrencyCardBean = new CurrencyCardBean();
                 mCurrencyCardBean.setCoin_name(coin_usdt.getCoin_name());
@@ -256,7 +253,7 @@ public class CoinListActivity extends BaseActivity {
                        case Constant.TRANSACTION_COIN_NAME_ETH:
                            mCurrencyCardBean.setCurrency_bg_id(R.mipmap.bg_coin_card_eth);
                            break;
-                       case Constant.TRANSACTION_COIN_NAME_USDT:
+                       case Constant.TRANSACTION_COIN_NAME_USDT_OMNI:
                            mCurrencyCardBean.setCurrency_bg_id(R.mipmap.bg_coin_card_usdt);
                            break;
                    }

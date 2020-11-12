@@ -1,16 +1,10 @@
 package com.tianqi.aitdwallet.ui.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.tianqi.aitdwallet.R;
-import com.tianqi.aitdwallet.ui.activity.wallet.initwallet.BackupMemoryWordActivity;
-import com.tianqi.aitdwallet.ui.activity.wallet.initwallet.SetSecurityPsdActivity;
-import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.CoinRateInfo;
 import com.tianqi.baselib.dao.UserInformation;
@@ -22,8 +16,6 @@ import com.tianqi.baselib.rxhttp.RetrofitFactory;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
 import com.tianqi.baselib.rxhttp.bean.CoinRateBean;
 import com.tianqi.baselib.utils.Constant;
-import com.tianqi.baselib.utils.digital.DataReshape;
-import com.tianqi.baselib.utils.rxtool.RxToolUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -89,10 +81,28 @@ public class SplashActivity extends BaseActivity {
                             WalletInfoManager.insertOrUpdate(walletInfo);
                         }
 
-
-                        walletInfo= WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_USDT);
+                        walletInfo= WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
                         coinRateInfo=new CoinRateInfo();
-                        coinRateInfo.setId(Constant.TRANSACTION_COIN_NAME_USDT);
+                        coinRateInfo.setId(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
+                        coinRateInfo.setPrice_usd(coinRateBean.getUsdt());
+
+                        value1=coinRateBean.getUsdtcny1();
+                        value2=coinRateBean.getUsdtcny2();
+                        value3=coinRateBean.getUsdtcny3();
+                        coinRateInfo.setPrice_cny(value1+value2+value3/3f);;
+
+                        CoinRateInfoManager.insertOrUpdate(coinRateInfo);
+
+                        if (walletInfo!=null){
+                            Log.i("tttttttttttttt", coinRateInfo.getPrice_usd()+"----onNext: 我们插入数据的数据是？"+coinRateInfo.getPrice_cny());
+                            walletInfo.setCoin_USDPrice(coinRateInfo.getPrice_usd());
+                            walletInfo.setCoin_CNYPrice(coinRateInfo.getPrice_cny());
+                            WalletInfoManager.insertOrUpdate(walletInfo);
+                        }
+
+                        walletInfo= WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_USDT_ERC20);
+                        coinRateInfo=new CoinRateInfo();
+                        coinRateInfo.setId(Constant.TRANSACTION_COIN_NAME_USDT_ERC20);
                         coinRateInfo.setPrice_usd(coinRateBean.getUsdt());
 
                         value1=coinRateBean.getUsdtcny1();

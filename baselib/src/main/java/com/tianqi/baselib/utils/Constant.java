@@ -96,7 +96,8 @@ public interface Constant {
     String IMPORT_BTC_ID = "BTC_IMPORT"; //导入的比特币id。
     String IMPORT_ETH_ID = "ETH_IMPORT"; //导入的比特币id。
     String TRANSACTION_COIN_NAME_ETH = "ETH";
-    String TRANSACTION_COIN_NAME_USDT = "USDT-OMNI";
+    String TRANSACTION_COIN_NAME_USDT_OMNI = "USDT-OMNI";
+    String TRANSACTION_COIN_NAME_USDT_ERC20 = "USDT-ERC20";
     String IMPORT_USDT_ID = "USDT_IMPORT"; //导入的USDT的id。
 
     String WALLET_TYPE_NAME_HD = "HD-Wallet";
@@ -109,7 +110,8 @@ public interface Constant {
 
     String COIN_FULL_NAME_BTC = "Bitcoin";
     String COIN_FULL_NAME_ETH = "Ethereum";
-    String COIN_FULL_NAME_USDT = "Tether";
+    String COIN_FULL_NAME_USDT_OMNI = "Tether USD";
+    String COIN_FULL_NAME_USDT_ERC20 = "USD-ERC-20";
 
     //币种的来源（0代表创建，1代表导入）
     int COIN_SOURCE_CREATE = 0;

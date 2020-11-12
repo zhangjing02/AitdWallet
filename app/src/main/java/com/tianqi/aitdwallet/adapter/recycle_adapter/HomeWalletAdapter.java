@@ -52,7 +52,7 @@ public class HomeWalletAdapter extends BaseQuickAdapter<WalletInfo, BaseViewHold
         GlideUtils.loadResourceImage(mContext,listBean.getResource_id(),iv_coin);
         tv_coin_name.setText(listBean.getWalletName());
 
-        if (listBean.getWallet_id().equals(Constant.TRANSACTION_COIN_NAME_USDT)){
+        if (listBean.getWallet_id().equals(Constant.TRANSACTION_COIN_NAME_USDT_OMNI)){
             tv_coin_balance.setText(DataReshape.doubleBig(listBean.getWalletBalance(), 4));
         }else {
             tv_coin_balance.setText(DataReshape.doubleBig(listBean.getWalletBalance(), 8));

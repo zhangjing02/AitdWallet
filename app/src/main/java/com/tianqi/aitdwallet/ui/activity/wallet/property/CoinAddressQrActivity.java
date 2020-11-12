@@ -28,7 +28,6 @@ import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import cn.bingoogolapple.qrcode.zxing.QRCodeDecoder;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -81,12 +80,15 @@ public class CoinAddressQrActivity extends BaseActivity {
         //根据传过来的币种，决定tittle
         if (stringExtra_name.equals(Constant.TRANSACTION_COIN_NAME_BTC)){
             toolbarTitle.setText(R.string.tittle_btc_receive);
-        }else if (stringExtra_name.equals(Constant.TRANSACTION_COIN_NAME_USDT)){
-            toolbarTitle.setText(R.string.tittle_usdt_receive);
-            ivCoin.setImageDrawable(getResources().getDrawable(R.mipmap.ic_circle_usdt));
+        }else if (stringExtra_name.equals(Constant.TRANSACTION_COIN_NAME_USDT_OMNI)){
+            toolbarTitle.setText(R.string.tittle_usdt_omni_receive);
+            ivCoin.setImageDrawable(getResources().getDrawable(R.mipmap.ic_circle_usdt_omni));
         }else if (stringExtra_name.equals(Constant.TRANSACTION_COIN_NAME_ETH)){
             ivCoin.setImageDrawable(getResources().getDrawable(R.mipmap.ic_circle_eth));
             toolbarTitle.setText(R.string.tittle_eth_receive);
+        }else if (stringExtra_name.equals(Constant.TRANSACTION_COIN_NAME_USDT_ERC20)){
+            ivCoin.setImageDrawable(getResources().getDrawable(R.mipmap.ic_circle_usdt_erc20));
+            toolbarTitle.setText(R.string.tittle_usdt_erc20_receive);
         }
 
         toolbar.setBackgroundColor(getResources().getColor(R.color.bg_pager_grey));

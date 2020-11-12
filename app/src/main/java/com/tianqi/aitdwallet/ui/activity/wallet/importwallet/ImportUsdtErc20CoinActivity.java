@@ -2,9 +2,7 @@ package com.tianqi.aitdwallet.ui.activity.wallet.importwallet;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -55,7 +53,6 @@ import com.tianqi.baselib.utils.eventbus.EventMessage;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,12 +60,11 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 
-public class ImportEthCoinActivity extends BaseActivity {
+public class ImportUsdtErc20CoinActivity extends BaseActivity {
 
     @BindView(R.id.toolbarTitle)
     TextView toolbarTitle;
@@ -130,11 +126,13 @@ public class ImportEthCoinActivity extends BaseActivity {
         mnemonicWordAdapter = new MnemonicWordAdapter(this, select_list, 3);
         gvMnemonicWord.setAdapter(mnemonicWordAdapter);
 
+
         etInputKey.setHint(R.string.input_private_key_hint);
         for (int i = 0; i < titles.length; i++) {
             tablayout.addTab(tablayout.newTab());
             tablayout.getTabAt(i).setText(titles[i]);
         }
+
         tablayout.addOnTabSelectedListener(onTabSelectedListener);
         etInputKey.addTextChangedListener(textWatcher);
         checkboxReadTerm.setOnCheckedChangeListener(onCheckedChangeListener);
@@ -368,7 +366,7 @@ public class ImportEthCoinActivity extends BaseActivity {
                         try {
                             KeyStoreFile keyStoreFile = KeyStoreFile.parse(etInputKey.getText().toString());
                             ECKeyPair decrypt = KeyStore.decrypt(etKeystorePsd.getText().toString(), keyStoreFile);
-                            if ( CoinInfoManager.getCoinFrPrivateKey(Constant.TRANSACTION_COIN_NAME_ETH, decrypt.getPrivateKey()).size() > 0){
+                            if ( CoinInfoManager.getCoinFrPrivateKey(Constant.TRANSACTION_COIN_NAME_USDT_ERC20, decrypt.getPrivateKey()).size() > 0){
                                 ToastUtil.showToast(this, getString(R.string.notice_same_keystore_text));
                             }else {
                                 importSingleCoin(decrypt);
@@ -396,11 +394,11 @@ public class ImportEthCoinActivity extends BaseActivity {
             emitter.onNext(ecKeyPair);
         }).map(master -> {  //解析网络请求，并且拼接交易对象，再把交易对象签名成hex。
             //钱包数据库,目前先只拿名字是BTC的，钱包。
-            WalletInfo walletInfo = WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_ETH);
+            WalletInfo walletInfo = WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_USDT_ERC20);
             if (walletInfo == null) {
-                walletInfo = createWalletInfo(Constant.TRANSACTION_COIN_NAME_ETH);
+                walletInfo = createWalletInfo(Constant.TRANSACTION_COIN_NAME_USDT_ERC20);
             }
-            CoinRateInfo btc_rate = CoinRateInfoManager.getWalletBtcFrCoinId(Constant.COIN_RATE_ETH);
+            CoinRateInfo btc_rate = CoinRateInfoManager.getWalletBtcFrCoinId(Constant.COIN_RATE_USDT);
             //币种数据库
             CoinInfo coinInfo = new CoinInfo();
             coinInfo.setCoin_address(Constants.HEX_PREFIX+master.getAddress());
@@ -409,7 +407,7 @@ public class ImportEthCoinActivity extends BaseActivity {
                 walletInfo.setCoin_USDPrice(btc_rate.getPrice_usd());
             }
             Log.i("WalletFragment", "importSingleCoin: 我们得到的钱包是什么？" + walletInfo.toString());
-            coinInfo.setCoin_fullName(Constant.COIN_FULL_NAME_ETH);
+            coinInfo.setCoin_fullName(Constant.COIN_FULL_NAME_USDT_ERC20);
 
             List<CoinInfo> walletBtcInfo = CoinInfoManager.getCoinEthImportInfo();
             coinInfo.setCoin_ComeType(Constant.COIN_SOURCE_IMPORT);
@@ -421,11 +419,11 @@ public class ImportEthCoinActivity extends BaseActivity {
             EthWalletManager.getInstance().loadWallet(this, coinInfo, wallet -> {
 
             });
-            coinInfo.setCoin_name(Constant.TRANSACTION_COIN_NAME_ETH);
+            coinInfo.setCoin_name(Constant.TRANSACTION_COIN_NAME_USDT_ERC20);
             coinInfo.setCoin_type(Constant.COIN_BIP_TYPE_ETH);
             coinInfo.setKeystoreStr(etInputKey.getText().toString());
-            coinInfo.setAlias_name(Constant.TRANSACTION_COIN_NAME_ETH);
-            coinInfo.setResourceId(R.mipmap.ic_circle_eth);
+            coinInfo.setAlias_name(Constant.TRANSACTION_COIN_NAME_USDT_ERC20);
+            coinInfo.setResourceId(R.mipmap.ic_circle_usdt_erc20);
 
             coinInfo.setPublicKey(master.getPublicKey());
             coinInfo.setWallet_id(walletInfo.getWallet_id());
@@ -483,7 +481,7 @@ public class ImportEthCoinActivity extends BaseActivity {
 
     private WalletInfo createWalletInfo(String wallet_id) {
         //钱包数据库。
-        CoinRateInfo coinRateInfo = CoinRateInfoManager.getWalletBtcFrCoinId(Constant.TRANSACTION_COIN_NAME_ETH);
+        CoinRateInfo coinRateInfo = CoinRateInfoManager.getWalletBtcFrCoinId(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
         UserInformation userInfo = UserInfoManager.getUserInfo();
         WalletInfo walletInfo = new WalletInfo();
         walletInfo.setUserId(userInfo.getUserId());
@@ -494,18 +492,18 @@ public class ImportEthCoinActivity extends BaseActivity {
         walletInfo.setCoin_CNYPrice(coinRateInfo.getPrice_cny());
         walletInfo.setCoin_USDPrice(coinRateInfo.getPrice_usd());
         walletInfo.setIsImportToCreate(true);
-        if (wallet_id.equals(Constant.TRANSACTION_COIN_NAME_ETH)) {
-            CoinRateInfo bitcoin_rate = CoinRateInfoManager.getWalletBtcFrCoinId(Constant.COIN_RATE_ETH);
+        if (wallet_id.equals(Constant.TRANSACTION_COIN_NAME_USDT_ERC20)) {
+            CoinRateInfo bitcoin_rate = CoinRateInfoManager.getWalletBtcFrCoinId(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
             if (bitcoin_rate != null) {
                 walletInfo.setCoin_CNYPrice(bitcoin_rate.getPrice_cny());
                 walletInfo.setCoin_USDPrice(bitcoin_rate.getPrice_usd());
             } else {
-                CoinRateInfo walletBtcFrCoinId = CoinRateInfoManager.getWalletBtcFrCoinId(Constant.TRANSACTION_COIN_NAME_ETH);
+                CoinRateInfo walletBtcFrCoinId = CoinRateInfoManager.getWalletBtcFrCoinId(Constant.TRANSACTION_COIN_NAME_USDT_ERC20);
                 walletInfo.setCoin_CNYPrice(walletBtcFrCoinId.getPrice_cny());
                 walletInfo.setCoin_USDPrice(walletBtcFrCoinId.getPrice_usd());
 
             }
-            walletInfo.setResource_id(R.mipmap.ic_circle_eth);
+            walletInfo.setResource_id(R.mipmap.ic_circle_usdt_erc20);
         }
         WalletInfoManager.insertOrUpdate(walletInfo);
         return walletInfo;

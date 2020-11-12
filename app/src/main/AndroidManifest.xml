@@ -84,6 +84,8 @@
         <activity android:name=".ui.activity.wallet.eth.EthTransactionNativeActivity" />
         <activity android:name=".ui.activity.wallet.eth.EthTransactionActivity" />
         <activity android:name=".ui.activity.setting.LanguageSettingActivity" />
+        <activity android:name=".ui.activity.wallet.importwallet.ImportUsdtErc20CoinActivity" />
+        <activity android:name=".ui.activity.wallet.usdt.UsdtErc20TransactionActivity" />
     </application>
 
 </manifest>

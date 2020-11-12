@@ -17,6 +17,7 @@ import com.quincysx.crypto.bip44.AddressIndex;
 import com.quincysx.crypto.bip44.BIP44;
 import com.quincysx.crypto.bip44.CoinPairDerive;
 import com.quincysx.crypto.bitcoin.BitCoinECKeyPair;
+import com.quincysx.crypto.utils.HexUtils;
 import com.tianqi.baselib.dao.UserInformation;
 import com.tianqi.baselib.dbManager.UserInfoManager;
 
@@ -36,6 +37,7 @@ public class WalletUtils {
         }.getType();
         List<String> list = gson.fromJson(userInformation.getMnemonicWord(), listType);
         byte[] seed = new SeedCalculator().calculateSeed(list, "");
+        Log.i("ttttttttttttt", "createCoinMaser: 我们看主种子是多少？"+HexUtils.toHex(seed));
         ExtendedKey extendedKey = null;
         try {
             extendedKey = ExtendedKey.create(seed);

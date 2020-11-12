@@ -26,6 +26,7 @@
         app:tabMode="fixed"
         app:tabPaddingEnd="15dp"
         app:tabPaddingStart="15dp"
+        app:tabTextAppearance="@style/TabLayoutTextStyle"
         app:tabSelectedTextColor="@color/text_main_black"
         app:tabTextColor="@color/text_main_60_black" />
 

@@ -3,6 +3,7 @@ package com.tianqi.baselib.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -207,8 +208,8 @@ public class CustomSeekBar extends View {
             leftPadding = 0;
         }
 
-        RectF backgroundRect = new RectF(leftPadding, getHeight()/2 / 2 - height-5, getWidth(),
-                getHeight()/2 / 2 + height+5);
+        RectF backgroundRect = new RectF(leftPadding, getHeight()/2 / 2 - height, getWidth(),
+                getHeight()/2 / 2 + height);
 
         //设置渐变色背景
 //        LinearGradient shader = new LinearGradient(leftPadding, getHeight()/2 / 2 - height, getWidth(), getHeight()/2 / 2 - height, colors,null, Shader.TileMode.MIRROR);
@@ -221,9 +222,9 @@ public class CustomSeekBar extends View {
                     / 2 + height);
             canvas.drawRoundRect(secondProgressRect, rSize, rSize, mSecondProgressPaint);
 
-            RectF progressRect = new RectF(leftPadding, getHeight()/2 / 2 - height-5,
+            RectF progressRect = new RectF(leftPadding, getHeight()/2 / 2 - height,
                     getProgress() * getWidth() / getMax(), getHeight()/2 / 2
-                    + height+5);
+                    + height);
 
             //设置渐变色背景
 //            shader = new LinearGradient(leftPadding, getHeight()/2 / 2 - height, getWidth(), getHeight()/2 / 2 - height, colors,null, Shader.TileMode.MIRROR);
@@ -239,10 +240,18 @@ public class CustomSeekBar extends View {
                 cx = Math.max(cx, rSize);
             }
             int cy = getHeight()/2 / 2;
-            canvas.drawCircle(cx, cy, rSize+10, mThumbPaint);
-            canvas.drawCircle(cx, cy, rSize+10-5, mThumbSmallPaint);
+//            canvas.drawCircle(cx, cy, rSize+10, mThumbPaint);
+//            canvas.drawCircle(cx, cy, rSize+10-5, mThumbSmallPaint);
 
+           //画圆角矩形。
+            RectF r1 = new RectF();
+            r1.left = cx-2;
+            r1.right = cx+18;
+            r1.top = 10 ;
+            r1.bottom = 60;
+            canvas.drawRoundRect(r1, 10, 10, mProgressPaint);
 
+            //写入文本
             float textWidth = textPaint.measureText(progress_txt);
             textPaint.setColor(progress_text_color);
             canvas.drawText(progress_txt,cx-textWidth/2, cy+60,textPaint);

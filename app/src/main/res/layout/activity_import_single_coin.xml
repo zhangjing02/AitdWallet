@@ -33,7 +33,7 @@
     <LinearLayout
         android:id="@+id/layout_import_keystore_notice"
         android:layout_width="match_parent"
-        android:layout_height="67dp"
+        android:layout_height="75dp"
         android:background="@drawable/bg_set_psd_notice"
         app:layout_constraintTop_toBottomOf="@+id/tablayout"
         android:paddingHorizontal="15dp"
@@ -78,6 +78,7 @@
         android:layout_marginTop="15dp"
         style="@style/bg_edit_grey"
         android:hint="@string/text_input_psd_hint"
+        android:inputType="textPassword"
         android:visibility="gone"
         android:textColorHint="@color/text_main_30_grey"
         android:paddingLeft="15dp"

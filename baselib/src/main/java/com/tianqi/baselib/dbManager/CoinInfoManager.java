@@ -1,7 +1,5 @@
 package com.tianqi.baselib.dbManager;
 
-import android.util.Log;
-
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dbgreendao.gen.CoinInfoDao;
 import com.tianqi.baselib.utils.Constant;
@@ -104,7 +102,7 @@ public class CoinInfoManager {
     }
     public static List<CoinInfo> getWalletUsdtInfo() {
         List<CoinInfo> list = getScaleRecordDao().queryBuilder()
-                .where(CoinInfoDao.Properties.Coin_name.eq(Constant.TRANSACTION_COIN_NAME_USDT))//数据筛选，只获取 Name = "btc" 的数据。
+                .where(CoinInfoDao.Properties.Coin_name.eq(Constant.TRANSACTION_COIN_NAME_USDT_OMNI))//数据筛选，只获取 Name = "btc" 的数据。
                 .build()
                 .list();
         return list;

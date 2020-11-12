@@ -124,7 +124,7 @@ public class UsdtTransactionNativeActivity extends BaseActivity {
         seekBarMinerCost.setEnabled(true);
         seekBarMinerCost.setMax(100);
         seekBarMinerCost.setProgress(10);
-        walletInfo = WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_USDT);
+        walletInfo = WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
         setMinerFeeText(miner_fee_single);
 
         seekBarMinerCost.setOnChangeListener(new CustomSeekBar.OnChangeListener() {
@@ -169,7 +169,7 @@ public class UsdtTransactionNativeActivity extends BaseActivity {
 
     private void initWallet() {
         String coin_address = getIntent().getStringExtra(Constants.TRANSACTION_COIN_ADDRESS);
-        walletBtcFrAddress = CoinInfoManager.getCoinFrAddress(Constant.TRANSACTION_COIN_NAME_USDT, coin_address);
+        walletBtcFrAddress = CoinInfoManager.getCoinFrAddress(Constant.TRANSACTION_COIN_NAME_USDT_OMNI, coin_address);
         try {
             master = BitCoinECKeyPair.parseWIF(walletBtcFrAddress.getPrivateKey());
         } catch (ValidationException e) {
@@ -345,7 +345,7 @@ public class UsdtTransactionNativeActivity extends BaseActivity {
                         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
                         tx_record.setTimeStr(format.format(calendar.getTime()));
 
-                        tx_record.setUnit(Constant.TRANSACTION_COIN_NAME_USDT);
+                        tx_record.setUnit(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
                         TransactionRecordManager.insertOrUpdate(tx_record);
                         EventMessage message = new EventMessage();
                         message.setType(EventMessage.TRANSACTION_RECORD_UPDATE);

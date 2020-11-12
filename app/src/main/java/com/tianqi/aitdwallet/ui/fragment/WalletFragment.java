@@ -4,15 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.RectF;
 import android.graphics.Typeface;
-import android.os.Handler;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -22,7 +19,6 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,9 +28,6 @@ import com.app.hubert.guide.listener.OnGuideChangedListener;
 import com.app.hubert.guide.listener.OnLayoutInflatedListener;
 import com.app.hubert.guide.model.GuidePage;
 import com.app.hubert.guide.model.HighLight;
-import com.google.gson.Gson;
-import com.quincysx.crypto.CoinTypes;
-import com.quincysx.crypto.ECKeyPair;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.adapter.recycle_adapter.HomeWalletAdapter;
@@ -44,7 +37,6 @@ import com.tianqi.aitdwallet.ui.activity.wallet.setting.WalletHiddenActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.setting.WalletManageActivity;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.aitdwallet.utils.HighlightOptionsUtils;
-import com.tianqi.aitdwallet.utils.WalletUtils;
 import com.tianqi.aitdwallet.utils.statusbar.StatusBarCompat;
 import com.tianqi.aitdwallet.widget.dialog.NewGuideEndDialog;
 import com.tianqi.aitdwallet.widget.dialog.NewGuideStartDialog;
@@ -65,7 +57,6 @@ import com.tianqi.baselib.utils.digital.DataReshape;
 import com.tianqi.baselib.utils.display.GlideUtils;
 import com.tianqi.baselib.utils.display.ScreenUtils;
 import com.tianqi.baselib.utils.eventbus.EventMessage;
-import com.tianqi.baselib.utils.rxtool.RxToolUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -77,9 +68,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.ObservableSource;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
 import io.reactivex.functions.Function;
 
 public class WalletFragment extends BaseFragment {
@@ -523,7 +512,7 @@ public class WalletFragment extends BaseFragment {
         }).delay(2, TimeUnit.SECONDS).doOnComplete(() -> {
             Log.i(TAG, "initWallet: 003");
             //当BTC调完后（但结果未必都返回了，所以要做2S延迟）完成的时候，我们做一个2S的延时，然后去循环调用usdt的余额。
-            allusdtCoinInfos = CoinInfoManager.getSpecCoinInfo(Constant.TRANSACTION_COIN_NAME_USDT);
+            allusdtCoinInfos = CoinInfoManager.getSpecCoinInfo(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
             if (allusdtCoinInfos!=null&&allusdtCoinInfos.size() > 0) {
                 usdt_quest_count = 0;
                 for (int i = 0; i < allusdtCoinInfos.size(); i++) {
@@ -544,7 +533,7 @@ public class WalletFragment extends BaseFragment {
     private void getBtcUtxo(CoinInfo specCoinInfo) {
         if (specCoinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_BTC)) {
             coin_type_params = "btc";
-        } else if (specCoinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT)) {
+        } else if (specCoinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_OMNI)) {
             coin_type_params = "usdt";
         }
         Map<String, Object> map = new HashMap<>();
