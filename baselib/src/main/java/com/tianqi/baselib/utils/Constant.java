@@ -95,8 +95,11 @@ public interface Constant {
     String TRANSACTION_COIN_NAME_BTC = "BTC";
     String IMPORT_BTC_ID = "BTC_IMPORT"; //导入的比特币id。
     String IMPORT_ETH_ID = "ETH_IMPORT"; //导入的比特币id。
+    String IMPORT_USDT_ERC20_ID = "USDT_ERC20_IMPORT"; //导入的比特币id。
+    String IMPORT_USDT_OMNI_ID = "USDT_OMNI_IMPORT"; //导入的比特币id。
     String TRANSACTION_COIN_NAME_ETH = "ETH";
     String TRANSACTION_COIN_NAME_USDT_OMNI = "USDT-OMNI";
+    String TRANSACTION_COIN_UNIT_USDT= "USDT";
     String TRANSACTION_COIN_NAME_USDT_ERC20 = "USDT-ERC20";
     String IMPORT_USDT_ID = "USDT_IMPORT"; //导入的USDT的id。
 
@@ -136,6 +139,7 @@ public interface Constant {
 
     String PSD_KEY = "12345678abcdefgh";
     String PSD_IV = "0123456789876543";
+    String CONTRACT_ADDRESS = "0xdac17f958d2ee523a2206206994597c13d831ec7";
 
 
     String COIN_RATE_JSON = "[\n" +

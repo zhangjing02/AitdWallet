@@ -43,7 +43,7 @@
 
     <me.grantland.widget.AutofitTextView
         android:id="@+id/tv_wallet_manage"
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="18dp"

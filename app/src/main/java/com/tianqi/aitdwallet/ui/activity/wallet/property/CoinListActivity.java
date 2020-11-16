@@ -101,7 +101,7 @@ public class CoinListActivity extends BaseActivity {
 //        header = LayoutInflater.from(this).inflate(R.layout.header_coin_card, findViewById(android.R.id.content), false);
 //        ViewPager mViewPager = header.findViewById(R.id.viewpager);
         mList = new ArrayList<>();
-        List<CoinInfo> specCoinInfo1 = CoinInfoManager.getSpecCoinInfo(Constant.TRANSACTION_COIN_NAME_BTC);
+        List<CoinInfo> specCoinInfo1 = CoinInfoManager.getCoinFrIdInfo(Constant.TRANSACTION_COIN_NAME_BTC);
 
         if (specCoinInfo1.size()>0){
             CoinInfo coinFrAddress = specCoinInfo1.get(0);
@@ -124,7 +124,7 @@ public class CoinListActivity extends BaseActivity {
             }
         }
 
-        List<CoinInfo> specCoinInfo2 = CoinInfoManager.getSpecCoinInfo(Constant.TRANSACTION_COIN_NAME_ETH);
+        List<CoinInfo> specCoinInfo2 = CoinInfoManager.getCoinFrIdInfo(Constant.TRANSACTION_COIN_NAME_ETH);
         if (specCoinInfo2.size()>0){
             CoinInfo coin_eth = specCoinInfo2.get(0);
             WalletInfo wallet_eth = WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_ETH);
@@ -145,10 +145,33 @@ public class CoinListActivity extends BaseActivity {
             }
         }
 
-        List<CoinInfo> specCoinInfo3 = CoinInfoManager.getSpecCoinInfo(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
+        List<CoinInfo> specCoinInfo3 = CoinInfoManager.getCoinFrIdInfo(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
         if (specCoinInfo3.size()>0){
             CoinInfo coin_usdt = specCoinInfo3.get(0);
             WalletInfo wallet_usdt = WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
+            if (wallet_usdt != null) {
+                CurrencyCardBean  mCurrencyCardBean = new CurrencyCardBean();
+                mCurrencyCardBean.setCoin_name(coin_usdt.getCoin_name());
+                mCurrencyCardBean.setCoin_alias_name(coin_usdt.getAlias_name());
+                mCurrencyCardBean.setCoin_address(coin_usdt.getCoin_address());
+                mCurrencyCardBean.setCoin_icon_id(coin_usdt.getCoin_id());
+
+                if (userInformation.getFiatUnit().equals(Constants.FIAT_USD)){
+                    mCurrencyCardBean.setCurrency_to_fiat_num("≈ $"+DataReshape.doubleBig(coin_usdt.getCoin_totalAmount() * wallet_usdt.getCoin_USDPrice(),2));
+                }else {
+                    mCurrencyCardBean.setCurrency_to_fiat_num("≈ ￥"+DataReshape.doubleBig(coin_usdt.getCoin_totalAmount() * wallet_usdt.getCoin_CNYPrice(),2));
+                }
+
+                mCurrencyCardBean.setCurrency_bg_id(R.mipmap.bg_coin_card_usdt);
+                mCurrencyCardBean.setCoin_icon_white_id(R.mipmap.ic_circle_white_usdt);
+                mList.add(mCurrencyCardBean);
+            }
+        }
+
+        List<CoinInfo> specCoinInfo4= CoinInfoManager.getCoinFrIdInfo(Constant.TRANSACTION_COIN_NAME_USDT_ERC20);
+        if (specCoinInfo4.size()>0){
+            CoinInfo coin_usdt = specCoinInfo4.get(0);
+            WalletInfo wallet_usdt = WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_USDT_ERC20);
             if (wallet_usdt != null) {
                 CurrencyCardBean  mCurrencyCardBean = new CurrencyCardBean();
                 mCurrencyCardBean.setCoin_name(coin_usdt.getCoin_name());
@@ -254,6 +277,9 @@ public class CoinListActivity extends BaseActivity {
                            mCurrencyCardBean.setCurrency_bg_id(R.mipmap.bg_coin_card_eth);
                            break;
                        case Constant.TRANSACTION_COIN_NAME_USDT_OMNI:
+                           mCurrencyCardBean.setCurrency_bg_id(R.mipmap.bg_coin_card_usdt);
+                           break;
+                       case Constant.TRANSACTION_COIN_NAME_USDT_ERC20:
                            mCurrencyCardBean.setCurrency_bg_id(R.mipmap.bg_coin_card_usdt);
                            break;
                    }

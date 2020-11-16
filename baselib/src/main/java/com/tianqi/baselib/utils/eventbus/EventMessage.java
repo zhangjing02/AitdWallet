@@ -28,6 +28,8 @@ public class EventMessage {
     public static final int HIDDEN_WALLET_UPDATE = 604;//有的钱包被隐藏了。
     public static final int HIDDEN_COIN_UPDATE = 605;//有的币种被隐藏了。
     public static final int COIN_NAME_UPDATE = 606;//修改了币种的别名
+    public static final int ADD_ADDRESS_UPDATE = 607;//添加了通讯录地址
+
 
     private int type;
     private Object object;

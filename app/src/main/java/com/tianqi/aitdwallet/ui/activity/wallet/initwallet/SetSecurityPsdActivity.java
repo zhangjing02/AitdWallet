@@ -19,6 +19,7 @@ import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 
 import com.tianqi.aitdwallet.R;
+import com.tianqi.aitdwallet.ui.activity.MainActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.importwallet.ImportWalletActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.setting.PrivacyTermsWebActivity;
 import com.tianqi.aitdwallet.utils.Constants;
@@ -338,44 +339,61 @@ public class SetSecurityPsdActivity extends BaseActivity {
                 break;
             case R.id.btn_create_wallet:
                 if (judgeSelectInput()) {
-                    Observable.just(true).map(s -> {
-                        String accountPwd=AESCipher.encrypt(Constant.PSD_KEY, etInputPassword.getText().toString().trim());
-                        Log.i(TAG, "onViewClicked: 001存入的密码是？  "+accountPwd);
-                        UserInformation userInformation = new UserInformation();
-                        userInformation.setUserId(RxToolUtil.readFingerprintFromFile(this));
-                      //  userInformation.setPasswordStr(MD5.Md5(etInputPassword.getText().toString().trim()));
-                        userInformation.setPasswordStr(accountPwd);
+                    String stringExtra = getIntent().getStringExtra(Constants.INTENT_PUT_TAG);
+                    if (stringExtra!=null&&stringExtra.equals(Constants.INTENT_PUT_CHANGE_PSD)){
+                        UserInformation userInformation = UserInfoManager.getUserInfo();
+                        try {
+                            String accountPwd=AESCipher.encrypt(Constant.PSD_KEY, etInputPassword.getText().toString().trim());
+                            userInformation.setPasswordStr(accountPwd);
+                            userInformation.setPasswordTip(etPasswordReminder.getText().toString());
 
-                        //解密
-                        String aes_decode_str = AESCipher.decrypt(Constant.PSD_KEY,accountPwd);
-                        // Log.i(TAG, "onViewClicked: 002存入的密码是？  "+aes_decode_str);
-                        if (getResources().getConfiguration().locale.getCountry().equals("US")){
-                        userInformation.setLanguageId(Constants.LANGUAGE_ENGLISH);
-                        }else {
-                            userInformation.setLanguageId(Constants.LANGUAGE_CHINA);
+                            UserInfoManager.insertOrUpdate(userInformation);
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                        userInformation.setNoCenter(true);
-                        // TODO: 2020/10/29 此处加入一些判语言和币种单位的逻辑。
-                        if (getResources().getConfiguration().locale.getCountry().equals("US")) {
-                            userInformation.setFiatUnit(Constants.FIAT_USD);
-                        } else {
-                            userInformation.setFiatUnit(Constants.FIAT_CNY);
-                        }
-                        userInformation.setPasswordTip(etPasswordReminder.getText().toString());
-                        return userInformation;
-                    }).compose(RxHelper.io_main()).subscribe(userInformation -> {
-                        UserInfoManager.insertOrUpdate(userInformation);
-                        if (build_wallet_type.equals(Constants.INTENT_PUT_CREATE_WALLET)) {
-                            Intent intent2 = new Intent(this, BackupMemoryWordActivity.class);
-                            startActivity(intent2);
-                        } else if (build_wallet_type.equals(Constants.INTENT_PUT_IMPORT_WALLET)) {
-                            Intent intent3 = new Intent(this, ImportWalletActivity.class);
-                            intent3.putExtra(Constants.INTENT_PUT_TAG, Constants.INTENT_PUT_IMPORT_WALLET);
-                            startActivity(intent3);
-                        }
-                        ToastUtil.showToast(this,getString(R.string.notice_setting_success_text));
+                        Intent intent1=new Intent(this, MainActivity.class);
+                        startActivity(intent1);
                         finish();
-                    });
+                    }else {
+                        Observable.just(true).map(s -> {
+                            String accountPwd=AESCipher.encrypt(Constant.PSD_KEY, etInputPassword.getText().toString().trim());
+                            Log.i(TAG, "onViewClicked: 001存入的密码是？  "+accountPwd);
+                            UserInformation userInformation = new UserInformation();
+                            userInformation.setUserId(RxToolUtil.readFingerprintFromFile(this));
+                            //  userInformation.setPasswordStr(MD5.Md5(etInputPassword.getText().toString().trim()));
+                            userInformation.setPasswordStr(accountPwd);
+
+                            //解密
+                            String aes_decode_str = AESCipher.decrypt(Constant.PSD_KEY,accountPwd);
+                            // Log.i(TAG, "onViewClicked: 002存入的密码是？  "+aes_decode_str);
+                            if (getResources().getConfiguration().locale.getCountry().equals("US")){
+                                userInformation.setLanguageId(Constants.LANGUAGE_ENGLISH);
+                            }else {
+                                userInformation.setLanguageId(Constants.LANGUAGE_CHINA);
+                            }
+                            userInformation.setNoCenter(true);
+                            // TODO: 2020/10/29 此处加入一些判语言和币种单位的逻辑。
+                            if (getResources().getConfiguration().locale.getCountry().equals("US")) {
+                                userInformation.setFiatUnit(Constants.FIAT_USD);
+                            } else {
+                                userInformation.setFiatUnit(Constants.FIAT_CNY);
+                            }
+                            userInformation.setPasswordTip(etPasswordReminder.getText().toString());
+                            return userInformation;
+                        }).compose(RxHelper.io_main()).subscribe(userInformation -> {
+                            UserInfoManager.insertOrUpdate(userInformation);
+                            if (build_wallet_type.equals(Constants.INTENT_PUT_CREATE_WALLET)) {
+                                Intent intent2 = new Intent(this, BackupMemoryWordActivity.class);
+                                startActivity(intent2);
+                            } else if (build_wallet_type.equals(Constants.INTENT_PUT_IMPORT_WALLET)) {
+                                Intent intent3 = new Intent(this, ImportWalletActivity.class);
+                                intent3.putExtra(Constants.INTENT_PUT_TAG, Constants.INTENT_PUT_IMPORT_WALLET);
+                                startActivity(intent3);
+                            }
+                            ToastUtil.showToast(this,getString(R.string.notice_setting_success_text));
+                            finish();
+                        });
+                    }
                 }
                 break;
         }

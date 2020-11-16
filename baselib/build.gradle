@@ -35,7 +35,7 @@ android {
 
 
 greendao {
-    schemaVersion 05
+    schemaVersion 10
     daoPackage 'com.tianqi.baselib.dbgreendao.gen'//1
     targetGenDir 'src/main/java-gen'
     //targetGenDir 'src/main/java'

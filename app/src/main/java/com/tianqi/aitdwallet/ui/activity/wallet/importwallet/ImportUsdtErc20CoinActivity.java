@@ -223,7 +223,7 @@ public class ImportUsdtErc20CoinActivity extends BaseActivity {
         public void afterTextChanged(Editable editable) {
             switch (select_index) {
                 case TITTLE_PRIVATE_KEY_INDEX:
-                    if (!TextUtils.isEmpty(editable.toString()) && editable.toString().length() == 52 && checkboxReadTerm.isChecked()) {
+                    if (!TextUtils.isEmpty(editable.toString()) && editable.toString().length() == 64 && checkboxReadTerm.isChecked()) {
                         btnImportWallet.setBackground(getResources().getDrawable(R.drawable.bg_blue_round_button));
                     } else {
                         btnImportWallet.setBackground(getResources().getDrawable(R.drawable.bg_grey_round_button));
@@ -254,7 +254,7 @@ public class ImportUsdtErc20CoinActivity extends BaseActivity {
         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
             switch (select_index) {
                 case TITTLE_PRIVATE_KEY_INDEX:
-                    if (!TextUtils.isEmpty(etInputKey.getText().toString()) && etInputKey.getText().toString().length() == 52 && checkboxReadTerm.isChecked()) {
+                    if (!TextUtils.isEmpty(etInputKey.getText().toString()) && etInputKey.getText().toString().length() == 64 && checkboxReadTerm.isChecked()) {
                         btnImportWallet.setBackground(getResources().getDrawable(R.drawable.bg_blue_round_button));
                     } else {
                         btnImportWallet.setBackground(getResources().getDrawable(R.drawable.bg_grey_round_button));
@@ -395,6 +395,7 @@ public class ImportUsdtErc20CoinActivity extends BaseActivity {
         }).map(master -> {  //解析网络请求，并且拼接交易对象，再把交易对象签名成hex。
             //钱包数据库,目前先只拿名字是BTC的，钱包。
             WalletInfo walletInfo = WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_USDT_ERC20);
+
             if (walletInfo == null) {
                 walletInfo = createWalletInfo(Constant.TRANSACTION_COIN_NAME_USDT_ERC20);
             }
@@ -409,9 +410,9 @@ public class ImportUsdtErc20CoinActivity extends BaseActivity {
             Log.i("WalletFragment", "importSingleCoin: 我们得到的钱包是什么？" + walletInfo.toString());
             coinInfo.setCoin_fullName(Constant.COIN_FULL_NAME_USDT_ERC20);
 
-            List<CoinInfo> walletBtcInfo = CoinInfoManager.getCoinEthImportInfo();
+            List<CoinInfo> walletBtcInfo = CoinInfoManager.getCoinErc20ImportInfo();
             coinInfo.setCoin_ComeType(Constant.COIN_SOURCE_IMPORT);
-            coinInfo.setCoin_id(Constant.IMPORT_ETH_ID + walletBtcInfo.size());
+            coinInfo.setCoin_id(Constant.IMPORT_USDT_ERC20_ID + walletBtcInfo.size());
             // coinInfo.setIsCollect();
             coinInfo.setPrivateKey(master.getPrivateKey());
             //保存一个文件形式，方便加载的时候，能很快加载出钱包。否则每次去生成会很慢。
@@ -457,10 +458,10 @@ public class ImportUsdtErc20CoinActivity extends BaseActivity {
         } else if (!checkboxReadTerm.isChecked()) {
             ToastUtil.showToast(this, getString(R.string.notice_agree_terms));
             return false;
-        } else if (select_index == TITTLE_PRIVATE_KEY_INDEX && etInputKey.getText().length() != 52) {
+        } else if (select_index == TITTLE_PRIVATE_KEY_INDEX && etInputKey.getText().length() != 64) {
             ToastUtil.showToast(this, getString(R.string.notice_private_key_error));
             return false;
-        } else if (CoinInfoManager.getCoinFrPrivateKey(Constant.TRANSACTION_COIN_NAME_BTC, etInputKey.getText().toString()).size() > 0) {
+        } else if (CoinInfoManager.getCoinFrPrivateKey(Constant.TRANSACTION_COIN_NAME_USDT_ERC20, etInputKey.getText().toString()).size() > 0) {
             ToastUtil.showToast(this, getString(R.string.notice_same_private_key));
             return false;
         }
@@ -481,7 +482,7 @@ public class ImportUsdtErc20CoinActivity extends BaseActivity {
 
     private WalletInfo createWalletInfo(String wallet_id) {
         //钱包数据库。
-        CoinRateInfo coinRateInfo = CoinRateInfoManager.getWalletBtcFrCoinId(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
+        CoinRateInfo coinRateInfo = CoinRateInfoManager.getWalletBtcFrCoinId(Constant.TRANSACTION_COIN_NAME_USDT_ERC20);
         UserInformation userInfo = UserInfoManager.getUserInfo();
         WalletInfo walletInfo = new WalletInfo();
         walletInfo.setUserId(userInfo.getUserId());
@@ -493,7 +494,7 @@ public class ImportUsdtErc20CoinActivity extends BaseActivity {
         walletInfo.setCoin_USDPrice(coinRateInfo.getPrice_usd());
         walletInfo.setIsImportToCreate(true);
         if (wallet_id.equals(Constant.TRANSACTION_COIN_NAME_USDT_ERC20)) {
-            CoinRateInfo bitcoin_rate = CoinRateInfoManager.getWalletBtcFrCoinId(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
+            CoinRateInfo bitcoin_rate = CoinRateInfoManager.getWalletBtcFrCoinId(Constant.TRANSACTION_COIN_NAME_USDT_ERC20);
             if (bitcoin_rate != null) {
                 walletInfo.setCoin_CNYPrice(bitcoin_rate.getPrice_cny());
                 walletInfo.setCoin_USDPrice(bitcoin_rate.getPrice_usd());
@@ -501,7 +502,6 @@ public class ImportUsdtErc20CoinActivity extends BaseActivity {
                 CoinRateInfo walletBtcFrCoinId = CoinRateInfoManager.getWalletBtcFrCoinId(Constant.TRANSACTION_COIN_NAME_USDT_ERC20);
                 walletInfo.setCoin_CNYPrice(walletBtcFrCoinId.getPrice_cny());
                 walletInfo.setCoin_USDPrice(walletBtcFrCoinId.getPrice_usd());
-
             }
             walletInfo.setResource_id(R.mipmap.ic_circle_usdt_erc20);
         }

@@ -225,7 +225,7 @@ public class ImportEthCoinActivity extends BaseActivity {
         public void afterTextChanged(Editable editable) {
             switch (select_index) {
                 case TITTLE_PRIVATE_KEY_INDEX:
-                    if (!TextUtils.isEmpty(editable.toString()) && editable.toString().length() == 52 && checkboxReadTerm.isChecked()) {
+                    if (!TextUtils.isEmpty(editable.toString()) && editable.toString().length() == 64 && checkboxReadTerm.isChecked()) {
                         btnImportWallet.setBackground(getResources().getDrawable(R.drawable.bg_blue_round_button));
                     } else {
                         btnImportWallet.setBackground(getResources().getDrawable(R.drawable.bg_grey_round_button));
@@ -256,7 +256,7 @@ public class ImportEthCoinActivity extends BaseActivity {
         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
             switch (select_index) {
                 case TITTLE_PRIVATE_KEY_INDEX:
-                    if (!TextUtils.isEmpty(etInputKey.getText().toString()) && etInputKey.getText().toString().length() == 52 && checkboxReadTerm.isChecked()) {
+                    if (!TextUtils.isEmpty(etInputKey.getText().toString()) && etInputKey.getText().toString().length() ==64 && checkboxReadTerm.isChecked()) {
                         btnImportWallet.setBackground(getResources().getDrawable(R.drawable.bg_blue_round_button));
                     } else {
                         btnImportWallet.setBackground(getResources().getDrawable(R.drawable.bg_grey_round_button));
@@ -426,7 +426,6 @@ public class ImportEthCoinActivity extends BaseActivity {
             coinInfo.setKeystoreStr(etInputKey.getText().toString());
             coinInfo.setAlias_name(Constant.TRANSACTION_COIN_NAME_ETH);
             coinInfo.setResourceId(R.mipmap.ic_circle_eth);
-
             coinInfo.setPublicKey(master.getPublicKey());
             coinInfo.setWallet_id(walletInfo.getWallet_id());
 
@@ -459,7 +458,7 @@ public class ImportEthCoinActivity extends BaseActivity {
         } else if (!checkboxReadTerm.isChecked()) {
             ToastUtil.showToast(this, getString(R.string.notice_agree_terms));
             return false;
-        } else if (select_index == TITTLE_PRIVATE_KEY_INDEX && etInputKey.getText().length() != 52) {
+        } else if (select_index == TITTLE_PRIVATE_KEY_INDEX && etInputKey.getText().length() != 64) {
             ToastUtil.showToast(this, getString(R.string.notice_private_key_error));
             return false;
         } else if (CoinInfoManager.getCoinFrPrivateKey(Constant.TRANSACTION_COIN_NAME_BTC, etInputKey.getText().toString()).size() > 0) {
@@ -508,6 +507,7 @@ public class ImportEthCoinActivity extends BaseActivity {
             walletInfo.setResource_id(R.mipmap.ic_circle_eth);
         }
         WalletInfoManager.insertOrUpdate(walletInfo);
+        Log.i("tttttttttttttt", "createWalletInfo: 002我们看写入的钱包明细"+walletInfo.toString());
         return walletInfo;
     }
 }

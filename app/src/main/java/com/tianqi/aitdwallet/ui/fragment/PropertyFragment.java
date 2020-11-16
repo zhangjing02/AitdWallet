@@ -75,12 +75,12 @@ public class PropertyFragment extends BaseFragment {
                 if (userInfo!=null&& !TextUtils.isEmpty(userInfo.getPasswordStr())){
                     // TODO: 2020/10/14 进入验证密码的页面。
                     Intent intent=new Intent(getActivity(), VerifySecurityPsdActivity.class);
-                                 intent.putExtra(Constants.INTENT_PUT_TAG,Constants.INTENT_PUT_IMPORT_WALLET);
+                                 intent.putExtra(Constants.INTENT_PUT_TAG,getString(R.string.tittle_import_wallet));
                     startActivity(intent);
 
                 }else {
                     Intent intent=new Intent(getActivity(), SetSecurityPsdActivity.class);
-                    intent.putExtra(Constants.INTENT_PUT_TAG,Constants.INTENT_PUT_IMPORT_WALLET);
+                    intent.putExtra(Constants.INTENT_PUT_TAG,getString(R.string.tittle_import_wallet));
                     startActivity(intent);
                 }
                 break;

@@ -35,6 +35,7 @@ import com.tianqi.baselib.rxhttp.base.RxHelper;
 import com.tianqi.baselib.rxhttp.bean.GetTxDetailBean;
 import com.tianqi.baselib.utils.Constant;
 import com.tianqi.baselib.utils.digital.DataReshape;
+import com.tianqi.baselib.utils.display.GlideUtils;
 import com.tianqi.baselib.utils.display.ToastUtil;
 
 import java.text.SimpleDateFormat;
@@ -100,6 +101,7 @@ public class TransactionDetailActivity extends BaseActivity {
     TextView tvBlockHeight;
     private Calendar calendar;
     private UserInformation userInformation;
+    private TransactionRecord txFrId;
 
     @Override
     protected int getContentView() {
@@ -130,7 +132,7 @@ public class TransactionDetailActivity extends BaseActivity {
         String tx_id = getIntent().getStringExtra(Constants.INTENT_PUT_TRANSACTION_ID);
         String coin_id = getIntent().getStringExtra(Constants.INTENT_PUT_COIN_ID);
         Log.i("ttttttttt", "initData: 我们看一下这个交易id是？"+tx_id);
-        TransactionRecord txFrId = TransactionRecordManager.getTxFrId(tx_id);
+        txFrId = TransactionRecordManager.getTxFrId(tx_id);
         if (!TextUtils.isEmpty(txFrId.getRemark())){
             tvTransactionNote.setText(txFrId.getRemark()+"");
         }
@@ -166,7 +168,6 @@ public class TransactionDetailActivity extends BaseActivity {
                                             receive_value=receive_value+Double.valueOf(data.getOutputs().get(i).getValue());
                                         }
                                     }
-
                                     //如果是转出，但是在output中没找到不是自己的地址，则应该是自己给自己转账，我们就拿第一比输出作为转金额。
                                     if (receive_value==0){
                                         if (data.getOutputs().size()>0){
@@ -242,6 +243,43 @@ public class TransactionDetailActivity extends BaseActivity {
                             ToastUtil.showToast(TransactionDetailActivity.this,msg);
                         }
                     });
+        }else {  //如果不是btc和usdt-omni就不掉接口了，自己数据库的用来呈现。
+            switch (txFrId.getStatus()) {
+                case 1:
+                    tvTransactionState.setText(R.string.text_transaction_state_fail);
+                    break;
+                case 2:
+                    tvTransactionState.setText(R.string.text_transaction_state_waiting);
+                    break;
+                case 0:
+                default:
+                    tvTransactionState.setText(R.string.text_transaction_state_success);
+                    break;
+            }
+
+            tvTransactionAmount.setText(DataReshape.doubleBig(txFrId.getAmount(),8));
+            if (userInformation.getFiatUnit().equals(Constants.FIAT_USD)) {
+                tvTransactionFiat.setText("≈ ¥ " + DataReshape.double2int(wallet_btc.getCoin_USDPrice() * txFrId.getAmount(),2));
+            } else {
+                tvTransactionFiat.setText("≈ ¥ " + DataReshape.double2int(wallet_btc.getCoin_CNYPrice() * txFrId.getAmount(),2));
+            }
+
+            if (txFrId.getTransType()==Constant.TRANSACTION_TYPE_SEND){
+                tvPaymentAddress.setText(txFrId.getAddress());
+                tvReceiveAddress.setText(txFrId.getTargetAddress());
+            }else if (txFrId.getTransType()==Constant.TRANSACTION_TYPE_RECEIVE){
+                tvPaymentAddress.setText(txFrId.getTargetAddress());
+                tvReceiveAddress.setText(txFrId.getAddress());
+            }
+
+            tvMinerFee.setText(DataReshape.doubleBig(txFrId.getMiner_fee(),8));
+            tvChainRecord.setText("https://btc.com/"+mainCoinFrCoinId.getCoin_address());
+
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+
+            tvArriveTime.setText(txFrId.getTimeStr());
+            tvTransactionNote.setText(txFrId.getRemark());
+            tvBlockHeight.setText(txFrId.getBlock_no());
         }
     }
 

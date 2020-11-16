@@ -3,6 +3,7 @@ package com.tianqi.aitdwallet.adapter.recycle_adapter;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -53,9 +54,13 @@ public class HomeWalletAdapter extends BaseQuickAdapter<WalletInfo, BaseViewHold
         tv_coin_name.setText(listBean.getWalletName());
 
         if (listBean.getWallet_id().equals(Constant.TRANSACTION_COIN_NAME_USDT_OMNI)){
-            tv_coin_balance.setText(DataReshape.doubleBig(listBean.getWalletBalance(), 4));
-        }else {
-            tv_coin_balance.setText(DataReshape.doubleBig(listBean.getWalletBalance(), 8));
+            tv_coin_balance.setText(DataReshape.doubleBig(listBean.getWalletBalance(), 4,4));
+        }else if (listBean.getWallet_id().equals(Constant.TRANSACTION_COIN_NAME_ETH)){
+            tv_coin_balance.setText(DataReshape.doubleBig(listBean.getWalletBalance(), 6,6));
+        }else if (listBean.getWallet_id().equals(Constant.TRANSACTION_COIN_NAME_USDT_ERC20)){
+            tv_coin_balance.setText(DataReshape.doubleBig(listBean.getWalletBalance(), 4,4));
+        } else {
+            tv_coin_balance.setText(DataReshape.doubleBig(listBean.getWalletBalance(), 8,8));
         }
 
         UserInformation userInformation= UserInfoManager.getUserInfo();
@@ -78,7 +83,7 @@ public class HomeWalletAdapter extends BaseQuickAdapter<WalletInfo, BaseViewHold
             String wallet_id02 = listBean.getWallet_id();
             List<CoinInfo> coinFrWalletIds02 = CoinInfoManager.getCoinFrWalletId(wallet_id02);
             List<CoinInfo> walletBtcInfo03 = CoinInfoManager.getCoinInfo();
-            Log.i(TAG, walletBtcInfo03.size()+"----convert: 我们看这个币种是多少？"+coinFrWalletIds02.size());
+            Log.i(TAG, walletBtcInfo03.size()+"----convert: 我们看这个币种是多少？"+coinFrWalletIds02.size()+"我們查询的wallet_id是？"+wallet_id02);
             if (coinFrWalletIds02.size() > 1) {  //如果大于一个币种，就展开显示。
                 if (expand_coin.isExpanded()) {
                     expand_coin.collapse();

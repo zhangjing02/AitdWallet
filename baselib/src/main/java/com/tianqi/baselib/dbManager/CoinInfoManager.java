@@ -100,6 +100,13 @@ public class CoinInfoManager {
                 .list();
         return list;
     }
+    public static List<CoinInfo> getCoinErc20ImportInfo() {
+        List<CoinInfo> list = getScaleRecordDao().queryBuilder()
+                .where(CoinInfoDao.Properties.Coin_name.eq(Constant.TRANSACTION_COIN_NAME_USDT_ERC20),CoinInfoDao.Properties.Coin_ComeType.eq(1))//数据筛选，只获取 Name = "btc" 的数据。
+                .build()
+                .list();
+        return list;
+    }
     public static List<CoinInfo> getWalletUsdtInfo() {
         List<CoinInfo> list = getScaleRecordDao().queryBuilder()
                 .where(CoinInfoDao.Properties.Coin_name.eq(Constant.TRANSACTION_COIN_NAME_USDT_OMNI))//数据筛选，只获取 Name = "btc" 的数据。
@@ -169,6 +176,15 @@ public class CoinInfoManager {
                 //.offset(1)//偏移量，相当于 SQL 语句中的 skip
                 // .limit(3)//只获取结果集的前 3 个数据
                 .where(CoinInfoDao.Properties.Coin_name.eq(coin_name))//数据筛选，只获取 Name = coin_name 的数据。
+                .build()
+                .list();
+        return list;
+    }
+    public static List<CoinInfo> getCoinFrIdInfo(String coin_id) {
+        List<CoinInfo> list = getScaleRecordDao().queryBuilder()
+                //.offset(1)//偏移量，相当于 SQL 语句中的 skip
+                // .limit(3)//只获取结果集的前 3 个数据
+                .where(CoinInfoDao.Properties.Coin_id.eq(coin_id))//数据筛选，只获取 Name = coin_name 的数据。
                 .build()
                 .list();
         return list;

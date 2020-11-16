@@ -47,7 +47,13 @@ public class TransRecordAdapter extends BaseQuickAdapter<TransactionRecord, Base
 
         tvTransactionAddress.setText(listBean.getAddress());
         tvTransactionTime.setText(listBean.getTimeStr());
-        tvCurrencyBalance.setText(DataReshape.doubleBig(listBean.getAmount(), 8));
+
+        if (listBean.getTransType()==Constant.TRANSACTION_TYPE_SEND){
+            tvCurrencyBalance.setText("-"+DataReshape.doubleBig(listBean.getAmount(), 8));
+        }else if (listBean.getTransType()==Constant.TRANSACTION_TYPE_RECEIVE){
+            tvCurrencyBalance.setText("+"+DataReshape.doubleBig(listBean.getAmount(), 8));
+        }
+
         switch (listBean.getStatus()) {
             case 1:
                 tvTransactionState.setText(R.string.text_transaction_state_fail);

@@ -60,6 +60,7 @@
 	<string name="notice_name_length_error">Cannot exceed 12 characters</string>
 	<string name="notice_name_null">Can not be empty</string>
 	<string name="tittle_export_private_key">Export Private Key</string>
+	<string name="tittle_export_keystore">Export Keystore</string>
 	<string name="tittle_psd_notice_msg">Password Reminder</string>
 	<string name="notice_psd_error">Password error</string>
 	<string name="tittle_hidden_coin">Hidden Currency</string>
@@ -94,7 +95,7 @@
 	<string name="text_miner_fee_tag">Miner fee</string>
 	<string name="notice_miner_fee_text">Recommended miner fee (according to the network)</string>
 	<string name="text_recommend_miner_fee">Featured:1000sat</string>
-	<string name="text_recommend_eth_miner_fee">Featured:59.00GWEI</string>
+	<string name="text_recommend_eth_miner_fee">Featured:50.00GWEI</string>
 	<string name="text_expect_arrive_time">Estimated arrival time: 10 minutes</string>
 	<string name="notice_remark_hint">Remarks</string>
 	<string name="notice_change_wallet_name">1-12 characters, can contain Chinese, English characters</string>
@@ -168,6 +169,8 @@
 	<string name="text_transaction_type_tag">Payment Information</string>
 	<string name="text_btc_transaction_type">BTC transfer</string>
 	<string name="text_usdt_transaction_type">USDT transfer</string>
+	<string name="text_eth_transaction_type">ETH transfer</string>
+	<string name="text_usdt_erc20_transaction_type">USDT-ERC20 transfer</string>
 	<string name="tittle_input_psd">Password</string>
 	<string name="btn_forget_psd_text">What to do if I forget my password</string>
 	<string name="tittle_screen_shot_safe_notice">Safety reminder</string>
@@ -187,8 +190,8 @@
 	<string name="btn_about_us_text">About Us</string>
 	<string name="text_no_data">No data</string>
 	<string name="text_property_head">Property</string>
-	<string name="text_dialog_import_wallet">Import wallet</string>
-	<string name="text_dialog_wallet_manage">Wallet management</string>
+	<string name="text_dialog_import_wallet">Import</string>
+	<string name="text_dialog_wallet_manage">Manage</string>
 	<string name="text_create_coin_alias_name">Existing %s address</string>
 	<string name="text_import_coin_alias_name">Imported %s address</string>
 	<string name="text_transaction_state_fail">Failure</string>
@@ -258,4 +261,16 @@
 	<string name="text_copy_keystore__notice">Copy and paste the contents of the ETH Wallet KeyStore file into the input box, or enter it by scanning the Keystore QR code.</string>
 	<string name="notice_address_error">wrong address</string>
 	<string name="notice_balance_not_enough">Balance shortfall</string>
+	<string name="notice_eth_amout_not_enouth">The eth balance is not enough support contract transfer</string>
+	<string name="btn_change_safe_psd_text">Change safe password</string>
+	<string name="tittle_safe_center">Safe Center</string>
+	<string name="tittle_change_safe_psd">Change Safe Password</string>
+	<string name="tittle_set_new_psd">Set New Password</string>
+	<string name="tittle_delete_wallet">Delete Wallet</string>
+	<string name="btn_create_new_address">Create Address</string>
+	<string name="tittle_address_management">Address Manage</string>
+	<string name="text_select_coin_address">Select %s address</string>
+	<string name="tittle_create_new_address">Create Address</string>
+	<string name="notice_input_address_name">Please enter a name</string>
+	<string name="notice_input_address_content">Please enter the address</string>
 </resources>

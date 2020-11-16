@@ -240,13 +240,13 @@ public class WalletManageActivity extends BaseActivity {
                     case TITTLE_CREATE_INDEX:
                         Log.i("ttttttttttttttttt", "onViewClicked:我们看这是创建么？");
                         Intent intent = new Intent(this, VerifySecurityPsdActivity.class);
-                        intent.putExtra(Constants.INTENT_PUT_TAG, Constants.INTENT_PUT_CREATE_WALLET);
+                        intent.putExtra(Constants.INTENT_PUT_TAG, getString(R.string.tittle_create_wallet));
                         startActivity(intent);
 
                         break;
                     case TITTLE_IMPORT_INDEX:
                         intent = new Intent(this, VerifySecurityPsdActivity.class);
-                        intent.putExtra(Constants.INTENT_PUT_TAG, Constants.INTENT_PUT_IMPORT_WALLET);
+                        intent.putExtra(Constants.INTENT_PUT_TAG, getString(R.string.tittle_import_wallet));
                         startActivity(intent);
                         break;
                 }

@@ -51,6 +51,7 @@ import com.tianqi.baselib.dbManager.WalletInfoManager;
 import com.tianqi.baselib.rxhttp.RetrofitFactory;
 import com.tianqi.baselib.rxhttp.base.BaseObserver;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
+import com.tianqi.baselib.rxhttp.bean.GetErc20BalanceBean;
 import com.tianqi.baselib.rxhttp.bean.GetListUnspentBean;
 import com.tianqi.baselib.utils.Constant;
 import com.tianqi.baselib.utils.digital.DataReshape;
@@ -142,8 +143,8 @@ public class WalletFragment extends BaseFragment {
 
     private PopupWindow mPopWindow,mPopWindowTop;
     private int new_guide_step_index;
-    private int btc_quest_count, usdt_quest_count;
-    private List<CoinInfo> allBtccCoinInfos, allusdtCoinInfos,allEthcCoinInfos;
+    private int btc_quest_count, usdt_quest_count,eth_quest_count,erc20_quest_count;
+    private List<CoinInfo> allBtccCoinInfos, allusdtCoinInfos,allEthcCoinInfos,allERC20cCoinInfos;
     private List<Disposable> disposableList;
    // private boolean is_request_btc,is_request_usdt;
 
@@ -399,6 +400,7 @@ public class WalletFragment extends BaseFragment {
         //  recyWallet.addItemDecoration(new RecyclerViewDivider(getActivity(), HORIZONTAL, 12, getResources().getColor(R.color.transparent2)));
         homeWalletAdapter = new HomeWalletAdapter(R.layout.layout_adapter_home_wallet_for_shadow, mWalletBeans);
         rcvHomeWallet.setAdapter(homeWalletAdapter);
+        rcvHomeWallet.setItemViewCacheSize(20);
 
         //刷新
         refreshLayout.setOnRefreshListener(refreshLayout -> {
@@ -494,23 +496,39 @@ public class WalletFragment extends BaseFragment {
                         emitter.onComplete(); }
                 }
             }else {
-                emitter.onComplete();
+               // emitter.onComplete();
+                emitter.onNext(-1);
             }
         }).map(index -> {
             Log.i(TAG, "initWallet: 001");
-             getBtcUtxo(allBtccCoinInfos.get(index));
+            if (index>=0){
+                getBtcUtxo(allBtccCoinInfos.get(index));
+            }
             return "123";
-        }).map((Function<String, Object>) s -> {
+        }).map((Function<String, String>) s -> {
             Log.i(TAG, "initWallet: 002");
             allEthcCoinInfos=CoinInfoManager.getSpecCoinInfo(Constant.TRANSACTION_COIN_NAME_ETH);
             if (allEthcCoinInfos!=null&&allEthcCoinInfos.size()>0){
+                eth_quest_count=0;
                 for (int i = 0; i <allEthcCoinInfos.size() ; i++) {
                     getEthBalance(allEthcCoinInfos.get(i));
                 }
             }
             return "456";
-        }).delay(2, TimeUnit.SECONDS).doOnComplete(() -> {
+        }).map(index -> {
             Log.i(TAG, "initWallet: 003");
+            if (index!=null){
+                allERC20cCoinInfos=CoinInfoManager.getSpecCoinInfo(Constant.TRANSACTION_COIN_NAME_USDT_ERC20);
+                if (allERC20cCoinInfos!=null&&allERC20cCoinInfos.size()>0){
+                    erc20_quest_count=0;
+                    for (int i = 0; i <allERC20cCoinInfos.size() ; i++) {
+                        getErc20Balance(allERC20cCoinInfos.get(i));
+                    }
+                }
+            }
+            return "789";
+        }).delay(2, TimeUnit.SECONDS).doOnComplete(() -> {
+            Log.i(TAG, "initWallet: 004");
             //当BTC调完后（但结果未必都返回了，所以要做2S延迟）完成的时候，我们做一个2S的延时，然后去循环调用usdt的余额。
             allusdtCoinInfos = CoinInfoManager.getSpecCoinInfo(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
             if (allusdtCoinInfos!=null&&allusdtCoinInfos.size() > 0) {
@@ -522,7 +540,7 @@ public class WalletFragment extends BaseFragment {
             }
         }).compose(RxHelper.pool_main())
                 .subscribe(baseEntity -> {
-                    Log.i(TAG, "initWallet: 004");
+                    Log.i(TAG, "initWallet: 005");
                     //此处留空，方便后续拓展。
                 });
     }
@@ -592,7 +610,7 @@ public class WalletFragment extends BaseFragment {
     }
 
     private void getEthBalance(CoinInfo specCoinInfo){
-        String mAddress=specCoinInfo.getCoin_address().startsWith("0x")?specCoinInfo.getCoin_address():Constants.HEX_PREFIX+specCoinInfo.getCoin_address();
+        String mAddress=specCoinInfo.getCoin_address().startsWith("0x")?specCoinInfo.getCoin_address().toLowerCase():Constants.HEX_PREFIX+specCoinInfo.getCoin_address().toLowerCase();
         Map<String, Object> map = new HashMap<>();
         map.put("apikey", "AnqHS6Rs2WX0hwFXlrv");
         RetrofitFactory.getInstence(getActivity()).API()
@@ -601,11 +619,48 @@ public class WalletFragment extends BaseFragment {
                     @Override
                     public void onSuccess(String data, String msg) {
                         Log.i(TAG, "onSuccess: 我们看得到的数据是？"+data);
+                        eth_quest_count++;
                         specCoinInfo.setCoin_totalAmount(Double.valueOf(data));
                         CoinInfoManager.insertOrUpdate(specCoinInfo);
+                        updateWaletBalance(2);
                     }
                     @Override
                     protected void onFailure(int code, String msg) {
+                        refreshLayout.finishRefresh();
+                    }
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposableList.add(d);
+                    }
+                });
+    }
+
+    private void getErc20Balance(CoinInfo specCoinInfo){
+        String mAddress=specCoinInfo.getCoin_address().startsWith("0x")?specCoinInfo.getCoin_address().toLowerCase():Constants.HEX_PREFIX+specCoinInfo.getCoin_address().toLowerCase();
+        Map<String, Object> map = new HashMap<>();
+        map.put("apikey", "AnqHS6Rs2WX0hwFXlrv");
+        RetrofitFactory.getInstence(getActivity()).API()
+                .getErc20AddressBalance("eth",mAddress, map).compose(RxHelper.io_main())
+                .subscribe(new BaseObserver<List<GetErc20BalanceBean>>(getActivity()) {
+                    @Override
+                    public void onSuccess(List<GetErc20BalanceBean> data, String msg) {
+                        erc20_quest_count++;
+                        double erc20_balance=0;
+                        if (data!=null&&data.size()>0){
+                            for (int i = 0; i <data.size() ; i++) {
+                                if (data.get(i).getHash().equals(Constant.CONTRACT_ADDRESS)){
+                                    erc20_balance=erc20_balance+Double.valueOf(data.get(i).getBalance())/Math.pow(10,Integer.valueOf(data.get(i).getTokenInfo().getD()));
+                                    Log.i(TAG, "onSuccess: 我们看得到的数据是？"+erc20_balance);
+                                }
+                            }
+                        }
+                        specCoinInfo.setCoin_totalAmount(erc20_balance);
+                        CoinInfoManager.insertOrUpdate(specCoinInfo);
+                        updateWaletBalance(3);
+                    }
+                    @Override
+                    protected void onFailure(int code, String msg) {
+                        refreshLayout.finishRefresh();
                     }
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -616,7 +671,6 @@ public class WalletFragment extends BaseFragment {
 
     private void updateWaletBalance(int coin_type) {
         if (coin_type == 0) {
-            Log.i(TAG, btc_quest_count+"updateWaletBalance: 001更新了btc------");
             if (btc_quest_count >= allBtccCoinInfos.size()) {
                 mMessageBeans = CoinInfoManager.getCoinInfo();
                 for (int i = 0; i < mWalletBeans.size(); i++) {
@@ -629,6 +683,7 @@ public class WalletFragment extends BaseFragment {
                     }
                     walletInfo.setWalletBalance(wallet_balance);
                     WalletInfoManager.insertOrUpdate(walletInfo);
+                    Log.i(TAG, walletInfo.getWallet_id()+"----updateWaletBalance: 001更新了btc------"+wallet_balance);
                 }
                 Log.i(TAG, "updateWaletBalance: 002更新了btc----");
             }
@@ -649,13 +704,46 @@ public class WalletFragment extends BaseFragment {
                 }
                 Log.i(TAG, "updateWaletBalance: 002更新了usdt----");
             }
+        }else if (coin_type == 2){
+            if (eth_quest_count >= allEthcCoinInfos.size()) {
+                mMessageBeans = CoinInfoManager.getCoinInfo();
+                for (int i = 0; i < mWalletBeans.size(); i++) {
+                    WalletInfo walletInfo = mWalletBeans.get(i);
+                    String wallet_id = walletInfo.getWallet_id();
+                    List<CoinInfo> coinFrWalletIds = CoinInfoManager.getCoinFrWalletId(wallet_id);
+                    double wallet_balance = 0;
+                    for (int j = 0; j < coinFrWalletIds.size(); j++) {
+                        wallet_balance = wallet_balance + coinFrWalletIds.get(j).getCoin_totalAmount();
+                    }
+                    walletInfo.setWalletBalance(wallet_balance);
+                    WalletInfoManager.insertOrUpdate(walletInfo);
+                }
+                Log.i(TAG, "updateWaletBalance: 002更新了usdt----");
+            }
+        }else if (coin_type==3){
+            if (erc20_quest_count >= allERC20cCoinInfos.size()) {
+                mMessageBeans = CoinInfoManager.getCoinInfo();
+                for (int i = 0; i < mWalletBeans.size(); i++) {
+                    WalletInfo walletInfo = mWalletBeans.get(i);
+                    String wallet_id = walletInfo.getWallet_id();
+                    List<CoinInfo> coinFrWalletIds = CoinInfoManager.getCoinFrWalletId(wallet_id);
+                    double wallet_balance = 0;
+                    for (int j = 0; j < coinFrWalletIds.size(); j++) {
+                        wallet_balance = wallet_balance + coinFrWalletIds.get(j).getCoin_totalAmount();
+                    }
+                    walletInfo.setWalletBalance(wallet_balance);
+                    WalletInfoManager.insertOrUpdate(walletInfo);
+                }
+                Log.i(TAG, "updateWaletBalance: 002更新了usdt----");
+            }
         }
         mWalletBeans = WalletInfoManager.getWalletInfoNoHidden(false);
 
         //暂时用，重新创建adapter的方法，否则用刷新方法，会导致展开的数据，错乱显示。
         homeWalletAdapter = new HomeWalletAdapter(R.layout.layout_adapter_home_wallet_for_shadow, mWalletBeans);
         rcvHomeWallet.setAdapter(homeWalletAdapter);
-     //   homeWalletAdapter.setNewData(mWalletBeans);
+
+       // homeWalletAdapter.setNewData(mWalletBeans);
         refreshLayout.finishRefresh();
         //获取了新的余额，去更新头部的卡片的余额数值。
         showHeadData();
@@ -696,7 +784,7 @@ public class WalletFragment extends BaseFragment {
 
                 tv_share_facebook.setOnClickListener(v -> {
                     Intent intent = new Intent(getActivity(), VerifySecurityPsdActivity.class);
-                    intent.putExtra(Constants.INTENT_PUT_TAG, Constants.INTENT_PUT_IMPORT_WALLET);
+                    intent.putExtra(Constants.INTENT_PUT_TAG, getString(R.string.tittle_import_wallet));
                     startActivity(intent);
                     mPopWindowTop.dismiss();
                 });

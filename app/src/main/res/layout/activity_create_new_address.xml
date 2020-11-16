@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.activity.address.CreateNewAddressActivity">
+
+    <include
+        android:id="@+id/toolbar_layout"
+        layout="@layout/toolbar_menu"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_coin_address_name_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_layout"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="15dp"
+        android:text="名称"
+        android:textSize="16sp"
+        android:textColor="@color/text_main_black"
+        android:layout_marginTop="20dp"/>
+    
+    
+    <EditText
+        android:id="@+id/et_input_address_name"
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        app:layout_constraintTop_toBottomOf="@+id/tv_coin_address_name_tag"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="15dp"
+        android:textSize="16sp"
+        android:textColor="@color/text_main_black"
+        style="@style/bg_edit_grey"/>
+
+
+    <TextView
+        android:id="@+id/tv_coin_address_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/et_input_address_name"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="15dp"
+        android:text="地址"
+        android:textSize="16sp"
+        android:textColor="@color/text_main_black"
+        android:layout_marginTop="20dp"/>
+
+
+    <EditText
+        android:id="@+id/et_input_address"
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        app:layout_constraintTop_toBottomOf="@+id/tv_coin_address_tag"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="15dp"
+        android:textSize="16sp"
+        android:textColor="@color/text_main_black"
+        style="@style/bg_edit_grey"/>
+
+
+    <TextView
+        android:id="@+id/btn_transaction_send"
+        style="@style/bg_button_20_grey"
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        android:layout_marginHorizontal="15dp"
+        android:text="@string/btn_finish_text"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_input_address"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.4"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

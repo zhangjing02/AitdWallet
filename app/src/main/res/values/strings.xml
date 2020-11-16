@@ -59,6 +59,7 @@
     <string name="notice_name_length_error">不能超过12个字符</string>
     <string name="notice_name_null">不能为空</string>
     <string name="tittle_export_private_key">导出私钥</string>
+    <string name="tittle_export_keystore">导出Keystore</string>
     <string name="tittle_psd_notice_msg">密码提示信息</string>
     <string name="notice_psd_error">密码错误</string>
     <string name="tittle_hidden_coin">隐藏币种</string>
@@ -93,7 +94,7 @@
     <string name="text_miner_fee_tag">矿工费</string>
     <string name="notice_miner_fee_text">推荐矿工费(根据区块链网络波动)</string>
     <string name="text_recommend_miner_fee">推荐:1000sat</string>
-    <string name="text_recommend_eth_miner_fee">推荐:59.00GWEI</string>
+    <string name="text_recommend_eth_miner_fee">推荐:50.00GWEI</string>
     <string name="text_expect_arrive_time">预计到账时间:10分钟</string>
     <string name="notice_remark_hint">备注</string>
     <string name="notice_change_wallet_name">1-12位字符，可包含中文，英文字符</string>
@@ -167,6 +168,8 @@
     <string name="text_transaction_type_tag">支付信息</string>
     <string name="text_btc_transaction_type">BTC转账</string>
     <string name="text_usdt_transaction_type">USDT转账</string>
+    <string name="text_eth_transaction_type">ETH转账</string>
+    <string name="text_usdt_erc20_transaction_type">USDT-ERC20转账</string>
     <string name="tittle_input_psd">密码</string>
     <string name="btn_forget_psd_text">忘记密码怎么办</string>
     <string name="tittle_screen_shot_safe_notice">安全提醒</string>
@@ -260,4 +263,16 @@
     <string name="text_copy_keystore__notice">复制粘贴ETH钱包KeyStore文件内容至输入框，或者通过扫描Keystore二维码录入</string>
     <string name="notice_address_error">地址错误</string>
     <string name="notice_balance_not_enough">余额不足</string>
+    <string name="notice_eth_amout_not_enouth">eth余额不够支持合约转账</string>
+    <string name="btn_change_safe_psd_text">修改安全密码</string>
+    <string name="tittle_safe_center">安全中心</string>
+    <string name="tittle_change_safe_psd">修改安全密码</string>
+    <string name="tittle_set_new_psd">设置新密码</string>
+    <string name="tittle_delete_wallet">删除钱包</string>
+    <string name="btn_create_new_address">新建地址</string>
+    <string name="tittle_address_management">地址管理</string>
+    <string name="text_select_coin_address">选择 %s 地址</string>
+    <string name="tittle_create_new_address">新建地址</string>
+    <string name="notice_input_address_name">请输入名称</string>
+    <string name="notice_input_address_content">请输入地址</string>
 </resources>

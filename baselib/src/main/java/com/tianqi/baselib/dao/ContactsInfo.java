@@ -20,21 +20,24 @@ public class ContactsInfo {
     private String contactsID;
 
     private String contactsName;
-    private String contactsPhone;
-    private String contactsEmail;
+    private String contactsCoinName;
+    private String contactsCoinAddress;
     private String remark;
     private String contactsCoinArray;
-    @Generated(hash = 153993078)
+    private int    coinResourceId;
+
+    @Generated(hash = 1121287128)
     public ContactsInfo(Long id, String contactsID, String contactsName,
-            String contactsPhone, String contactsEmail, String remark,
-            String contactsCoinArray) {
+            String contactsCoinName, String contactsCoinAddress, String remark,
+            String contactsCoinArray, int coinResourceId) {
         this.id = id;
         this.contactsID = contactsID;
         this.contactsName = contactsName;
-        this.contactsPhone = contactsPhone;
-        this.contactsEmail = contactsEmail;
+        this.contactsCoinName = contactsCoinName;
+        this.contactsCoinAddress = contactsCoinAddress;
         this.remark = remark;
         this.contactsCoinArray = contactsCoinArray;
+        this.coinResourceId = coinResourceId;
     }
     @Generated(hash = 9726432)
     public ContactsInfo() {
@@ -57,17 +60,17 @@ public class ContactsInfo {
     public void setContactsName(String contactsName) {
         this.contactsName = contactsName;
     }
-    public String getContactsPhone() {
-        return this.contactsPhone;
+    public String getContactsCoinName() {
+        return this.contactsCoinName;
     }
-    public void setContactsPhone(String contactsPhone) {
-        this.contactsPhone = contactsPhone;
+    public void setContactsCoinName(String contactsCoinName) {
+        this.contactsCoinName = contactsCoinName;
     }
-    public String getContactsEmail() {
-        return this.contactsEmail;
+    public String getContactsCoinAddress() {
+        return this.contactsCoinAddress;
     }
-    public void setContactsEmail(String contactsEmail) {
-        this.contactsEmail = contactsEmail;
+    public void setContactsCoinAddress(String contactsCoinAddress) {
+        this.contactsCoinAddress = contactsCoinAddress;
     }
     public String getRemark() {
         return this.remark;
@@ -81,6 +84,11 @@ public class ContactsInfo {
     public void setContactsCoinArray(String contactsCoinArray) {
         this.contactsCoinArray = contactsCoinArray;
     }
-
-
+    public int getCoinResourceId() {
+        return this.coinResourceId;
+    }
+    public void setCoinResourceId(int coinResourceId) {
+        this.coinResourceId = coinResourceId;
+    }
+    
 }

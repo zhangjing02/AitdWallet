@@ -23,7 +23,9 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppThemeTrans">
-        <activity android:name=".ui.activity.wallet.eth.EthTransactionTestActivity"></activity>
+        <activity android:name=".ui.activity.address.CreateNewAddressActivity"></activity>
+        <activity android:name=".ui.activity.address.CreateContactsAddressActivity" />
+        <activity android:name=".ui.activity.wallet.eth.EthTransactionTestActivity" />
         <activity android:name=".ui.activity.wallet.property.SelectCoinToTransActivity" />
         <activity android:name=".ui.activity.setting.SafeCenterActivity" />
         <activity android:name=".ui.activity.wallet.btc.BtcTransTestActivity" />

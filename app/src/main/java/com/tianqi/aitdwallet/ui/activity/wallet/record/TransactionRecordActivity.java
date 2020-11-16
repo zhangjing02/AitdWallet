@@ -39,6 +39,7 @@ import com.tianqi.baselib.dbManager.WalletInfoManager;
 import com.tianqi.baselib.rxhttp.RetrofitFactory;
 import com.tianqi.baselib.rxhttp.base.BaseObserver;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
+import com.tianqi.baselib.rxhttp.bean.GetErc20TxRecordBean;
 import com.tianqi.baselib.rxhttp.bean.GetEthTxRecordBean;
 import com.tianqi.baselib.rxhttp.bean.GetListUnspentBean;
 import com.tianqi.baselib.rxhttp.bean.GetLoadingTxBean;
@@ -178,7 +179,11 @@ public class TransactionRecordActivity extends BaseActivity {
         if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_BTC)) {
             tvCurrencyBalance.setText(DataReshape.doubleBig(walletBtcInfo.getCoin_totalAmount(), 8, 8));
         } else if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_OMNI)) {
-            tvCurrencyBalance.setText(DataReshape.doubleBig(walletBtcInfo.getCoin_totalAmount(), 8, 4));
+            tvCurrencyBalance.setText(DataReshape.doubleBig(walletBtcInfo.getCoin_totalAmount(), 4, 4));
+        }else if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_ETH)) {
+            tvCurrencyBalance.setText(DataReshape.doubleBig(walletBtcInfo.getCoin_totalAmount(), 6, 4));
+        }else if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_ERC20)){
+            tvCurrencyBalance.setText(DataReshape.doubleBig(walletBtcInfo.getCoin_totalAmount(), 4, 4));
         }
         UserInformation userInformation = UserInfoManager.getUserInfo();
         if (userInformation.getFiatUnit().equals(Constants.FIAT_USD)) {
@@ -187,7 +192,6 @@ public class TransactionRecordActivity extends BaseActivity {
             tvFiatBalance.setText("≈￥" + DataReshape.doubleBig(walletBtcInfo.getCoin_totalAmount() * walletInfo.getCoin_CNYPrice(), 2));
         }
         setListener();
-
         //刷新
         refreshLayout.setOnRefreshListener(refreshLayout -> {
             initData();
@@ -270,11 +274,70 @@ public class TransactionRecordActivity extends BaseActivity {
         }else if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_BTC)||walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_OMNI)){
              initBtcTxRecord(walletBtcInfo);
              initBtcLoadingRecord(walletBtcInfo);
+         }else if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_ERC20)){
+             initErc20TxRecore(walletBtcInfo);
+
          }
     }
 
+    private void initErc20TxRecore(CoinInfo coinInfo) {
+        String mAddress=coinInfo.getCoin_address().startsWith("0x")?coinInfo.getCoin_address().toLowerCase():Constants.HEX_PREFIX+coinInfo.getCoin_address().toLowerCase();
+        Map<String, Object> map = new HashMap<>();
+        map.put("apikey", "AnqHS6Rs2WX0hwFXlrv");
+        RetrofitFactory.getInstence(this).API()
+                .getErc20TxRecord( mAddress, Constant.CONTRACT_ADDRESS,"1/50",map).compose(RxHelper.io_io())
+                .subscribe(new BaseObserver<List<GetErc20TxRecordBean>>(this) {
+                    @Override
+                    public void onSuccess(List<GetErc20TxRecordBean> datas, String msg) {
+                        if (datas!=null&&datas.size()>0){
+                            for (int i = 0; i <datas.size() ; i++) {
+                                inserErc20TxRecord(datas, i, coinInfo,i==datas.size()-1);
+                            }
+                        }
+                    }
+                    @Override
+                    protected void onFailure(int code, String msg) {
+                        refreshLayout.finishRefresh();
+                    }
+                });
+    }
+
+    private void inserErc20TxRecord(List<GetErc20TxRecordBean> datas, int i, CoinInfo coinInfo,boolean isLast) {
+        //创建（转出）数据库交易，存入数据库
+        TransactionRecord tx_record = new TransactionRecord();
+        tx_record.setAddress(coinInfo.getCoin_address());
+        tx_record.setAmount(Double.valueOf(datas.get(i).getValue())/Math.pow(10,Integer.valueOf(datas.get(i).getTokenInfo().getD())));
+        tx_record.setCoin_type(Constant.TRANSACTION_COIN_ETH);//0代表比特币。
+        tx_record.setStatus(Constant.TRANSACTION_STATE_SUCCESS);
+        if (datas.get(i).getFrom().equals(coinInfo.getCoin_address().toLowerCase())){  //如果是自己的地址，证明是转出。
+            tx_record.setTransType(Constant.TRANSACTION_TYPE_SEND);
+            tx_record.setTargetAddress(datas.get(i).getTo());
+        }else {
+            tx_record.setTransType(Constant.TRANSACTION_TYPE_RECEIVE);
+            tx_record.setTargetAddress(datas.get(i).getFrom());
+        }
+        tx_record.setCoin_id(coinInfo.getCoin_id());
+        tx_record.setVout_id(datas.get(i).getIndex());
+        tx_record.setConfirmations(datas.get(i).getConformations());
+        tx_record.setTxid(datas.get(i).getTxid());
+        Calendar calendar = Calendar.getInstance();
+        tx_record.setBlock_no(String.valueOf(datas.get(i).getBlock_no()));
+        calendar.setTimeInMillis(datas.get(i).getTime() * 1000l);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+        tx_record.setTimeStr(format.format(calendar.getTime()));
+        tx_record.setUnit(Constant.COIN_UNIT_ETH);
+        // tx_record.setMiner_fee(Double.valueOf(datas.get(i).getFee()));   //此接口没有费用，所以暂时不管。
+        TransactionRecordManager.insertOrUpdate(tx_record);
+        if (isLast){
+            refreshLayout.finishRefresh();
+            EventMessage eventMessage = new EventMessage();
+            eventMessage.setType(EventMessage.TRANSACTION_RECORD_UPDATE);
+            EventBus.getDefault().post(eventMessage);
+        }
+    }
+
     private void initEthTxRecord(CoinInfo coinInfo) {
-        String mAddress=coinInfo.getCoin_address().startsWith("0x")?coinInfo.getCoin_address():Constants.HEX_PREFIX+coinInfo.getCoin_address();
+        String mAddress=coinInfo.getCoin_address().startsWith("0x")?coinInfo.getCoin_address().toLowerCase():Constants.HEX_PREFIX+coinInfo.getCoin_address().toLowerCase();
         Map<String, Object> map = new HashMap<>();
         map.put("apikey", "AnqHS6Rs2WX0hwFXlrv");
         RetrofitFactory.getInstence(this).API()
@@ -287,7 +350,9 @@ public class TransactionRecordActivity extends BaseActivity {
                             coinInfo.setCoin_totalAmount(btc_account_balance);
                             CoinInfoManager.insertOrUpdate(coinInfo);
                             for (int i = 0; i < data.getTxs().size(); i++) {
-                                insertEthTxRecord(data.getTxs().get(i),coinInfo,i>=data.getTxs().size()-1);
+                                if (Double.valueOf(data.getTxs().get(i).getValue())>0){
+                                    insertEthTxRecord(data.getTxs().get(i),coinInfo,i>=data.getTxs().size()-1);
+                                }
                             }
                         }
                     }
@@ -305,7 +370,7 @@ public class TransactionRecordActivity extends BaseActivity {
         tx_record.setAmount(Double.valueOf(txsBean.getValue()));
         tx_record.setCoin_type(Constant.TRANSACTION_COIN_ETH);//0代表比特币。
         tx_record.setStatus(Constant.TRANSACTION_STATE_SUCCESS);
-        if (txsBean.getFrom().equals(eth_coinInfo.getCoin_address())){  //如果是自己的地址，证明是转出。
+        if (txsBean.getFrom().equals(eth_coinInfo.getCoin_address().toLowerCase())){  //如果是自己的地址，证明是转出。
             tx_record.setTransType(Constant.TRANSACTION_TYPE_SEND);
             tx_record.setTargetAddress(txsBean.getTo());
         }else {
@@ -579,8 +644,6 @@ public class TransactionRecordActivity extends BaseActivity {
             intent.putExtra(Constants.TRANSACTION_COIN_NAME, walletBtcInfo.getCoin_name());
             startActivity(intent);
         });
-
-
     }
 
     @Override

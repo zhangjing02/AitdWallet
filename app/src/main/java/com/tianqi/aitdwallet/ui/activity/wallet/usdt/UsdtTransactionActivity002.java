@@ -434,7 +434,7 @@ public class UsdtTransactionActivity002 extends BaseActivity {
                         }
                         tx_record.setInput_id(use_listunspent_str);   //保存一个已使用过的，listunspent.防止后续再使用它，
 
-                        tx_record.setUnit(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
+                        tx_record.setUnit(Constant.COIN_UNIT_USDT);
                         TransactionRecordManager.insertOrUpdate(tx_record);
                         EventMessage message = new EventMessage();
                         message.setType(EventMessage.TRANSACTION_RECORD_UPDATE_USDT);

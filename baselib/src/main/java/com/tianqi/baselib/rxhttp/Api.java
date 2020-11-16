@@ -2,6 +2,8 @@ package com.tianqi.baselib.rxhttp;
 
 import com.tianqi.baselib.rxhttp.base.BaseEntity;
 import com.tianqi.baselib.rxhttp.bean.CoinRateBean;
+import com.tianqi.baselib.rxhttp.bean.GetErc20BalanceBean;
+import com.tianqi.baselib.rxhttp.bean.GetErc20TxRecordBean;
 import com.tianqi.baselib.rxhttp.bean.GetEthTxRecordBean;
 import com.tianqi.baselib.rxhttp.bean.GetFormalUtxoBean;
 import com.tianqi.baselib.rxhttp.bean.GetListUnspentBean;
@@ -104,9 +106,24 @@ public interface Api {
 
 
     /**
+     *  获取ERC20钱包地址余额
+     */
+    @GET("/vipapi/{coin_type}/address/tokenbalance/{eth_address}/??")
+    Observable<BaseEntity<List<GetErc20BalanceBean>>> getErc20AddressBalance(@Path("coin_type") String coin_type, @Path("eth_address") String btc_address, @QueryMap Map<String, Object> map);
+
+
+    /**
      *  获取ETH钱包地址交易历史
      */
     @GET("/vipapi/{coin_type}/address/{eth_address}/?")
     Observable<BaseEntity<GetEthTxRecordBean>> getEthTxRecord(@Path("coin_type") String coin_type, @Path("eth_address") String btc_address , @QueryMap Map<String, Object> map);
+
+
+    /**
+     *  获取ETH钱包地址交易历史
+     */
+    @GET("/vipapi/eth/address/tokentrans/{eth_address}/{contract_address}/{page}?")
+    Observable<BaseEntity<List<GetErc20TxRecordBean>>> getErc20TxRecord(@Path("eth_address") String eth_address, @Path("contract_address") String contract_address ,
+                                                                        @Path("page") String page , @QueryMap Map<String, Object> map);
 
 }

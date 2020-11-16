@@ -8,6 +8,8 @@ import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 
 import com.tianqi.aitdwallet.R;
+import com.tianqi.aitdwallet.ui.activity.address.CreateContactsAddressActivity;
+import com.tianqi.aitdwallet.ui.activity.setting.SafeCenterActivity;
 import com.tianqi.aitdwallet.ui.activity.setting.SystemSettingActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.setting.WalletManageActivity;
 import com.tianqi.baselib.base.BaseFragment;
@@ -43,7 +45,6 @@ public class SettingFragment extends BaseFragment {
     @Override
     protected void initView() {
         getToolBar();
-
     }
 
     private void getToolBar() {
@@ -58,8 +59,8 @@ public class SettingFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-
     }
+
 
     @OnClick({R.id.tv_wallet_manage, R.id.tv_address_manage, R.id.tv_my_message, R.id.tv_invite_friend, R.id.tv_safe_center, R.id.tv_sys_setting, R.id.tv_about_me})
     public void onViewClicked(View view) {
@@ -69,12 +70,16 @@ public class SettingFragment extends BaseFragment {
                 startActivity(intent);
                 break;
             case R.id.tv_address_manage:
+                intent=new Intent(getActivity(), CreateContactsAddressActivity.class);
+                startActivity(intent);
                 break;
             case R.id.tv_my_message:
                 break;
             case R.id.tv_invite_friend:
                 break;
             case R.id.tv_safe_center:
+                intent=new Intent(getActivity(), SafeCenterActivity.class);
+                startActivity(intent);
                 break;
             case R.id.tv_sys_setting:
                 intent=new Intent(getActivity(), SystemSettingActivity.class);

@@ -135,37 +135,31 @@ public class WalletSettingActivity extends BaseActivity {
                 break;
             case R.id.tv_export_private_key:
                 intent = new Intent(this, VerifySecurityPsdActivity.class);
-                intent.putExtra(Constants.INTENT_PUT_TAG, Constants.INTENT_PUT_EXPORT_PRIVATE_KEY);
+                intent.putExtra(Constants.INTENT_PUT_TAG, getString(R.string.tittle_explain_private_key));
                 intent.putExtra(Constants.TRANSACTION_COIN_NAME, wallet_name);
                 startActivity(intent);
                 break;
             case R.id.tv_export_keystore:
                 intent = new Intent(this, VerifySecurityPsdActivity.class);
-                intent.putExtra(Constants.INTENT_PUT_TAG, Constants.INTENT_PUT_EXPORT_KEYSTORE);
+                intent.putExtra(Constants.INTENT_PUT_TAG, getString(R.string.tittle_export_keystore));
                 intent.putExtra(Constants.TRANSACTION_COIN_NAME, wallet_name);
                 startActivity(intent);
-
                 break;
             case R.id.tv_back_up_mnemonic:
                 //INTENT_PUT_BACK_UP_MNEMONIC
                 intent = new Intent(this, VerifySecurityPsdActivity.class);
-                intent.putExtra(Constants.INTENT_PUT_TAG, Constants.INTENT_PUT_BACK_UP_MNEMONIC);
+                intent.putExtra(Constants.INTENT_PUT_TAG, getString(R.string.tittle_back_up_mnemonic));
                 intent.putExtra(Constants.TRANSACTION_COIN_NAME, wallet_name);
                 startActivity(intent);
                 break;
             case R.id.tv_delete_wallet:
                 intent = new Intent(this, VerifySecurityPsdActivity.class);
-                intent.putExtra(Constants.INTENT_PUT_TAG, Constants.INTENT_PUT_DELETE_COIN);
+               // intent.putExtra(Constants.INTENT_PUT_TAG, Constants.INTENT_PUT_DELETE_COIN);
+                intent.putExtra(Constants.INTENT_PUT_TAG, getString(R.string.tittle_delete_wallet));
                 intent.putExtra(Constants.INTENT_PUT_COIN_ID, coin_id);
                 startActivity(intent);
                 break;
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

@@ -44,6 +44,11 @@ public class Constants {
     public static final String INTENT_PUT_DELETE_IMPORT_WALLET= "删除导入的钱包";
     public static final String INTENT_PUT_ALREADY_MNEMONIC= "备份已有的助记词";
     public static final String INTENT_PUT_MNEMONIC= "INTENT_PUT_MNEMONIC";
+    public static final String INTENT_PUT_CHANGE_PSD= "修改密码";
+    public static final String INTENT_PUT_RESOURCE= "intent_put_resource";
+
+    public static final String INTENT_PUT_CREATE_ADDRESS= "新建地址";
+
    // public static final String INTENT_PUT_TRANSACTION_TYPE= "INTENT_PUT_TRANSACTION_TYPE";
 
 
@@ -56,7 +61,6 @@ public class Constants {
 
     public static final int LANGUAGE_CHINA= 0;
     public static final int LANGUAGE_ENGLISH= 1;
-
 
     public static final String HEX_PREFIX = "0x";
 

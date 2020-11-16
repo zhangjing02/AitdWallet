@@ -42,7 +42,7 @@ public class ChildCoinAdapter extends BaseAdapter {
         mContext = context;
         maps = beanList;
         typeFace = Typeface.createFromAsset(context.getAssets(), Constant.FONT_PATH);
-        walletInfo= WalletInfoManager.getHdWalletInfo();
+        walletInfo= WalletInfoManager.getHdWalletInfoFrId(beanList.get(0).getWallet_id());
     }
 
     public void refreshData(List<CoinInfo> couponTypeBeans) {
@@ -90,7 +90,17 @@ public class ChildCoinAdapter extends BaseAdapter {
         }
 
         viewHolder.tvCoinAddress.setText(maps.get(position).getCoin_address());
-        viewHolder.tvCurrencyBalance.setText(DataReshape.doubleBig(maps.get(position).getCoin_totalAmount(),8) +"");
+
+
+        if (maps.get(position).getWallet_id().equals(Constant.TRANSACTION_COIN_NAME_USDT_OMNI)){
+            viewHolder.tvCurrencyBalance.setText(DataReshape.doubleBig(maps.get(position).getCoin_totalAmount(),4,0) +"");
+        }else if (maps.get(position).getWallet_id().equals(Constant.TRANSACTION_COIN_NAME_ETH)){
+            viewHolder.tvCurrencyBalance.setText(DataReshape.doubleBig(maps.get(position).getCoin_totalAmount(),6,6) +"");
+        }else if (maps.get(position).getWallet_id().equals(Constant.TRANSACTION_COIN_NAME_USDT_ERC20)){
+            viewHolder.tvCurrencyBalance.setText(DataReshape.doubleBig(maps.get(position).getCoin_totalAmount(),4,6) +"");
+        } else {
+            viewHolder.tvCurrencyBalance.setText(DataReshape.doubleBig(maps.get(position).getCoin_totalAmount(),8,8) +"");
+        }
 
         UserInformation userInformation= UserInfoManager.getUserInfo();
         if (userInformation.getFiatUnit().equals(Constants.FIAT_USD)){
