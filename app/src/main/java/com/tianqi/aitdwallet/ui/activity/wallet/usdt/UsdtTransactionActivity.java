@@ -23,6 +23,7 @@ import com.quincysx.crypto.bitcoin.BitCoinECKeyPair;
 import com.quincysx.crypto.bitcoin.BitcoinException;
 import com.quincysx.crypto.utils.HexUtils;
 import com.tianqi.aitdwallet.R;
+import com.tianqi.aitdwallet.ui.activity.address.ContactsAddressManageActivity;
 import com.tianqi.aitdwallet.ui.activity.tool.ScanActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.record.TransactionRecordActivity;
 import com.tianqi.aitdwallet.utils.Constants;
@@ -192,7 +193,7 @@ public class UsdtTransactionActivity extends BaseActivity {
         initWallet();
         etPaymentAddress.addTextChangedListener(textWatcher);
         etPaymentAmount.addTextChangedListener(textWatcher);
-        tvBalance.setText(DataReshape.doubleBig(walletBtcFrAddress.getCoin_totalAmount(), 8));
+        tvBalance.setText(DataReshape.doubleBig(walletBtcFrAddress.getCoin_totalAmount(), 4));
     }
 
     TextWatcher textWatcher = new TextWatcher() {
@@ -247,6 +248,9 @@ public class UsdtTransactionActivity extends BaseActivity {
         if (event.getType() == EventMessage.SCAN_EVENT) {
             etPaymentAddress.setText(event.getMsg());
             etPaymentAddress.setSelection(event.getMsg().length());
+        }else if (event.getType()==EventMessage.SELECT_ADDRESS_UPDATE){
+            etPaymentAddress.setText(event.getMsg());
+            etPaymentAddress.setSelection(event.getMsg().length());
         }
     }
 
@@ -289,7 +293,7 @@ public class UsdtTransactionActivity extends BaseActivity {
                         account_balance=Double.valueOf(data.get(0).getReceive())+Double.valueOf(data.get(0).getSpend());
                         specCoinInfo.setCoin_totalAmount(account_balance);
                         CoinInfoManager.insertOrUpdate(specCoinInfo);
-                        tvBalance.setText(DataReshape.doubleBig(account_balance, 8)+"");
+                        tvBalance.setText(DataReshape.doubleBig(account_balance, 4)+"");
                     }
                     @Override
                     protected void onFailure(int code, String msg) {
@@ -495,7 +499,7 @@ public class UsdtTransactionActivity extends BaseActivity {
         return null;
     }
 
-    @OnClick({R.id.btn_collect, R.id.btn_transaction_send, R.id.btn_balance_all, R.id.tv_transaction_request})
+    @OnClick({R.id.btn_collect, R.id.btn_transaction_send, R.id.btn_balance_all, R.id.tv_transaction_request,R.id.iv_receive_address_account})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_collect:
@@ -514,6 +518,14 @@ public class UsdtTransactionActivity extends BaseActivity {
                 }
                 ExplainTxMinerFeeDialog shotNoticeDialog = new ExplainTxMinerFeeDialog(this, R.style.MyDialog2);
                 shotNoticeDialog.show();
+                break;
+            case R.id.iv_receive_address_account:
+                if (ButtonUtils.isFastDoubleClick()) {
+                    return;
+                }
+                Intent intent1=new Intent(this, ContactsAddressManageActivity.class);
+                intent1.putExtra(Constants.INTENT_PUT_TAG,Constants.INTENT_PUT_TRANSACTION);
+                startActivity(intent1);
                 break;
             case R.id.btn_transaction_send://开始转账
                 if (judgeSelectInput()) {
@@ -707,6 +719,9 @@ public class UsdtTransactionActivity extends BaseActivity {
             return false;
         }else if (etPaymentAddress.getText().toString().equals(master.getAddress())){
             ToastUtil.showToast(this, getString(R.string.notice_trans_to_me_refuse));
+            return false;
+        }else if (Double.valueOf(etPaymentAmount.getText().toString())>=0.0001){
+            ToastUtil.showToast(this, getString(R.string.notice_amount_too_little));
             return false;
         }
         return true;

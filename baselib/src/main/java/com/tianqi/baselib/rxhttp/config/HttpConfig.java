@@ -20,6 +20,7 @@ public class HttpConfig {
    // public static final String BASE_URL = "http://wallet-admin-dev.aitdcoin.com"; //钱包开发域名
     public static final String BASE_URL = "http://192.168.1.11:18443"; //钱包开发域名
     public static final String BASE_FORMAL_URL = "https://services.tokenview.com"; //钱包开发域名正式服用的地址
+   // public static final String BASE_FORMAL_URL = "http://172.31.17.22:10340"; //我们后台统计数据所用的域名
 
     public static final String BASE_BTC_FORMAL_URL = "https://services.tokenview.com/vipapi/onchainwallet/btc?apikey=AnqHS6Rs2WX0hwFXlrv"; //btc钱包正式网广播交易地址。
     public static final String BASE_USDT_FORMAL_URL = "https://services.tokenview.com/vipapi/onchainwallet/usdt?apikey=AnqHS6Rs2WX0hwFXlrv"; //usdt钱包正式网广播交易地址。
@@ -29,6 +30,10 @@ public class HttpConfig {
     public static final String BASE_USDT_URL = "http://192.168.1.16:18332"; //钱包开发域名
     public static final String RPC_HEADER_USER = "dev";  //比特币rpc请求头的用户名
     public static final String RPC_HEADER_PSD= "a";      //比特币rpc请求头的密码
+
+
+
+    public static final String BASE_BACKEND_STATISTICS_URL = "http://172.31.17.22:10340/WalletAdmin/app/new/list"; //btc钱包正式网广播交易地址。
 
 
 

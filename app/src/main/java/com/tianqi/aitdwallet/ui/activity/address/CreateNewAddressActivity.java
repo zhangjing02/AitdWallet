@@ -1,11 +1,9 @@
 package com.tianqi.aitdwallet.ui.activity.address;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -19,13 +17,20 @@ import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.ContactsInfo;
 import com.tianqi.baselib.dbManager.ContactsInfoManager;
+import com.tianqi.baselib.utils.Constant;
 import com.tianqi.baselib.utils.display.ToastUtil;
 import com.tianqi.baselib.utils.eventbus.EventMessage;
 
+import org.bitcoinj.core.Address;
+import org.bitcoinj.core.NetworkParameters;
+import org.bitcoinj.params.MainNetParams;
 import org.greenrobot.eventbus.EventBus;
+import org.web3j.crypto.WalletUtils;
+import org.web3j.utils.Numeric;
+
+import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class CreateNewAddressActivity extends BaseActivity {
@@ -113,9 +118,34 @@ public class CreateNewAddressActivity extends BaseActivity {
                 break;
             case R.id.btn_transaction_send:
                 if (judgeSelectInput()){
+                    switch (coinName){
+                        case Constant.TRANSACTION_COIN_NAME_BTC:
+                        case Constant.TRANSACTION_COIN_NAME_USDT_OMNI:
+                            if (etInputAddress.getText().toString().length()!=34){
+                                ToastUtil.showToast(this,getString(R.string.notice_address_length_error));
+                                return;
+                            }else if (!isBTCValidAddress(etInputAddress.getText().toString())){
+                                ToastUtil.showToast(this,getString(R.string.notice_address_format_error));
+                                return;
+                            }
+                            break;
+                        case Constant.TRANSACTION_COIN_NAME_ETH:
+                        case Constant.TRANSACTION_COIN_NAME_USDT_ERC20:
+                            if (etInputAddress.getText().toString().length()!=42){
+                                ToastUtil.showToast(this,getString(R.string.notice_address_length_error));
+                                return;
+                            }if (!isValidAddress(etInputAddress.getText().toString())||!isETHValidAddress(etInputAddress.getText().toString())){
+                                ToastUtil.showToast(this,getString(R.string.notice_address_format_error));
+                                return;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
                     ContactsInfo contactsInfo=new ContactsInfo();
-                    contactsInfo.setContactsID(coinName+etInputAddress.getText().toString());
-                    contactsInfo.setContactsCoinName(etInputAddressName.getText().toString());
+                    contactsInfo.setContactsID(coinName+etInputAddressName.getText().toString()+etInputAddress.getText().toString());
+                    contactsInfo.setContactsName(etInputAddressName.getText().toString());
+                    contactsInfo.setContactsCoinName(coinName) ;
                     contactsInfo.setContactsCoinAddress(etInputAddress.getText().toString());
                     contactsInfo.setCoinResourceId(resource_id);
                     ContactsInfoManager.insertOrUpdate(contactsInfo);
@@ -134,13 +164,50 @@ public class CreateNewAddressActivity extends BaseActivity {
      * @return 判断输入是否合法
      */
     private boolean judgeSelectInput() {
+        List<ContactsInfo> coinFrIdInfo = ContactsInfoManager.getCoinFrIdInfo(coinName + etInputAddressName.getText().toString() + etInputAddress.getText().toString());
         if (TextUtils.isEmpty(etInputAddressName.getText().toString())) {
             ToastUtil.showToast(this, getString(R.string.notice_input_address_name));
             return false;
         } else if (TextUtils.isEmpty(etInputAddress.getText().toString())) {
             ToastUtil.showToast(this, getString(R.string.notice_input_address_content));
             return false;
+        }else if (coinFrIdInfo!=null&&coinFrIdInfo.size()>0){
+            ToastUtil.showToast(this,getString(R.string.notice_do_not_repeat));
+            return false;
         }
         return true;
+    }
+
+
+    public static boolean isETHValidAddress(String input) {
+        if (!input.startsWith("0x"))
+            return false;
+        return WalletUtils.isValidAddress(input);
+    }
+
+
+    public static boolean isValidAddress(String input){
+        String cleanHexInput = Numeric.cleanHexPrefix(input);
+        try{
+            Numeric.toBigIntNoPrefix(cleanHexInput);
+        }catch(NumberFormatException e){
+            return false;
+        }
+
+        return cleanHexInput.length() == 40;
+    }
+
+
+    public static boolean isBTCValidAddress(String input) {
+        try {
+            NetworkParameters networkParameters = MainNetParams.get();
+            Address address = Address.fromBase58(networkParameters, input);
+            if (address != null)
+                return true;
+            else
+                return false;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

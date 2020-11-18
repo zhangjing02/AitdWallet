@@ -58,7 +58,7 @@ public class HomeWalletAdapter extends BaseQuickAdapter<WalletInfo, BaseViewHold
         }else if (listBean.getWallet_id().equals(Constant.TRANSACTION_COIN_NAME_ETH)){
             tv_coin_balance.setText(DataReshape.doubleBig(listBean.getWalletBalance(), 6,6));
         }else if (listBean.getWallet_id().equals(Constant.TRANSACTION_COIN_NAME_USDT_ERC20)){
-            tv_coin_balance.setText(DataReshape.doubleBig(listBean.getWalletBalance(), 4,4));
+            tv_coin_balance.setText(DataReshape.doubleBig(listBean.getWalletBalance(), 6,6));
         } else {
             tv_coin_balance.setText(DataReshape.doubleBig(listBean.getWalletBalance(), 8,8));
         }

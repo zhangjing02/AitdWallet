@@ -17,6 +17,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.google.gson.Gson;
 import com.tianqi.aitdwallet.R;
+import com.tianqi.aitdwallet.ui.activity.address.ContactsAddressManageActivity;
 import com.tianqi.aitdwallet.ui.activity.tool.ScanActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.record.TransactionRecordActivity;
 import com.tianqi.aitdwallet.utils.Constants;
@@ -42,7 +43,6 @@ import com.tianqi.baselib.rxhttp.bean.GetErc20BalanceBean;
 import com.tianqi.baselib.rxhttp.bean.GetSimpleRpcBean;
 import com.tianqi.baselib.utils.ButtonUtils;
 import com.tianqi.baselib.utils.Constant;
-import com.tianqi.baselib.utils.MyChainId;
 import com.tianqi.baselib.utils.NetworkUtil;
 import com.tianqi.baselib.utils.digital.AESCipher;
 import com.tianqi.baselib.utils.digital.DataReshape;
@@ -68,7 +68,6 @@ import org.web3j.crypto.Wallet;
 import org.web3j.crypto.WalletFile;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jFactory;
-import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.ChainId;
 import org.web3j.utils.Convert;
@@ -233,7 +232,8 @@ public class UsdtErc20TransactionActivity extends BaseActivity {
                         }
                        erc20_balance =erc20_balances;
                         Log.i(TAG, "onSuccess: 002我们看得到的数据是？"+erc20_balance);
-                        tvBalance.setText(erc20_balance+"");
+                        account_balance=erc20_balance;
+                        tvBalance.setText(DataReshape.doubleBig(erc20_balance,6)+"");
                     }
                     @Override
                     protected void onFailure(int code, String msg) {
@@ -275,7 +275,8 @@ public class UsdtErc20TransactionActivity extends BaseActivity {
     private void initWallet() {
         String coin_address = getIntent().getStringExtra(Constants.TRANSACTION_COIN_ADDRESS);
         walletBtcFrAddress = CoinInfoManager.getCoinFrAddress(Constant.TRANSACTION_COIN_NAME_USDT_ERC20, coin_address);
-        tvBalance.setText(DataReshape.doubleBig(walletBtcFrAddress.getCoin_totalAmount(), 8));
+        account_balance=walletBtcFrAddress.getCoin_totalAmount();
+        tvBalance.setText(DataReshape.doubleBig(walletBtcFrAddress.getCoin_totalAmount(), 6));
         EthWalletManager.getInstance().loadWallet(this, walletBtcFrAddress, wallet -> {
             initWeb3j("http://192.168.1.16:8545");
             Log.i(TAG, walletBtcFrAddress.getCoin_address()+"initData: 001我们看看加载出来的钱包是啥？");
@@ -300,10 +301,13 @@ public class UsdtErc20TransactionActivity extends BaseActivity {
         if (event.getType() == EventMessage.SCAN_EVENT) {
             etPaymentAddress.setText(event.getMsg());
             etPaymentAddress.setSelection(event.getMsg().length());
+        }else if (event.getType()==EventMessage.SELECT_ADDRESS_UPDATE){
+            etPaymentAddress.setText(event.getMsg());
+            etPaymentAddress.setSelection(event.getMsg().length());
         }
     }
 
-    @OnClick({R.id.btn_collect, R.id.btn_transaction_send, R.id.btn_balance_all, R.id.tv_transaction_request})
+    @OnClick({R.id.btn_collect, R.id.btn_transaction_send, R.id.btn_balance_all, R.id.tv_transaction_request,R.id.iv_receive_address_account})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_collect:
@@ -312,8 +316,10 @@ public class UsdtErc20TransactionActivity extends BaseActivity {
                 break;
             case R.id.btn_balance_all:
                 // TODO: 2020/10/27 把余额都添加进去。
-                if (account_balance > 0.000001) {
-                    etPaymentAmount.setText(DataReshape.doubleBig((account_balance - 0.000001), 8));
+                if (account_balance > 0.00228) {
+                    etPaymentAmount.setText(DataReshape.doubleBig((account_balance - 0.00228), 6));
+                }else {
+                    ToastUtil.showToast(this,getString(R.string.notice_balance_not_enough));
                 }
                 break;
             case R.id.tv_transaction_request:
@@ -322,6 +328,14 @@ public class UsdtErc20TransactionActivity extends BaseActivity {
                 }
                 ExplainTxMinerFeeDialog shotNoticeDialog = new ExplainTxMinerFeeDialog(this, R.style.MyDialog2);
                 shotNoticeDialog.show();
+                break;
+            case R.id.iv_receive_address_account:
+                if (ButtonUtils.isFastDoubleClick()) {
+                    return;
+                }
+                Intent intent1=new Intent(this, ContactsAddressManageActivity.class);
+                intent1.putExtra(Constants.INTENT_PUT_TAG,Constants.INTENT_PUT_TRANSACTION);
+                startActivity(intent1);
                 break;
             case R.id.btn_transaction_send://开始转账
                 if (NetworkUtil.isNetworkAvailable(this)) {
@@ -535,9 +549,11 @@ public class UsdtErc20TransactionActivity extends BaseActivity {
         } else if (Double.valueOf(etPaymentAmount.getText().toString())>= erc20_balance){
             ToastUtil.showToast(this, getString(R.string.notice_balance_not_enough));
             return false;
-        }
-        else if (eth_balance<0.003){
-            ToastUtil.showToast(this, getString(R.string.notice_eth_amout_not_enouth));
+        } else if (eth_balance<0.003){
+            ToastUtil.showToast(this, getString(R.string.notice_eth_amount_not_enough));
+            return false;
+        }else if (Double.valueOf(etPaymentAmount.getText().toString())>0.000001){
+            ToastUtil.showToast(this, getString(R.string.notice_amount_too_little));
             return false;
         }
         return true;

@@ -382,10 +382,10 @@ public class SetSecurityPsdActivity extends BaseActivity {
                             return userInformation;
                         }).compose(RxHelper.io_main()).subscribe(userInformation -> {
                             UserInfoManager.insertOrUpdate(userInformation);
-                            if (build_wallet_type.equals(Constants.INTENT_PUT_CREATE_WALLET)) {
+                            if (build_wallet_type.equals(getString(R.string.tittle_create_wallet))) {
                                 Intent intent2 = new Intent(this, BackupMemoryWordActivity.class);
                                 startActivity(intent2);
-                            } else if (build_wallet_type.equals(Constants.INTENT_PUT_IMPORT_WALLET)) {
+                            } else if (build_wallet_type.equals(getString(R.string.tittle_import_wallet))) {
                                 Intent intent3 = new Intent(this, ImportWalletActivity.class);
                                 intent3.putExtra(Constants.INTENT_PUT_TAG, Constants.INTENT_PUT_IMPORT_WALLET);
                                 startActivity(intent3);

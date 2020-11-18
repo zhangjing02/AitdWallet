@@ -1,6 +1,6 @@
 package com.tianqi.aitdwallet.ui.activity.address;
 
-import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -10,21 +10,21 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.adapter.list_adapter.ContactsAddressAdapter;
+import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.aitdwallet.widget.dialog.SelectCoinDialog;
 import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dao.ContactsInfo;
 import com.tianqi.baselib.dbManager.ContactsInfoManager;
-import com.tianqi.baselib.utils.Constant;
+import com.tianqi.baselib.utils.eventbus.EventMessage;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CreateContactsAddressActivity extends BaseActivity {
+public class ContactsAddressManageActivity extends BaseActivity {
 
     @BindView(R.id.toolbarTitle)
     TextView toolbarTitle;
@@ -41,6 +41,7 @@ public class CreateContactsAddressActivity extends BaseActivity {
     private List<ContactsInfo> contactsInfos;
 
     private ContactsAddressAdapter coinSelectAdapter;
+    private int comeFrIndex;
 
     @Override
     protected int getContentView() {
@@ -49,37 +50,69 @@ public class CreateContactsAddressActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        contactsInfos = ContactsInfoManager.getWalletInfo();
+        contactsInfos = ContactsInfoManager.getAllContactsInfo();
+        //intent1.putExtra(Constants.INTENT_PUT_TAG,Constants.INTENT_PUT_TRANSACTION);
+        comeFrIndex = getIntent().getIntExtra(Constants.INTENT_PUT_TAG, -1);
         getToolBar();
     }
-
 
     private void getToolBar() {
         toolbarTitle.setText(R.string.tittle_address_management);
         toolbar.setNavigationOnClickListener(v -> {
             finish();//返回
         });
-
+        btnCollect.setImageDrawable(getResources().getDrawable(R.mipmap.ic_add_contacts_address));
         if (contactsInfos != null && contactsInfos.size() > 0) {
             btnCollect.setVisibility(View.VISIBLE);
-            btnCollect.setImageDrawable(getResources().getDrawable(R.mipmap.ic_add_contacts_address));
             btnCreateAddress.setVisibility(View.GONE);
             ivNoData.setVisibility(View.GONE);
         }
     }
 
     @Override
+    public void onDataSynEvent(EventMessage event) {
+        if (event.getType()==EventMessage.ADD_ADDRESS_UPDATE){
+            List<CoinInfo> coinInfoList = new ArrayList<>();
+            contactsInfos = ContactsInfoManager.getAllContactsInfo();
+            String coin_name="pp";
+            if (contactsInfos!=null&&contactsInfos.size()>0){
+                for (int i = 0; i <contactsInfos.size() ; i++) {
+                    CoinInfo coinInfo = new CoinInfo();
+                    coinInfo.setCoin_name(contactsInfos.get(i).getContactsCoinName());
+                    coinInfo.setResourceId(contactsInfos.get(i).getCoinResourceId());
+                    if (!coin_name.contains(coinInfo.getCoin_name())){
+                        coinInfoList.add(coinInfo);
+                        coin_name=coinInfo.getCoin_name()+"&&"+coin_name;
+                    }
+                }
+                btnCreateAddress.setVisibility(View.GONE);
+                ivNoData.setVisibility(View.GONE);
+                btnCollect.setVisibility(View.VISIBLE);
+            }else {
+                btnCreateAddress.setVisibility(View.VISIBLE);
+                ivNoData.setVisibility(View.VISIBLE);
+                btnCollect.setVisibility(View.GONE);
+            }
+            coinSelectAdapter.refreshData(coinInfoList);
+        }
+    }
+
+    @Override
     protected void initData() {
         List<CoinInfo> coinInfoList = new ArrayList<>();
+        String coin_name="pp";
         if (contactsInfos!=null&&contactsInfos.size()>0){
             for (int i = 0; i <contactsInfos.size() ; i++) {
                 CoinInfo coinInfo = new CoinInfo();
                 coinInfo.setCoin_name(contactsInfos.get(i).getContactsCoinName());
                 coinInfo.setResourceId(contactsInfos.get(i).getCoinResourceId());
-                coinInfoList.add(coinInfo);
+                if (!coin_name.contains(coinInfo.getCoin_name())){
+                    coinInfoList.add(coinInfo);
+                    coin_name=coinInfo.getCoin_name()+"&&"+coin_name;
+                }
             }
         }
-        coinSelectAdapter = new ContactsAddressAdapter(this, coinInfoList);
+        coinSelectAdapter = new ContactsAddressAdapter(this, coinInfoList,comeFrIndex);
 
         lvCoinAddress.setAdapter(coinSelectAdapter);
     }

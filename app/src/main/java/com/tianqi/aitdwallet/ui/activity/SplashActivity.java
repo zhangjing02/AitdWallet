@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.CoinRateInfo;
@@ -12,16 +13,22 @@ import com.tianqi.baselib.dao.WalletInfo;
 import com.tianqi.baselib.dbManager.CoinRateInfoManager;
 import com.tianqi.baselib.dbManager.UserInfoManager;
 import com.tianqi.baselib.dbManager.WalletInfoManager;
+import com.tianqi.baselib.rxhttp.HttpClientUtil;
 import com.tianqi.baselib.rxhttp.RetrofitFactory;
+import com.tianqi.baselib.rxhttp.base.BaseObserver;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
 import com.tianqi.baselib.rxhttp.bean.CoinRateBean;
 import com.tianqi.baselib.utils.Constant;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import okhttp3.Response;
 
 public class SplashActivity extends BaseActivity {
     private UserInformation userInfo;
@@ -37,7 +44,6 @@ public class SplashActivity extends BaseActivity {
         Map<String, Object> map = new HashMap<>();
         map.put("apikey", "AnqHS6Rs2WX0hwFXlrv");
         //获取各个币种的汇率，存入币种汇率的数据库中。
-
         RetrofitFactory.getInstence(this).API()
                 .getCoinRate(map).compose(RxHelper.io_main())
                 .subscribe(new Observer<CoinRateBean>() {
@@ -183,6 +189,21 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        //获取各个币种的汇率，存入币种汇率的数据库中。
+//        Map<String,Object>map=new HashMap<>();
+//        map.put("type",2);
+//        RetrofitFactory.getInstence(this).API()
+//                .getVersionList(map).compose(RxHelper.io_main())
+//                .subscribe(new BaseObserver<Object>(this) {
+//                    @Override
+//                    public void onSuccess(Object data, String msg) {
+//                        Log.i("ttttttttttttttt", "onSuccess: ");
+//                    }
+//                    @Override
+//                    protected void onFailure(int code, String msg) {
+//                    }
+//                });
+
     }
 
 }

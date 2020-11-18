@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_transparent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="275dp"
+        style="@style/bg_words_white"
+        android:layout_marginHorizontal="50dp"
+        android:layout_gravity="center"
+        android:layout_height="139dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_message"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:gravity="center"
+                android:lineSpacingExtra="5dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:text="@string/text_dialog_del_address_content"
+                android:textColor="@color/text_main_black"
+                android:textSize="17sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/color_line_10_blue"
+                app:layout_constraintTop_toBottomOf="@+id/tv_message" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="54dp"
+                android:layout_gravity="center_horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view">
+
+                <TextView
+                    android:id="@+id/dialog_button_cancel"
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:text="@string/btn_cancel_text"
+                    android:gravity="center"
+                    android:textSize="17sp"
+                    android:textAllCaps="false"
+                    android:textColor="@color/text_main_blue" />
+
+                <View
+                    android:id="@+id/view_line"
+                    android:layout_width="0.6dp"
+                    android:layout_height="fill_parent"
+                    android:background="@color/color_line_10_blue"/>
+
+                <TextView
+                    android:id="@+id/dialog_button_ok"
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:text="@string/btn_confirm_text"
+                    android:textSize="17sp"
+                    android:gravity="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/text_main_blue" />
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    </LinearLayout>
+
+
+    <!--<TextView-->
+    <!--android:id="@+id/tv_tile"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginTop="20dp"-->
+    <!--android:text="@string/warm_prompt"-->
+    <!--android:textColor="@color/black"-->
+    <!--android:textSize="15sp"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--app:layout_constraintTop_toTopOf="parent" />-->
+</FrameLayout>

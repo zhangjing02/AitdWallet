@@ -138,15 +138,15 @@ public class WalletSettingFrImportActivity extends BaseActivity {
                 break;
             case R.id.tv_export_private_key:
                 intent = new Intent(this, VerifySecurityPsdActivity.class);
-                intent.putExtra(Constants.INTENT_PUT_TAG,  getString(R.string.tittle_explain_private_key));
-
+                intent.putExtra(Constants.INTENT_PUT_TAG,  getString(R.string.tittle_export_private_key));
+                Log.i("tttttttttttt", "initView: 001我们看名字是个啥？"+coin_id);
                 intent.putExtra(Constants.TRANSACTION_COIN_NAME, coin_id);
                 startActivity(intent);
                 break;
             case R.id.tv_export_keystore:
                 intent = new Intent(this, VerifySecurityPsdActivity.class);
                 intent.putExtra(Constants.INTENT_PUT_TAG, getString(R.string.tittle_export_keystore));
-                intent.putExtra(Constants.TRANSACTION_COIN_NAME, wallet_name);
+                intent.putExtra(Constants.TRANSACTION_COIN_NAME, coin_id);
                 startActivity(intent);
                 break;
             case R.id.tv_back_up_mnemonic:

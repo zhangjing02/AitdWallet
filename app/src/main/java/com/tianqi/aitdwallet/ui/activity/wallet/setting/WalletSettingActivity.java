@@ -135,7 +135,7 @@ public class WalletSettingActivity extends BaseActivity {
                 break;
             case R.id.tv_export_private_key:
                 intent = new Intent(this, VerifySecurityPsdActivity.class);
-                intent.putExtra(Constants.INTENT_PUT_TAG, getString(R.string.tittle_explain_private_key));
+                intent.putExtra(Constants.INTENT_PUT_TAG, getString(R.string.tittle_export_private_key));
                 intent.putExtra(Constants.TRANSACTION_COIN_NAME, wallet_name);
                 startActivity(intent);
                 break;

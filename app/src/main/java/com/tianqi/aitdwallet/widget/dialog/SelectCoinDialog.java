@@ -103,14 +103,12 @@ public class SelectCoinDialog extends Dialog {
 
         lvCoinSelect.setAdapter(coinSelectAdapter);
         
-        lvCoinSelect.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent=new Intent(mContext, CreateNewAddressActivity.class);
-                intent.putExtra(Constants.INTENT_PUT_TAG,coinInfoList.get(i).getCoin_name());
-                intent.putExtra(Constants.INTENT_PUT_RESOURCE,coinInfoList.get(i).getResourceId());
-                mContext.startActivity(intent);
-            }
+        lvCoinSelect.setOnItemClickListener((adapterView, view12, i, l) -> {
+            Intent intent=new Intent(mContext, CreateNewAddressActivity.class);
+            intent.putExtra(Constants.INTENT_PUT_TAG,coinInfoList.get(i).getCoin_name());
+            intent.putExtra(Constants.INTENT_PUT_RESOURCE,coinInfoList.get(i).getResourceId());
+            mContext.startActivity(intent);
+            dismiss();
         });
 
         btnCancel.setOnClickListener(view1 -> {

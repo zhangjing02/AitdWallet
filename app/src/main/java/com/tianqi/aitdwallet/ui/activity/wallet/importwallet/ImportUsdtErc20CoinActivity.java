@@ -422,7 +422,9 @@ public class ImportUsdtErc20CoinActivity extends BaseActivity {
             });
             coinInfo.setCoin_name(Constant.TRANSACTION_COIN_NAME_USDT_ERC20);
             coinInfo.setCoin_type(Constant.COIN_BIP_TYPE_ETH);
-            coinInfo.setKeystoreStr(etInputKey.getText().toString());
+            if (select_index==TITTLE_KEYSTORE){
+                coinInfo.setKeystoreStr(etInputKey.getText().toString());
+            }
             coinInfo.setAlias_name(Constant.TRANSACTION_COIN_NAME_USDT_ERC20);
             coinInfo.setResourceId(R.mipmap.ic_circle_usdt_erc20);
 

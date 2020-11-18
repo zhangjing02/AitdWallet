@@ -23,6 +23,7 @@ import com.quincysx.crypto.bitcoin.BitCoinECKeyPair;
 import com.quincysx.crypto.bitcoin.BitcoinException;
 import com.quincysx.crypto.utils.HexUtils;
 import com.tianqi.aitdwallet.R;
+import com.tianqi.aitdwallet.ui.activity.address.ContactsAddressManageActivity;
 import com.tianqi.aitdwallet.ui.activity.tool.ScanActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.record.TransactionRecordActivity;
 import com.tianqi.aitdwallet.utils.Constants;
@@ -251,6 +252,9 @@ public class BitcoinTransactionActivity extends BaseActivity {
         if (event.getType() == EventMessage.SCAN_EVENT) {
             etPaymentAddress.setText(event.getMsg());
             etPaymentAddress.setSelection(event.getMsg().length());
+        }else if (event.getType()==EventMessage.SELECT_ADDRESS_UPDATE){
+            etPaymentAddress.setText(event.getMsg());
+            etPaymentAddress.setSelection(event.getMsg().length());
         }
     }
 
@@ -450,7 +454,7 @@ public class BitcoinTransactionActivity extends BaseActivity {
         return null;
     }
 
-    @OnClick({R.id.btn_collect, R.id.btn_transaction_send, R.id.btn_balance_all, R.id.tv_transaction_request})
+    @OnClick({R.id.btn_collect, R.id.btn_transaction_send, R.id.btn_balance_all, R.id.tv_transaction_request,R.id.iv_receive_address_account})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_collect:
@@ -469,6 +473,14 @@ public class BitcoinTransactionActivity extends BaseActivity {
                 }
                 ExplainTxMinerFeeDialog shotNoticeDialog = new ExplainTxMinerFeeDialog(this, R.style.MyDialog2);
                 shotNoticeDialog.show();
+                break;
+            case R.id.iv_receive_address_account:
+                if (ButtonUtils.isFastDoubleClick()) {
+                    return;
+                }
+                Intent intent1=new Intent(this, ContactsAddressManageActivity.class);
+                intent1.putExtra(Constants.INTENT_PUT_TAG,Constants.INTENT_PUT_TRANSACTION);
+                startActivity(intent1);
                 break;
             case R.id.btn_transaction_send://开始转账
                 if (utxo_list!=null&&utxo_list.size()>0){

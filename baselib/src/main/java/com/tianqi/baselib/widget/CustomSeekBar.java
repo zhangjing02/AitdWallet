@@ -247,8 +247,8 @@ public class CustomSeekBar extends View {
             RectF r1 = new RectF();
             r1.left = cx-2;
             r1.right = cx+18;
-            r1.top = 0 ;
-            r1.bottom = 50;
+            r1.top = getHeight()/2 / 2 - height-23 ;
+            r1.bottom =  getHeight()/2 / 2 - height+28;
             canvas.drawRoundRect(r1, 10, 10, mProgressPaint);
 
             //写入文本

@@ -46,7 +46,7 @@ public class Constants {
     public static final String INTENT_PUT_MNEMONIC= "INTENT_PUT_MNEMONIC";
     public static final String INTENT_PUT_CHANGE_PSD= "修改密码";
     public static final String INTENT_PUT_RESOURCE= "intent_put_resource";
-
+    public static final int INTENT_PUT_TRANSACTION= 1;
     public static final String INTENT_PUT_CREATE_ADDRESS= "新建地址";
 
    // public static final String INTENT_PUT_TRANSACTION_TYPE= "INTENT_PUT_TRANSACTION_TYPE";

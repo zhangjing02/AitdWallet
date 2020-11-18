@@ -61,6 +61,7 @@ public class LanguageSettingActivity extends BaseActivity {
                 break;
         }
     }
+
     @Override
     protected void initData() {
         rbSelectSimpleChinese.setOnCheckedChangeListener((compoundButton, b) -> {
@@ -72,7 +73,7 @@ public class LanguageSettingActivity extends BaseActivity {
         rbSelectEnglish.setOnCheckedChangeListener((compoundButton, b) -> {
             if (b) {
                 userInformation.setLanguageId(Constants.LANGUAGE_ENGLISH);
-              //  UserInfoManager.insertOrUpdate(userInformation);
+                //  UserInfoManager.insertOrUpdate(userInformation);
             }
         });
     }
@@ -82,6 +83,10 @@ public class LanguageSettingActivity extends BaseActivity {
         toolbar.setNavigationOnClickListener(v -> {
             finish();//返回
         });
+        btnFinish.setVisibility(View.VISIBLE);
+        btnFinish.setText(getString(R.string.btn_confirm_text));
+        btnFinish.setTextColor(getResources().getColor(R.color.text_light_blue));
+        btnFinish.setTextSize(16);
     }
 
 
@@ -96,31 +101,38 @@ public class LanguageSettingActivity extends BaseActivity {
         overridePendingTransition(0, 0);
     }
 
-
-    @OnClick(R.id.btn_change_language)
-    public void onViewClicked() {
-        int languageId = userInformation.getLanguageId();
-        switch (languageId) {
-            case Constants.LANGUAGE_CHINA:
-                rbSelectSimpleChinese.setChecked(true);
-                if (LocaleUtils.needUpdateLocale(this, LocaleUtils.LOCALE_CHINESE)) {
-                    LocaleUtils.updateLocale(this, LocaleUtils.LOCALE_CHINESE);
-                    userInformation.setLanguageId(Constants.LANGUAGE_CHINA);
-                    UserInfoManager.insertOrUpdate(userInformation);
-                    restartAct();
+    @OnClick({R.id.btn_finish, R.id.btn_change_language})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.btn_finish:
+                int languageId = userInformation.getLanguageId();
+                switch (languageId) {
+                    case Constants.LANGUAGE_CHINA:
+                        rbSelectSimpleChinese.setChecked(true);
+                        if (LocaleUtils.needUpdateLocale(this, LocaleUtils.LOCALE_CHINESE)) {
+                            LocaleUtils.updateLocale(this, LocaleUtils.LOCALE_CHINESE);
+                            userInformation.setLanguageId(Constants.LANGUAGE_CHINA);
+                            UserInfoManager.insertOrUpdate(userInformation);
+                            restartAct();
+                        }
+                        break;
+                    case Constants.LANGUAGE_ENGLISH:
+                        rbSelectEnglish.setChecked(true);
+                        if (LocaleUtils.needUpdateLocale(this, LocaleUtils.LOCALE_ENGLISH)) {
+                            LocaleUtils.updateLocale(this, LocaleUtils.LOCALE_ENGLISH);
+                            userInformation.setLanguageId(Constants.LANGUAGE_ENGLISH);
+                            UserInfoManager.insertOrUpdate(userInformation);
+                            restartAct();
+                        }
+                        break;
+                    default:
+                        break;
                 }
                 break;
-            case Constants.LANGUAGE_ENGLISH:
-                rbSelectEnglish.setChecked(true);
-                if (LocaleUtils.needUpdateLocale(this, LocaleUtils.LOCALE_ENGLISH)) {
-                    LocaleUtils.updateLocale(this, LocaleUtils.LOCALE_ENGLISH);
-                    userInformation.setLanguageId(Constants.LANGUAGE_ENGLISH);
-                    UserInfoManager.insertOrUpdate(userInformation);
-                    restartAct();
-                }
-                break;
-            default:
+            case R.id.btn_change_language:
                 break;
         }
     }
+
+
 }

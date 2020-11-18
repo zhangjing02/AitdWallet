@@ -48,7 +48,7 @@
     <string name="notice_third_word_error">第3个助记词错误</string>
     <string name="tittle_btc_receive">BTC收款</string>
     <string name="tittle_usdt_omni_receive">USDT-OMNI收款</string>
-    <string name="tittle_eth_receive">ETHT收款</string>
+    <string name="tittle_eth_receive">ETH收款</string>
     <string name="tittle_usdt_erc20_receive">USDT-ERC20收款</string>
     <string name="tittle_share_sth">分享</string>
     <string name="notice_copy_success">复制成功</string>
@@ -263,7 +263,7 @@
     <string name="text_copy_keystore__notice">复制粘贴ETH钱包KeyStore文件内容至输入框，或者通过扫描Keystore二维码录入</string>
     <string name="notice_address_error">地址错误</string>
     <string name="notice_balance_not_enough">余额不足</string>
-    <string name="notice_eth_amout_not_enouth">eth余额不够支持合约转账</string>
+    <string name="notice_eth_amount_not_enough">eth余额不够支持合约转账</string>
     <string name="btn_change_safe_psd_text">修改安全密码</string>
     <string name="tittle_safe_center">安全中心</string>
     <string name="tittle_change_safe_psd">修改安全密码</string>
@@ -275,4 +275,20 @@
     <string name="tittle_create_new_address">新建地址</string>
     <string name="notice_input_address_name">请输入名称</string>
     <string name="notice_input_address_content">请输入地址</string>
+    <string name="btn_delete_address_text">删除</string>
+    <string name="notice_do_not_repeat">请勿重复</string>
+    <string name="tittle_about_us_text">关于我们</string>
+    <string name="text_version_name_tag">版本号：</string>
+    <string name="text_version_log_tag">版本日志</string>
+    <string name="text_website_tag">Website</string>
+    <string name="text_email_tag">Email</string>
+    <string name="text_twitter_tag">Twitter</string>
+    <string name="text_wechat_tag">Wechat</string>
+    <string name="tittle_version_log_text">版本日志</string>
+    <string name="tittle_aitd_slogan_text">AITD 岂止安全</string>
+    <string name="text_open_test">荣耀公测</string>
+    <string name="text_dialog_del_address_content">确定删除地址？</string>
+    <string name="notice_address_length_error">地址长度不对</string>
+    <string name="notice_address_format_error">地址格式错误</string>
+    <string name="notice_amount_too_little">金额太小</string>
 </resources>

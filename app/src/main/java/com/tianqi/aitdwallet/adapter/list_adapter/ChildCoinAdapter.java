@@ -93,20 +93,20 @@ public class ChildCoinAdapter extends BaseAdapter {
 
 
         if (maps.get(position).getWallet_id().equals(Constant.TRANSACTION_COIN_NAME_USDT_OMNI)){
-            viewHolder.tvCurrencyBalance.setText(DataReshape.doubleBig(maps.get(position).getCoin_totalAmount(),4,0) +"");
+            viewHolder.tvCurrencyBalance.setText(DataReshape.doubleBig(maps.get(position).getCoin_totalAmount(),4,4) +"");
         }else if (maps.get(position).getWallet_id().equals(Constant.TRANSACTION_COIN_NAME_ETH)){
             viewHolder.tvCurrencyBalance.setText(DataReshape.doubleBig(maps.get(position).getCoin_totalAmount(),6,6) +"");
         }else if (maps.get(position).getWallet_id().equals(Constant.TRANSACTION_COIN_NAME_USDT_ERC20)){
-            viewHolder.tvCurrencyBalance.setText(DataReshape.doubleBig(maps.get(position).getCoin_totalAmount(),4,6) +"");
+            viewHolder.tvCurrencyBalance.setText(DataReshape.doubleBig(maps.get(position).getCoin_totalAmount(),6,6) +"");
         } else {
             viewHolder.tvCurrencyBalance.setText(DataReshape.doubleBig(maps.get(position).getCoin_totalAmount(),8,8) +"");
         }
 
         UserInformation userInformation= UserInfoManager.getUserInfo();
         if (userInformation.getFiatUnit().equals(Constants.FIAT_USD)){
-            viewHolder.tvFiatBalance.setText("≈ $"+DataReshape.double2int((maps.get(position).getCoin_totalAmount()*walletInfo.getCoin_USDPrice()),2));
+            viewHolder.tvFiatBalance.setText("≈ $"+DataReshape.doubleBig((maps.get(position).getCoin_totalAmount()*walletInfo.getCoin_USDPrice()),2));
         }else {
-            viewHolder.tvFiatBalance.setText("≈ ￥"+DataReshape.double2int((maps.get(position).getCoin_totalAmount()*walletInfo.getCoin_CNYPrice()),2));
+            viewHolder.tvFiatBalance.setText("≈ ￥"+DataReshape.doubleBig((maps.get(position).getCoin_totalAmount()*walletInfo.getCoin_CNYPrice()),2));
         }
 
         viewHolder.layoutCurrency.setOnClickListener(view1 -> {

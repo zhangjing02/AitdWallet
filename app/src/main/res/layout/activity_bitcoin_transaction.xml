@@ -52,9 +52,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/tv_receive_address_tag"
                     app:layout_constraintRight_toRightOf="parent"
                     android:layout_marginRight="15dp"
-                    android:src="@mipmap/ic_receive_account"
-
-                    />
+                    android:src="@mipmap/ic_receive_account" />
 
 
                 <EditText

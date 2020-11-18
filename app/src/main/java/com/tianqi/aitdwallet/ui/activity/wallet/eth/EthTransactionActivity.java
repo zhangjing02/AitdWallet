@@ -22,6 +22,7 @@ import com.quincysx.crypto.bitcoin.BitCoinECKeyPair;
 import com.quincysx.crypto.bitcoin.BitcoinException;
 import com.quincysx.crypto.utils.HexUtils;
 import com.tianqi.aitdwallet.R;
+import com.tianqi.aitdwallet.ui.activity.address.ContactsAddressManageActivity;
 import com.tianqi.aitdwallet.ui.activity.tool.ScanActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.record.TransactionRecordActivity;
 import com.tianqi.aitdwallet.utils.Constants;
@@ -221,11 +222,11 @@ public class EthTransactionActivity extends BaseActivity {
                 .subscribe(new BaseObserver<String>(this) {
                     @Override
                     public void onSuccess(String data, String msg) {
-                        eth_balance= new BigDecimal(data).setScale(4, RoundingMode.HALF_UP).doubleValue();
-
+                        eth_balance= new BigDecimal(data).setScale(8, RoundingMode.HALF_UP).doubleValue();
+                        account_balance=eth_balance;
                       //  eth_balance=Double.valueOf(eth_balance);
                         Log.i(TAG, eth_balance+"onSuccess: 我们看得到的数据是？"+data);
-                        tvBalance.setText(data);
+                        tvBalance.setText(DataReshape.doubleBig(eth_balance,6));
                     }
                     @Override
                     protected void onFailure(int code, String msg) {
@@ -255,7 +256,8 @@ public class EthTransactionActivity extends BaseActivity {
     private void initWallet() {
         String coin_address = getIntent().getStringExtra(Constants.TRANSACTION_COIN_ADDRESS);
         walletBtcFrAddress = CoinInfoManager.getCoinFrAddress(Constant.TRANSACTION_COIN_NAME_ETH, coin_address);
-        tvBalance.setText(DataReshape.doubleBig(walletBtcFrAddress.getCoin_totalAmount(), 8));
+        account_balance=walletBtcFrAddress.getCoin_totalAmount();
+        tvBalance.setText(DataReshape.doubleBig(walletBtcFrAddress.getCoin_totalAmount(), 6));
         EthWalletManager.getInstance().loadWallet(this, walletBtcFrAddress, wallet -> {
             initWeb3j("http://192.168.1.16:8545");
            // initWeb3j("https://services.tokenview.com/vipapi/?apikey=AnqHS6Rs2WX0hwFXlrv");
@@ -281,10 +283,13 @@ public class EthTransactionActivity extends BaseActivity {
         if (event.getType() == EventMessage.SCAN_EVENT) {
             etPaymentAddress.setText(event.getMsg());
             etPaymentAddress.setSelection(event.getMsg().length());
+        }else if (event.getType()==EventMessage.SELECT_ADDRESS_UPDATE){
+            etPaymentAddress.setText(event.getMsg());
+            etPaymentAddress.setSelection(event.getMsg().length());
         }
     }
 
-    @OnClick({R.id.btn_collect, R.id.btn_transaction_send, R.id.btn_balance_all, R.id.tv_transaction_request})
+    @OnClick({R.id.btn_collect, R.id.btn_transaction_send, R.id.btn_balance_all, R.id.tv_transaction_request,R.id.iv_receive_address_account})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_collect:
@@ -293,8 +298,10 @@ public class EthTransactionActivity extends BaseActivity {
                 break;
             case R.id.btn_balance_all:
                 // TODO: 2020/10/27 把余额都添加进去。
-                if (account_balance > 0.000001) {
-                    etPaymentAmount.setText(DataReshape.doubleBig((account_balance - 0.000001), 8));
+                if (account_balance > 0.000798) {
+                    etPaymentAmount.setText(DataReshape.doubleBig((account_balance - 0.000798), 6));
+                }else {
+                    ToastUtil.showToast(this,getString(R.string.notice_balance_not_enough));
                 }
                 break;
             case R.id.tv_transaction_request:
@@ -304,10 +311,18 @@ public class EthTransactionActivity extends BaseActivity {
                 ExplainTxMinerFeeDialog shotNoticeDialog = new ExplainTxMinerFeeDialog(this, R.style.MyDialog2);
                 shotNoticeDialog.show();
                 break;
+            case R.id.iv_receive_address_account:
+                if (ButtonUtils.isFastDoubleClick()) {
+                    return;
+                }
+                Intent intent1=new Intent(this, ContactsAddressManageActivity.class);
+                intent1.putExtra(Constants.INTENT_PUT_TAG,Constants.INTENT_PUT_TRANSACTION);
+                startActivity(intent1);
+                break;
             case R.id.btn_transaction_send://开始转账
                 if (NetworkUtil.isNetworkAvailable(this)) {
                     // TODO: 2020/11/10 这里是转账逻辑。
-                    Log.i(TAG, eth_balance+"----onViewClicked: 我们看看金额？"+Double.valueOf(etPaymentAmount.getText().toString()));
+                  //  Log.i(TAG, eth_balance+"----onViewClicked: 我们看看金额？"+Double.valueOf(etPaymentAmount.getText().toString()));
                     if (judgeSelectInput()) {
                         String fiat_value;
                         UserInformation userInformation = UserInfoManager.getUserInfo();
@@ -522,6 +537,9 @@ public class EthTransactionActivity extends BaseActivity {
             return false;
         } else if (Double.valueOf(etPaymentAmount.getText().toString())>=eth_balance){
             ToastUtil.showToast(this, getString(R.string.notice_balance_not_enough));
+            return false;
+        }else if (Double.valueOf(etPaymentAmount.getText().toString())>0.000001){
+            ToastUtil.showToast(this, getString(R.string.notice_amount_too_little));
             return false;
         }
         return true;

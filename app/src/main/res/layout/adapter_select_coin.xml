@@ -12,7 +12,7 @@
         android:layout_height="29dp"
         android:src="@mipmap/ic_circle_btc"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.38"
+        app:layout_constraintHorizontal_bias="0.30"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -20,7 +20,7 @@
     <TextView
         android:id="@+id/tv_coin_name"
         android:layout_width="wrap_content"
-        android:layout_height="72dp"
+        android:layout_height="65dp"
         android:gravity="center_vertical"
         android:layout_marginLeft="10dp"
         android:text="选择 BTC 地址"

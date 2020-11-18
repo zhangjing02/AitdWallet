@@ -14,6 +14,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.tianqi.aitdwallet.R;
 import com.tianqi.baselib.dao.CoinInfo;
+import com.tianqi.baselib.dao.ContactsInfo;
+import com.tianqi.baselib.dbManager.ContactsInfoManager;
 import com.tianqi.baselib.utils.Constant;
 import com.tianqi.baselib.utils.display.GlideUtils;
 import com.tianqi.baselib.widget.ExpandableLayout;
@@ -31,11 +33,13 @@ public class ContactsAddressAdapter extends BaseAdapter {
     private String gate_way_id;
     private static final int TRUST_GATE_WAY = 2;
     private static final int UN_TRUST_GATE_WAY = 1;
+    private int function_type;
 
-    public ContactsAddressAdapter(Context context, List<CoinInfo> beanList) {
+    public ContactsAddressAdapter(Context context, List<CoinInfo> beanList,int type) {
         mContext = context;
         maps = beanList;
         typeFace = Typeface.createFromAsset(context.getAssets(), Constant.FONT_PATH);
+        function_type=type;
     }
 
     public void refreshData(List<CoinInfo> couponTypeBeans) {
@@ -75,19 +79,36 @@ public class ContactsAddressAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
+        viewHolder.expandableLayout.collapse();
 
         viewHolder.tvCoinName.setText(maps.get(position).getCoin_name());
 
         GlideUtils.loadResourceImage(mContext,maps.get(position).getResourceId(), viewHolder.icCoin);
 
-        viewHolder.layout_coin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
+        viewHolder.layout_coin.setOnClickListener(view1 -> {
+            List<ContactsInfo>contactsInfoList= ContactsInfoManager.getCoinFrCoinNameInfo(maps.get(position).getCoin_name());
+            ContactsAddressChildAdapter childAdapter=new ContactsAddressChildAdapter(mContext,contactsInfoList,function_type);
+            viewHolder.lv_coin_detail.setAdapter(childAdapter);
+            if (viewHolder.expandableLayout.isExpanded()){
+                viewHolder.expandableLayout.collapse();
+            }else {
+                viewHolder.expandableLayout.expand();
             }
+//            viewHolder.lv_coin_detail.setOnItemClickListener((adapterView, view2, i, l) -> {
+//                Log.i("ttttttttttttttttt", "getView: 我们看得到是个啥？"+function_type);
+//
+//            });
         });
+
         return view;
     }
+
+
+    public void collapseCoin(){
+
+
+    }
+
 
     //设置分享点击接口
     public interface OnActionClickLitener {

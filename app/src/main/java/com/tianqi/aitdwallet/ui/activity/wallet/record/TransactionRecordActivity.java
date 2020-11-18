@@ -177,13 +177,13 @@ public class TransactionRecordActivity extends BaseActivity {
         GlideUtils.loadResourceImage(this, walletBtcInfo.getResourceId(), ivWalletCoin);
 
         if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_BTC)) {
-            tvCurrencyBalance.setText(DataReshape.doubleBig(walletBtcInfo.getCoin_totalAmount(), 8, 8));
+            tvCurrencyBalance.setText(DataReshape.doubleAll(walletBtcInfo.getCoin_totalAmount(), 8 ));
         } else if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_OMNI)) {
-            tvCurrencyBalance.setText(DataReshape.doubleBig(walletBtcInfo.getCoin_totalAmount(), 4, 4));
+            tvCurrencyBalance.setText(DataReshape.doubleAll(walletBtcInfo.getCoin_totalAmount(), 4));
         }else if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_ETH)) {
-            tvCurrencyBalance.setText(DataReshape.doubleBig(walletBtcInfo.getCoin_totalAmount(), 6, 4));
+            tvCurrencyBalance.setText(DataReshape.doubleAll(walletBtcInfo.getCoin_totalAmount(), 6));
         }else if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_ERC20)){
-            tvCurrencyBalance.setText(DataReshape.doubleBig(walletBtcInfo.getCoin_totalAmount(), 4, 4));
+            tvCurrencyBalance.setText(DataReshape.doubleAll(walletBtcInfo.getCoin_totalAmount(), 6));
         }
         UserInformation userInformation = UserInfoManager.getUserInfo();
         if (userInformation.getFiatUnit().equals(Constants.FIAT_USD)) {

@@ -36,6 +36,7 @@ import com.tianqi.baselib.utils.display.CodeEncoder;
 import com.tianqi.baselib.utils.display.ToastUtil;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import butterknife.BindView;
@@ -107,29 +108,31 @@ public class ExportKeystoreActivity extends BaseActivity {
 
         mainCoinFrCoinId = CoinInfoManager.getMainCoinFrCoinId(wallet_name);
         //一般在创建钱包的时候，都已经存储了keystore，如果没有keystore就自己再生成一遍。
-        if (TextUtils.isEmpty(mainCoinFrCoinId.getKeystoreStr())){
-            Observable.create((ObservableOnSubscribe<String>) emitter -> {
-                emitter.onNext(mainCoinFrCoinId.getPrivateKey());
-            }).map(response -> {
-                try {
-                    EthECKeyPair ethECKeyPair=new EthECKeyPair(HexUtils.fromHex(mainCoinFrCoinId.getPrivateKey()));
-                    KeyStoreFile light = KeyStore.createLight(wallet_psd,  ethECKeyPair);
-                    String keystore_str=light.toString();
-                    mainCoinFrCoinId.setKeystoreStr(keystore_str);
-                    CoinInfoManager.insertOrUpdate(mainCoinFrCoinId);
-                    return keystore_str;
-                } catch (ValidationException e) {
-                    e.printStackTrace();
-                } catch (CipherException e) {
-                    e.printStackTrace();
-                }
-                return Constant.HTTP_ERROR;
-            }).compose(RxHelper.pool_main())
-                    .subscribe(baseEntity -> {
-                        tvCoinPrivateKey.setText(baseEntity);
-                    });
-        }else {
-            tvCoinPrivateKey.setText(mainCoinFrCoinId.getKeystoreStr());
+        if (mainCoinFrCoinId!=null){
+            if (mainCoinFrCoinId.getKeystoreStr()==null||TextUtils.isEmpty(mainCoinFrCoinId.getKeystoreStr())){
+                Observable.create((ObservableOnSubscribe<String>) emitter -> {
+                    emitter.onNext(mainCoinFrCoinId.getPrivateKey());
+                }).map(response -> {
+                    try {
+                        EthECKeyPair ethECKeyPair=new EthECKeyPair(HexUtils.fromHex(mainCoinFrCoinId.getPrivateKey()));
+                        KeyStoreFile light = KeyStore.createLight(wallet_psd,  ethECKeyPair);
+                        String keystore_str=light.toString();
+                        mainCoinFrCoinId.setKeystoreStr(keystore_str);
+                        CoinInfoManager.insertOrUpdate(mainCoinFrCoinId);
+                        return keystore_str;
+                    } catch (ValidationException e) {
+                        e.printStackTrace();
+                    } catch (CipherException e) {
+                        e.printStackTrace();
+                    }
+                    return Constant.HTTP_ERROR;
+                }).compose(RxHelper.pool_main())
+                        .subscribe(baseEntity -> {
+                            tvCoinPrivateKey.setText(baseEntity);
+                        });
+            }else {
+                tvCoinPrivateKey.setText(mainCoinFrCoinId.getKeystoreStr());
+            }
         }
 
         Bitmap qrCodeBitmap = CodeEncoder.createImage(mainCoinFrCoinId.getKeystoreStr(), ivShowKeyQr.getLayoutParams().width, ivShowKeyQr.getLayoutParams().height, null);
@@ -180,7 +183,7 @@ public class ExportKeystoreActivity extends BaseActivity {
     }
 
     private void getToolBar() {
-        toolbarTitle.setText(R.string.tittle_export_private_key);
+        toolbarTitle.setText(R.string.tittle_export_keystore);
         toolbar.setNavigationOnClickListener(v -> {
             finish();//返回
         });

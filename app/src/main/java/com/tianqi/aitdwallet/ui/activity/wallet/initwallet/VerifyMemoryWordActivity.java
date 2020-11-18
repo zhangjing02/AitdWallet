@@ -273,15 +273,12 @@ public class VerifyMemoryWordActivity extends BaseActivity {
         }
 
         for (int i = 0; i < targetLength; i++) {
-
             // 取出一个随机角标
             int r = (int) (Math.random() * requList.size());
             list.add(requList.get(r));
 
             // 移除已经取过的值
             requList.remove(r);
-
-
         }
 
         return list;

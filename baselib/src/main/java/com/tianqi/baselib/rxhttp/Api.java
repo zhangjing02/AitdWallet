@@ -125,5 +125,11 @@ public interface Api {
     @GET("/vipapi/eth/address/tokentrans/{eth_address}/{contract_address}/{page}?")
     Observable<BaseEntity<List<GetErc20TxRecordBean>>> getErc20TxRecord(@Path("eth_address") String eth_address, @Path("contract_address") String contract_address ,
                                                                         @Path("page") String page , @QueryMap Map<String, Object> map);
+    /**
+     *  btc的广播交易。
+     *
+     */
+    @POST("WalletAdmin/app/new/list?")
+    Observable<BaseEntity<Object>> getVersionList(@QueryMap Map<String, Object> map1);
 
 }

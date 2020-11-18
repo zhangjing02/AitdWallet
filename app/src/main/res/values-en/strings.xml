@@ -261,7 +261,7 @@
 	<string name="text_copy_keystore__notice">Copy and paste the contents of the ETH Wallet KeyStore file into the input box, or enter it by scanning the Keystore QR code.</string>
 	<string name="notice_address_error">wrong address</string>
 	<string name="notice_balance_not_enough">Balance shortfall</string>
-	<string name="notice_eth_amout_not_enouth">The eth balance is not enough support contract transfer</string>
+	<string name="notice_eth_amount_not_enough">The eth balance is not enough support contract transfer</string>
 	<string name="btn_change_safe_psd_text">Change safe password</string>
 	<string name="tittle_safe_center">Safe Center</string>
 	<string name="tittle_change_safe_psd">Change Safe Password</string>
@@ -273,4 +273,20 @@
 	<string name="tittle_create_new_address">Create Address</string>
 	<string name="notice_input_address_name">Please enter a name</string>
 	<string name="notice_input_address_content">Please enter the address</string>
+    <string name="btn_delete_address_text">Delete</string>
+	<string name="notice_do_not_repeat">Please do not repeat</string>
+	<string name="tittle_about_us_text">About Us</string>
+	<string name="text_version_name_tag">Version Code：</string>
+	<string name="text_version_log_tag">Version Log</string>
+	<string name="text_website_tag">Website</string>
+	<string name="text_email_tag">Email</string>
+	<string name="text_twitter_tag">Twitter</string>
+	<string name="text_wechat_tag">Wechat</string>
+	<string name="tittle_version_log_text">Version Log</string>
+    <string name="tittle_aitd_slogan_text">AITD Safe</string>
+	<string name="text_open_test">Open Test</string>
+	<string name="text_dialog_del_address_content">Sure to delete the address？</string>
+	<string name="notice_address_length_error">Address length error</string>
+	<string name="notice_address_format_error">Address format error</string>
+	<string name="notice_amount_too_little">The amount is too small</string>
 </resources>

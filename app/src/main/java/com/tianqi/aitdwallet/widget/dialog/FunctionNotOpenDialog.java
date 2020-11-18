@@ -18,7 +18,6 @@ import butterknife.ButterKnife;
 
 public class FunctionNotOpenDialog extends Dialog {
 
-
     @BindView(R.id.iv_shot_warning)
     ImageView ivShotWarning;
     @BindView(R.id.tv_shot_warning_tittle)

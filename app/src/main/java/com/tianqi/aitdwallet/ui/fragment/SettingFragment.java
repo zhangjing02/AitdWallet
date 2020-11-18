@@ -8,7 +8,9 @@ import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 
 import com.tianqi.aitdwallet.R;
-import com.tianqi.aitdwallet.ui.activity.address.CreateContactsAddressActivity;
+import com.tianqi.aitdwallet.ui.activity.address.ContactsAddressManageActivity;
+import com.tianqi.aitdwallet.ui.activity.setting.AboutUsActivity;
+import com.tianqi.aitdwallet.ui.activity.setting.InviteFriendActivity;
 import com.tianqi.aitdwallet.ui.activity.setting.SafeCenterActivity;
 import com.tianqi.aitdwallet.ui.activity.setting.SystemSettingActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.setting.WalletManageActivity;
@@ -70,12 +72,14 @@ public class SettingFragment extends BaseFragment {
                 startActivity(intent);
                 break;
             case R.id.tv_address_manage:
-                intent=new Intent(getActivity(), CreateContactsAddressActivity.class);
+                intent=new Intent(getActivity(), ContactsAddressManageActivity.class);
                 startActivity(intent);
                 break;
             case R.id.tv_my_message:
                 break;
             case R.id.tv_invite_friend:
+                intent=new Intent(getActivity(), InviteFriendActivity.class);
+                startActivity(intent);
                 break;
             case R.id.tv_safe_center:
                 intent=new Intent(getActivity(), SafeCenterActivity.class);
@@ -88,8 +92,8 @@ public class SettingFragment extends BaseFragment {
 //                startActivity(intent);
                 break;
             case R.id.tv_about_me:
-//                intent=new Intent(getActivity(), BtcTransTestActivity.class);
-//                startActivity(intent);
+                intent=new Intent(getActivity(), AboutUsActivity.class);
+                startActivity(intent);
                 break;
         }
     }

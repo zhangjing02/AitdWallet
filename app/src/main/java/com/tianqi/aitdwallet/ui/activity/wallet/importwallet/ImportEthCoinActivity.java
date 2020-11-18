@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -49,6 +50,7 @@ import com.tianqi.baselib.dbManager.WalletInfoManager;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
 import com.tianqi.baselib.utils.ButtonUtils;
 import com.tianqi.baselib.utils.Constant;
+import com.tianqi.baselib.utils.LogUtil;
 import com.tianqi.baselib.utils.display.LoadingDialogUtils;
 import com.tianqi.baselib.utils.display.ToastUtil;
 import com.tianqi.baselib.utils.eventbus.EventMessage;
@@ -151,7 +153,7 @@ public class ImportEthCoinActivity extends BaseActivity {
                     gvMnemonicWord.setVisibility(View.GONE);
                     etInputKey.setHint(R.string.input_private_key_hint);
                     etInputKey.setText("");
-
+                    etKeystorePsd.setText("");
                     layoutImportKeystoreNotice.setVisibility(View.GONE);
                     tvImportKeystoreNotice.setVisibility(View.GONE);
                     etKeystorePsd.setVisibility(View.GONE);
@@ -171,6 +173,7 @@ public class ImportEthCoinActivity extends BaseActivity {
                     gvMnemonicWord.setVisibility(View.VISIBLE);
                     etInputKey.setHint(R.string.input_mnemonic_word_hint);
                     etInputKey.setText("");
+                    etKeystorePsd.setText("");
 
                     layoutImportKeystoreNotice.setVisibility(View.GONE);
                     tvImportKeystoreNotice.setVisibility(View.GONE);
@@ -315,7 +318,7 @@ public class ImportEthCoinActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.btn_collect, R.id.btn_import_wallet, R.id.tv_explain_private_key, R.id.tv_service_privacy_terms})
+    @OnClick({R.id.btn_collect, R.id.btn_import_wallet, R.id.tv_explain_private_key, R.id.tv_service_privacy_terms,R.id.iv_psd_show})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_collect:
@@ -338,6 +341,9 @@ public class ImportEthCoinActivity extends BaseActivity {
                 }
                 ExplainPrivateKeyDialog shotNoticeDialog = new ExplainPrivateKeyDialog(this, R.style.MyDialog2);
                 shotNoticeDialog.show();
+                break;
+            case R.id.iv_psd_show:
+                showOrHidePsd(etKeystorePsd,ivPsdShow);
                 break;
             case R.id.btn_import_wallet:
                 if (ButtonUtils.isFastDoubleClick()) {
@@ -423,7 +429,9 @@ public class ImportEthCoinActivity extends BaseActivity {
             });
             coinInfo.setCoin_name(Constant.TRANSACTION_COIN_NAME_ETH);
             coinInfo.setCoin_type(Constant.COIN_BIP_TYPE_ETH);
-            coinInfo.setKeystoreStr(etInputKey.getText().toString());
+            if (select_index==TITTLE_KEYSTORE){
+                coinInfo.setKeystoreStr(etInputKey.getText().toString());
+            }
             coinInfo.setAlias_name(Constant.TRANSACTION_COIN_NAME_ETH);
             coinInfo.setResourceId(R.mipmap.ic_circle_eth);
             coinInfo.setPublicKey(master.getPublicKey());
@@ -509,5 +517,23 @@ public class ImportEthCoinActivity extends BaseActivity {
         WalletInfoManager.insertOrUpdate(walletInfo);
         Log.i("tttttttttttttt", "createWalletInfo: 002我们看写入的钱包明细"+walletInfo.toString());
         return walletInfo;
+    }
+
+    /**
+     * 显示隐藏密码
+     *
+     * @param editText  需要显示的edittext控件，
+     * @param imageView 需要点击的眼睛图标。
+     */
+    public void showOrHidePsd(EditText editText,  ImageView imageView) {
+        LogUtil.d("ttttttt", InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD + "--showOrHidePsd: 键盘" + editText.getInputType());
+        if (editText.getInputType() != InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) {
+            imageView.setImageResource(R.mipmap.ic_open_eye);
+            editText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        } else {
+            imageView.setImageResource(R.mipmap.ic_close_eye);
+            editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        }
+        editText.setSelection(editText.getText().toString().trim().length());
     }
 }

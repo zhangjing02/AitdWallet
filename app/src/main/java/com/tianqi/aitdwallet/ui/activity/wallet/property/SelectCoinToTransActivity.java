@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.adapter.recycle_adapter.SelectCoinAdapter;
 import com.tianqi.aitdwallet.ui.activity.wallet.btc.BitcoinTransactionActivity002;
+import com.tianqi.aitdwallet.ui.activity.wallet.eth.EthTransactionActivity;
+import com.tianqi.aitdwallet.ui.activity.wallet.usdt.UsdtErc20TransactionActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.usdt.UsdtTransactionActivity002;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.baselib.base.BaseActivity;
@@ -78,6 +80,16 @@ public class SelectCoinToTransActivity extends BaseActivity {
                     finish();
                 } else if (mMessageBeans.get(position).getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_OMNI)) {
                     Intent intent = new Intent(this, UsdtTransactionActivity002.class);
+                    intent.putExtra(Constants.TRANSACTION_COIN_ADDRESS, mMessageBeans.get(position).getCoin_address());
+                    startActivity(intent);
+                    finish();
+                }else if (mMessageBeans.get(position).getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_ETH)) {
+                    Intent intent = new Intent(this, EthTransactionActivity.class);
+                    intent.putExtra(Constants.TRANSACTION_COIN_ADDRESS, mMessageBeans.get(position).getCoin_address());
+                    startActivity(intent);
+                    finish();
+                }else if (mMessageBeans.get(position).getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_ERC20)) {
+                    Intent intent = new Intent(this, UsdtErc20TransactionActivity.class);
                     intent.putExtra(Constants.TRANSACTION_COIN_ADDRESS, mMessageBeans.get(position).getCoin_address());
                     startActivity(intent);
                     finish();

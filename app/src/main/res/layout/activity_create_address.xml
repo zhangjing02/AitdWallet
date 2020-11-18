@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".ui.activity.address.CreateContactsAddressActivity">
+    tools:context=".ui.activity.address.ContactsAddressManageActivity">
 
     <include
         android:id="@+id/toolbar_layout"
@@ -17,6 +17,7 @@
         android:id="@+id/lv_coin_address"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:divider="@null"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_layout"
         app:layout_constraintBottom_toBottomOf="parent"/>
 

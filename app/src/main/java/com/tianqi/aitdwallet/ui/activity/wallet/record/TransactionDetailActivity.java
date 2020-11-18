@@ -175,7 +175,7 @@ public class TransactionDetailActivity extends BaseActivity {
                                         }
                                     }
 
-                                    SpannableString spannableString = new SpannableString(DataReshape.doubleBig(receive_value,8) +" "+ txFrId.getUnit());
+                                    SpannableString spannableString = new SpannableString(DataReshape.doubleIntBig(receive_value,8) +" "+ txFrId.getUnit());
                                     //  SpannableString spannableString = new SpannableString(34.256478222555+" BTC");
                                     ForegroundColorSpan colorSpan = new ForegroundColorSpan(getResources().getColor(R.color.textLightGrey));
                                     spannableString.setSpan(new AbsoluteSizeSpan(DensityUtil.dp2px(10.0f)), spannableString.toString().indexOf(txFrId.getUnit()), spannableString.length(),
@@ -205,12 +205,15 @@ public class TransactionDetailActivity extends BaseActivity {
                                     tvReceiveAddress.setText(mainCoinFrCoinId.getCoin_address());
                                     //  double receive_value=Double.valueOf(data.getInputs().get(0).getValue());
                                     double receive_value=0;
-                                    for (int i = 0; i <data.getInputs().size() ; i++) {
-                                        if (!data.getInputs().get(i).getAddress().equals(mainCoinFrCoinId.getCoin_address())){
-                                            receive_value=receive_value+Double.valueOf(data.getInputs().get(i).getValue());
+                                    for (int i = 0; i <data.getOutputs().size() ; i++) {
+                                        if (data.getOutputs().get(i).getAddress()!=null){
+                                            if (data.getOutputs().get(i).getAddress().equals(mainCoinFrCoinId.getCoin_address())){
+                                                receive_value=receive_value+Double.valueOf(data.getOutputs().get(i).getValue());
+                                            }
                                         }
+
                                     }
-                                    SpannableString spannableString = new SpannableString(DataReshape.doubleBig(receive_value,8) +" "+ txFrId.getUnit());
+                                    SpannableString spannableString = new SpannableString(DataReshape.doubleIntBig(receive_value,8) +" "+ txFrId.getUnit());
                                     //  SpannableString spannableString = new SpannableString(34.256478222555+" BTC");
                                     ForegroundColorSpan colorSpan = new ForegroundColorSpan(getResources().getColor(R.color.textLightGrey));
                                     spannableString.setSpan(new AbsoluteSizeSpan(DensityUtil.dp2px(10.0f)), spannableString.toString().indexOf(txFrId.getUnit()), spannableString.length(),
@@ -257,7 +260,7 @@ public class TransactionDetailActivity extends BaseActivity {
                     break;
             }
 
-            tvTransactionAmount.setText(DataReshape.doubleBig(txFrId.getAmount(),8));
+            tvTransactionAmount.setText(DataReshape.doubleIntBig(txFrId.getAmount(),8));
             if (userInformation.getFiatUnit().equals(Constants.FIAT_USD)) {
                 tvTransactionFiat.setText("≈ ¥ " + DataReshape.double2int(wallet_btc.getCoin_USDPrice() * txFrId.getAmount(),2));
             } else {

@@ -23,8 +23,11 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppThemeTrans">
-        <activity android:name=".ui.activity.address.CreateNewAddressActivity"></activity>
-        <activity android:name=".ui.activity.address.CreateContactsAddressActivity" />
+        <activity android:name=".ui.activity.setting.InviteFriendActivity"></activity>
+        <activity android:name=".ui.activity.setting.VersionLogActivity" />
+        <activity android:name=".ui.activity.setting.AboutUsActivity" />
+        <activity android:name=".ui.activity.address.CreateNewAddressActivity" />
+        <activity android:name=".ui.activity.address.ContactsAddressManageActivity" />
         <activity android:name=".ui.activity.wallet.eth.EthTransactionTestActivity" />
         <activity android:name=".ui.activity.wallet.property.SelectCoinToTransActivity" />
         <activity android:name=".ui.activity.setting.SafeCenterActivity" />
