@@ -77,10 +77,10 @@ public class ExportPrivateKeyActivity extends BaseActivity {
     protected void initView() {
         titles = new String[]{getString(R.string.tittle_private_key_text), getString(R.string.tittle_qr_code_text)};
         getToolBar();
-        String wallet_name = getIntent().getStringExtra(Constants.TRANSACTION_COIN_NAME);
+        String coin_id = getIntent().getStringExtra(Constants.INTENT_PUT_COIN_ID);
 
-        Log.i("tttttttttt", "initView: 拿到的名字是？"+wallet_name);
-        mainCoinFrCoinId = CoinInfoManager.getMainCoinFrCoinId(wallet_name);
+        Log.i("tttttttttt", "initView: 拿到的名字是？"+coin_id);
+        mainCoinFrCoinId = CoinInfoManager.getMainCoinFrCoinId(coin_id);
         tvCoinPrivateKey.setText(mainCoinFrCoinId.getPrivateKey());
         Bitmap qrCodeBitmap = CodeEncoder.createImage(mainCoinFrCoinId.getPrivateKey(), ivShowKeyQr.getLayoutParams().width, ivShowKeyQr.getLayoutParams().height, null);
         ivShowKeyQr.setImageBitmap(qrCodeBitmap);
@@ -117,7 +117,6 @@ public class ExportPrivateKeyActivity extends BaseActivity {
                         btnKeyCopy.setVisibility(View.GONE);
 
                         break;
-
                 }
             }
 

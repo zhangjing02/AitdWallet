@@ -103,10 +103,10 @@ public class ExportKeystoreActivity extends BaseActivity {
     protected void initView() {
         titles = new String[]{getString(R.string.tittle_keystore_text), getString(R.string.tittle_qr_code_text)};
         getToolBar();
-        String wallet_name = getIntent().getStringExtra(Constants.TRANSACTION_COIN_NAME);
+        String coin_id = getIntent().getStringExtra(Constants.INTENT_PUT_COIN_ID);
         wallet_psd = getIntent().getStringExtra(Constants.INTENT_PUT_COIN_PASSWORD);
 
-        mainCoinFrCoinId = CoinInfoManager.getMainCoinFrCoinId(wallet_name);
+        mainCoinFrCoinId = CoinInfoManager.getMainCoinFrCoinId(coin_id);
         //一般在创建钱包的时候，都已经存储了keystore，如果没有keystore就自己再生成一遍。
         if (mainCoinFrCoinId!=null){
             if (mainCoinFrCoinId.getKeystoreStr()==null||TextUtils.isEmpty(mainCoinFrCoinId.getKeystoreStr())){
@@ -167,7 +167,6 @@ public class ExportKeystoreActivity extends BaseActivity {
                         layoutExportKeyNotice.setVisibility(View.GONE);
                         tvCoinPrivateKey.setVisibility(View.GONE);
                         btnKeyCopy.setVisibility(View.GONE);
-
                         break;
                 }
             }

@@ -152,13 +152,14 @@ public class VerifySecurityPsdActivity extends BaseActivity {
                         startActivity(intent);
                     } else if (intent_target.equals(getString(R.string.tittle_export_private_key))) {
                         Intent intent = new Intent(this, ExportPrivateKeyActivity.class);
-                        String wallet_name = getIntent().getStringExtra(Constants.TRANSACTION_COIN_NAME);
-                        intent.putExtra(Constants.TRANSACTION_COIN_NAME, wallet_name);
+                       // String wallet_name = getIntent().getStringExtra(Constants.TRANSACTION_COIN_NAME);
+                        String coin_id = getIntent().getStringExtra(Constants.INTENT_PUT_COIN_ID);
+                        intent.putExtra(Constants.INTENT_PUT_COIN_ID, coin_id);
                         startActivity(intent);
                     } else if (intent_target.equals(getString(R.string.tittle_export_keystore))) {
                         Intent intent = new Intent(this, ExportKeystoreActivity.class);
-                        String wallet_name = getIntent().getStringExtra(Constants.TRANSACTION_COIN_NAME);
-                        intent.putExtra(Constants.TRANSACTION_COIN_NAME, wallet_name);
+                        String coin_id = getIntent().getStringExtra(Constants.INTENT_PUT_COIN_ID);
+                        intent.putExtra(Constants.INTENT_PUT_COIN_ID, coin_id);
                         intent.putExtra(Constants.INTENT_PUT_COIN_PASSWORD, etInputPassword.getText().toString());
                         startActivity(intent);
                     } else if (intent_target.equals(getString(R.string.tittle_back_up_mnemonic))) {
