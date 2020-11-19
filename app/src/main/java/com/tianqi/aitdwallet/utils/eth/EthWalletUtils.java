@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tianqi.aitdwallet.bean.BaibeiWallet;
+import com.tianqi.baselib.utils.LogUtil;
 
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.crypto.ChildNumber;
@@ -86,7 +87,7 @@ public class EthWalletUtils {
 
         String fileName = getWalletFileName(walletFile);
         File destination = new File(destinationDirectory, fileName);
-        Log.i("钱包地址 = ", "generateWalletFile: 钱包地址 = " + walletFile.getAddress());
+        LogUtil.i("钱包地址 = ", "generateWalletFile: 钱包地址 = " + walletFile.getAddress());
 
         objectMapper.writeValue(destination, walletFile);
 
@@ -104,7 +105,7 @@ public class EthWalletUtils {
      */
     public static Bip39Wallet generateBip39Wallet(String password, File destinationDirectory)
             throws CipherException, IOException {
-        Log.i("TAG", "generateBip39Wallet:钱包39生成的地址如下 ");
+        LogUtil.i("TAG", "generateBip39Wallet:钱包39生成的地址如下 ");
         byte[] initialEntropy = new byte[16];
         secureRandom.nextBytes(initialEntropy);
 
@@ -113,7 +114,7 @@ public class EthWalletUtils {
         mnemonic = "again fossil all tired ticket hurry gown modify submit minimum plate mountain";
         byte[] seed = MnemonicUtils.generateSeed(mnemonic, null);
         ECKeyPair privateKey = ECKeyPair.create(sha256(seed));
-        Log.i("Bip39Wallet", "generateBip39Wallet: getPrivateKey = " + privateKey.getPrivateKey()
+        LogUtil.i("Bip39Wallet", "generateBip39Wallet: getPrivateKey = " + privateKey.getPrivateKey()
                 + "\ngetPublicKey = " + privateKey.getPublicKey());
 
         String walletFile = generateWalletFile(password, privateKey, destinationDirectory, false);
@@ -124,7 +125,7 @@ public class EthWalletUtils {
 
     public static Bip39Wallet generateBip44Wallet(String password, File destinationDirectory)
             throws CipherException, IOException {
-        Log.i("TAG", "generateBip44Wallet:钱包44生成的地址如下 ");
+        LogUtil.i("TAG", "generateBip44Wallet:钱包44生成的地址如下 ");
         byte[] initialEntropy = new byte[16];
         secureRandom.nextBytes(initialEntropy);
 
@@ -139,7 +140,7 @@ public class EthWalletUtils {
         DeterministicKey rootPrivateKey = HDKeyDerivation.createMasterPrivateKey(seed);
         // 4. 根私钥进行 priB58编码,得到测试网站上显示的数据
         String priv = rootPrivateKey.serializePrivB58(params);
-        Log.i("TAG","BIP32 Extended Private Key:" + priv);
+        LogUtil.i("TAG","BIP32 Extended Private Key:" + priv);
         // 5. 生成 HD 钱包 , 由根私钥
         DeterministicHierarchy dh = new DeterministicHierarchy(rootPrivateKey);
         // 6. 定义父路径
@@ -197,7 +198,7 @@ public class EthWalletUtils {
 
 //        ECKeyPair privateKey = ECKeyPair.create(sha256(seed));
         ECKeyPair privateKey = ECKeyPair.create(privateKeyByte);
-        Log.i("Bip44Wallet", "generateBip44Wallet: getPrivateKey = " + privateKey.getPrivateKey()
+        LogUtil.i("Bip44Wallet", "generateBip44Wallet: getPrivateKey = " + privateKey.getPrivateKey()
                 + "\ngetPublicKey = " + privateKey.getPublicKey());
 
         String walletFile = generateWalletFile(password, privateKey, destinationDirectory, false);
@@ -215,7 +216,7 @@ public class EthWalletUtils {
 //        byte[] seed = MnemonicUtils.generateSeed(mnemonic, password);
         byte[] seed = MnemonicUtils.generateSeed(mnemonic, null);
         ECKeyPair privateKey = ECKeyPair.create(sha256(seed));
-        Log.i("Bip39Wallet", "generateBip39Wallet: getPrivateKey = " + privateKey.getPrivateKey()
+        LogUtil.i("Bip39Wallet", "generateBip39Wallet: getPrivateKey = " + privateKey.getPrivateKey()
                 + "\ngetPublicKey = " + privateKey.getPublicKey());
         WalletFile walletFile;
         walletFile = Wallet.createLight(password, privateKey);
@@ -231,7 +232,7 @@ public class EthWalletUtils {
 //        byte[] seed = MnemonicUtils.generateSeed(mnemonic, password);
         byte[] seed = MnemonicUtils.generateSeed(mnemonic, null);
         ECKeyPair privateKey = ECKeyPair.create(sha256(seed));
-        Log.i("Bip39Wallet", "generateBip39Wallet: getPrivateKey = " + privateKey.getPrivateKey()
+        LogUtil.i("Bip39Wallet", "generateBip39Wallet: getPrivateKey = " + privateKey.getPrivateKey()
                 + "\ngetPublicKey = " + privateKey.getPublicKey());
         WalletFile walletFile;
         walletFile = Wallet.createLight(password, privateKey);

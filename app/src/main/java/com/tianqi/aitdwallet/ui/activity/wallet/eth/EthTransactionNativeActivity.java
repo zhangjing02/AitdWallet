@@ -45,6 +45,7 @@ import com.tianqi.baselib.rxhttp.HttpClientUtil;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
 import com.tianqi.baselib.rxhttp.bean.GetSimpleRpcBean;
 import com.tianqi.baselib.utils.Constant;
+import com.tianqi.baselib.utils.LogUtil;
 import com.tianqi.baselib.utils.digital.AESCipher;
 import com.tianqi.baselib.utils.digital.DataReshape;
 import com.tianqi.baselib.utils.display.LoadingDialogUtils;
@@ -271,7 +272,7 @@ public class EthTransactionNativeActivity extends BaseActivity {
                         mLoadDialog.dismiss();
                     }
                     if (baseEntity != null && !baseEntity.equals(Constant.HTTP_ERROR)) {
-                        Log.i(TAG, baseEntity + "createOutputApi: 005打印线程执行情况" + Thread.currentThread().getName());
+                        LogUtil.i(TAG, baseEntity + "createOutputApi: 005打印线程执行情况" + Thread.currentThread().getName());
                         ScreenUtils.hideKeyboard(this);
                         Gson gson = new Gson();
                         GetSimpleRpcBean getCreateTransactionBean = gson.fromJson(baseEntity, GetSimpleRpcBean.class);
@@ -337,7 +338,7 @@ public class EthTransactionNativeActivity extends BaseActivity {
         total_params.add(send_params);
         listunspentParams.put("params", total_params);
 
-        Log.i(TAG, "createTransaction: 我们看请求的参数是多少？" + new Gson().toJson(listunspentParams));
+        LogUtil.i(TAG, "createTransaction: 我们看请求的参数是多少？" + new Gson().toJson(listunspentParams));
 
         Response response = HttpClientUtil.getInstance().postBtcJson(new Gson().toJson(listunspentParams));
         String tx_hex = null;
@@ -346,7 +347,7 @@ public class EthTransactionNativeActivity extends BaseActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Log.i(TAG, "createTransaction: 我们看得到的交易hex是？" + tx_hex);
+        LogUtil.i(TAG, "createTransaction: 我们看得到的交易hex是？" + tx_hex);
         GetSimpleRpcBean simpleRpcBean = new Gson().fromJson(tx_hex, GetSimpleRpcBean.class);
         return simpleRpcBean.getResult();
     }
@@ -428,7 +429,7 @@ public class EthTransactionNativeActivity extends BaseActivity {
         params.add(0);//交易签名数组
         listunspentParams.put("params", params);
 
-        Log.i(TAG, "makeOutputApiParams: 002我们拼接的请求体是？" + new Gson().toJson(listunspentParams));
+        LogUtil.i(TAG, "makeOutputApiParams: 002我们拼接的请求体是？" + new Gson().toJson(listunspentParams));
         return new Gson().toJson(listunspentParams);
     }
     /**

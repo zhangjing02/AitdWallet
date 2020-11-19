@@ -15,6 +15,7 @@ import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.utils.Constant;
+import com.tianqi.baselib.utils.LogUtil;
 import com.tianqi.baselib.utils.display.GlideUtils;
 
 import java.util.List;
@@ -38,7 +39,7 @@ public class WalletManageAdapter extends BaseQuickAdapter<CoinInfo, BaseViewHold
         TextView tv_add_coin = helper.getView(R.id.tv_add_coin);
         RelativeLayout layout_add_coin = helper.getView(R.id.layout_add_coin);
 
-        Log.i(TAG, "convert: 我们看每一条数据是？"+listBean.toString());
+        LogUtil.i(TAG, "convert: 我们看每一条数据是？"+listBean.toString());
         if (listBean.getWallet_id()!=null&&!listBean.getWallet_id().equals(Constants.COIN_NULL)){
             ivWallet.setVisibility(View.VISIBLE);
             tvWalletName.setVisibility(View.VISIBLE);

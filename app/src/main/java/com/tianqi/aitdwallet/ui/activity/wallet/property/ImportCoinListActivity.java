@@ -28,6 +28,7 @@ import com.tianqi.baselib.dbManager.CoinInfoManager;
 import com.tianqi.baselib.dbManager.UserInfoManager;
 import com.tianqi.baselib.dbManager.WalletInfoManager;
 import com.tianqi.baselib.utils.Constant;
+import com.tianqi.baselib.utils.LogUtil;
 import com.tianqi.baselib.utils.digital.DataReshape;
 import com.tianqi.baselib.utils.eventbus.EventMessage;
 import com.zhy.magicviewpager.transformer.ScaleInTransformer;
@@ -165,7 +166,7 @@ public class ImportCoinListActivity extends BaseActivity {
             @Override
             public void onPageSelected(int position) {
                 List<CoinInfo> coinFrName = CoinInfoManager.getNoHiddenSpecHdCoinInfo(mList.get(position).getCoin_name());
-                Log.i(TAG, mList.get(position).getCoin_name()+"001initView:" + coinFrName.size());
+                LogUtil.i(TAG, mList.get(position).getCoin_name()+"001initView:" + coinFrName.size());
                 select_index = position;
                 toolbarTitle.setText(mList.get(position).getCoin_name());
 
@@ -175,7 +176,7 @@ public class ImportCoinListActivity extends BaseActivity {
             }
             @Override
             public void onPageScrollStateChanged(int state) {
-                Log.i(TAG, "我们看点击了哪个？" + state);
+                LogUtil.i(TAG, "我们看点击了哪个？" + state);
             }
         });
 

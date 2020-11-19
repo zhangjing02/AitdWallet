@@ -24,6 +24,7 @@ import com.tianqi.baselib.dao.WalletInfo;
 import com.tianqi.baselib.dbManager.CoinInfoManager;
 import com.tianqi.baselib.dbManager.UserInfoManager;
 import com.tianqi.baselib.utils.Constant;
+import com.tianqi.baselib.utils.LogUtil;
 import com.tianqi.baselib.utils.digital.DataReshape;
 import com.tianqi.baselib.utils.display.GlideUtils;
 import com.tianqi.baselib.widget.ExpandableLayout;
@@ -84,7 +85,7 @@ public class HomeWalletAdapter extends BaseQuickAdapter<WalletInfo, BaseViewHold
             String wallet_id02 = listBean.getWallet_id();
             List<CoinInfo> coinFrWalletIds02 = CoinInfoManager.getCoinFrWalletId(wallet_id02);
             List<CoinInfo> walletBtcInfo03 = CoinInfoManager.getCoinInfo();
-            Log.i(TAG, walletBtcInfo03.size()+"----convert: 我们看这个币种是多少？"+coinFrWalletIds02.size()+"我們查询的wallet_id是？"+wallet_id02);
+            LogUtil.i(TAG, walletBtcInfo03.size()+"----convert: 我们看这个币种是多少？"+coinFrWalletIds02.size()+"我們查询的wallet_id是？"+wallet_id02);
             if (coinFrWalletIds02.size() > 1) {  //如果大于一个币种，就展开显示。
                 if (expand_coin.isExpanded()) {
                     expand_coin.collapse();

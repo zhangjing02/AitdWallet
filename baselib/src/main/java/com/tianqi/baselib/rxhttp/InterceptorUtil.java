@@ -100,7 +100,7 @@ public class InterceptorUtil {
                 String unspent_url_str=request.toString();
                 String substring = unspent_url_str.substring(unspent_url_str.indexOf("unspent/btc/"), unspent_url_str.length());
                 String test_unspent_url="http://www.tokenview.com:8088/tq"+substring+"1/50";
-                Log.i(TAG, "tokenInterceptor: 我们看截取的内容是"+test_unspent_url);
+                LogUtil.i(TAG, "tokenInterceptor: 我们看截取的内容是"+test_unspent_url);
                 Request newRequest =request
                         .newBuilder()
                         .url(test_unspent_url)

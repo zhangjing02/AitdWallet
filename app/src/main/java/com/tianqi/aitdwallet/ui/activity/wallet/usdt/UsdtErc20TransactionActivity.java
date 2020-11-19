@@ -43,6 +43,7 @@ import com.tianqi.baselib.rxhttp.bean.GetErc20BalanceBean;
 import com.tianqi.baselib.rxhttp.bean.GetSimpleRpcBean;
 import com.tianqi.baselib.utils.ButtonUtils;
 import com.tianqi.baselib.utils.Constant;
+import com.tianqi.baselib.utils.LogUtil;
 import com.tianqi.baselib.utils.NetworkUtil;
 import com.tianqi.baselib.utils.digital.AESCipher;
 import com.tianqi.baselib.utils.digital.DataReshape;
@@ -157,14 +158,14 @@ public class UsdtErc20TransactionActivity extends BaseActivity {
         seekBarMinerCost.setMax(100);
         seekBarMinerCost.setProgress(15);
         walletInfo= WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_USDT_ERC20);
-        Log.i(TAG, walletInfo.getCoin_CNYPrice()+"------initView: 汇率是多少？"+walletInfo.getCoin_USDPrice());
+        LogUtil.i(TAG, walletInfo.getCoin_CNYPrice()+"------initView: 汇率是多少？"+walletInfo.getCoin_USDPrice());
         setMinerFeeText(0.003);
 
         seekBarMinerCost.setOnChangeListener(new CustomSeekBar.OnChangeListener() {
             @Override
             public void onProgressChanged(CustomSeekBar seekBar) {
                 int select_miner = (int) (38+seekBar.getProgress()*0.51f);
-                Log.i(TAG, seekBar.getProgress() + "onProgressChanged: 001我们计算的费用是？" + select_miner);
+                LogUtil.i(TAG, seekBar.getProgress() + "onProgressChanged: 001我们计算的费用是？" + select_miner);
                 miner_fee_single = select_miner;
                 setMinerFeeText(select_miner*GAS_LIMITS/1000000000f);
             }
@@ -226,12 +227,12 @@ public class UsdtErc20TransactionActivity extends BaseActivity {
                             for (int i = 0; i <data.size() ; i++) {
                                 if (data.get(i).getHash().equals(Constant.CONTRACT_ADDRESS)){
                                     erc20_balances=erc20_balances+Double.valueOf(data.get(i).getBalance())/Math.pow(10,Integer.valueOf(data.get(i).getTokenInfo().getD()));
-                                    Log.i(TAG, "onSuccess: 001我们看得到的数据是？"+erc20_balance);
+                                    LogUtil.i(TAG, "onSuccess: 001我们看得到的数据是？"+erc20_balance);
                                 }
                             }
                         }
                        erc20_balance =erc20_balances;
-                        Log.i(TAG, "onSuccess: 002我们看得到的数据是？"+erc20_balance);
+                        LogUtil.i(TAG, "onSuccess: 002我们看得到的数据是？"+erc20_balance);
                         account_balance=erc20_balance;
                         tvBalance.setText(DataReshape.doubleBig(erc20_balance,6)+"");
                     }
@@ -279,10 +280,10 @@ public class UsdtErc20TransactionActivity extends BaseActivity {
         tvBalance.setText(DataReshape.doubleBig(walletBtcFrAddress.getCoin_totalAmount(), 6));
         EthWalletManager.getInstance().loadWallet(this, walletBtcFrAddress, wallet -> {
             initWeb3j("http://192.168.1.16:8545");
-            Log.i(TAG, walletBtcFrAddress.getCoin_address()+"initData: 001我们看看加载出来的钱包是啥？");
+            LogUtil.i(TAG, walletBtcFrAddress.getCoin_address()+"initData: 001我们看看加载出来的钱包是啥？");
             if (walletBtcFrAddress.getCoin_address().substring(2).toLowerCase().equals(wallet.getAddress())){
                 mWalletFile=wallet;
-                Log.i(TAG, "initData: 002我们看看加载出来的钱包是啥？"+mWalletFile.getAddress());
+                LogUtil.i(TAG, "initData: 002我们看看加载出来的钱包是啥？"+mWalletFile.getAddress());
             }
         });
     }
@@ -345,7 +346,7 @@ public class UsdtErc20TransactionActivity extends BaseActivity {
                         String fiat_value;
                         UserInformation userInformation = UserInfoManager.getUserInfo();
                         double miner_fee_total=miner_fee_single*GAS_LIMITS/1000000000f;
-                        Log.i(TAG, eth_balance+"----onViewClicked: 002我们看看金额？"+miner_fee_total);
+                        LogUtil.i(TAG, eth_balance+"----onViewClicked: 002我们看看金额？"+miner_fee_total);
                         if (userInformation.getFiatUnit().equals(Constants.FIAT_USD)) {
                             fiat_value = DataReshape.doubleBig(miner_fee_total, 8) + " ≈$"
                                     + DataReshape.doubleBig(miner_fee_total * walletInfo.getCoin_USDPrice(), 2);
@@ -410,7 +411,7 @@ public class UsdtErc20TransactionActivity extends BaseActivity {
            // String amount = "123";
             BigDecimal value = Convert.toWei(etPaymentAmount.getText().toString(), Convert.Unit.MWEI);  //此处的数值，是为了除以6个0，因为精度是6.没有别的意思。
             //BigDecimal value = BigDecimal.valueOf(Long.valueOf(etPaymentAmount.getText().toString()));  //转账金额。
-            Log.i(TAG, to+"-------createTxToBroadcastApi: 我们计算的金额是多少？"+value);
+            LogUtil.i(TAG, to+"-------createTxToBroadcastApi: 我们计算的金额是多少？"+value);
 
             Function transfer = transfer(to, value.toBigInteger());
             ECKeyPair ecKeyPair = null;
@@ -432,7 +433,7 @@ public class UsdtErc20TransactionActivity extends BaseActivity {
         }).map(response -> {
             //把交易的hex，做签名处理。
             if (response != null&&!response.equals(Constant.HTTP_ERROR)) {
-                Log.i(TAG, "createTxToBroadcastApi: 看看签名如何？"+response);
+                LogUtil.i(TAG, "createTxToBroadcastApi: 看看签名如何？"+response);
                 //可以用btc的域名进行请求，请求参数换成eth的就行。
                 Response tx_response = HttpClientUtil.getInstance().postFormalEthJson(makeBroadcastTxParams002(response));
                 if (tx_response != null) {
@@ -451,7 +452,7 @@ public class UsdtErc20TransactionActivity extends BaseActivity {
                         mLoadDialog.dismiss();
                     }
                     if (baseEntity != null && !baseEntity.equals(Constant.HTTP_ERROR)) {
-                        Log.i(TAG, "createTxToBroadcastApi: 我们看交易成功后的id是？"+baseEntity);
+                        LogUtil.i(TAG, "createTxToBroadcastApi: 我们看交易成功后的id是？"+baseEntity);
                         ScreenUtils.hideKeyboard(this);
                         Gson gson = new Gson();
                         GetSimpleRpcBean getCreateTransactionBean = gson.fromJson(baseEntity, GetSimpleRpcBean.class);
@@ -485,7 +486,7 @@ public class UsdtErc20TransactionActivity extends BaseActivity {
 
                             new Handler().postDelayed(() -> {
                                 Intent intent = new Intent(this, TransactionRecordActivity.class);
-                                Log.i(TAG, walletBtcFrAddress.getCoin_name() + "createTxToBroadcastApi: 传过去的是啥？" + walletBtcFrAddress.getCoin_id());
+                                LogUtil.i(TAG, walletBtcFrAddress.getCoin_name() + "createTxToBroadcastApi: 传过去的是啥？" + walletBtcFrAddress.getCoin_id());
                                 intent.putExtra(Constants.TRANSACTION_COIN_NAME, walletBtcFrAddress.getCoin_name());
                                 intent.putExtra(Constants.TRANSACTION_COIN_ADDRESS, walletBtcFrAddress.getCoin_address());
                                 intent.putExtra(Constants.TRANSACTION_COIN_ID, walletBtcFrAddress.getCoin_id());
@@ -511,7 +512,7 @@ public class UsdtErc20TransactionActivity extends BaseActivity {
         params.add(transaction_hex);//交易签名数组
         // params.add(0);//交易签名数组
         listunspentParams.put("params", params);
-        Log.i(TAG, "makeOutputApiParams: 002我们拼接的请求体是？" + new Gson().toJson(listunspentParams));
+        LogUtil.i(TAG, "makeOutputApiParams: 002我们拼接的请求体是？" + new Gson().toJson(listunspentParams));
         return new Gson().toJson(listunspentParams);
     }
 
@@ -527,7 +528,7 @@ public class UsdtErc20TransactionActivity extends BaseActivity {
         // params.add(0);//交易签名数组
         listunspentParams.put("params", params);
 
-        Log.i(TAG, "makeOutputApiParams: 002我们拼接的请求体是？" + new Gson().toJson(listunspentParams));
+        LogUtil.i(TAG, "makeOutputApiParams: 002我们拼接的请求体是？" + new Gson().toJson(listunspentParams));
         return new Gson().toJson(listunspentParams);
     }
 
@@ -577,7 +578,7 @@ public class UsdtErc20TransactionActivity extends BaseActivity {
         BigInteger gasLimit = BigInteger.valueOf(GAS_LIMITS);
         String encodedFunction = FunctionEncoder.encode(function);
 
-        Log.i(TAG, walletBtcFrAddress.getCoin_address()+"------------execute: 我们看erc20的值是多少？"+encodedFunction);
+        LogUtil.i(TAG, walletBtcFrAddress.getCoin_address()+"------------execute: 我们看erc20的值是多少？"+encodedFunction);
 
         RawTransaction rawTransaction = RawTransaction.createTransaction(
                 nonce,

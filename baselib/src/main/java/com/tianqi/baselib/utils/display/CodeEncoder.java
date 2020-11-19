@@ -29,6 +29,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.tianqi.baselib.utils.LogUtil;
 
 import java.util.EnumMap;
 import java.util.Hashtable;
@@ -266,7 +267,7 @@ public final class CodeEncoder {
     public static Bitmap createLogoCode(String content,int widthAndHeight, Bitmap logoBitmap)
             throws WriterException {
 
-        Log.i("tttttttttttt", "createLogoCode: 我们自己的宽度是"+widthAndHeight);
+        LogUtil.i("tttttttttttt", "createLogoCode: 我们自己的宽度是"+widthAndHeight);
         int CODE_WIDTH = widthAndHeight;
         /**
          * LOGO宽度值,最大不能大于二维码20%宽度值,大于可能会导致二维码信息失效

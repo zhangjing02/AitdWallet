@@ -38,6 +38,7 @@ import com.tianqi.baselib.dbManager.UserInfoManager;
 import com.tianqi.baselib.dbManager.WalletInfoManager;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
 import com.tianqi.baselib.utils.Constant;
+import com.tianqi.baselib.utils.LogUtil;
 import com.tianqi.baselib.utils.digital.AESCipher;
 import com.tianqi.baselib.utils.display.GlideUtils;
 import com.tianqi.baselib.utils.rxtool.RxToolUtil;
@@ -315,7 +316,7 @@ public class CreateWalletActivity extends BaseActivity {
             }
         }
         //  coinInfo.setWalletLimit();  //不需要限制。
-        Log.i("WalletFragment", "insertBtcCoinInfo: 我们看插入的币种信息是？" + coinInfo.toString());
+        LogUtil.i("WalletFragment", "insertBtcCoinInfo: 我们看插入的币种信息是？" + coinInfo.toString());
         CoinInfoManager.insertOrUpdate(coinInfo);
     }
 

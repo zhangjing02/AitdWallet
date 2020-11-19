@@ -29,6 +29,8 @@ import android.view.WindowManager;
 
 import androidx.core.app.ActivityCompat;
 
+import com.tianqi.baselib.utils.LogUtil;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.lang.reflect.Field;
@@ -304,10 +306,10 @@ public class DeviceUtil {
         TelephonyManager telephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         int type = telephony.getPhoneType();
         if (type == TelephonyManager.PHONE_TYPE_NONE) {
-            Log.i(TAG,"Current device is Tablet!");
+            LogUtil.i(TAG,"Current device is Tablet!");
             return false;
         } else {
-            Log.i(TAG,"Current device is phone!");
+            LogUtil.i(TAG,"Current device is phone!");
             return true;
         }
     }

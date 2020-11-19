@@ -27,6 +27,7 @@ import com.tianqi.aitdwallet.bean.GetUtxoBean;
 import com.tianqi.baselib.rxhttp.HttpClientUtil;
 import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
+import com.tianqi.baselib.utils.LogUtil;
 
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Coin;
@@ -87,7 +88,7 @@ public class TestBtcActivity extends BaseActivity {
     Handler handler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
-            Log.i("tttttttttttt", "handleMessage: 主线程得到一定的回复" + msg);
+            LogUtil.i("tttttttttttt", "handleMessage: 主线程得到一定的回复" + msg);
 
         }
     };
@@ -206,9 +207,9 @@ public class TestBtcActivity extends BaseActivity {
                     System.out.println("Transaction will be forwarded after it confirms.");
 
 
-                    Log.i("tttttttttttttt", "onCoinsReceived: 001我们看收到了哪些东西呢？" + wallet.toString());
-                    Log.i("tttttttttttttt", "onCoinsReceived: 002我们看收到了哪些东西呢？" + tx.toString());
-                    Log.i("tttttttttttttt", "onCoinsReceived: 003我们看收到了哪些东西呢？" + newBalance.toString());
+                    LogUtil.i("tttttttttttttt", "onCoinsReceived: 001我们看收到了哪些东西呢？" + wallet.toString());
+                    LogUtil.i("tttttttttttttt", "onCoinsReceived: 002我们看收到了哪些东西呢？" + tx.toString());
+                    LogUtil.i("tttttttttttttt", "onCoinsReceived: 003我们看收到了哪些东西呢？" + newBalance.toString());
                     ListenableFuture<TransactionConfidence> future = tx.getConfidence().getDepthFuture(1);
 
                     Futures.addCallback(tx.getConfidence().getDepthFuture(1), new FutureCallback<TransactionConfidence>() {
@@ -300,7 +301,7 @@ public class TestBtcActivity extends BaseActivity {
                 break;
             case R.id.btn_wallet_sign:
                 btc_sign_msg = signMsg("我是张二胖", master.getPrivateKey());
-                Log.i("tttttttttttttt", "onViewClicked: 我们签名" + btc_sign_msg);
+                LogUtil.i("tttttttttttttt", "onViewClicked: 我们签名" + btc_sign_msg);
                 break;
             case R.id.btn_wallet_verify:
 //                Intent intent = new Intent(this, BitcoinTransactionActivity.class);

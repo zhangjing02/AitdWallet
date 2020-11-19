@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tianqi.aitdwallet.bean.BaibeiWallet;
+import com.tianqi.baselib.utils.LogUtil;
 
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.crypto.ChildNumber;
@@ -253,18 +254,18 @@ public class BaiBeiWalletUtils {
         List<ChildNumber> parentPath = HDUtils.parsePath("M/44H/60H/0H/0");
         // 6. 由父路径,派生出第一个子私钥 "new ChildNumber(0)" 表示第一个 （m/44'/60'/0'/0/0）
         DeterministicKey child = dh.deriveChild(parentPath, true, true, new ChildNumber(0));
-        Log.i("TAG", "generateBip44Wallet: 44钥匙对  私钥 = " + child.getPrivateKeyAsHex());
-        Log.i("TAG", "generateBip44Wallet: 44钥匙对  公钥 = " + child.getPublicKeyAsHex());
+        LogUtil.i("TAG", "generateBip44Wallet: 44钥匙对  私钥 = " + child.getPrivateKeyAsHex());
+        LogUtil.i("TAG", "generateBip44Wallet: 44钥匙对  公钥 = " + child.getPublicKeyAsHex());
 
         byte[] privateKeyByte = child.getPrivKeyBytes();
 //        ECKeyPair privateKey = ECKeyPair.create(sha256(seed));
         //通过私钥生成公私钥对
         ECKeyPair keyPair = ECKeyPair.create(privateKeyByte);
-        Log.i("TAG", "generateBip44Wallet: 钥匙对  私钥 = " + Numeric.toHexStringNoPrefix(keyPair.getPrivateKey()));
-        Log.i("TAG", "generateBip44Wallet: 钥匙对  公钥 = " + Numeric.toHexStringNoPrefix(keyPair.getPublicKey()));
+        LogUtil.i("TAG", "generateBip44Wallet: 钥匙对  私钥 = " + Numeric.toHexStringNoPrefix(keyPair.getPrivateKey()));
+        LogUtil.i("TAG", "generateBip44Wallet: 钥匙对  公钥 = " + Numeric.toHexStringNoPrefix(keyPair.getPublicKey()));
 
         WalletFile walletFile = Wallet.createLight(password, keyPair);
-        Log.i("TAG", "generateBip44Wallet: 002地址 = " + Keys.toChecksumAddress(walletFile.getAddress()));
+        LogUtil.i("TAG", "generateBip44Wallet: 002地址 = " + Keys.toChecksumAddress(walletFile.getAddress()));
         return new BaibeiWallet(walletFile, mnemonic,keyPair);
     }
 
@@ -280,7 +281,7 @@ public class BaiBeiWalletUtils {
         ECKeyPair keyPair = ECKeyPair.create(privateKeyByte);
         WalletFile walletFile = Wallet.createLight(password, keyPair);
 
-        Log.i("TAG",  Numeric.toHexStringNoPrefix(keyPair.getPublicKey())+"generateBip44Wallet: 003地址 = " + Keys.toChecksumAddress(walletFile.getAddress()));
+        LogUtil.i("TAG",  Numeric.toHexStringNoPrefix(keyPair.getPublicKey())+"generateBip44Wallet: 003地址 = " + Keys.toChecksumAddress(walletFile.getAddress()));
         return new BaibeiWallet(walletFile, mnemonic,keyPair);
     }
     public static BaibeiWallet generateBip44WalletByPrivateKey(String privateKey, String password)
@@ -294,7 +295,7 @@ public class BaiBeiWalletUtils {
         //通过私钥生成公私钥对
         ECKeyPair keyPair = ECKeyPair.create(privateKeyByte);
         WalletFile walletFile = Wallet.createLight(password, keyPair);
-        Log.i("TAG", "generateBip44Wallet: 004地址 = " + Keys.toChecksumAddress(walletFile.getAddress()));
+        LogUtil.i("TAG", "generateBip44Wallet: 004地址 = " + Keys.toChecksumAddress(walletFile.getAddress()));
         return new BaibeiWallet(walletFile, null,keyPair);
     }
 
