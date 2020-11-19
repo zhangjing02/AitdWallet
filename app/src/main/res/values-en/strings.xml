@@ -149,7 +149,7 @@
 	<string name="text_chain_record_tag">Record on chain</string>
 	<string name="text_arrive_time_tag">Arrival time</string>
 	<string name="text_coin_block_height_tag">Block height</string>
-	<string name="tittle_send_money_text">Send</string>
+	<string name="tittle_send_money_text">Transfer</string>
 	<string name="tittle_receive_money_text">Receive</string>
 	<string name="notice_verify_mnemonic_word_text">Make sure you have backed up your mnemonic words, please verify the following questions:</string>
 	<string name="text_verify_word1_tag">Please select the first word</string>
@@ -290,4 +290,9 @@
 	<string name="notice_address_length_error">Address length error</string>
 	<string name="notice_address_format_error">Address format error</string>
 	<string name="notice_amount_too_little">The amount is too small</string>
+	<string name="titttle_record_all">All</string>
+	<string name="tittle_record_send">Transfer</string>
+	<string name="tittle_record_receive">Receive</string>
+	<string name="tittle_record_failure">Failure</string>
+	<string name="text_remark_tag">Remark</string>
 </resources>

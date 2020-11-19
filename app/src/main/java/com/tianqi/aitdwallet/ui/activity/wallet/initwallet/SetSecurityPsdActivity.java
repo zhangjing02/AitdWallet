@@ -340,7 +340,8 @@ public class SetSecurityPsdActivity extends BaseActivity {
             case R.id.btn_create_wallet:
                 if (judgeSelectInput()) {
                     String stringExtra = getIntent().getStringExtra(Constants.INTENT_PUT_TAG);
-                    if (stringExtra!=null&&stringExtra.equals(Constants.INTENT_PUT_CHANGE_PSD)){
+                    Log.i(TAG, "onViewClicked: 我们看修改密码的是个啥？"+stringExtra);
+                    if (stringExtra!=null&&stringExtra.equals(getString(R.string.tittle_set_new_psd))){
                         UserInformation userInformation = UserInfoManager.getUserInfo();
                         try {
                             String accountPwd=AESCipher.encrypt(Constant.PSD_KEY, etInputPassword.getText().toString().trim());

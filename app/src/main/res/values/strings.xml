@@ -292,4 +292,9 @@
     <string name="notice_address_length_error">地址长度不对</string>
     <string name="notice_address_format_error">地址格式错误</string>
     <string name="notice_amount_too_little">金额太小</string>
+    <string name="titttle_record_all">全部</string>
+    <string name="tittle_record_send">转出</string>
+    <string name="tittle_record_receive">转入</string>
+    <string name="tittle_record_failure">失败</string>
+    <string name="text_remark_tag">备注</string>
 </resources>

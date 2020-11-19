@@ -162,7 +162,7 @@ public class TransactionRecordActivity extends BaseActivity {
         btnTransactionReceive = record_header.findViewById(R.id.btn_transaction_receive);
         View lineMiddle = record_header.findViewById(R.id.line_middle);
         tablayout = record_header02.findViewById(R.id.tablayout);
-        titles = new String[]{Constants.TRANSACTION_ALL, Constants.TRANSACTION_SEND, Constants.TRANSACTION_RECEIVE, Constants.TRANSACTION_FIALE};
+        titles = new String[]{getString(R.string.titttle_record_all), getString(R.string.tittle_record_send), getString(R.string.tittle_record_receive), getString(R.string.tittle_record_failure)};
 
         for (int i = 0; i < titles.length; i++) {
             tablayout.addTab(tablayout.newTab());
