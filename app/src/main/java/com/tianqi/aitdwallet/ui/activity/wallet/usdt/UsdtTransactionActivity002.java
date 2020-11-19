@@ -23,6 +23,7 @@ import com.quincysx.crypto.bitcoin.BitCoinECKeyPair;
 import com.quincysx.crypto.bitcoin.BitcoinException;
 import com.quincysx.crypto.utils.HexUtils;
 import com.tianqi.aitdwallet.R;
+import com.tianqi.aitdwallet.ui.activity.address.ContactsAddressManageActivity;
 import com.tianqi.aitdwallet.ui.activity.tool.ScanActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.record.TransactionRecordActivity;
 import com.tianqi.aitdwallet.utils.Constants;
@@ -49,8 +50,8 @@ import com.tianqi.baselib.rxhttp.bean.GetUnspentTxBean;
 import com.tianqi.baselib.utils.ButtonUtils;
 import com.tianqi.baselib.utils.Constant;
 import com.tianqi.baselib.utils.NetworkUtil;
+import com.tianqi.baselib.utils.digital.AESCipher;
 import com.tianqi.baselib.utils.digital.DataReshape;
-import com.tianqi.baselib.utils.digital.MD5;
 import com.tianqi.baselib.utils.display.LoadingDialogUtils;
 import com.tianqi.baselib.utils.display.ScreenUtils;
 import com.tianqi.baselib.utils.display.ToastUtil;
@@ -77,7 +78,11 @@ import io.reactivex.ObservableOnSubscribe;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-
+/**
+ * @author zhangjing
+ * @date 2020/11/9
+ * @description usdt交易暂时使用类，这里加入了listunspent过滤逻辑，防止第三方服务没有及时清理listunspent交易，导致双花的问题。
+ */
 public class UsdtTransactionActivity002 extends BaseActivity {
 
     private static final String TAG = "UsdtTransactionActivity";
@@ -129,6 +134,7 @@ public class UsdtTransactionActivity002 extends BaseActivity {
     private double total_listunspent_value;
     double usdt_consume_fee = 0.00000546;//转账usdt会固定消耗btc546聪到对方账户。
     private  List<TransactionRecord>transactionRecords;
+    private  double btc_balance = 0;
 
     @Override
     protected int getContentView() {
@@ -142,7 +148,7 @@ public class UsdtTransactionActivity002 extends BaseActivity {
         seekBarMinerCost.setEnabled(true);
         seekBarMinerCost.setMax(100);
         seekBarMinerCost.setProgress(10);
-        walletInfo = WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_USDT);
+        walletInfo = WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
         setMinerFeeText(miner_fee_single);
 
         seekBarMinerCost.setOnChangeListener(new CustomSeekBar.OnChangeListener() {
@@ -216,7 +222,7 @@ public class UsdtTransactionActivity002 extends BaseActivity {
 
     private void initWallet() {
         String coin_address = getIntent().getStringExtra(Constants.TRANSACTION_COIN_ADDRESS);
-        walletBtcFrAddress = CoinInfoManager.getCoinFrAddress(Constant.TRANSACTION_COIN_NAME_USDT, coin_address);
+        walletBtcFrAddress = CoinInfoManager.getCoinFrAddress(Constant.TRANSACTION_COIN_NAME_USDT_OMNI, coin_address);
         transactionRecords =TransactionRecordManager.getTxFrAddress(walletBtcFrAddress.getCoin_address());
         getUsdtBalance(walletBtcFrAddress);
 
@@ -248,6 +254,9 @@ public class UsdtTransactionActivity002 extends BaseActivity {
     @Override
     public void onDataSynEvent(EventMessage event) {
         if (event.getType() == EventMessage.SCAN_EVENT) {
+            etPaymentAddress.setText(event.getMsg());
+            etPaymentAddress.setSelection(event.getMsg().length());
+        }else if (event.getType()==EventMessage.SELECT_ADDRESS_UPDATE){
             etPaymentAddress.setText(event.getMsg());
             etPaymentAddress.setSelection(event.getMsg().length());
         }
@@ -302,7 +311,7 @@ public class UsdtTransactionActivity002 extends BaseActivity {
                         utxo_list=new ArrayList<>();
                         if (getUnspentTxBean!=null&&getUnspentTxBean.getData()!=null){
                             for (GetUnspentTxBean.DataBean result : getUnspentTxBean.getData()) {
-                                account_balance = account_balance + Double.valueOf(result.getValue());
+                                btc_balance = btc_balance + Double.valueOf(result.getValue());
                                 if (Double.valueOf(result.getValue())>0){
                                     utxo_list.add(result);
                                 }
@@ -339,7 +348,7 @@ public class UsdtTransactionActivity002 extends BaseActivity {
                             account_balance=Double.valueOf(data.get(0).getReceive())+Double.valueOf(data.get(0).getSpend());
                             specCoinInfo.setCoin_totalAmount(account_balance);
                             CoinInfoManager.insertOrUpdate(specCoinInfo);
-                            tvBalance.setText(DataReshape.doubleBig(account_balance, 8)+"");
+                            tvBalance.setText(DataReshape.doubleBig(account_balance, 4)+"");
                         }
                     }
                     @Override
@@ -430,7 +439,7 @@ public class UsdtTransactionActivity002 extends BaseActivity {
                         }
                         tx_record.setInput_id(use_listunspent_str);   //保存一个已使用过的，listunspent.防止后续再使用它，
 
-                        tx_record.setUnit(Constant.TRANSACTION_COIN_NAME_USDT);
+                        tx_record.setUnit(Constant.COIN_UNIT_USDT);
                         TransactionRecordManager.insertOrUpdate(tx_record);
                         EventMessage message = new EventMessage();
                         message.setType(EventMessage.TRANSACTION_RECORD_UPDATE_USDT);
@@ -496,25 +505,21 @@ public class UsdtTransactionActivity002 extends BaseActivity {
 
         //把负载和omni转账，拼接成一个hex，然后形成一个代表omni转账的特殊output。
         String total_tx_str = create_load_tx.substring(0, create_load_tx.lastIndexOf(tx_cut_str) + 18) + connet_tx_str + omni_str;
-        Log.i("ttttttttttttt", strHex + "---------onViewClicked: 002我们看这个" + total_tx_str);
+      //  Log.i("ttttttttttttt", strHex + "---------onViewClicked: 002我们看这个" + total_tx_str);
         return total_tx_str;
     }
 
     private String createFinalTransaction(String omni_tx_hex) {
         BTCTransaction.Script script = null;  //对方的地址
-        Log.i("ttttttttttttt", "---------onViewClicked: 003我们看这个" + omni_tx_hex);
         try {
             BTCTransaction omni_tx = new BTCTransaction(HexUtils.fromHex(omni_tx_hex));
-            Log.i("ttttttttttttt", "---------onViewClicked: 003---1我们看这个" + omni_tx_hex);
             BTCTransaction.Script script002 = BTCTransaction.Script.buildOutput(master.getAddress());  //自己的地址
-            Log.i("ttttttttttttt", "---------onViewClicked: 003---2我们看这个" + omni_tx_hex);
             BTCTransaction.Input[] inputs = new BTCTransaction.Input[utxo_for_pay.size()];
             for (int i = 0; i < utxo_for_pay.size(); i++) {
                 BTCTransaction.OutPoint outPoint = new BTCTransaction.OutPoint(HexUtils.fromHex(utxo_for_pay.get(i).getTxid()), utxo_for_pay.get(i).getOutput_no());
                 BTCTransaction.Input input = new BTCTransaction.Input(outPoint, script002, 0);
                 inputs[i] = input;
             }
-            Log.i("ttttttttttttt", "---------onViewClicked: 003---3我们看这个" + omni_tx_hex);
             script = BTCTransaction.Script.buildOutput(etPaymentAddress.getText().toString());
             BTCTransaction.Script script003 = BTCTransaction.Script.buildOutput(master.getAddress());
             double change_value = total_listunspent_value - usdt_consume_fee;
@@ -540,19 +545,17 @@ public class UsdtTransactionActivity002 extends BaseActivity {
             BTCTransaction unsignedTransaction = new BTCTransaction(inputs, outputs, 0);
             byte[] sign = unsignedTransaction.sign(master);
             String toHex = HexUtils.toHex(sign);
-            Log.i("tttttttttttttttttttt", master.getAddress() + "------onViewClicked: 我们看签名后的数据是？" + toHex);
+         //   Log.i("tttttttttttttttttttt", master.getAddress() + "------onViewClicked: 我们看签名后的数据是？" + toHex);
             return toHex;
         } catch (BitcoinException e) {
-            Log.i("ttttttttttttt", "---------onViewClicked: 004我们看这个" + e.getMessage());
             e.printStackTrace();
         } catch (ValidationException e) {
-            Log.i("ttttttttttttt", "---------onViewClicked: 005我们看这个" + e.getMessage());
             e.printStackTrace();
         }
         return null;
     }
 
-    @OnClick({R.id.btn_collect, R.id.btn_transaction_send, R.id.btn_balance_all, R.id.tv_transaction_request})
+    @OnClick({R.id.btn_collect, R.id.btn_transaction_send, R.id.btn_balance_all, R.id.tv_transaction_request,R.id.iv_receive_address_account})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_collect:
@@ -561,9 +564,7 @@ public class UsdtTransactionActivity002 extends BaseActivity {
                 break;
             case R.id.btn_balance_all:
                 // TODO: 2020/10/27 把余额都添加进去。
-                if (account_balance > 0.000001) {
-                    etPaymentAmount.setText(DataReshape.doubleBig((account_balance - 0.000001), 8));
-                }
+                etPaymentAmount.setText(DataReshape.doubleBig(account_balance , 4));
                 break;
             case R.id.tv_transaction_request:
                 if (ButtonUtils.isFastDoubleClick()) {
@@ -572,16 +573,24 @@ public class UsdtTransactionActivity002 extends BaseActivity {
                 ExplainTxMinerFeeDialog shotNoticeDialog = new ExplainTxMinerFeeDialog(this, R.style.MyDialog2);
                 shotNoticeDialog.show();
                 break;
+            case R.id.iv_receive_address_account:
+                if (ButtonUtils.isFastDoubleClick()) {
+                    return;
+                }
+                Intent intent1=new Intent(this, ContactsAddressManageActivity.class);
+                intent1.putExtra(Constants.INTENT_PUT_TAG,Constants.INTENT_PUT_TRANSACTION);
+                startActivity(intent1);
+                break;
             case R.id.btn_transaction_send://开始转账
                 if (judgeSelectInput()) {
                     if (NetworkUtil.isNetworkAvailable(this)){
                         ToastUtil.showToast(this, getString(R.string.network_error));
                         return;
                     }
-                    if (account_balance < 0.000009) {
-                        ToastUtil.showToast(this, getString(R.string.notice_cost_not_enough));
-                        return;
-                    }
+//                    if (account_balance < 0.000009) {
+//                        ToastUtil.showToast(this, getString(R.string.notice_cost_not_enough));
+//                        return;
+//                    }
                   //  createTxApi();
                     String fiat_value;
                     UserInformation userInformation = UserInfoManager.getUserInfo();
@@ -607,7 +616,8 @@ public class UsdtTransactionActivity002 extends BaseActivity {
                             bottomDialog.dismiss();
                             UserInformation userInfo = UserInfoManager.getUserInfo();
                             userInfo.getPasswordStr();
-                            if (password != null && userInfo.getPasswordStr().equals(MD5.Md5(password))) {
+                            String aes_decode_str = AESCipher.decrypt(Constant.PSD_KEY, password.trim());
+                            if (password != null && userInfo.getPasswordStr().equals(aes_decode_str)) {
                                 mLoadDialog = LoadingDialogUtils.createLoadingDialog(this, "");
                                 createTxToBroadcastApi();
                             } else {
@@ -759,6 +769,7 @@ public class UsdtTransactionActivity002 extends BaseActivity {
      * @return 判断输入是否合法
      */
     private boolean judgeSelectInput() {
+        Log.i(TAG, "judgeSelectInput: 我们看用户btc余额时多少？"+btc_balance);
         if (TextUtils.isEmpty(etPaymentAddress.getText().toString())) {
             ToastUtil.showToast(this, getString(R.string.input_receive_address_notice));
             return false;
@@ -767,6 +778,12 @@ public class UsdtTransactionActivity002 extends BaseActivity {
             return false;
         }else if (etPaymentAddress.getText().toString().equals(master.getAddress())){
             ToastUtil.showToast(this, getString(R.string.notice_trans_to_me_refuse));
+            return false;
+        }else if (btc_balance<miner_fee_single){  //此账户对应的btc余额都小于单价手续费，当然就不允许转账了。
+            ToastUtil.showToast(this, getString(R.string.notice_btc_amount_not_enough));
+            return false;
+        }else if (Double.valueOf(etPaymentAmount.getText().toString())<0.0001){
+            ToastUtil.showToast(this, getString(R.string.notice_amount_too_little));
             return false;
         }
         return true;

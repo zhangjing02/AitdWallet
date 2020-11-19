@@ -42,6 +42,7 @@ public class TransactionRecordDao extends AbstractDao<TransactionRecord, Long> {
         public final static Property Input_spent = new Property(15, double.class, "input_spent", false, "INPUT_SPENT");
         public final static Property List_unspent_consume = new Property(16, String.class, "list_unspent_consume", false, "LIST_UNSPENT_CONSUME");
         public final static Property Miner_fee = new Property(17, double.class, "miner_fee", false, "MINER_FEE");
+        public final static Property Block_no = new Property(18, String.class, "block_no", false, "BLOCK_NO");
     }
 
 
@@ -74,7 +75,8 @@ public class TransactionRecordDao extends AbstractDao<TransactionRecord, Long> {
                 "\"INPUT_ID\" TEXT," + // 14: input_id
                 "\"INPUT_SPENT\" REAL NOT NULL ," + // 15: input_spent
                 "\"LIST_UNSPENT_CONSUME\" TEXT," + // 16: list_unspent_consume
-                "\"MINER_FEE\" REAL NOT NULL );"); // 17: miner_fee
+                "\"MINER_FEE\" REAL NOT NULL ," + // 17: miner_fee
+                "\"BLOCK_NO\" TEXT);"); // 18: block_no
         // Add Indexes
         db.execSQL("CREATE UNIQUE INDEX " + constraint + "IDX_TRANSACTION_RECORD_TXID ON \"TRANSACTION_RECORD\"" +
                 " (\"TXID\" ASC);");
@@ -147,6 +149,11 @@ public class TransactionRecordDao extends AbstractDao<TransactionRecord, Long> {
             stmt.bindString(17, list_unspent_consume);
         }
         stmt.bindDouble(18, entity.getMiner_fee());
+ 
+        String block_no = entity.getBlock_no();
+        if (block_no != null) {
+            stmt.bindString(19, block_no);
+        }
     }
 
     @Override
@@ -210,6 +217,11 @@ public class TransactionRecordDao extends AbstractDao<TransactionRecord, Long> {
             stmt.bindString(17, list_unspent_consume);
         }
         stmt.bindDouble(18, entity.getMiner_fee());
+ 
+        String block_no = entity.getBlock_no();
+        if (block_no != null) {
+            stmt.bindString(19, block_no);
+        }
     }
 
     @Override
@@ -237,7 +249,8 @@ public class TransactionRecordDao extends AbstractDao<TransactionRecord, Long> {
             cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // input_id
             cursor.getDouble(offset + 15), // input_spent
             cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16), // list_unspent_consume
-            cursor.getDouble(offset + 17) // miner_fee
+            cursor.getDouble(offset + 17), // miner_fee
+            cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18) // block_no
         );
         return entity;
     }
@@ -262,6 +275,7 @@ public class TransactionRecordDao extends AbstractDao<TransactionRecord, Long> {
         entity.setInput_spent(cursor.getDouble(offset + 15));
         entity.setList_unspent_consume(cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16));
         entity.setMiner_fee(cursor.getDouble(offset + 17));
+        entity.setBlock_no(cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18));
      }
     
     @Override

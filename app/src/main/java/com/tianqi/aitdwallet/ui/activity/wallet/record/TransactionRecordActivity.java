@@ -1,9 +1,7 @@
 package com.tianqi.aitdwallet.ui.activity.wallet.record;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -20,14 +18,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.tabs.TabLayout;
-import com.google.gson.Gson;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.adapter.recycle_adapter.TransRecordAdapter;
-import com.tianqi.aitdwallet.bean.GetUtxoBean;
-import com.tianqi.aitdwallet.bean.UsdtTxRecordBean;
 import com.tianqi.aitdwallet.ui.activity.wallet.btc.BitcoinTransactionActivity002;
+import com.tianqi.aitdwallet.ui.activity.wallet.eth.EthTransactionActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.property.CoinAddressQrActivity;
+import com.tianqi.aitdwallet.ui.activity.wallet.usdt.UsdtErc20TransactionActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.usdt.UsdtTransactionActivity002;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.baselib.base.BaseActivity;
@@ -39,22 +36,21 @@ import com.tianqi.baselib.dbManager.CoinInfoManager;
 import com.tianqi.baselib.dbManager.TransactionRecordManager;
 import com.tianqi.baselib.dbManager.UserInfoManager;
 import com.tianqi.baselib.dbManager.WalletInfoManager;
-import com.tianqi.baselib.rxhttp.HttpClientUtil;
 import com.tianqi.baselib.rxhttp.RetrofitFactory;
 import com.tianqi.baselib.rxhttp.base.BaseObserver;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
+import com.tianqi.baselib.rxhttp.bean.GetErc20TxRecordBean;
+import com.tianqi.baselib.rxhttp.bean.GetEthTxRecordBean;
 import com.tianqi.baselib.rxhttp.bean.GetListUnspentBean;
 import com.tianqi.baselib.rxhttp.bean.GetLoadingTxBean;
 import com.tianqi.baselib.utils.Constant;
 import com.tianqi.baselib.utils.digital.DataReshape;
 import com.tianqi.baselib.utils.display.GlideUtils;
-import com.tianqi.baselib.utils.display.ToastUtil;
 import com.tianqi.baselib.utils.eventbus.EventMessage;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -62,11 +58,18 @@ import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import io.reactivex.Observable;
-import io.reactivex.ObservableOnSubscribe;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
+
+/**
+ * @author zhangjing
+ * @date 2020/11/9
+ * @description  交易记录的类，此处还缺少分页加载的逻辑。
+ */
+
+/**
+ * @author zhangjing
+ * @date 2020/11/9
+ * @description  交易记录的类，此处还缺少分页加载的逻辑。
+ */
 
 public class TransactionRecordActivity extends BaseActivity {
 
@@ -164,7 +167,7 @@ public class TransactionRecordActivity extends BaseActivity {
         btnTransactionReceive = record_header.findViewById(R.id.btn_transaction_receive);
         View lineMiddle = record_header.findViewById(R.id.line_middle);
         tablayout = record_header02.findViewById(R.id.tablayout);
-        titles = new String[]{Constants.TRANSACTION_ALL, Constants.TRANSACTION_SEND, Constants.TRANSACTION_RECEIVE, Constants.TRANSACTION_FIALE};
+        titles = new String[]{getString(R.string.titttle_record_all), getString(R.string.tittle_record_send), getString(R.string.tittle_record_receive), getString(R.string.tittle_record_failure)};
 
         for (int i = 0; i < titles.length; i++) {
             tablayout.addTab(tablayout.newTab());
@@ -179,9 +182,13 @@ public class TransactionRecordActivity extends BaseActivity {
         GlideUtils.loadResourceImage(this, walletBtcInfo.getResourceId(), ivWalletCoin);
 
         if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_BTC)) {
-            tvCurrencyBalance.setText(DataReshape.doubleBig(walletBtcInfo.getCoin_totalAmount(), 8, 8));
-        } else if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT)) {
-            tvCurrencyBalance.setText(DataReshape.doubleBig(walletBtcInfo.getCoin_totalAmount(), 8, 4));
+            tvCurrencyBalance.setText(DataReshape.doubleAll(walletBtcInfo.getCoin_totalAmount(), 8 ));
+        } else if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_OMNI)) {
+            tvCurrencyBalance.setText(DataReshape.doubleAll(walletBtcInfo.getCoin_totalAmount(), 4));
+        }else if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_ETH)) {
+            tvCurrencyBalance.setText(DataReshape.doubleAll(walletBtcInfo.getCoin_totalAmount(), 6));
+        }else if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_ERC20)){
+            tvCurrencyBalance.setText(DataReshape.doubleAll(walletBtcInfo.getCoin_totalAmount(), 6));
         }
         UserInformation userInformation = UserInfoManager.getUserInfo();
         if (userInformation.getFiatUnit().equals(Constants.FIAT_USD)) {
@@ -190,7 +197,6 @@ public class TransactionRecordActivity extends BaseActivity {
             tvFiatBalance.setText("≈￥" + DataReshape.doubleBig(walletBtcInfo.getCoin_totalAmount() * walletInfo.getCoin_CNYPrice(), 2));
         }
         setListener();
-
         //刷新
         refreshLayout.setOnRefreshListener(refreshLayout -> {
             initData();
@@ -199,11 +205,7 @@ public class TransactionRecordActivity extends BaseActivity {
 
     private void getToolBar() {
         coin_tittle = getIntent().getStringExtra(Constants.TRANSACTION_COIN_NAME);
-        if (coin_tittle.equals(Constant.TRANSACTION_COIN_NAME_USDT)) {
-            toolbarTitle.setText(R.string.tittle_usdt_tx_record_text);
-        } else {
-            toolbarTitle.setText(coin_tittle);
-        }
+        toolbarTitle.setText(coin_tittle);
 
         toolbar.setNavigationOnClickListener(v -> {
             finish();//返回
@@ -272,17 +274,141 @@ public class TransactionRecordActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        initBtcTxRecord(walletBtcInfo);
-        initBtcLoadingRecord(walletBtcInfo);
+         if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_ETH)){
+            initEthTxRecord(walletBtcInfo);
+        }else if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_BTC)||walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_OMNI)){
+             initBtcTxRecord(walletBtcInfo);
+             initBtcLoadingRecord(walletBtcInfo);
+         }else if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_ERC20)){
+             initErc20TxRecore(walletBtcInfo);
+         }
+    }
+
+    private void initErc20TxRecore(CoinInfo coinInfo) {
+        String mAddress=coinInfo.getCoin_address().startsWith("0x")?coinInfo.getCoin_address().toLowerCase():Constants.HEX_PREFIX+coinInfo.getCoin_address().toLowerCase();
+        Map<String, Object> map = new HashMap<>();
+        map.put("apikey", "AnqHS6Rs2WX0hwFXlrv");
+        RetrofitFactory.getInstence(this).API()
+                .getErc20TxRecord( mAddress, Constant.CONTRACT_ADDRESS,"1/50",map).compose(RxHelper.io_io())
+                .subscribe(new BaseObserver<List<GetErc20TxRecordBean>>(this) {
+                    @Override
+                    public void onSuccess(List<GetErc20TxRecordBean> datas, String msg) {
+                        if (datas!=null&&datas.size()>0){
+                            for (int i = 0; i <datas.size() ; i++) {
+                                inserErc20TxRecord(datas, i, coinInfo,i==datas.size()-1);
+                            }
+                        }
+                    }
+                    @Override
+                    protected void onFailure(int code, String msg) {
+                        refreshLayout.finishRefresh();
+                    }
+                });
+    }
+
+    private void inserErc20TxRecord(List<GetErc20TxRecordBean> datas, int i, CoinInfo coinInfo,boolean isLast) {
+        //创建（转出）数据库交易，存入数据库
+        TransactionRecord tx_record = new TransactionRecord();
+        tx_record.setAddress(coinInfo.getCoin_address());
+        tx_record.setAmount(Double.valueOf(datas.get(i).getValue())/Math.pow(10,Integer.valueOf(datas.get(i).getTokenInfo().getD())));
+        tx_record.setCoin_type(Constant.TRANSACTION_COIN_ETH);//0代表比特币。
+        tx_record.setStatus(Constant.TRANSACTION_STATE_SUCCESS);
+        if (datas.get(i).getFrom().equals(coinInfo.getCoin_address().toLowerCase())){  //如果是自己的地址，证明是转出。
+            tx_record.setTransType(Constant.TRANSACTION_TYPE_SEND);
+            tx_record.setTargetAddress(datas.get(i).getTo());
+        }else {
+            tx_record.setTransType(Constant.TRANSACTION_TYPE_RECEIVE);
+            tx_record.setTargetAddress(datas.get(i).getFrom());
+        }
+        tx_record.setCoin_id(coinInfo.getCoin_id());
+        tx_record.setVout_id(datas.get(i).getIndex());
+        tx_record.setConfirmations(datas.get(i).getConformations());
+        tx_record.setTxid(datas.get(i).getTxid());
+        Calendar calendar = Calendar.getInstance();
+        tx_record.setBlock_no(String.valueOf(datas.get(i).getBlock_no()));
+        calendar.setTimeInMillis(datas.get(i).getTime() * 1000l);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+        tx_record.setTimeStr(format.format(calendar.getTime()));
+        tx_record.setUnit(Constant.COIN_UNIT_USDT);
+        // tx_record.setMiner_fee(Double.valueOf(datas.get(i).getFee()));   //此接口没有费用，所以暂时不管。
+        TransactionRecordManager.insertOrUpdate(tx_record);
+        if (isLast){
+            refreshLayout.finishRefresh();
+            EventMessage eventMessage = new EventMessage();
+            eventMessage.setType(EventMessage.TRANSACTION_RECORD_UPDATE);
+            EventBus.getDefault().post(eventMessage);
+        }
+    }
+
+    private void initEthTxRecord(CoinInfo coinInfo) {
+        String mAddress=coinInfo.getCoin_address().startsWith("0x")?coinInfo.getCoin_address().toLowerCase():Constants.HEX_PREFIX+coinInfo.getCoin_address().toLowerCase();
+        Map<String, Object> map = new HashMap<>();
+        map.put("apikey", "AnqHS6Rs2WX0hwFXlrv");
+        RetrofitFactory.getInstence(this).API()
+                .getEthTxRecord("eth", mAddress, map).compose(RxHelper.io_io())
+                .subscribe(new BaseObserver<GetEthTxRecordBean>(this) {
+                    @Override
+                    public void onSuccess(GetEthTxRecordBean data, String msg) {
+                        if (data != null && data.getTxs()!=null&&data.getTxs().size() > 0) {
+                            btc_account_balance = Double.valueOf(data.getSpend()) + Double.valueOf(data.getReceive());
+                            coinInfo.setCoin_totalAmount(btc_account_balance);
+                            CoinInfoManager.insertOrUpdate(coinInfo);
+                            for (int i = 0; i < data.getTxs().size(); i++) {
+                                if (Double.valueOf(data.getTxs().get(i).getValue())>0){
+                                    insertEthTxRecord(data.getTxs().get(i),coinInfo,i>=data.getTxs().size()-1);
+                                }
+                            }
+                        }
+                    }
+                    @Override
+                    protected void onFailure(int code, String msg) {
+                        refreshLayout.finishRefresh();
+                    }
+                });
+    }
+
+    private void insertEthTxRecord(GetEthTxRecordBean.TxsBean txsBean, CoinInfo eth_coinInfo, boolean isLast) {
+        //创建（转出）数据库交易，存入数据库
+        TransactionRecord tx_record = new TransactionRecord();
+        tx_record.setAddress(eth_coinInfo.getCoin_address());
+        tx_record.setAmount(Double.valueOf(txsBean.getValue()));
+        tx_record.setCoin_type(Constant.TRANSACTION_COIN_ETH);//0代表比特币。
+        tx_record.setStatus(Constant.TRANSACTION_STATE_SUCCESS);
+        if (txsBean.getFrom().equals(eth_coinInfo.getCoin_address().toLowerCase())){  //如果是自己的地址，证明是转出。
+            tx_record.setTransType(Constant.TRANSACTION_TYPE_SEND);
+            tx_record.setTargetAddress(txsBean.getTo());
+        }else {
+            tx_record.setTransType(Constant.TRANSACTION_TYPE_RECEIVE);
+            tx_record.setTargetAddress(txsBean.getFrom());
+        }
+        tx_record.setCoin_id(eth_coinInfo.getCoin_id());
+        tx_record.setVout_id(txsBean.getIndex());
+        tx_record.setConfirmations(txsBean.getConfirmations());
+        tx_record.setTxid(txsBean.getTxid());
+        Calendar calendar = Calendar.getInstance();
+        tx_record.setBlock_no(String.valueOf(txsBean.getBlock_no()));
+        calendar.setTimeInMillis(txsBean.getTime() * 1000l);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+        tx_record.setTimeStr(format.format(calendar.getTime()));
+        tx_record.setUnit(Constant.COIN_UNIT_ETH);
+        tx_record.setMiner_fee(Double.valueOf(txsBean.getFee()));
+        TransactionRecordManager.insertOrUpdate(tx_record);
+        if (isLast){
+            refreshLayout.finishRefresh();
+            EventMessage eventMessage = new EventMessage();
+            eventMessage.setType(EventMessage.TRANSACTION_RECORD_UPDATE);
+            EventBus.getDefault().post(eventMessage);
+        }
     }
 
     private void initBtcTxRecord(CoinInfo coinInfo) {
         String coin_type_params = null;
         if (coinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_BTC)) {
             coin_type_params = "btc";
-        } else if (coinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT)) {
+        } else if (coinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_OMNI)) {
             coin_type_params = "usdt";
         }
+
         if (!TextUtils.isEmpty(coin_type_params)) {
             Map<String, Object> map = new HashMap<>();
             map.put("apikey", "AnqHS6Rs2WX0hwFXlrv");
@@ -311,6 +437,7 @@ public class TransactionRecordActivity extends BaseActivity {
 
                         @Override
                         protected void onFailure(int code, String msg) {
+                            refreshLayout.finishRefresh();
                         }
                     });
         }
@@ -340,6 +467,7 @@ public class TransactionRecordActivity extends BaseActivity {
                 spend_value=Double.valueOf(data.get(i).getTxs().get(j).getOutputs().get(0).getValue());
             }
         }
+
         //创建（转出）数据库交易，存入数据库
         TransactionRecord tx_record = new TransactionRecord();
         tx_record.setAddress(coinInfo.getCoin_address());
@@ -358,7 +486,7 @@ public class TransactionRecordActivity extends BaseActivity {
 
         if (coinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_BTC)) {
             tx_record.setUnit(Constant.COIN_UNIT_BTC);
-        } else if (coinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT)) {
+        } else if (coinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_OMNI)) {
             tx_record.setUnit(Constant.COIN_UNIT_USDT);
         }
         TransactionRecordManager.insertOrUpdate(tx_record);
@@ -371,11 +499,12 @@ public class TransactionRecordActivity extends BaseActivity {
         }
     }
 
+
     private void initBtcLoadingRecord(CoinInfo coinInfo) {
         String coin_type_params = null;
         if (coinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_BTC)) {
             coin_type_params = "btc";
-        } else if (coinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT)) {
+        } else if (coinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_OMNI)) {
             coin_type_params = "usdt";
         }
         Map<String, Object> map = new HashMap<>();
@@ -411,6 +540,7 @@ public class TransactionRecordActivity extends BaseActivity {
 
                     @Override
                     protected void onFailure(int code, String msg) {
+                        refreshLayout.finishRefresh();
                     }
                 });
     }
@@ -436,7 +566,7 @@ public class TransactionRecordActivity extends BaseActivity {
         tx_record.setTimeStr(format.format(calendar.getTime()));
         if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_BTC)) {
             tx_record.setUnit(Constant.COIN_UNIT_BTC);
-        } else if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT)) {
+        } else if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_OMNI)) {
             tx_record.setUnit(Constant.COIN_UNIT_USDT);
         }
         TransactionRecordManager.insertOrUpdate(tx_record);
@@ -472,7 +602,6 @@ public class TransactionRecordActivity extends BaseActivity {
                 // 找到当前屏幕中显示的第二条目
                 View view = mLayoutManager.findViewByPosition(mCurrentFirstVisibleIndex + 1);
                 if (view != null) {
-                    Log.i("ttttttttttt", mSuspensionHeight + "onScrolled:000 显示的啥？" + "控件高度" + view.getTop() + "滑动高度" + dy + "显示的第几个条目" + mCurrentFirstVisibleIndex);
                     if (view.getTop() <= mSuspensionHeight) {
                         tablayoutOut.setVisibility(View.VISIBLE);
                         // 当前屏幕中第二Item离控件顶部距离如果小于悬挂条高度.
@@ -481,16 +610,7 @@ public class TransactionRecordActivity extends BaseActivity {
                         if (mCurrentFirstVisibleIndex < 1) {
                             tablayoutOut.setVisibility(View.GONE);
                         }
-
-                        if (dy < 0) {
-                            // 假如手指向下滑动, 刚好新的第一Item从屏幕顶端滑出来时,设置mSuspensionBar为透明.
-                            // mSuspensionBar.setAlpha(0);
-                            Log.i("ttttttttttt", "onScrolled:001 显示的啥？" + dy);
-                        }
-                        //Log.e(TAG, "正在移动");
                     } else {
-                        //stickyTitle.setVisibility(View.VISIBLE);
-                        Log.i("ttttttttttt", "onScrolled:999999显示的啥？" + dy);
                     }
                 }
                 //Log.e(TAG, "dy  " + dy);
@@ -505,8 +625,18 @@ public class TransactionRecordActivity extends BaseActivity {
                     intent.putExtra(Constants.TRANSACTION_COIN_ADDRESS, coin_address);
                     startActivity(intent);
                     break;
-                case Constant.TRANSACTION_COIN_NAME_USDT:
+                case Constant.TRANSACTION_COIN_NAME_USDT_OMNI:
                     intent = new Intent(this, UsdtTransactionActivity002.class);
+                    intent.putExtra(Constants.TRANSACTION_COIN_ADDRESS, coin_address);
+                    startActivity(intent);
+                    break;
+                case Constant.TRANSACTION_COIN_NAME_ETH:
+                    intent = new Intent(this, EthTransactionActivity.class);
+                    intent.putExtra(Constants.TRANSACTION_COIN_ADDRESS, coin_address);
+                    startActivity(intent);
+                    break;
+                case Constant.TRANSACTION_COIN_NAME_USDT_ERC20:
+                    intent = new Intent(this, UsdtErc20TransactionActivity.class);
                     intent.putExtra(Constants.TRANSACTION_COIN_ADDRESS, coin_address);
                     startActivity(intent);
                     break;
@@ -518,13 +648,10 @@ public class TransactionRecordActivity extends BaseActivity {
             intent.putExtra(Constants.TRANSACTION_COIN_NAME, walletBtcInfo.getCoin_name());
             startActivity(intent);
         });
-
-
     }
 
     @Override
     public void onDataSynEvent(EventMessage event) {
-        Log.i("ttttttttttttt", event.getType() + "---onDataSynEvent: 有进来了么？" + select_index);
         if (event.getType() == EventMessage.TRANSACTION_RECORD_UPDATE) {
             switch (select_index) {
                 case 1:
@@ -546,7 +673,6 @@ public class TransactionRecordActivity extends BaseActivity {
 //            mMessageBeans.addAll(mMessageBeans02);
 //            mMessageBeans.addAll(mMessageBeans02);
 //            mMessageBeans.addAll(mMessageBeans02);
-            Log.i("ttttttttttttt", "onDataSynEvent: 002有进来了么？" + mMessageBeans.size());
             recordAdapter.setNewData(mMessageBeans);
         } else if (event.getType() == EventMessage.TRANSACTION_RECORD_UPDATE_USDT) {
             switch (select_index) {

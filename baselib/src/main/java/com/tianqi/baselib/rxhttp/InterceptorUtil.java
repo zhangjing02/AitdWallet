@@ -80,6 +80,7 @@ public class InterceptorUtil {
             String credential = Credentials.basic("dev", "a");
 
             builder.header(Constant.TOKEN_NAME,  credential);
+           // builder.header("Content-Type",  "application/x-www-form-urlencoded;charset=UTF-8");
 
 
             // builder.post(RequestBody.create(MEDIA_TYPE_MARKDOWN, paramStr));

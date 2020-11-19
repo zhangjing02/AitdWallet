@@ -17,10 +17,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 
-import com.google.gson.Gson;
 import com.scwang.smartrefresh.layout.util.DensityUtil;
 import com.tianqi.aitdwallet.R;
-import com.tianqi.aitdwallet.bean.TransactionDetailBean;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
@@ -31,31 +29,23 @@ import com.tianqi.baselib.dbManager.CoinInfoManager;
 import com.tianqi.baselib.dbManager.TransactionRecordManager;
 import com.tianqi.baselib.dbManager.UserInfoManager;
 import com.tianqi.baselib.dbManager.WalletInfoManager;
-import com.tianqi.baselib.rxhttp.HttpClientUtil;
 import com.tianqi.baselib.rxhttp.RetrofitFactory;
 import com.tianqi.baselib.rxhttp.base.BaseObserver;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
-import com.tianqi.baselib.rxhttp.bean.DecodeTxBean;
-import com.tianqi.baselib.rxhttp.bean.GetFormalUtxoBean;
 import com.tianqi.baselib.rxhttp.bean.GetTxDetailBean;
 import com.tianqi.baselib.utils.Constant;
 import com.tianqi.baselib.utils.digital.DataReshape;
+import com.tianqi.baselib.utils.display.GlideUtils;
 import com.tianqi.baselib.utils.display.ToastUtil;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import io.reactivex.Observable;
-import io.reactivex.ObservableOnSubscribe;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 public class TransactionDetailActivity extends BaseActivity {
 
@@ -111,6 +101,7 @@ public class TransactionDetailActivity extends BaseActivity {
     TextView tvBlockHeight;
     private Calendar calendar;
     private UserInformation userInformation;
+    private TransactionRecord txFrId;
 
     @Override
     protected int getContentView() {
@@ -140,8 +131,8 @@ public class TransactionDetailActivity extends BaseActivity {
         userInformation= UserInfoManager.getUserInfo();
         String tx_id = getIntent().getStringExtra(Constants.INTENT_PUT_TRANSACTION_ID);
         String coin_id = getIntent().getStringExtra(Constants.INTENT_PUT_COIN_ID);
-        Log.i("ttttttttt", "initData: 我们看一下这个交易id是？"+tx_id);
-        TransactionRecord txFrId = TransactionRecordManager.getTxFrId(tx_id);
+       // Log.i("ttttttttt", "initData: -----我们看一下这个交易id是？"+tx_id);
+        txFrId = TransactionRecordManager.getTxFrId(tx_id);
         if (!TextUtils.isEmpty(txFrId.getRemark())){
             tvTransactionNote.setText(txFrId.getRemark()+"");
         }
@@ -154,7 +145,7 @@ public class TransactionDetailActivity extends BaseActivity {
         String coin_type_params=null;
         if (mainCoinFrCoinId.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_BTC)) {
             coin_type_params = "btc";
-        } else if (mainCoinFrCoinId.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT)) {
+        } else if (mainCoinFrCoinId.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_OMNI)) {
             coin_type_params = "usdt";
         }
         if (!TextUtils.isEmpty(coin_type_params)){
@@ -165,9 +156,8 @@ public class TransactionDetailActivity extends BaseActivity {
                     .subscribe(new BaseObserver<GetTxDetailBean>(this) {
                         @Override
                         public void onSuccess(GetTxDetailBean data, String msg) {
-                            Log.i("ttttttttttttttt", "onSuccess: "+tx_type);
                             if (data!=null){
-                                tvMinerFee.setText( data.getFee());
+                                tvMinerFee.setText(data.getFee()+"BTC");
                                 if (tx_type== Constant.TRANSACTION_TYPE_SEND){
                                     tvReceiveAddress.setText(data.getOutputs().get(0).getAddress());
                                     tvPaymentAddress.setText(mainCoinFrCoinId.getCoin_address());
@@ -177,7 +167,6 @@ public class TransactionDetailActivity extends BaseActivity {
                                             receive_value=receive_value+Double.valueOf(data.getOutputs().get(i).getValue());
                                         }
                                     }
-
                                     //如果是转出，但是在output中没找到不是自己的地址，则应该是自己给自己转账，我们就拿第一比输出作为转金额。
                                     if (receive_value==0){
                                         if (data.getOutputs().size()>0){
@@ -185,7 +174,7 @@ public class TransactionDetailActivity extends BaseActivity {
                                         }
                                     }
 
-                                    SpannableString spannableString = new SpannableString(DataReshape.doubleBig(receive_value,8) +" "+ txFrId.getUnit());
+                                    SpannableString spannableString = new SpannableString("-"+DataReshape.doubleIntBig(receive_value,8) +" "+ txFrId.getUnit());
                                     //  SpannableString spannableString = new SpannableString(34.256478222555+" BTC");
                                     ForegroundColorSpan colorSpan = new ForegroundColorSpan(getResources().getColor(R.color.textLightGrey));
                                     spannableString.setSpan(new AbsoluteSizeSpan(DensityUtil.dp2px(10.0f)), spannableString.toString().indexOf(txFrId.getUnit()), spannableString.length(),
@@ -215,12 +204,15 @@ public class TransactionDetailActivity extends BaseActivity {
                                     tvReceiveAddress.setText(mainCoinFrCoinId.getCoin_address());
                                     //  double receive_value=Double.valueOf(data.getInputs().get(0).getValue());
                                     double receive_value=0;
-                                    for (int i = 0; i <data.getInputs().size() ; i++) {
-                                        if (!data.getInputs().get(i).getAddress().equals(mainCoinFrCoinId.getCoin_address())){
-                                            receive_value=receive_value+Double.valueOf(data.getInputs().get(i).getValue());
+                                    for (int i = 0; i <data.getOutputs().size() ; i++) {
+                                        if (data.getOutputs().get(i).getAddress()!=null){
+                                            if (data.getOutputs().get(i).getAddress().equals(mainCoinFrCoinId.getCoin_address())){
+                                                receive_value=receive_value+Double.valueOf(data.getOutputs().get(i).getValue());
+                                            }
                                         }
+
                                     }
-                                    SpannableString spannableString = new SpannableString(DataReshape.doubleBig(receive_value,8) +" "+ txFrId.getUnit());
+                                    SpannableString spannableString = new SpannableString(DataReshape.doubleIntBig(receive_value,8) +" "+ txFrId.getUnit());
                                     //  SpannableString spannableString = new SpannableString(34.256478222555+" BTC");
                                     ForegroundColorSpan colorSpan = new ForegroundColorSpan(getResources().getColor(R.color.textLightGrey));
                                     spannableString.setSpan(new AbsoluteSizeSpan(DensityUtil.dp2px(10.0f)), spannableString.toString().indexOf(txFrId.getUnit()), spannableString.length(),
@@ -253,6 +245,57 @@ public class TransactionDetailActivity extends BaseActivity {
                             ToastUtil.showToast(TransactionDetailActivity.this,msg);
                         }
                     });
+        }else {  //如果不是btc和usdt-omni就不掉接口了，自己数据库的用来呈现。
+            switch (txFrId.getStatus()) {
+                case 1:
+                    tvTransactionState.setText(R.string.text_transaction_state_fail);
+                    break;
+                case 2:
+                    tvTransactionState.setText(R.string.text_transaction_state_waiting);
+                    break;
+                case 0:
+                default:
+                    tvTransactionState.setText(R.string.text_transaction_state_success);
+                    break;
+            }
+
+            if (userInformation.getFiatUnit().equals(Constants.FIAT_USD)) {
+                tvTransactionFiat.setText("≈ ¥ " + DataReshape.double2int(wallet_btc.getCoin_USDPrice() * txFrId.getAmount(),2));
+            } else {
+                tvTransactionFiat.setText("≈ ¥ " + DataReshape.double2int(wallet_btc.getCoin_CNYPrice() * txFrId.getAmount(),2));
+            }
+
+            if (txFrId.getTransType()==Constant.TRANSACTION_TYPE_SEND){
+                tvPaymentAddress.setText(txFrId.getAddress());
+                tvReceiveAddress.setText(txFrId.getTargetAddress());
+                SpannableString spannableString = new SpannableString("-"+DataReshape.doubleIntBig(txFrId.getAmount(),6) +" "+ txFrId.getUnit());
+                //  SpannableString spannableString = new SpannableString(34.256478222555+" BTC");
+                ForegroundColorSpan colorSpan = new ForegroundColorSpan(getResources().getColor(R.color.textLightGrey));
+                spannableString.setSpan(new AbsoluteSizeSpan(DensityUtil.dp2px(10.0f)), spannableString.toString().indexOf(txFrId.getUnit()), spannableString.length(),
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                tvTransactionAmount.setText(spannableString);
+               // tvTransactionAmount.setText("-"+DataReshape.doubleIntBig(txFrId.getAmount(),8));
+            }else if (txFrId.getTransType()==Constant.TRANSACTION_TYPE_RECEIVE){
+                tvPaymentAddress.setText(txFrId.getTargetAddress());
+                tvReceiveAddress.setText(txFrId.getAddress());
+             //   tvTransactionAmount.setText(DataReshape.doubleIntBig(txFrId.getAmount(),8));
+
+                SpannableString spannableString = new SpannableString(DataReshape.doubleIntBig(txFrId.getAmount(),6) +" "+ txFrId.getUnit());
+                //  SpannableString spannableString = new SpannableString(34.256478222555+" BTC");
+                ForegroundColorSpan colorSpan = new ForegroundColorSpan(getResources().getColor(R.color.textLightGrey));
+                spannableString.setSpan(new AbsoluteSizeSpan(DensityUtil.dp2px(10.0f)), spannableString.toString().indexOf(txFrId.getUnit()), spannableString.length(),
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                tvTransactionAmount.setText(spannableString);
+            }
+
+            tvMinerFee.setText(DataReshape.doubleBig(txFrId.getMiner_fee(),8)+"ETH");
+            tvChainRecord.setText("https://cn.etherscan.com/token/"+mainCoinFrCoinId.getCoin_address());
+
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+
+            tvArriveTime.setText(txFrId.getTimeStr());
+            tvTransactionNote.setText(txFrId.getRemark());
+            tvBlockHeight.setText(txFrId.getBlock_no());
         }
     }
 

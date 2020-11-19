@@ -73,4 +73,5 @@
     <color name="bg_button_xxx_grey">#CD5E6992</color>
     <color name="text_main_yellow">#FF8944</color>
     <color name="text_main2_yellow">#FFB744</color>
+    <color name="color_line_black">#161A27</color>
 </resources>

@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -66,6 +67,7 @@ public class MainActivity extends BaseActivity {
 
     private String[] titles;
     private ArrayList<Fragment> fragments = new ArrayList<>();
+    private  WalletFragment fragment1;
 
     @Override
     protected int getContentView() {
@@ -76,7 +78,7 @@ public class MainActivity extends BaseActivity {
     protected void initView() {
         titles = new String[]{getString(R.string.tittle_property), getString(R.string.tittle_financial), getString(R.string.tittle_browse), getString(R.string.tittle_setting)};
         StatusBarCompat.translucentStatusBar(MainActivity.this, true);
-        WalletFragment fragment1 = new WalletFragment();
+        fragment1 = new WalletFragment();
         fragments.add(fragment1);
         for (int i = 0; i < titles.length - 2; i++) {
             Fragment1 fragment2 = new Fragment1();
@@ -146,7 +148,6 @@ public class MainActivity extends BaseActivity {
                                 Calendar calendar=Calendar.getInstance();
                                 long time_update=PrefUtils.getLong(MainActivity.this, PrefUtils.APP_UPDATE_TIME,0);
                                 long time_during=calendar.getTimeInMillis()/1000-time_update/1000-86400;
-                                Log.i("ttttttttt", time_during+"-----onSuccess: 我们看上次更新的时间是？"+time_update);
                                 if (data.isForceFlag()){
                                     VersionUpdateDialog shotNoticeDialog = new VersionUpdateDialog(MainActivity.this, R.style.MyDialog2,data.isForceFlag());
                                     shotNoticeDialog.setTittle(getString(R.string.tittle_version_update_tag)+data.getVersion());
@@ -207,6 +208,10 @@ public class MainActivity extends BaseActivity {
                 }
                 FunctionNotOpenDialog shotNoticeDialog = new FunctionNotOpenDialog(this, R.style.MyDialog2);
                 shotNoticeDialog.show();
+                if (getResources().getConfiguration().locale.getCountry().equals("US")){
+                    shotNoticeDialog.setImageView(R.mipmap.ic_function_not_open_en);
+                }
+
 //                StatusBarCompat.translucentStatusBar(MainActivity.this, false);
 //                StatusBarCompat.setStatusBarColor(MainActivity.this, getResources().getColor(R.color.white_transparent));
                 //   ToastUtil.showSimpleToast(this,getString(R.string.notice_function_not_open));
@@ -255,6 +260,9 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if  (fragment1!=null){
+                fragment1.hiddenPopWindow();
+            }
             if ((System.currentTimeMillis() - mExitTime) > 2000) {
                 ToastUtil.showToast(this,getString(R.string.exist_procedure));
                 mExitTime = System.currentTimeMillis();
@@ -265,6 +273,14 @@ public class MainActivity extends BaseActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+     if  (fragment1!=null){
+         fragment1.hiddenPopWindow();
+        }
+        return super.onTouchEvent(event);
     }
 
 }

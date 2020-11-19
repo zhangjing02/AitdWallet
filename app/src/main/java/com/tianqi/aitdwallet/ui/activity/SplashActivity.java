@@ -1,16 +1,11 @@
 package com.tianqi.aitdwallet.ui.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.tianqi.aitdwallet.R;
-import com.tianqi.aitdwallet.ui.activity.wallet.initwallet.BackupMemoryWordActivity;
-import com.tianqi.aitdwallet.ui.activity.wallet.initwallet.SetSecurityPsdActivity;
-import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.CoinRateInfo;
 import com.tianqi.baselib.dao.UserInformation;
@@ -18,18 +13,22 @@ import com.tianqi.baselib.dao.WalletInfo;
 import com.tianqi.baselib.dbManager.CoinRateInfoManager;
 import com.tianqi.baselib.dbManager.UserInfoManager;
 import com.tianqi.baselib.dbManager.WalletInfoManager;
+import com.tianqi.baselib.rxhttp.HttpClientUtil;
 import com.tianqi.baselib.rxhttp.RetrofitFactory;
+import com.tianqi.baselib.rxhttp.base.BaseObserver;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
 import com.tianqi.baselib.rxhttp.bean.CoinRateBean;
 import com.tianqi.baselib.utils.Constant;
-import com.tianqi.baselib.utils.digital.DataReshape;
-import com.tianqi.baselib.utils.rxtool.RxToolUtil;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import okhttp3.Response;
 
 public class SplashActivity extends BaseActivity {
     private UserInformation userInfo;
@@ -45,7 +44,6 @@ public class SplashActivity extends BaseActivity {
         Map<String, Object> map = new HashMap<>();
         map.put("apikey", "AnqHS6Rs2WX0hwFXlrv");
         //获取各个币种的汇率，存入币种汇率的数据库中。
-
         RetrofitFactory.getInstence(this).API()
                 .getCoinRate(map).compose(RxHelper.io_main())
                 .subscribe(new Observer<CoinRateBean>() {
@@ -71,7 +69,6 @@ public class SplashActivity extends BaseActivity {
                             WalletInfoManager.insertOrUpdate(walletInfo);
                         }
 
-
                         walletInfo= WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_ETH);
                         coinRateInfo=new CoinRateInfo();
                         coinRateInfo.setId(Constant.TRANSACTION_COIN_NAME_ETH);
@@ -90,10 +87,9 @@ public class SplashActivity extends BaseActivity {
                             WalletInfoManager.insertOrUpdate(walletInfo);
                         }
 
-
-                        walletInfo= WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_USDT);
+                        walletInfo= WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
                         coinRateInfo=new CoinRateInfo();
-                        coinRateInfo.setId(Constant.TRANSACTION_COIN_NAME_USDT);
+                        coinRateInfo.setId(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
                         coinRateInfo.setPrice_usd(coinRateBean.getUsdt());
 
                         value1=coinRateBean.getUsdtcny1();
@@ -104,7 +100,24 @@ public class SplashActivity extends BaseActivity {
                         CoinRateInfoManager.insertOrUpdate(coinRateInfo);
 
                         if (walletInfo!=null){
-                            Log.i("tttttttttttttt", coinRateInfo.getPrice_usd()+"----onNext: 我们插入数据的数据是？"+coinRateInfo.getPrice_cny());
+                            walletInfo.setCoin_USDPrice(coinRateInfo.getPrice_usd());
+                            walletInfo.setCoin_CNYPrice(coinRateInfo.getPrice_cny());
+                            WalletInfoManager.insertOrUpdate(walletInfo);
+                        }
+
+                        walletInfo= WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_USDT_ERC20);
+                        coinRateInfo=new CoinRateInfo();
+                        coinRateInfo.setId(Constant.TRANSACTION_COIN_NAME_USDT_ERC20);
+                        coinRateInfo.setPrice_usd(coinRateBean.getUsdt());
+
+                        value1=coinRateBean.getUsdtcny1();
+                        value2=coinRateBean.getUsdtcny2();
+                        value3=coinRateBean.getUsdtcny3();
+                        coinRateInfo.setPrice_cny(value1+value2+value3/3f);;
+
+                        CoinRateInfoManager.insertOrUpdate(coinRateInfo);
+
+                        if (walletInfo!=null){
                             walletInfo.setCoin_USDPrice(coinRateInfo.getPrice_usd());
                             walletInfo.setCoin_CNYPrice(coinRateInfo.getPrice_cny());
                             WalletInfoManager.insertOrUpdate(walletInfo);
@@ -174,6 +187,21 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        //获取各个币种的汇率，存入币种汇率的数据库中。
+//        Map<String,Object>map=new HashMap<>();
+//        map.put("type",2);
+//        RetrofitFactory.getInstence(this).API()
+//                .getVersionList(map).compose(RxHelper.io_main())
+//                .subscribe(new BaseObserver<Object>(this) {
+//                    @Override
+//                    public void onSuccess(Object data, String msg) {
+//                        Log.i("ttttttttttttttt", "onSuccess: ");
+//                    }
+//                    @Override
+//                    protected void onFailure(int code, String msg) {
+//                    }
+//                });
+
     }
 
 }

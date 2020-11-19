@@ -23,6 +23,7 @@ import com.quincysx.crypto.bitcoin.BitCoinECKeyPair;
 import com.quincysx.crypto.bitcoin.BitcoinException;
 import com.quincysx.crypto.utils.HexUtils;
 import com.tianqi.aitdwallet.R;
+import com.tianqi.aitdwallet.ui.activity.address.ContactsAddressManageActivity;
 import com.tianqi.aitdwallet.ui.activity.tool.ScanActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.record.TransactionRecordActivity;
 import com.tianqi.aitdwallet.utils.Constants;
@@ -46,8 +47,8 @@ import com.tianqi.baselib.rxhttp.bean.GetUnspentTxBean;
 import com.tianqi.baselib.rxhttp.bean.GetSimpleRpcBean;
 import com.tianqi.baselib.utils.ButtonUtils;
 import com.tianqi.baselib.utils.Constant;
+import com.tianqi.baselib.utils.digital.AESCipher;
 import com.tianqi.baselib.utils.digital.DataReshape;
-import com.tianqi.baselib.utils.digital.MD5;
 import com.tianqi.baselib.utils.display.LoadingDialogUtils;
 import com.tianqi.baselib.utils.display.ScreenUtils;
 import com.tianqi.baselib.utils.display.ToastUtil;
@@ -70,8 +71,11 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-
-
+/**
+ * @author zhangjing
+ * @date 2020/11/9
+ * @description btc原始的交易类。
+ */
 public class BitcoinTransactionActivity extends BaseActivity {
 
     private static final String TAG = "BitcoinWalletActivity";
@@ -248,6 +252,9 @@ public class BitcoinTransactionActivity extends BaseActivity {
         if (event.getType() == EventMessage.SCAN_EVENT) {
             etPaymentAddress.setText(event.getMsg());
             etPaymentAddress.setSelection(event.getMsg().length());
+        }else if (event.getType()==EventMessage.SELECT_ADDRESS_UPDATE){
+            etPaymentAddress.setText(event.getMsg());
+            etPaymentAddress.setSelection(event.getMsg().length());
         }
     }
 
@@ -358,7 +365,7 @@ public class BitcoinTransactionActivity extends BaseActivity {
 
                             //  tx_record.setId(0);
                             tx_record.setCoin_type(Constant.TRANSACTION_COIN_BTC);//0代表比特币。
-                            tx_record.setStatus(Constant.TRANSACTION_STATE_SUCCESS);
+                            tx_record.setStatus(Constant.TRANSACTION_STATE_WAITING);
                             tx_record.setTransType(Constant.TRANSACTION_TYPE_SEND);//0转账，1收款
                             tx_record.setCoin_id(walletBtcFrAddress.getCoin_id());
                             if (!TextUtils.isEmpty(etPaymentRemark.getText().toString())) {
@@ -447,7 +454,7 @@ public class BitcoinTransactionActivity extends BaseActivity {
         return null;
     }
 
-    @OnClick({R.id.btn_collect, R.id.btn_transaction_send, R.id.btn_balance_all, R.id.tv_transaction_request})
+    @OnClick({R.id.btn_collect, R.id.btn_transaction_send, R.id.btn_balance_all, R.id.tv_transaction_request,R.id.iv_receive_address_account})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_collect:
@@ -466,6 +473,14 @@ public class BitcoinTransactionActivity extends BaseActivity {
                 }
                 ExplainTxMinerFeeDialog shotNoticeDialog = new ExplainTxMinerFeeDialog(this, R.style.MyDialog2);
                 shotNoticeDialog.show();
+                break;
+            case R.id.iv_receive_address_account:
+                if (ButtonUtils.isFastDoubleClick()) {
+                    return;
+                }
+                Intent intent1=new Intent(this, ContactsAddressManageActivity.class);
+                intent1.putExtra(Constants.INTENT_PUT_TAG,Constants.INTENT_PUT_TRANSACTION);
+                startActivity(intent1);
                 break;
             case R.id.btn_transaction_send://开始转账
                 if (utxo_list!=null&&utxo_list.size()>0){
@@ -494,7 +509,13 @@ public class BitcoinTransactionActivity extends BaseActivity {
                                 bottomDialog.dismiss();
                                 UserInformation userInfo = UserInfoManager.getUserInfo();
                                 userInfo.getPasswordStr();
-                                if (password != null && userInfo.getPasswordStr().equals(MD5.Md5(password))) {
+                                String aes_decode_str= null;
+                                try {
+                                    aes_decode_str = AESCipher.decrypt(Constant.PSD_KEY,password);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                if (password != null && userInfo.getPasswordStr().equals(aes_decode_str)) {
                                     mLoadDialog = LoadingDialogUtils.createLoadingDialog(this, "");
                                     createTxToBroadcastApi();
                                 } else {

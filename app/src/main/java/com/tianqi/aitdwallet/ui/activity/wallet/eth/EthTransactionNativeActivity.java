@@ -20,10 +20,14 @@ import com.quincysx.crypto.ECKeyPair;
 import com.quincysx.crypto.bip32.ValidationException;
 import com.quincysx.crypto.bitcoin.BTCTransaction;
 import com.quincysx.crypto.bitcoin.BitCoinECKeyPair;
+import com.quincysx.crypto.ethereum.keystore.KeyStore;
+import com.quincysx.crypto.ethereum.keystore.KeyStoreFile;
 import com.quincysx.crypto.utils.HexUtils;
 import com.tianqi.aitdwallet.R;
+import com.tianqi.aitdwallet.bean.BaibeiWallet;
 import com.tianqi.aitdwallet.bean.GetUtxoBean;
 import com.tianqi.aitdwallet.ui.activity.tool.ScanActivity;
+import com.tianqi.aitdwallet.utils.BaiBeiWalletUtils;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.aitdwallet.widget.dialog.BottomDialog;
 import com.tianqi.aitdwallet.widget.dialog.PaymentDialog;
@@ -41,8 +45,8 @@ import com.tianqi.baselib.rxhttp.HttpClientUtil;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
 import com.tianqi.baselib.rxhttp.bean.GetSimpleRpcBean;
 import com.tianqi.baselib.utils.Constant;
+import com.tianqi.baselib.utils.digital.AESCipher;
 import com.tianqi.baselib.utils.digital.DataReshape;
-import com.tianqi.baselib.utils.digital.MD5;
 import com.tianqi.baselib.utils.display.LoadingDialogUtils;
 import com.tianqi.baselib.utils.display.ScreenUtils;
 import com.tianqi.baselib.utils.display.ToastUtil;
@@ -50,8 +54,13 @@ import com.tianqi.baselib.utils.eventbus.EventMessage;
 import com.tianqi.baselib.widget.CustomSeekBar;
 
 import org.greenrobot.eventbus.EventBus;
+import org.web3j.crypto.CipherException;
+import org.web3j.crypto.Wallet;
+import org.web3j.crypto.WalletFile;
 
 import java.io.IOException;
+import java.security.KeyPair;
+import java.security.PublicKey;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -376,7 +385,8 @@ public class EthTransactionNativeActivity extends BaseActivity {
                             bottomDialog.dismiss();
                             UserInformation userInfo = UserInfoManager.getUserInfo();
                             userInfo.getPasswordStr();
-                            if (password != null && userInfo.getPasswordStr().equals(MD5.Md5(password))) {
+                            String aes_decode_str = AESCipher.decrypt(Constant.PSD_KEY, password);
+                            if (password != null && userInfo.getPasswordStr().equals(aes_decode_str)) {
                                 mLoadDialog = LoadingDialogUtils.createLoadingDialog(this, "");
                                 createTxToBroadcastApi();
                             } else {

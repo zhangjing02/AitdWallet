@@ -94,6 +94,12 @@ public class BottomDialog extends Dialog {
         if (type==1){
             tvTransactionAmountUnit.setText(Constant.COIN_UNIT_USDT);
             tvTransactionMsg.setText(mContext.getString(R.string.text_usdt_transaction_type));
+        }else if (type==2){
+            tvTransactionAmountUnit.setText(Constant.COIN_UNIT_ETH);
+            tvTransactionMsg.setText(mContext.getString(R.string.text_eth_transaction_type));
+        }else if (type==3){
+            tvTransactionAmountUnit.setText(Constant.COIN_UNIT_USDT);
+            tvTransactionMsg.setText(mContext.getString(R.string.text_usdt_erc20_transaction_type));
         }else{
             tvTransactionAmountUnit.setText(Constant.COIN_UNIT_USDT);
             tvTransactionMsg.setText(mContext.getString(R.string.text_btc_transaction_type));

@@ -1,8 +1,6 @@
 package com.tianqi.baselib.dbManager;
 
-import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dao.WalletInfo;
-import com.tianqi.baselib.dbgreendao.gen.CoinInfoDao;
 import com.tianqi.baselib.dbgreendao.gen.WalletInfoDao;
 import com.tianqi.baselib.utils.Constant;
 
@@ -45,7 +43,7 @@ public class WalletInfoManager {
 
     public static List<WalletInfo> getUsdtWalletInfo() {
         List<WalletInfo> walletInfo = getScaleRecordDao().queryBuilder()
-                .where(WalletInfoDao.Properties.Wallet_id.eq(Constant.TRANSACTION_COIN_NAME_USDT))//数据筛选，只获取usdt的。
+                .where(WalletInfoDao.Properties.Wallet_id.eq(Constant.TRANSACTION_COIN_NAME_USDT_OMNI))//数据筛选，只获取usdt的。
                 .build()
                 .list();
         return walletInfo;
@@ -62,7 +60,6 @@ public class WalletInfoManager {
         }else {
             return null;
         }
-
     }
     //查询用户
     public static WalletInfo getHdWalletInfoFrId(String wallet_id) {
@@ -83,11 +80,22 @@ public class WalletInfoManager {
         return walletInfo;
     }
 
-
     //查询用户
     public static WalletInfo getWalletFrName(String wallet_name) {
         List<WalletInfo> walletInfo = getScaleRecordDao().queryBuilder()
                 .where(WalletInfoDao.Properties.WalletName.eq(wallet_name))//数据筛选，只获取 Name = "btc" 的数据。
+                .build()
+                .list();
+        if (walletInfo.size()>0){
+            return walletInfo.get(0);
+        }else {
+            return null;
+        }
+    }
+    //查询用户
+    public static WalletInfo getWalletFrId(String wallet_id) {
+        List<WalletInfo> walletInfo = getScaleRecordDao().queryBuilder()
+                .where(WalletInfoDao.Properties.Wallet_id.eq(wallet_id))//数据筛选，只获取 Name = "btc" 的数据。
                 .build()
                 .list();
         if (walletInfo.size()>0){

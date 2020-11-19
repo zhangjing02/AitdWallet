@@ -13,6 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.ui.activity.wallet.property.CoinListActivity;
+import com.tianqi.aitdwallet.ui.activity.wallet.property.ImportCoinListActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.record.TransactionRecordActivity;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.baselib.dao.CoinInfo;
@@ -42,7 +43,7 @@ public class ChildCoinAdapter extends BaseAdapter {
         mContext = context;
         maps = beanList;
         typeFace = Typeface.createFromAsset(context.getAssets(), Constant.FONT_PATH);
-        walletInfo= WalletInfoManager.getHdWalletInfo();
+        walletInfo= WalletInfoManager.getHdWalletInfoFrId(beanList.get(0).getWallet_id());
     }
 
     public void refreshData(List<CoinInfo> couponTypeBeans) {
@@ -90,13 +91,23 @@ public class ChildCoinAdapter extends BaseAdapter {
         }
 
         viewHolder.tvCoinAddress.setText(maps.get(position).getCoin_address());
-        viewHolder.tvCurrencyBalance.setText(DataReshape.doubleBig(maps.get(position).getCoin_totalAmount(),8) +"");
+
+
+        if (maps.get(position).getWallet_id().equals(Constant.TRANSACTION_COIN_NAME_USDT_OMNI)){
+            viewHolder.tvCurrencyBalance.setText(DataReshape.doubleBig(maps.get(position).getCoin_totalAmount(),4,4) +"");
+        }else if (maps.get(position).getWallet_id().equals(Constant.TRANSACTION_COIN_NAME_ETH)){
+            viewHolder.tvCurrencyBalance.setText(DataReshape.doubleBig(maps.get(position).getCoin_totalAmount(),6,6) +"");
+        }else if (maps.get(position).getWallet_id().equals(Constant.TRANSACTION_COIN_NAME_USDT_ERC20)){
+            viewHolder.tvCurrencyBalance.setText(DataReshape.doubleBig(maps.get(position).getCoin_totalAmount(),6,6) +"");
+        } else {
+            viewHolder.tvCurrencyBalance.setText(DataReshape.doubleBig(maps.get(position).getCoin_totalAmount(),8,8) +"");
+        }
 
         UserInformation userInformation= UserInfoManager.getUserInfo();
         if (userInformation.getFiatUnit().equals(Constants.FIAT_USD)){
-            viewHolder.tvFiatBalance.setText("≈ $"+DataReshape.double2int((maps.get(position).getCoin_totalAmount()*walletInfo.getCoin_USDPrice()),2));
+            viewHolder.tvFiatBalance.setText("≈ $"+DataReshape.doubleBig((maps.get(position).getCoin_totalAmount()*walletInfo.getCoin_USDPrice()),2));
         }else {
-            viewHolder.tvFiatBalance.setText("≈ ￥"+DataReshape.double2int((maps.get(position).getCoin_totalAmount()*walletInfo.getCoin_CNYPrice()),2));
+            viewHolder.tvFiatBalance.setText("≈ ￥"+DataReshape.doubleBig((maps.get(position).getCoin_totalAmount()*walletInfo.getCoin_CNYPrice()),2));
         }
 
         viewHolder.layoutCurrency.setOnClickListener(view1 -> {
@@ -107,16 +118,17 @@ public class ChildCoinAdapter extends BaseAdapter {
                 intent.putExtra(Constants.TRANSACTION_COIN_ID, maps.get(position).getCoin_id());
                 mContext.startActivity(intent);
             }else {
+                Intent intent = new Intent(mContext, ImportCoinListActivity.class);
+                intent.putExtra(Constants.TRANSACTION_COIN_NAME, maps.get(position).getWallet_id());
+                intent.putExtra(Constants.TRANSACTION_COIN_ADDRESS, maps.get(position).getCoin_address());
+                intent.putExtra(Constants.TRANSACTION_COIN_ID, maps.get(position).getCoin_id());
+                mContext.startActivity(intent);
+
 //                Intent intent = new Intent(mContext, TransactionRecordActivity.class);
 //                intent.putExtra(Constants.TRANSACTION_COIN_NAME, maps.get(position).getCoin_name());
 //                intent.putExtra(Constants.TRANSACTION_COIN_ADDRESS, maps.get(position).getCoin_address());
 //                intent.putExtra(Constants.TRANSACTION_COIN_ID, maps.get(position).getCoin_id());
 //                mContext.startActivity(intent);
-                Intent intent = new Intent(mContext, TransactionRecordActivity.class);
-                intent.putExtra(Constants.TRANSACTION_COIN_NAME, maps.get(position).getCoin_name());
-                intent.putExtra(Constants.TRANSACTION_COIN_ADDRESS, maps.get(position).getCoin_address());
-                intent.putExtra(Constants.TRANSACTION_COIN_ID, maps.get(position).getCoin_id());
-                mContext.startActivity(intent);
             }
         });
         return view;

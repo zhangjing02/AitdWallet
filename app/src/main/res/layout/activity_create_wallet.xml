@@ -43,13 +43,13 @@
 
     <GridView
         android:id="@+id/gv_wallet_coin"
-        android:layout_width="100dp"
+        android:layout_width="200dp"
         android:layout_height="100dp"
         android:layout_marginTop="20dp"
-        android:columnWidth="20dp"
+        android:columnWidth="10dp"
         android:gravity="center"
-        android:horizontalSpacing="1dp"
-        android:numColumns="2"
+        android:horizontalSpacing="3dp"
+        android:numColumns="4"
         android:stretchMode="columnWidth"
         android:verticalSpacing="2dp"
         app:layout_constraintBottom_toBottomOf="parent"

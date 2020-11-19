@@ -2,6 +2,9 @@ package com.tianqi.baselib.rxhttp;
 
 import com.tianqi.baselib.rxhttp.base.BaseEntity;
 import com.tianqi.baselib.rxhttp.bean.CoinRateBean;
+import com.tianqi.baselib.rxhttp.bean.GetErc20BalanceBean;
+import com.tianqi.baselib.rxhttp.bean.GetErc20TxRecordBean;
+import com.tianqi.baselib.rxhttp.bean.GetEthTxRecordBean;
 import com.tianqi.baselib.rxhttp.bean.GetFormalUtxoBean;
 import com.tianqi.baselib.rxhttp.bean.GetListUnspentBean;
 import com.tianqi.baselib.rxhttp.bean.GetLoadingTxBean;
@@ -40,7 +43,8 @@ public interface Api {
      *  获取BTC钱包地址余额（1/1是余额，1/50是交易记录）
      */
     @GET("/vipapi//address/{coin_type}/{btc_address}/{type}?")
-    Observable<BaseEntity<List<GetListUnspentBean>>> getBtcAddressBalance(@Path("coin_type") String coin_type ,@Path("btc_address") String btc_address , @Path("type") String type, @QueryMap Map<String, Object> map);
+    Observable<BaseEntity<List<GetListUnspentBean>>> getBtcAddressBalance(@Path("coin_type") String coin_type
+            ,@Path("btc_address") String btc_address , @Path("type") String type, @QueryMap Map<String, Object> map);
 
 
 
@@ -92,5 +96,40 @@ public interface Api {
      */
     @GET(HttpConfig.APP_VERSION_UPDATE_METHOD)
     Observable<BaseEntity<GetNewVersionBean>> getNewVersion();
+
+
+    /**
+     *  获取ETH钱包地址余额
+     */
+    @GET("/vipapi/addr/b/{coin_type}/{eth_address}/?")
+    Observable<BaseEntity<String>> getEthAddressBalance(@Path("coin_type") String coin_type,@Path("eth_address") String btc_address ,@QueryMap Map<String, Object> map);
+
+
+    /**
+     *  获取ERC20钱包地址余额
+     */
+    @GET("/vipapi/{coin_type}/address/tokenbalance/{eth_address}/??")
+    Observable<BaseEntity<List<GetErc20BalanceBean>>> getErc20AddressBalance(@Path("coin_type") String coin_type, @Path("eth_address") String btc_address, @QueryMap Map<String, Object> map);
+
+
+    /**
+     *  获取ETH钱包地址交易历史
+     */
+    @GET("/vipapi/{coin_type}/address/{eth_address}/?")
+    Observable<BaseEntity<GetEthTxRecordBean>> getEthTxRecord(@Path("coin_type") String coin_type, @Path("eth_address") String btc_address , @QueryMap Map<String, Object> map);
+
+
+    /**
+     *  获取ETH钱包地址交易历史
+     */
+    @GET("/vipapi/eth/address/tokentrans/{eth_address}/{contract_address}/{page}?")
+    Observable<BaseEntity<List<GetErc20TxRecordBean>>> getErc20TxRecord(@Path("eth_address") String eth_address, @Path("contract_address") String contract_address ,
+                                                                        @Path("page") String page , @QueryMap Map<String, Object> map);
+    /**
+     *  btc的广播交易。
+     *
+     */
+    @POST("WalletAdmin/app/new/list?")
+    Observable<BaseEntity<Object>> getVersionList(@QueryMap Map<String, Object> map1);
 
 }

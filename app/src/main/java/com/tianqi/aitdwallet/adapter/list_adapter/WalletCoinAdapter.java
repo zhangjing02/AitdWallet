@@ -8,8 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import androidx.cardview.widget.CardView;
-
 import com.tianqi.aitdwallet.R;
 import com.tianqi.baselib.utils.Constant;
 import com.tianqi.baselib.utils.display.GlideUtils;
@@ -86,23 +84,23 @@ public class WalletCoinAdapter extends BaseAdapter {
                     break;
                 case 1:
                     map = wordBeanList.get(i);
-                   // map.put(Constant.ACTION_IMAGE,R.mipmap.ic_circle_eth);
-                    map.put(Constant.ACTION_IMAGE,R.mipmap.ic_circle_usdt);
+                    map.put(Constant.ACTION_IMAGE,R.mipmap.ic_circle_eth);
+                    //map.put(Constant.ACTION_IMAGE,R.mipmap.ic_circle_usdt_omni);
                     wordBeanList.set(i,map);
                     GlideUtils.loadResourceImage(context, (Integer) wordBeanList.get(i).get(Constant.ACTION_IMAGE), holder.ivCoin);
                     break;
-//                case 2:
-//                    map = wordBeanList.get(i);
-//                    map.put(Constant.ACTION_IMAGE,R.mipmap.ic_circle_usdt);
-//                    wordBeanList.set(i,map);
-//                    GlideUtils.loadResourceImage(context, (Integer) wordBeanList.get(i).get(Constant.ACTION_IMAGE), holder.ivCoin);
-//                    break;
-//                case 3:
-//                    map = wordBeanList.get(i);
-//                    map.put(Constant.ACTION_IMAGE,R.mipmap.ic_circle_aitd);
-//                    wordBeanList.set(i,map);
-//                    GlideUtils.loadResourceImage(context, (Integer) wordBeanList.get(i).get(Constant.ACTION_IMAGE), holder.ivCoin);
-//                    break;
+                case 2:
+                    map = wordBeanList.get(i);
+                    map.put(Constant.ACTION_IMAGE,R.mipmap.ic_circle_usdt_omni);
+                    wordBeanList.set(i,map);
+                    GlideUtils.loadResourceImage(context, (Integer) wordBeanList.get(i).get(Constant.ACTION_IMAGE), holder.ivCoin);
+                    break;
+                case 3:
+                    map = wordBeanList.get(i);
+                    map.put(Constant.ACTION_IMAGE,R.mipmap.ic_circle_usdt_erc20);
+                    wordBeanList.set(i,map);
+                    GlideUtils.loadResourceImage(context, (Integer) wordBeanList.get(i).get(Constant.ACTION_IMAGE), holder.ivCoin);
+                    break;
             }
           //  holder.cardCoin.setVisibility(View.GONE);
             holder.progressBar1.setVisibility(View.GONE);

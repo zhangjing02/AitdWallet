@@ -124,6 +124,51 @@ public class HttpClientUtil {
     }
 
 
+    public Response postBackendJson(String json) {
+        RequestBody body = RequestBody.create(JSON, json);
+        Request request = new Request.Builder()
+                .url(HttpConfig.BASE_BACKEND_STATISTICS_URL)
+                .post(body)
+                .build();
+        Response response = null;
+        try {
+            response = okHttpClient.newCall(request).execute();
+            if (response.isSuccessful()) {
+                return response;
+            } else {
+                // TODO: 2020/9/21 此处要处理异常，不能这样抛异常，会引起闪退。
+                return null;
+                //  throw new IOException("Unexpected code " + response.message());
+            }
+        } catch (IOException e) {
+            return null;
+            //  e.printStackTrace();
+        }
+    }
+
+    public Response postFormalEthJson(String json) {
+        RequestBody body = RequestBody.create(JSON, json);
+        Request request = new Request.Builder()
+                .url(HttpConfig.BASE_ETH_FORMAL_URL)
+                .post(body)
+                .build();
+        Response response = null;
+        try {
+            response = okHttpClient.newCall(request).execute();
+            if (response.isSuccessful()) {
+                return response;
+            } else {
+                // TODO: 2020/9/21 此处要处理异常，不能这样抛异常，会引起闪退。
+                return null;
+                //  throw new IOException("Unexpected code " + response.message());
+            }
+        } catch (IOException e) {
+            return null;
+            //  e.printStackTrace();
+        }
+    }
+
+
     public Response postFormalUsdtJson(String json) {
         RequestBody body = RequestBody.create(JSON, json);
         Request request = new Request.Builder()

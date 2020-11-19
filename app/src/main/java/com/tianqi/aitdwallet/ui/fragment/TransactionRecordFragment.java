@@ -1,8 +1,6 @@
 package com.tianqi.aitdwallet.ui.fragment;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,11 +11,8 @@ import com.github.jdsjlzx.interfaces.OnRefreshListener;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 import com.github.jdsjlzx.recyclerview.ProgressStyle;
-import com.google.gson.Gson;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.adapter.recycle_adapter.TransactionRecordAdapter;
-import com.tianqi.aitdwallet.bean.GetUtxoBean;
-import com.tianqi.aitdwallet.bean.UsdtTxRecordBean;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.aitdwallet.widget.MyArrowRefreshHeader;
 import com.tianqi.baselib.base.BaseFragment;
@@ -25,25 +20,12 @@ import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dao.TransactionRecord;
 import com.tianqi.baselib.dbManager.CoinInfoManager;
 import com.tianqi.baselib.dbManager.TransactionRecordManager;
-import com.tianqi.baselib.rxhttp.HttpClientUtil;
-import com.tianqi.baselib.rxhttp.base.RxHelper;
 import com.tianqi.baselib.utils.Constant;
-import com.tianqi.baselib.utils.display.ToastUtil;
 import com.tianqi.baselib.utils.eventbus.EventMessage;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 import butterknife.BindView;
-import io.reactivex.Observable;
-import io.reactivex.ObservableOnSubscribe;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 public class TransactionRecordFragment extends BaseFragment {
     @BindView(R.id.lrc_transaction_record)
@@ -130,7 +112,7 @@ public class TransactionRecordFragment extends BaseFragment {
         switch (coin_name) {
             case Constant.TRANSACTION_COIN_NAME_BTC:
                 break;
-            case Constant.TRANSACTION_COIN_NAME_USDT:
+            case Constant.TRANSACTION_COIN_NAME_USDT_OMNI:
               //  getUsdtBalance(walletBtcFrAddress);
                 break;
         }
@@ -148,9 +130,9 @@ public class TransactionRecordFragment extends BaseFragment {
             }
         }else if (event.getType()==EventMessage.TRANSACTION_RECORD_UPDATE_USDT){
             if (transaction_type.equals(Constants.TRANSACTION_SEND)) {
-                mMessageBeans = TransactionRecordManager.getTxSendFrAddressAndCoin(coin_address,Constant.TRANSACTION_COIN_NAME_USDT);
+                mMessageBeans = TransactionRecordManager.getTxSendFrAddressAndCoin(coin_address,Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
             } else if (transaction_type.equals(Constants.TRANSACTION_ALL)) {
-                mMessageBeans = TransactionRecordManager.getTxSendFrAddressAndCoin(coin_address,Constant.TRANSACTION_COIN_NAME_USDT);
+                mMessageBeans = TransactionRecordManager.getTxSendFrAddressAndCoin(coin_address,Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
             }
         }
         if (mMessageBeans.size()<=0){

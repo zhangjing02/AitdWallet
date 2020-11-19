@@ -14,7 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.ui.activity.wallet.importwallet.ImportBtcCoinActivity;
+import com.tianqi.aitdwallet.ui.activity.wallet.importwallet.ImportEthCoinActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.importwallet.ImportUsdtCoinActivity;
+import com.tianqi.aitdwallet.ui.activity.wallet.importwallet.ImportUsdtErc20CoinActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.record.TransactionRecordActivity;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.baselib.dao.CoinInfo;
@@ -95,9 +97,18 @@ public class SingleWalletAdapter extends RecyclerView.Adapter<SingleWalletAdapte
                         intent.putExtra(Constants.TRANSACTION_COIN_NAME, mMessageBeans.get(position).getCoin_name());
                         mContext.startActivity(intent);
                         break;
-
-                    case Constant.TRANSACTION_COIN_NAME_USDT:
+                    case Constant.TRANSACTION_COIN_NAME_USDT_OMNI:
                         intent = new Intent(mContext, ImportUsdtCoinActivity.class);
+                        intent.putExtra(Constants.TRANSACTION_COIN_NAME, mMessageBeans.get(position).getCoin_name());
+                        mContext.startActivity(intent);
+                        break;
+                    case Constant.TRANSACTION_COIN_NAME_USDT_ERC20:
+                        intent = new Intent(mContext, ImportUsdtErc20CoinActivity.class);
+                        intent.putExtra(Constants.TRANSACTION_COIN_NAME, mMessageBeans.get(position).getCoin_name());
+                        mContext.startActivity(intent);
+                        break;
+                    case Constant.TRANSACTION_COIN_NAME_ETH:
+                        intent = new Intent(mContext, ImportEthCoinActivity.class);
                         intent.putExtra(Constants.TRANSACTION_COIN_NAME, mMessageBeans.get(position).getCoin_name());
                         mContext.startActivity(intent);
                         break;

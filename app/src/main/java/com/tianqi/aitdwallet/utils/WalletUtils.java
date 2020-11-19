@@ -17,6 +17,8 @@ import com.quincysx.crypto.bip44.AddressIndex;
 import com.quincysx.crypto.bip44.BIP44;
 import com.quincysx.crypto.bip44.CoinPairDerive;
 import com.quincysx.crypto.bitcoin.BitCoinECKeyPair;
+import com.quincysx.crypto.ethereum.EthECKeyPair;
+import com.quincysx.crypto.utils.HexUtils;
 import com.tianqi.baselib.dao.UserInformation;
 import com.tianqi.baselib.dbManager.UserInfoManager;
 
@@ -75,10 +77,19 @@ public class WalletUtils {
 
     public static ECKeyPair importCoinMaser(CoinTypes coinTypes,String private_key) {
         ECKeyPair master=null;
-        try {
-            master = BitCoinECKeyPair.parseWIF(private_key);
-        } catch (ValidationException e) {
-            e.printStackTrace();
+        if (coinTypes==CoinTypes.Bitcoin){
+            try {
+                master = BitCoinECKeyPair.parseWIF(private_key);
+            } catch (ValidationException e) {
+                e.printStackTrace();
+            }
+        }else if (coinTypes==CoinTypes.Ethereum){
+            try {
+                EthECKeyPair ethECKeyPair=new EthECKeyPair(HexUtils.fromHex(private_key));
+                master=ethECKeyPair;
+            } catch (ValidationException e) {
+                e.printStackTrace();
+            }
         }
         return master;
     }

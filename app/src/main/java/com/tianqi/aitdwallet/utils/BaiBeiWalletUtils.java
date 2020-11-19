@@ -6,7 +6,6 @@ import android.util.Log;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tianqi.aitdwallet.BuildConfig;
 import com.tianqi.aitdwallet.bean.BaibeiWallet;
 
 import org.bitcoinj.core.NetworkParameters;
@@ -213,12 +212,12 @@ public class BaiBeiWalletUtils {
     private static DeterministicKey getDeterministicKeyBip44BySeed(byte[] seed) {
         // 3. 生成根私钥 root private key 树顶点的master key
         DeterministicKey rootPrivateKey = HDKeyDerivation.createMasterPrivateKey(seed);
-        if (BuildConfig.DEBUG) {
-            // 根私钥进行 priB58编码,得到测试网站上显示的数据
-            NetworkParameters params = MainNetParams.get();
-            String priv = rootPrivateKey.serializePrivB58(params);
-            Log.i("TAG", "BIP32 Extended Private Key:" + priv);
-        }
+//        if (BuildConfig.DEBUG) {
+//            // 根私钥进行 priB58编码,得到测试网站上显示的数据
+//            NetworkParameters params = MainNetParams.get();
+//            String priv = rootPrivateKey.serializePrivB58(params);
+//            Log.i("TAG", "BIP32 Extended Private Key:" + priv);
+//        }
         // 4. 由根私钥生成 第一个HD 钱包
         DeterministicHierarchy dh = new DeterministicHierarchy(rootPrivateKey);
         // 5. 定义父路径 H则是加强 imtoken中的eth钱包进过测试发现使用的是此方式生成
@@ -235,19 +234,19 @@ public class BaiBeiWalletUtils {
         byte[] initialEntropy = new byte[16];
         secureRandom.nextBytes(initialEntropy);
         String mnemonic = MnemonicUtils.generateMnemonic(initialEntropy);
-        if (BuildConfig.DEBUG) {
-            Log.i("TAG", "generateBip44Wallet: 助记词 = " + mnemonic);
-        }
+//        if (BuildConfig.DEBUG) {
+//            Log.i("TAG", "generateBip44Wallet: 助记词 = " + mnemonic);
+//        }
         //2.生成种子
         byte[] seed = MnemonicUtils.generateSeed(mnemonic, null);
         // 3. 生成根私钥 root private key 树顶点的master key
         DeterministicKey rootPrivateKey = HDKeyDerivation.createMasterPrivateKey(seed);
-        if (BuildConfig.DEBUG) {
-            // 根私钥进行 priB58编码,得到测试网站上显示的数据
-            NetworkParameters params = MainNetParams.get();
-            String priv = rootPrivateKey.serializePrivB58(params);
-            Log.i("TAG", "BIP32 Extended Private Key:" + priv);
-        }
+//        if (BuildConfig.DEBUG) {
+//            // 根私钥进行 priB58编码,得到测试网站上显示的数据
+//            NetworkParameters params = MainNetParams.get();
+//            String priv = rootPrivateKey.serializePrivB58(params);
+//            Log.i("TAG", "BIP32 Extended Private Key:" + priv);
+//        }
         // 4. 由根私钥生成 第一个HD 钱包
         DeterministicHierarchy dh = new DeterministicHierarchy(rootPrivateKey);
         // 5. 定义父路径 H则是加强 imtoken中的eth钱包进过测试发现使用的是此方式生成

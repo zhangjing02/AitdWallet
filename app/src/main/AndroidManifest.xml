@@ -23,7 +23,13 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppThemeTrans">
-        <activity android:name=".ui.activity.wallet.property.SelectCoinToTransActivity"></activity>
+        <activity android:name=".ui.activity.setting.InviteFriendActivity"></activity>
+        <activity android:name=".ui.activity.setting.VersionLogActivity" />
+        <activity android:name=".ui.activity.setting.AboutUsActivity" />
+        <activity android:name=".ui.activity.address.CreateNewAddressActivity" />
+        <activity android:name=".ui.activity.address.ContactsAddressManageActivity" />
+        <activity android:name=".ui.activity.wallet.eth.EthTransactionTestActivity" />
+        <activity android:name=".ui.activity.wallet.property.SelectCoinToTransActivity" />
         <activity android:name=".ui.activity.setting.SafeCenterActivity" />
         <activity android:name=".ui.activity.wallet.btc.BtcTransTestActivity" />
         <activity android:name=".ui.activity.wallet.setting.CoinHiddenActivity" />
@@ -39,8 +45,9 @@
         <activity
             android:name=".ui.activity.wallet.importwallet.ImportBtcCoinActivity"
             android:windowSoftInputMode="adjustNothing" />
-        <activity android:name=".ui.activity.wallet.importwallet.ImportWalletActivity"
-            android:windowSoftInputMode="adjustNothing"/>
+        <activity
+            android:name=".ui.activity.wallet.importwallet.ImportWalletActivity"
+            android:windowSoftInputMode="adjustNothing" />
         <activity android:name=".ui.activity.wallet.initwallet.CreateWalletActivity" />
         <activity android:name=".ui.activity.wallet.TestBtcActivity" />
         <activity android:name=".ui.activity.wallet.initwallet.BackupMemoryWordActivity" />
@@ -77,6 +84,17 @@
         <activity android:name=".ui.activity.wallet.btc.BitcoinTransactionActivity002" />
         <activity android:name=".ui.activity.wallet.usdt.UsdtTransactionActivity002" />
         <activity android:name=".ui.activity.wallet.record.TransactionRecordActivity" />
+        <activity android:name=".ui.activity.wallet.setting.ExportKeystoreActivity" />
+        <activity android:name=".ui.activity.wallet.importwallet.ImportEthCoinActivity"
+            android:windowSoftInputMode="adjustNothing"/>
+        <activity android:name=".ui.activity.wallet.eth.EthTransactionNativeActivity" />
+        <activity android:name=".ui.activity.wallet.eth.EthTransactionActivity" />
+        <activity android:name=".ui.activity.setting.LanguageSettingActivity" />
+        <activity android:name=".ui.activity.wallet.importwallet.ImportUsdtErc20CoinActivity"
+            android:windowSoftInputMode="adjustNothing"
+            />
+        <activity android:name=".ui.activity.wallet.usdt.UsdtErc20TransactionActivity" />
+        <activity android:name=".ui.activity.wallet.property.ImportCoinListActivity" />
     </application>
 
 </manifest>

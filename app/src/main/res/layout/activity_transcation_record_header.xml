@@ -24,7 +24,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_wallet_coin"
-        android:text="0.000000BTC"
+        android:text="0.000000"
         android:textSize="24sp"
         android:textColor="@color/text_main_black"
         android:layout_marginTop="20dp"/>
@@ -41,26 +41,40 @@
         android:textColor="@color/text_main_60_black"
         android:layout_marginTop="10dp"/>
 
-    <TextView
-        android:id="@+id/btn_transaction_send"
+
+    <LinearLayout
         android:layout_width="0dp"
-        app:layout_constraintWidth_percent="0.4"
         android:layout_height="47dp"
+        app:layout_constraintWidth_percent="0.4"
         android:layout_marginTop="50dp"
-        android:text="@string/tittle_send_money_text"
         app:layout_constraintTop_toBottomOf="@+id/tv_fiat_balance"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_bias="0.12"
         android:layout_marginBottom="15dp"
-        android:textSize="16sp"
-        android:singleLine="true"
-        android:paddingHorizontal="40dp"
-        android:drawableLeft="@mipmap/ic_white_send"
-        style="@style/bg_button_blue" />
+        style="@style/bg_button_blue"
+        >
+        <ImageView
+            app:layout_constraintTop_toTopOf="@+id/btn_transaction_send"
+            android:src="@mipmap/ic_white_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
-    <TextView
-        android:id="@+id/btn_transaction_receive"
+        <TextView
+            android:id="@+id/btn_transaction_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tittle_send_money_text"
+            android:textSize="16sp"
+            android:layout_marginLeft="6dp"
+            android:textColor="@color/white"
+            android:singleLine="true"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_receive"
         android:layout_width="0dp"
         android:layout_height="47dp"
         android:layout_marginTop="50dp"
@@ -69,13 +83,27 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_bias="0.88"
         android:layout_marginBottom="15dp"
-        android:textSize="16sp"
-        android:text="@string/tittle_receive_money_text"
-        android:singleLine="true"
-        android:paddingHorizontal="40dp"
-        android:drawableLeft="@mipmap/ic_white_receive_60"
+        android:gravity="center"
         app:layout_constraintWidth_percent="0.4"
-        style="@style/bg_button_green" />
+        style="@style/bg_button_green"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:src="@mipmap/ic_white_receive_60"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/btn_transaction_receive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:text="@string/tittle_receive_money_text"
+            android:layout_marginLeft="6dp"
+            android:singleLine="true" />
+    </LinearLayout>
+
 
     <View
         android:id="@+id/line_middle"
@@ -83,7 +111,7 @@
         android:layout_height="10dp"
         android:layout_marginTop="22dp"
         android:background="@color/color_line_5_grey"
-        app:layout_constraintTop_toBottomOf="@+id/btn_transaction_receive" />
+        app:layout_constraintTop_toBottomOf="@+id/layout_receive" />
 
 
 

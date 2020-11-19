@@ -53,6 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:text="@string/tittle_new_guide_end"
+                android:gravity="center"
                 android:textColor="@color/text_main_black"
                 android:textSize="17sp"
                 android:layout_gravity="center_horizontal"

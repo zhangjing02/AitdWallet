@@ -3,6 +3,7 @@ package com.tianqi.aitdwallet.adapter.recycle_adapter;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.adapter.list_adapter.ChildCoinAdapter;
 import com.tianqi.aitdwallet.ui.activity.wallet.property.CoinListActivity;
+import com.tianqi.aitdwallet.ui.activity.wallet.property.ImportCoinListActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.record.TransactionRecordActivity;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.baselib.dao.CoinInfo;
@@ -52,10 +54,14 @@ public class HomeWalletAdapter extends BaseQuickAdapter<WalletInfo, BaseViewHold
         GlideUtils.loadResourceImage(mContext,listBean.getResource_id(),iv_coin);
         tv_coin_name.setText(listBean.getWalletName());
 
-        if (listBean.getWallet_id().equals(Constant.TRANSACTION_COIN_NAME_USDT)){
-            tv_coin_balance.setText(DataReshape.doubleBig(listBean.getWalletBalance(), 4));
-        }else {
-            tv_coin_balance.setText(DataReshape.doubleBig(listBean.getWalletBalance(), 8));
+        if (listBean.getWallet_id().equals(Constant.TRANSACTION_COIN_NAME_USDT_OMNI)){
+            tv_coin_balance.setText(DataReshape.doubleBig(listBean.getWalletBalance(), 4,4));
+        }else if (listBean.getWallet_id().equals(Constant.TRANSACTION_COIN_NAME_ETH)){
+            tv_coin_balance.setText(DataReshape.doubleBig(listBean.getWalletBalance(), 6,6));
+        }else if (listBean.getWallet_id().equals(Constant.TRANSACTION_COIN_NAME_USDT_ERC20)){
+            tv_coin_balance.setText(DataReshape.doubleBig(listBean.getWalletBalance(), 6,6));
+        } else {
+            tv_coin_balance.setText(DataReshape.doubleBig(listBean.getWalletBalance(), 8,8));
         }
 
         UserInformation userInformation= UserInfoManager.getUserInfo();
@@ -78,7 +84,7 @@ public class HomeWalletAdapter extends BaseQuickAdapter<WalletInfo, BaseViewHold
             String wallet_id02 = listBean.getWallet_id();
             List<CoinInfo> coinFrWalletIds02 = CoinInfoManager.getCoinFrWalletId(wallet_id02);
             List<CoinInfo> walletBtcInfo03 = CoinInfoManager.getCoinInfo();
-            Log.i(TAG, walletBtcInfo03.size()+"----convert: 我们看这个币种是多少？"+coinFrWalletIds02.size());
+            Log.i(TAG, walletBtcInfo03.size()+"----convert: 我们看这个币种是多少？"+coinFrWalletIds02.size()+"我們查询的wallet_id是？"+wallet_id02);
             if (coinFrWalletIds02.size() > 1) {  //如果大于一个币种，就展开显示。
                 if (expand_coin.isExpanded()) {
                     expand_coin.collapse();
@@ -95,11 +101,17 @@ public class HomeWalletAdapter extends BaseQuickAdapter<WalletInfo, BaseViewHold
                     intent.putExtra(Constants.TRANSACTION_COIN_ID, coinFrWalletIds02.get(0).getCoin_id());
                     mContext.startActivity(intent);
                 }else {
-                    Intent intent = new Intent(mContext, TransactionRecordActivity.class);
+                    Intent intent = new Intent(mContext, ImportCoinListActivity.class);
                     intent.putExtra(Constants.TRANSACTION_COIN_NAME, coinFrWalletIds02.get(0).getCoin_name());
                     intent.putExtra(Constants.TRANSACTION_COIN_ADDRESS, coinFrWalletIds02.get(0).getCoin_address());
                     intent.putExtra(Constants.TRANSACTION_COIN_ID, coinFrWalletIds02.get(0).getCoin_id());
                     mContext.startActivity(intent);
+
+//                    Intent intent = new Intent(mContext, TransactionRecordActivity.class);
+//                    intent.putExtra(Constants.TRANSACTION_COIN_NAME, coinFrWalletIds02.get(0).getCoin_name());
+//                    intent.putExtra(Constants.TRANSACTION_COIN_ADDRESS, coinFrWalletIds02.get(0).getCoin_address());
+//                    intent.putExtra(Constants.TRANSACTION_COIN_ID, coinFrWalletIds02.get(0).getCoin_id());
+//                    mContext.startActivity(intent);
                 }
             }
         });

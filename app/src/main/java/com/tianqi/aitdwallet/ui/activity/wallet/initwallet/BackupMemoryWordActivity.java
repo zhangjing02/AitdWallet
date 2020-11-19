@@ -115,7 +115,7 @@ public class BackupMemoryWordActivity extends BaseActivity {
                 Gson gson = new Gson();
                 Type listType = new TypeToken<List<String>>() {
                 }.getType();
-                strings = gson.fromJson( userInfo.getMnemonicWord(), listType);
+                strings = gson.fromJson(userInfo.getMnemonicWord(), listType);
             }
             byte[] seed = new SeedCalculator().calculateSeed(strings, "");
             ExtendedKey extendedKey = ExtendedKey.create(seed);

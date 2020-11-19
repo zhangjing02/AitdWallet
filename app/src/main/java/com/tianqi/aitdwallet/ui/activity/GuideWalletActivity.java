@@ -71,7 +71,7 @@ public class GuideWalletActivity extends BaseActivity {
                         startActivity(intent);
                     }else {
                         Intent  intent = new Intent(this, SetSecurityPsdActivity.class);
-                        intent.putExtra(Constants.INTENT_PUT_TAG,Constants.INTENT_PUT_CREATE_WALLET);
+                        intent.putExtra(Constants.INTENT_PUT_TAG,getString(R.string.tittle_create_wallet));
                         //Intent intent=new Intent(this, SelectWalletTypeActivity.class);
                         startActivity(intent);
                     }
@@ -80,7 +80,7 @@ public class GuideWalletActivity extends BaseActivity {
                     startActivity(intent);
                 }else {
                     Intent  intent = new Intent(this, SetSecurityPsdActivity.class);
-                    intent.putExtra(Constants.INTENT_PUT_TAG,Constants.INTENT_PUT_CREATE_WALLET);
+                    intent.putExtra(Constants.INTENT_PUT_TAG,getString(R.string.tittle_create_wallet));
                     //Intent intent=new Intent(this, SelectWalletTypeActivity.class);
                     startActivity(intent);
                 }
@@ -89,11 +89,11 @@ public class GuideWalletActivity extends BaseActivity {
                 if (userInfo!=null&& !TextUtils.isEmpty(userInfo.getPasswordStr())){
                     // TODO: 2020/10/14 进入验证密码的页面。
                     Intent intent=new Intent(this, VerifySecurityPsdActivity.class);
-                    intent.putExtra(Constants.INTENT_PUT_TAG,Constants.INTENT_PUT_IMPORT_WALLET);
+                    intent.putExtra(Constants.INTENT_PUT_TAG,getString(R.string.tittle_import_wallet));
                     startActivity(intent);
                 }else {
                     Intent intent=new Intent(this, SetSecurityPsdActivity.class);
-                    intent.putExtra(Constants.INTENT_PUT_TAG,Constants.INTENT_PUT_IMPORT_WALLET);
+                    intent.putExtra(Constants.INTENT_PUT_TAG,getString(R.string.tittle_import_wallet));
                     startActivity(intent);
                 }
                 break;

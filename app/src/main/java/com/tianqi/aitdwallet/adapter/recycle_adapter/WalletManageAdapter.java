@@ -58,7 +58,8 @@ public class WalletManageAdapter extends BaseQuickAdapter<CoinInfo, BaseViewHold
             case Constant.TRANSACTION_COIN_NAME_ETH:
                 layoutVirtualCurrency.setBackground(mContext.getResources().getDrawable(R.drawable.bg_wallet_manage_eth));
                 break;
-            case Constant.TRANSACTION_COIN_NAME_USDT:
+            case Constant.TRANSACTION_COIN_NAME_USDT_OMNI:
+            case Constant.TRANSACTION_COIN_NAME_USDT_ERC20:
                 layoutVirtualCurrency.setBackground(mContext.getResources().getDrawable(R.drawable.bg_wallet_manage_usdt));
                 break;
             case Constants.COIN_NULL:

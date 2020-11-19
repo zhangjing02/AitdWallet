@@ -18,6 +18,7 @@ import com.tianqi.aitdwallet.utils.statusbar.StatusBarCompat;
 import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dbManager.CoinInfoManager;
+import com.tianqi.baselib.utils.Constant;
 import com.tianqi.baselib.utils.display.GlideUtils;
 import com.tianqi.baselib.utils.display.ToastUtil;
 import com.tianqi.baselib.utils.eventbus.EventMessage;
@@ -58,6 +59,8 @@ public class WalletSettingFrImportActivity extends BaseActivity {
     TextView tvDeleteWallet;
     @BindView(R.id.line_down_mnemonic)
     View lineDownMnemonic;
+    @BindView(R.id.line_down_keystore)
+    View lineDownKeystore;
     private String wallet_name;
     private String coin_id;
 
@@ -76,7 +79,6 @@ public class WalletSettingFrImportActivity extends BaseActivity {
         CoinInfo coinFrWalletId = CoinInfoManager.getMainCoinFrCoinId(coin_id);
 
 
-        Log.i("tttttttttttttttt", "initView: 我们看获取的币种类型是？" + coinFrWalletId.getCoin_ComeType());
 
         GlideUtils.loadResourceImage(this, coinFrWalletId.getResourceId(), ivWalletCoin);
 
@@ -88,6 +90,16 @@ public class WalletSettingFrImportActivity extends BaseActivity {
         tvBackUpMnemonic.setVisibility(View.GONE);
         tvDeleteWallet.setVisibility(View.VISIBLE);
         lineDownMnemonic.setVisibility(View.GONE);
+
+
+        if (wallet_name.contains(Constant.TRANSACTION_COIN_NAME_ETH)||wallet_name.contains(Constant.TRANSACTION_COIN_NAME_USDT_ERC20)) {
+            tvExportKeystore.setVisibility(View.VISIBLE);
+            lineDownKeystore.setVisibility(View.VISIBLE);
+        } else {
+            tvExportKeystore.setVisibility(View.GONE);
+            lineDownKeystore.setVisibility(View.GONE);
+        }
+
     }
 
     private void getToolBar() {
@@ -125,23 +137,27 @@ public class WalletSettingFrImportActivity extends BaseActivity {
                 break;
             case R.id.tv_export_private_key:
                 intent = new Intent(this, VerifySecurityPsdActivity.class);
-                intent.putExtra(Constants.INTENT_PUT_TAG, Constants.INTENT_PUT_EXPORT_PRIVATE_KEY);
-
-                intent.putExtra(Constants.TRANSACTION_COIN_NAME, coin_id);
+                intent.putExtra(Constants.INTENT_PUT_TAG,  getString(R.string.tittle_export_private_key));
+               // intent.putExtra(Constants.TRANSACTION_COIN_NAME, coin_id);
+                intent.putExtra(Constants.INTENT_PUT_COIN_ID, coin_id);
                 startActivity(intent);
                 break;
             case R.id.tv_export_keystore:
+                intent = new Intent(this, VerifySecurityPsdActivity.class);
+                intent.putExtra(Constants.INTENT_PUT_TAG, getString(R.string.tittle_export_keystore));
+                intent.putExtra(Constants.INTENT_PUT_COIN_ID, coin_id);
+                startActivity(intent);
                 break;
             case R.id.tv_back_up_mnemonic:
                 //INTENT_PUT_BACK_UP_MNEMONIC
                 intent = new Intent(this, VerifySecurityPsdActivity.class);
-                intent.putExtra(Constants.INTENT_PUT_TAG, Constants.INTENT_PUT_BACK_UP_MNEMONIC);
+                intent.putExtra(Constants.INTENT_PUT_TAG, getString(R.string.tittle_back_up_mnemonic));
                 intent.putExtra(Constants.TRANSACTION_COIN_NAME, wallet_name);
                 startActivity(intent);
                 break;
             case R.id.tv_delete_wallet:
                 intent = new Intent(this, VerifySecurityPsdActivity.class);
-                intent.putExtra(Constants.INTENT_PUT_TAG, Constants.INTENT_PUT_DELETE_COIN);
+                intent.putExtra(Constants.INTENT_PUT_TAG, getString(R.string.tittle_delete_wallet));
                 intent.putExtra(Constants.INTENT_PUT_COIN_ID, coin_id);
                 startActivity(intent);
                 break;

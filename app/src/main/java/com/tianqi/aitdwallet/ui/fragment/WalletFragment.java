@@ -4,9 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.RectF;
 import android.graphics.Typeface;
-import android.os.Handler;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -21,7 +19,6 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,9 +28,6 @@ import com.app.hubert.guide.listener.OnGuideChangedListener;
 import com.app.hubert.guide.listener.OnLayoutInflatedListener;
 import com.app.hubert.guide.model.GuidePage;
 import com.app.hubert.guide.model.HighLight;
-import com.google.gson.Gson;
-import com.quincysx.crypto.CoinTypes;
-import com.quincysx.crypto.ECKeyPair;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.adapter.recycle_adapter.HomeWalletAdapter;
@@ -43,7 +37,6 @@ import com.tianqi.aitdwallet.ui.activity.wallet.setting.WalletHiddenActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.setting.WalletManageActivity;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.aitdwallet.utils.HighlightOptionsUtils;
-import com.tianqi.aitdwallet.utils.WalletUtils;
 import com.tianqi.aitdwallet.utils.statusbar.StatusBarCompat;
 import com.tianqi.aitdwallet.widget.dialog.NewGuideEndDialog;
 import com.tianqi.aitdwallet.widget.dialog.NewGuideStartDialog;
@@ -58,13 +51,13 @@ import com.tianqi.baselib.dbManager.WalletInfoManager;
 import com.tianqi.baselib.rxhttp.RetrofitFactory;
 import com.tianqi.baselib.rxhttp.base.BaseObserver;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
+import com.tianqi.baselib.rxhttp.bean.GetErc20BalanceBean;
 import com.tianqi.baselib.rxhttp.bean.GetListUnspentBean;
 import com.tianqi.baselib.utils.Constant;
 import com.tianqi.baselib.utils.digital.DataReshape;
 import com.tianqi.baselib.utils.display.GlideUtils;
 import com.tianqi.baselib.utils.display.ScreenUtils;
 import com.tianqi.baselib.utils.eventbus.EventMessage;
-import com.tianqi.baselib.utils.rxtool.RxToolUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -77,7 +70,7 @@ import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
+import io.reactivex.functions.Function;
 
 public class WalletFragment extends BaseFragment {
 
@@ -148,10 +141,10 @@ public class WalletFragment extends BaseFragment {
     private Typeface typeFace;
     private boolean isHideBalance;
 
-    private PopupWindow mPopWindow;
+    private PopupWindow mPopWindow,mPopWindowTop;
     private int new_guide_step_index;
-    private int btc_quest_count, usdt_quest_count;
-    private List<CoinInfo> allBtccCoinInfos, allusdtCoinInfos;
+    private int btc_quest_count, usdt_quest_count,eth_quest_count,erc20_quest_count;
+    private List<CoinInfo> allBtccCoinInfos, allusdtCoinInfos,allEthcCoinInfos,allERC20cCoinInfos;
     private List<Disposable> disposableList;
    // private boolean is_request_btc,is_request_usdt;
 
@@ -170,7 +163,7 @@ public class WalletFragment extends BaseFragment {
         StatusBarCompat.translucentStatusBar(getActivity(), true);
 
         int first_open = PrefUtils.getInt(getActivity(), PrefUtils.FIRST_START_APP, -1);
-        if (first_open < 0) {
+        if (first_open <0) {
             NewGuideStartDialog shotNoticeDialog = new NewGuideStartDialog(getActivity(), R.style.MyDialog2);
             shotNoticeDialog.setOnDialogClickListener((view1, password, type) -> {
                 showGuide();
@@ -182,6 +175,12 @@ public class WalletFragment extends BaseFragment {
                 }
             });
             shotNoticeDialog.show();
+        }
+    }
+
+    public void hiddenPopWindow(){
+        if (mPopWindowTop!=null){
+            mPopWindowTop.dismiss();
         }
     }
 
@@ -205,7 +204,6 @@ public class WalletFragment extends BaseFragment {
                     @Override
                     public void onShowed(Controller controller) {
                     }
-
                     @Override
                     public void onRemoved(Controller controller) {
                         Log.i(TAG, new_guide_step_index + "-----onShowed: 002我们看到了啥？" + controller.toString());
@@ -270,7 +268,11 @@ public class WalletFragment extends BaseFragment {
                                 // TextView textView2 = view.findViewById(R.id.textView2);
                                 TextView textView4 = view.findViewById(R.id.textView4);
                                 SpannableString spannableString = new SpannableString(textView3.getText().toString());
-                                spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.text_main_yellow)), 0, 3, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                                int end=3;
+                                if (getResources().getConfiguration().locale.getCountry().equals("US")){
+                                    end=12;
+                                }
+                                spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.text_main_yellow)), 0, end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                                 textView3.setText(spannableString);
                                 if (height <= 1920) {
 //                                    ViewGroup.LayoutParams layoutParams = textView3.getLayoutParams();
@@ -322,7 +324,13 @@ public class WalletFragment extends BaseFragment {
                                 spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.text_main_yellow)), 0, end1, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                                 textView2.setText(spannableString);
                                 if (height <= 1920) {
-                                    int xx = (1920 - height) / 2;
+                                    int xx =0;
+                                    if (height<=1600){
+                                        xx = (1920 - height) /30;
+                                    }else {
+                                        xx = (1920 - height) / 2;
+                                    }
+
                                     LinearLayout.LayoutParams layoutParams002 = (LinearLayout.LayoutParams) textView9.getLayoutParams();
                                     layoutParams002.setMargins(0, 0, 0, 160 - xx);
                                     textView9.setLayoutParams(layoutParams002);
@@ -333,7 +341,6 @@ public class WalletFragment extends BaseFragment {
 //                                    layoutParams003.setMargins(0,0,0,500);
 //                                    textView4.setLayoutParams(layoutParams003);
                                 }
-
                             }
                         }))
                 .addGuidePage(GuidePage.newInstance()
@@ -355,7 +362,12 @@ public class WalletFragment extends BaseFragment {
                                 spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.text_main_yellow)), 0, end1, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                                 textView2.setText(spannableString);
                                 if (height <= 1920) {
-                                    int xx = (1920 - height) / 2;
+                                    int xx =0;
+                                    if (height<=1600){
+                                        xx = (1920 - height) /30;
+                                    }else {
+                                        xx = (1920 - height) / 2;
+                                    }
                                     LinearLayout.LayoutParams layoutParams002 = (LinearLayout.LayoutParams) textView9.getLayoutParams();
                                     layoutParams002.setMargins(0, 0, 0, 100);
                                     textView9.setLayoutParams(layoutParams002);
@@ -388,6 +400,7 @@ public class WalletFragment extends BaseFragment {
         //  recyWallet.addItemDecoration(new RecyclerViewDivider(getActivity(), HORIZONTAL, 12, getResources().getColor(R.color.transparent2)));
         homeWalletAdapter = new HomeWalletAdapter(R.layout.layout_adapter_home_wallet_for_shadow, mWalletBeans);
         rcvHomeWallet.setAdapter(homeWalletAdapter);
+        rcvHomeWallet.setItemViewCacheSize(20);
 
         //刷新
         refreshLayout.setOnRefreshListener(refreshLayout -> {
@@ -445,17 +458,11 @@ public class WalletFragment extends BaseFragment {
         }
     }
 
-
     @Override
     protected void initData() {
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         initWallet();
     }
+
 
     @Override
     public void onDataSynEvent(EventMessage event) {
@@ -470,6 +477,8 @@ public class WalletFragment extends BaseFragment {
             rcvHomeWallet.setAdapter(homeWalletAdapter);
         } else if (event.getType() == EventMessage.NEW_COIN_UPDATE) {
             // TODO: 2020/11/2 导入了币种，不知道该更新点啥？
+            homeWalletAdapter = new HomeWalletAdapter(R.layout.layout_adapter_home_wallet_for_shadow, mWalletBeans);
+            rcvHomeWallet.setAdapter(homeWalletAdapter);
         }
     }
 
@@ -487,14 +496,41 @@ public class WalletFragment extends BaseFragment {
                         emitter.onComplete(); }
                 }
             }else {
-                emitter.onComplete();
+               // emitter.onComplete();
+                emitter.onNext(-1);
             }
         }).map(index -> {
-             getBtcUtxo(allBtccCoinInfos.get(index));
+            Log.i(TAG, "initWallet: 001");
+            if (index>=0){
+                getBtcUtxo(allBtccCoinInfos.get(index));
+            }
             return "123";
+        }).map((Function<String, String>) s -> {
+            Log.i(TAG, "initWallet: 002");
+            allEthcCoinInfos=CoinInfoManager.getSpecCoinInfo(Constant.TRANSACTION_COIN_NAME_ETH);
+            if (allEthcCoinInfos!=null&&allEthcCoinInfos.size()>0){
+                eth_quest_count=0;
+                for (int i = 0; i <allEthcCoinInfos.size() ; i++) {
+                    getEthBalance(allEthcCoinInfos.get(i));
+                }
+            }
+            return "456";
+        }).map(index -> {
+            Log.i(TAG, "initWallet: 003");
+            if (index!=null){
+                allERC20cCoinInfos=CoinInfoManager.getSpecCoinInfo(Constant.TRANSACTION_COIN_NAME_USDT_ERC20);
+                if (allERC20cCoinInfos!=null&&allERC20cCoinInfos.size()>0){
+                    erc20_quest_count=0;
+                    for (int i = 0; i <allERC20cCoinInfos.size() ; i++) {
+                        getErc20Balance(allERC20cCoinInfos.get(i));
+                    }
+                }
+            }
+            return "789";
         }).delay(2, TimeUnit.SECONDS).doOnComplete(() -> {
+            Log.i(TAG, "initWallet: 004");
             //当BTC调完后（但结果未必都返回了，所以要做2S延迟）完成的时候，我们做一个2S的延时，然后去循环调用usdt的余额。
-            allusdtCoinInfos = CoinInfoManager.getSpecCoinInfo(Constant.TRANSACTION_COIN_NAME_USDT);
+            allusdtCoinInfos = CoinInfoManager.getSpecCoinInfo(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
             if (allusdtCoinInfos!=null&&allusdtCoinInfos.size() > 0) {
                 usdt_quest_count = 0;
                 for (int i = 0; i < allusdtCoinInfos.size(); i++) {
@@ -504,6 +540,7 @@ public class WalletFragment extends BaseFragment {
             }
         }).compose(RxHelper.pool_main())
                 .subscribe(baseEntity -> {
+                    Log.i(TAG, "initWallet: 005");
                     //此处留空，方便后续拓展。
                 });
     }
@@ -514,7 +551,7 @@ public class WalletFragment extends BaseFragment {
     private void getBtcUtxo(CoinInfo specCoinInfo) {
         if (specCoinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_BTC)) {
             coin_type_params = "btc";
-        } else if (specCoinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT)) {
+        } else if (specCoinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_OMNI)) {
             coin_type_params = "usdt";
         }
         Map<String, Object> map = new HashMap<>();
@@ -564,7 +601,6 @@ public class WalletFragment extends BaseFragment {
                             updateWaletBalance(1);
                         }
                     }
-
                     @Override
                     public void onSubscribe(Disposable d) {
                         disposableList.add(d);
@@ -573,9 +609,68 @@ public class WalletFragment extends BaseFragment {
 
     }
 
+    private void getEthBalance(CoinInfo specCoinInfo){
+        String mAddress=specCoinInfo.getCoin_address().startsWith("0x")?specCoinInfo.getCoin_address().toLowerCase():Constants.HEX_PREFIX+specCoinInfo.getCoin_address().toLowerCase();
+        Map<String, Object> map = new HashMap<>();
+        map.put("apikey", "AnqHS6Rs2WX0hwFXlrv");
+        RetrofitFactory.getInstence(getActivity()).API()
+                .getEthAddressBalance("eth",mAddress, map).compose(RxHelper.io_main())
+                .subscribe(new BaseObserver<String>(getActivity()) {
+                    @Override
+                    public void onSuccess(String data, String msg) {
+                        Log.i(TAG, "onSuccess: 我们看得到的数据是？"+data);
+                        eth_quest_count++;
+                        specCoinInfo.setCoin_totalAmount(Double.valueOf(data));
+                        CoinInfoManager.insertOrUpdate(specCoinInfo);
+                        updateWaletBalance(2);
+                    }
+                    @Override
+                    protected void onFailure(int code, String msg) {
+                        refreshLayout.finishRefresh();
+                    }
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposableList.add(d);
+                    }
+                });
+    }
+
+    private void getErc20Balance(CoinInfo specCoinInfo){
+        String mAddress=specCoinInfo.getCoin_address().startsWith("0x")?specCoinInfo.getCoin_address().toLowerCase():Constants.HEX_PREFIX+specCoinInfo.getCoin_address().toLowerCase();
+        Map<String, Object> map = new HashMap<>();
+        map.put("apikey", "AnqHS6Rs2WX0hwFXlrv");
+        RetrofitFactory.getInstence(getActivity()).API()
+                .getErc20AddressBalance("eth",mAddress, map).compose(RxHelper.io_main())
+                .subscribe(new BaseObserver<List<GetErc20BalanceBean>>(getActivity()) {
+                    @Override
+                    public void onSuccess(List<GetErc20BalanceBean> data, String msg) {
+                        erc20_quest_count++;
+                        double erc20_balance=0;
+                        if (data!=null&&data.size()>0){
+                            for (int i = 0; i <data.size() ; i++) {
+                                if (data.get(i).getHash().equals(Constant.CONTRACT_ADDRESS)){
+                                    erc20_balance=erc20_balance+Double.valueOf(data.get(i).getBalance())/Math.pow(10,Integer.valueOf(data.get(i).getTokenInfo().getD()));
+                                    Log.i(TAG, "onSuccess: 我们看得到的数据是？"+erc20_balance);
+                                }
+                            }
+                        }
+                        specCoinInfo.setCoin_totalAmount(erc20_balance);
+                        CoinInfoManager.insertOrUpdate(specCoinInfo);
+                        updateWaletBalance(3);
+                    }
+                    @Override
+                    protected void onFailure(int code, String msg) {
+                        refreshLayout.finishRefresh();
+                    }
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposableList.add(d);
+                    }
+                });
+    }
+
     private void updateWaletBalance(int coin_type) {
         if (coin_type == 0) {
-            Log.i(TAG, btc_quest_count+"updateWaletBalance: 001更新了btc------");
             if (btc_quest_count >= allBtccCoinInfos.size()) {
                 mMessageBeans = CoinInfoManager.getCoinInfo();
                 for (int i = 0; i < mWalletBeans.size(); i++) {
@@ -588,6 +683,7 @@ public class WalletFragment extends BaseFragment {
                     }
                     walletInfo.setWalletBalance(wallet_balance);
                     WalletInfoManager.insertOrUpdate(walletInfo);
+                    Log.i(TAG, walletInfo.getWallet_id()+"----updateWaletBalance: 001更新了btc------"+wallet_balance);
                 }
                 Log.i(TAG, "updateWaletBalance: 002更新了btc----");
             }
@@ -608,9 +704,46 @@ public class WalletFragment extends BaseFragment {
                 }
                 Log.i(TAG, "updateWaletBalance: 002更新了usdt----");
             }
+        }else if (coin_type == 2){
+            if (eth_quest_count >= allEthcCoinInfos.size()) {
+                mMessageBeans = CoinInfoManager.getCoinInfo();
+                for (int i = 0; i < mWalletBeans.size(); i++) {
+                    WalletInfo walletInfo = mWalletBeans.get(i);
+                    String wallet_id = walletInfo.getWallet_id();
+                    List<CoinInfo> coinFrWalletIds = CoinInfoManager.getCoinFrWalletId(wallet_id);
+                    double wallet_balance = 0;
+                    for (int j = 0; j < coinFrWalletIds.size(); j++) {
+                        wallet_balance = wallet_balance + coinFrWalletIds.get(j).getCoin_totalAmount();
+                    }
+                    walletInfo.setWalletBalance(wallet_balance);
+                    WalletInfoManager.insertOrUpdate(walletInfo);
+                }
+                Log.i(TAG, "updateWaletBalance: 002更新了usdt----");
+            }
+        }else if (coin_type==3){
+            if (erc20_quest_count >= allERC20cCoinInfos.size()) {
+                mMessageBeans = CoinInfoManager.getCoinInfo();
+                for (int i = 0; i < mWalletBeans.size(); i++) {
+                    WalletInfo walletInfo = mWalletBeans.get(i);
+                    String wallet_id = walletInfo.getWallet_id();
+                    List<CoinInfo> coinFrWalletIds = CoinInfoManager.getCoinFrWalletId(wallet_id);
+                    double wallet_balance = 0;
+                    for (int j = 0; j < coinFrWalletIds.size(); j++) {
+                        wallet_balance = wallet_balance + coinFrWalletIds.get(j).getCoin_totalAmount();
+                    }
+                    walletInfo.setWalletBalance(wallet_balance);
+                    WalletInfoManager.insertOrUpdate(walletInfo);
+                }
+                Log.i(TAG, "updateWaletBalance: 002更新了usdt----");
+            }
         }
         mWalletBeans = WalletInfoManager.getWalletInfoNoHidden(false);
-        homeWalletAdapter.setNewData(mWalletBeans);
+
+        //暂时用，重新创建adapter的方法，否则用刷新方法，会导致展开的数据，错乱显示。
+        homeWalletAdapter = new HomeWalletAdapter(R.layout.layout_adapter_home_wallet_for_shadow, mWalletBeans);
+        rcvHomeWallet.setAdapter(homeWalletAdapter);
+
+       // homeWalletAdapter.setNewData(mWalletBeans);
         refreshLayout.finishRefresh();
         //获取了新的余额，去更新头部的卡片的余额数值。
         showHeadData();
@@ -638,34 +771,41 @@ public class WalletFragment extends BaseFragment {
                 getActivity().getWindow().setAttributes(lp);
 
                 View contentView = LayoutInflater.from(getActivity()).inflate(R.layout.pop_share_select, null);
-                PopupWindow mPopWindow = new PopupWindow(contentView);
-
+                if (mPopWindowTop!=null&&mPopWindowTop.isShowing()){
+                    mPopWindowTop.dismiss();
+                }
+                mPopWindowTop = new PopupWindow(contentView);
                 //130和112是设计尺寸。
-                mPopWindow.setWidth(ScreenUtils.dip2px(getActivity(), 130));
-                mPopWindow.setHeight(ScreenUtils.dip2px(getActivity(), 112));
-                mPopWindow.setOutsideTouchable(true);
+                mPopWindowTop.setWidth(ScreenUtils.dip2px(getActivity(), 130));
+                mPopWindowTop.setHeight(ScreenUtils.dip2px(getActivity(), 112));
+
                 TextView tv_share_facebook = contentView.findViewById(R.id.tv_import_wallet);
                 TextView tv_share_other = contentView.findViewById(R.id.tv_wallet_manage);
 
                 tv_share_facebook.setOnClickListener(v -> {
                     Intent intent = new Intent(getActivity(), VerifySecurityPsdActivity.class);
-                    intent.putExtra(Constants.INTENT_PUT_TAG, Constants.INTENT_PUT_IMPORT_WALLET);
+                    intent.putExtra(Constants.INTENT_PUT_TAG, getString(R.string.tittle_import_wallet));
                     startActivity(intent);
-                    mPopWindow.dismiss();
+                    mPopWindowTop.dismiss();
                 });
                 tv_share_other.setOnClickListener(v -> {
                     Intent intent = new Intent(getActivity(), WalletManageActivity.class);
                     startActivity(intent);
-                    mPopWindow.dismiss();
+                    mPopWindowTop.dismiss();
                 });
                 //130是pop的宽度，10是整体右边距，15是view控件的宽度。
-                mPopWindow.showAsDropDown(view, -ScreenUtils.dip2px(getActivity(), 130 - 10 - 15), 0);
+                mPopWindowTop.showAsDropDown(view, -ScreenUtils.dip2px(getActivity(), 130 - 10 - 15), 0);
 
-                mPopWindow.setOnDismissListener(() -> {
+                mPopWindowTop.setOnDismissListener(() -> {
                     WindowManager.LayoutParams lp1 = getActivity().getWindow().getAttributes();
                     lp1.alpha = 1f;
                     getActivity().getWindow().setAttributes(lp1);
                 });
+
+//                // 设置PopupWindow是否能响应外部点击事件
+//                mPopWindowTop.setFocusable(true);
+//                mPopWindowTop.setOutsideTouchable(true);
+//                mPopWindowTop.update();
 
                 break;
             case R.id.iv_balance_hide:

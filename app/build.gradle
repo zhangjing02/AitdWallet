@@ -8,8 +8,8 @@ android {
         applicationId "com.tianqi.aitdwallet"
         minSdkVersion 19
         targetSdkVersion 30
-        versionCode 52
-        versionName "1.0.0"
+        versionCode 67
+        versionName "1.1.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -106,5 +106,7 @@ dependencies {
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
     implementation 'com.github.zhpanvip:viewpagerindicator:1.0.6'
     implementation 'com.github.huburt-Hu:NewbieGuide:v2.4.0'
-
+    implementation 'me.grantland:autofittextview:0.2.+'
+   // implementation 'com.github.mcxtzhang:SwipeDelMenuLayout:V1.2.1'
+    implementation 'com.github.mcxtzhang:SwipeDelMenuLayout:V1.3.0'
 }

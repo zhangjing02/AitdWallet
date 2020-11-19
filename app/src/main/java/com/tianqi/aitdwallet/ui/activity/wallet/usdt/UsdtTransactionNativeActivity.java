@@ -41,8 +41,8 @@ import com.tianqi.baselib.rxhttp.HttpClientUtil;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
 import com.tianqi.baselib.rxhttp.bean.GetSimpleRpcBean;
 import com.tianqi.baselib.utils.Constant;
+import com.tianqi.baselib.utils.digital.AESCipher;
 import com.tianqi.baselib.utils.digital.DataReshape;
-import com.tianqi.baselib.utils.digital.MD5;
 import com.tianqi.baselib.utils.display.LoadingDialogUtils;
 import com.tianqi.baselib.utils.display.ScreenUtils;
 import com.tianqi.baselib.utils.display.ToastUtil;
@@ -124,7 +124,7 @@ public class UsdtTransactionNativeActivity extends BaseActivity {
         seekBarMinerCost.setEnabled(true);
         seekBarMinerCost.setMax(100);
         seekBarMinerCost.setProgress(10);
-        walletInfo = WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_USDT);
+        walletInfo = WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
         setMinerFeeText(miner_fee_single);
 
         seekBarMinerCost.setOnChangeListener(new CustomSeekBar.OnChangeListener() {
@@ -169,7 +169,7 @@ public class UsdtTransactionNativeActivity extends BaseActivity {
 
     private void initWallet() {
         String coin_address = getIntent().getStringExtra(Constants.TRANSACTION_COIN_ADDRESS);
-        walletBtcFrAddress = CoinInfoManager.getCoinFrAddress(Constant.TRANSACTION_COIN_NAME_USDT, coin_address);
+        walletBtcFrAddress = CoinInfoManager.getCoinFrAddress(Constant.TRANSACTION_COIN_NAME_USDT_OMNI, coin_address);
         try {
             master = BitCoinECKeyPair.parseWIF(walletBtcFrAddress.getPrivateKey());
         } catch (ValidationException e) {
@@ -345,7 +345,7 @@ public class UsdtTransactionNativeActivity extends BaseActivity {
                         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
                         tx_record.setTimeStr(format.format(calendar.getTime()));
 
-                        tx_record.setUnit(Constant.TRANSACTION_COIN_NAME_USDT);
+                        tx_record.setUnit(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
                         TransactionRecordManager.insertOrUpdate(tx_record);
                         EventMessage message = new EventMessage();
                         message.setType(EventMessage.TRANSACTION_RECORD_UPDATE);
@@ -480,7 +480,8 @@ public class UsdtTransactionNativeActivity extends BaseActivity {
                             bottomDialog.dismiss();
                             UserInformation userInfo = UserInfoManager.getUserInfo();
                             userInfo.getPasswordStr();
-                            if (password != null && userInfo.getPasswordStr().equals(MD5.Md5(password))) {
+                            String aes_decode_str = AESCipher.decrypt(Constant.PSD_KEY, password.trim());
+                            if (password != null && userInfo.getPasswordStr().equals(aes_decode_str)) {
                                 mLoadDialog = LoadingDialogUtils.createLoadingDialog(this, "");
                                 createTxToBroadcastApi(baseEntity);
                             } else {

@@ -7,7 +7,7 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -35,7 +35,7 @@ android {
 
 
 greendao {
-    schemaVersion 05
+    schemaVersion 10
     daoPackage 'com.tianqi.baselib.dbgreendao.gen'//1
     targetGenDir 'src/main/java-gen'
     //targetGenDir 'src/main/java'

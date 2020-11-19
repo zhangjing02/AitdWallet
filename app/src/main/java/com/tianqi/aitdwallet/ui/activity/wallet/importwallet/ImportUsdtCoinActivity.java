@@ -4,11 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.text.Editable;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
@@ -21,7 +18,6 @@ import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.tabs.TabLayout;
-import com.google.gson.Gson;
 import com.quincysx.crypto.CoinTypes;
 import com.quincysx.crypto.ECKeyPair;
 import com.tianqi.aitdwallet.R;
@@ -32,7 +28,6 @@ import com.tianqi.aitdwallet.ui.activity.wallet.setting.PrivacyTermsWebActivity;
 import com.tianqi.aitdwallet.utils.MnemonicUtils;
 import com.tianqi.aitdwallet.utils.WalletUtils;
 import com.tianqi.aitdwallet.widget.dialog.ExplainPrivateKeyDialog;
-import com.tianqi.aitdwallet.widget.dialog.ForgetPsdNoticeDialog;
 import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dao.CoinRateInfo;
@@ -42,7 +37,6 @@ import com.tianqi.baselib.dbManager.CoinInfoManager;
 import com.tianqi.baselib.dbManager.CoinRateInfoManager;
 import com.tianqi.baselib.dbManager.UserInfoManager;
 import com.tianqi.baselib.dbManager.WalletInfoManager;
-import com.tianqi.baselib.rxhttp.HttpClientUtil;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
 import com.tianqi.baselib.utils.ButtonUtils;
 import com.tianqi.baselib.utils.Constant;
@@ -54,15 +48,12 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
-import okhttp3.Response;
 
 public class ImportUsdtCoinActivity extends BaseActivity {
 
@@ -331,9 +322,9 @@ public class ImportUsdtCoinActivity extends BaseActivity {
             emitter.onNext(ecKeyPair);
         }).map(master -> {  //解析网络请求，并且拼接交易对象，再把交易对象签名成hex。
             //钱包数据库,目前先只拿名字是BTC的，钱包。
-            WalletInfo walletInfo = WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_USDT);
+            WalletInfo walletInfo = WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
             if (walletInfo==null){
-                walletInfo=  createWalletInfo(Constant.TRANSACTION_COIN_NAME_USDT);
+                walletInfo=  createWalletInfo(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
             }
 
             CoinRateInfo btc_rate = CoinRateInfoManager.getWalletBtcFrCoinId(Constant.COIN_RATE_USDT);
@@ -347,15 +338,15 @@ public class ImportUsdtCoinActivity extends BaseActivity {
             }
 
             Log.i("WalletFragment", "importSingleCoin: 我们得到的钱包是什么？" + walletInfo.toString());
-            coinInfo.setCoin_fullName(Constant.COIN_FULL_NAME_USDT);
-            CoinRateInfo coinRateInfo=CoinRateInfoManager.getWalletBtcFrCoinId(Constant.TRANSACTION_COIN_NAME_USDT);
+            coinInfo.setCoin_fullName(Constant.COIN_FULL_NAME_USDT_OMNI);
+            CoinRateInfo coinRateInfo=CoinRateInfoManager.getWalletBtcFrCoinId(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
             List<CoinInfo> walletBtcInfo = CoinInfoManager.getWalletBtcInfo();
             coinInfo.setCoin_ComeType(Constant.COIN_SOURCE_IMPORT);
             coinInfo.setCoin_id(Constant.IMPORT_USDT_ID + walletBtcInfo.size());
-            coinInfo.setCoin_name(Constant.TRANSACTION_COIN_NAME_USDT);
+            coinInfo.setCoin_name(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
             coinInfo.setCoin_type(Constant.COIN_BIP_TYPE_USDT);
-            coinInfo.setAlias_name(Constant.TRANSACTION_COIN_NAME_USDT);
-            coinInfo.setResourceId(R.mipmap.ic_circle_usdt);
+            coinInfo.setAlias_name(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
+            coinInfo.setResourceId(R.mipmap.ic_circle_usdt_omni);
 
             walletInfo.setCoin_CNYPrice(coinRateInfo.getPrice_cny());
             walletInfo.setCoin_USDPrice(coinRateInfo.getPrice_usd());
@@ -401,7 +392,7 @@ public class ImportUsdtCoinActivity extends BaseActivity {
         } else if (select_index==TITTLE_PRIVATE_KEY_INDEX && etInputKey.getText().length() != 52) {
             ToastUtil.showToast(this, getString(R.string.notice_private_key_error));
             return false;
-        }else if (CoinInfoManager.getCoinFrPrivateKey(Constant.TRANSACTION_COIN_NAME_USDT, etInputKey.getText().toString()).size() > 0) {
+        }else if (CoinInfoManager.getCoinFrPrivateKey(Constant.TRANSACTION_COIN_NAME_USDT_OMNI, etInputKey.getText().toString()).size() > 0) {
             ToastUtil.showToast(this, getString(R.string.notice_same_private_key));
             return false;
         }
@@ -431,7 +422,7 @@ public class ImportUsdtCoinActivity extends BaseActivity {
         walletInfo.setAlias_name(wallet_id);
         walletInfo.setWalletType(Constant.WALLET_TYPE_HD);
         walletInfo.setWallet_id(wallet_id);
-        walletInfo.setResource_id(R.mipmap.ic_circle_usdt);
+        walletInfo.setResource_id(R.mipmap.ic_circle_usdt_omni);
         walletInfo.setIsImportToCreate(true);
         if (wallet_id.equals(Constant.TRANSACTION_COIN_NAME_BTC)) {
             CoinRateInfo bitcoin_rate = CoinRateInfoManager.getWalletBtcFrCoinId(Constant.COIN_RATE_BTC);
