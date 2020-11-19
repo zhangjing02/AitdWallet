@@ -203,7 +203,7 @@ public class VerifySecurityPsdActivity extends BaseActivity {
                         UserInformation userInfo = UserInfoManager.getUserInfo();
                         if (WalletInfoManager.getWalletInfo().size() > 0) {
                             WalletInfo walletInfo = WalletInfoManager.getWalletInfo().get(0);
-                            Log.i(TAG, walletInfo.getWalletType() + "+------onViewClicked: 我们看这次的钱包是？" + walletInfo.getIsImportToCreate());
+                            LogUtil.i(TAG, walletInfo.getWalletType() + "+------onViewClicked: 我们看这次的钱包是？" + walletInfo.getIsImportToCreate());
                             if (walletInfo != null && walletInfo.getWalletType() >= 0 && !walletInfo.getIsImportToCreate()) {
                                 Intent intent = new Intent(this, MainActivity.class);
                                 startActivity(intent);
@@ -253,7 +253,7 @@ public class VerifySecurityPsdActivity extends BaseActivity {
                         }
                     }
                     for (int i = 0; i < wallet_id_str.size(); i++) {
-                        Log.i(TAG, i + "------onViewClicked: 我们看删除了谁？" + wallet_id_str.get(i));
+                        LogUtil.i(TAG, i + "------onViewClicked: 我们看删除了谁？" + wallet_id_str.get(i));
                         WalletInfoManager.deleteScaleRecord(WalletInfoManager.getHdWalletInfoFrId(wallet_id_str.get(i)));
                     }
                     emitter.onNext(0);
@@ -275,7 +275,7 @@ public class VerifySecurityPsdActivity extends BaseActivity {
                         }
                     }
                     for (int i = 0; i < wallet_id_str.size(); i++) {
-                        Log.i(TAG, i + "------onViewClicked: 我们看删除了谁？" + wallet_id_str.get(i));
+                        LogUtil.i(TAG, i + "------onViewClicked: 我们看删除了谁？" + wallet_id_str.get(i));
                         WalletInfoManager.deleteScaleRecord(WalletInfoManager.getHdWalletInfoFrId(wallet_id_str.get(i)));
                     }
                     emitter.onNext(2);

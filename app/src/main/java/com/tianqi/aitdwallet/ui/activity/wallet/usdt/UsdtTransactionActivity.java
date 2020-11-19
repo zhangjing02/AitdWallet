@@ -208,7 +208,7 @@ public class UsdtTransactionActivity extends BaseActivity {
 
         @Override
         public void afterTextChanged(Editable editable) {
-            Log.i(TAG, "afterTextChanged: 001我们收到了啥？");
+            LogUtil.i(TAG, "afterTextChanged: 001我们收到了啥？");
             if (!TextUtils.isEmpty(etPaymentAddress.getText().toString()) && !TextUtils.isEmpty(etPaymentAmount.getText().toString())) {
                 btnTransactionSend.setBackground(getResources().getDrawable(R.drawable.bg_blue_round_button));
             } else {

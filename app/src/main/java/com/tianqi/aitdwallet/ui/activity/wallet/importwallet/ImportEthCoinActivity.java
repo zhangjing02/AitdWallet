@@ -417,7 +417,7 @@ public class ImportEthCoinActivity extends BaseActivity {
                 walletInfo.setCoin_CNYPrice(btc_rate.getPrice_cny());
                 walletInfo.setCoin_USDPrice(btc_rate.getPrice_usd());
             }
-            Log.i("WalletFragment", "importSingleCoin: 我们得到的钱包是什么？" + walletInfo.toString());
+            LogUtil.i("WalletFragment", "importSingleCoin: 我们得到的钱包是什么？" + walletInfo.toString());
             coinInfo.setCoin_fullName(Constant.COIN_FULL_NAME_ETH);
 
             List<CoinInfo> walletBtcInfo = CoinInfoManager.getCoinEthImportInfo();

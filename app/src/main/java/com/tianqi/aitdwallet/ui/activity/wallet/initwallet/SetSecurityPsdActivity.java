@@ -215,11 +215,11 @@ public class SetSecurityPsdActivity extends BaseActivity {
     View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
         @Override
         public void onFocusChange(View view, boolean b) {
-            Log.i(TAG, view.getId() + "-------onFocusChange: 001我们看看焦点变化" + b);
+            LogUtil.i(TAG, view.getId() + "-------onFocusChange: 001我们看看焦点变化" + b);
             switch (view.getId()) {
                 case R.id.et_input_password:
                     if (b) {
-                        Log.i(TAG, view.getId() + "-------onFocusChange: 002我们看看焦点变化" + b);
+                        LogUtil.i(TAG, view.getId() + "-------onFocusChange: 002我们看看焦点变化" + b);
                         tvInputNoticeTittle.setVisibility(View.VISIBLE);
                         tvInputUpLetterNotice.setVisibility(View.VISIBLE);
                         tvInputLowLetterNotice.setVisibility(View.VISIBLE);
@@ -371,7 +371,7 @@ public class SetSecurityPsdActivity extends BaseActivity {
                     }else {
                         Observable.just(true).map(s -> {
                             String accountPwd=AESCipher.encrypt(Constant.PSD_KEY, etInputPassword.getText().toString().trim());
-                            Log.i(TAG, "onViewClicked: 001存入的密码是？  "+accountPwd);
+                            LogUtil.i(TAG, "onViewClicked: 001存入的密码是？  "+accountPwd);
                             UserInformation userInformation = new UserInformation();
                             userInformation.setUserId(RxToolUtil.readFingerprintFromFile(this));
                             //  userInformation.setPasswordStr(MD5.Md5(etInputPassword.getText().toString().trim()));
@@ -417,7 +417,7 @@ public class SetSecurityPsdActivity extends BaseActivity {
      * @return 判断输入是否合法
      */
     private boolean judgeSelectInput() {
-        Log.i(TAG, "judgeSelectInput: 我们看用户的选择" + checkboxReadTerm.isChecked());
+        LogUtil.i(TAG, "judgeSelectInput: 我们看用户的选择" + checkboxReadTerm.isChecked());
         if (TextUtils.isEmpty(etInputPassword.getText().toString())) {
             ToastUtil.showToast(this, getString(R.string.notice_input_psd));
             return false;

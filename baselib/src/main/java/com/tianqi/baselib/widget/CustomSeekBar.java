@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 
 import com.tianqi.baselib.R;
+import com.tianqi.baselib.utils.LogUtil;
 import com.tianqi.baselib.utils.display.ScreenUtils;
 
 
@@ -292,7 +293,7 @@ public class CustomSeekBar extends View {
             case MotionEvent.ACTION_MOVE:
                 int deltaX = (int) (mLastX - curX);
                 int deltaY = (int) (mLastY - curY);
-                Log.i("ttttttttt", mTrackTouch+"----onTouchEvent: 这个阈值是多少？"+mTouchSlop);
+                LogUtil.i("ttttttttt", mTrackTouch+"----onTouchEvent: 这个阈值是多少？"+mTouchSlop);
 
                 if ((mTrackTouch == TRACKTOUCH_PROGRESSCHANGED) || (Math.abs(deltaX) > mTouchSlop
                         && Math.abs(deltaY) < mTouchSlop)) {

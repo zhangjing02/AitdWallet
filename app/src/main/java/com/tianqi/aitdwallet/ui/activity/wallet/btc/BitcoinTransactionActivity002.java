@@ -47,6 +47,7 @@ import com.tianqi.baselib.rxhttp.bean.GetSimpleRpcBean;
 import com.tianqi.baselib.rxhttp.bean.GetUnspentTxBean;
 import com.tianqi.baselib.utils.ButtonUtils;
 import com.tianqi.baselib.utils.Constant;
+import com.tianqi.baselib.utils.LogUtil;
 import com.tianqi.baselib.utils.NetworkUtil;
 import com.tianqi.baselib.utils.digital.AESCipher;
 import com.tianqi.baselib.utils.digital.DataReshape;
@@ -149,7 +150,7 @@ public class BitcoinTransactionActivity002 extends BaseActivity {
             @Override
             public void onProgressChanged(CustomSeekBar seekBar) {
                 int select_miner = 300 + (5000 - 300) * seekBar.getProgress() / 100;
-                Log.i(TAG, seekBar.getProgress()+"onProgressChanged: 我们计算的费用是？"+select_miner);
+                LogUtil.i(TAG, seekBar.getProgress()+"onProgressChanged: 我们计算的费用是？"+select_miner);
                 miner_fee_single = select_miner / 100000000f;
                 setMinerFeeText(miner_fee_single);
             }
@@ -201,7 +202,7 @@ public class BitcoinTransactionActivity002 extends BaseActivity {
 
         @Override
         public void afterTextChanged(Editable editable) {
-            Log.i(TAG, "afterTextChanged: 001我们收到了啥？");
+            LogUtil.i(TAG, "afterTextChanged: 001我们收到了啥？");
             if (!TextUtils.isEmpty(etPaymentAddress.getText().toString()) && !TextUtils.isEmpty(etPaymentAmount.getText().toString())) {
                 btnTransactionSend.setBackground(getResources().getDrawable(R.drawable.bg_blue_round_button));
             } else {
@@ -351,7 +352,7 @@ public class BitcoinTransactionActivity002 extends BaseActivity {
             if (response != null) {
                 //把得到的签名hex，去掉接口广播出去。
                // Response tx_response = HttpClientUtil.getInstance().postBtcJson(makeBroadcastTxParams(response));
-                Log.i(TAG, "createTxToBroadcastApi: 看看签名如何？"+response);
+                LogUtil.i(TAG, "createTxToBroadcastApi: 看看签名如何？"+response);
                 Response tx_response = HttpClientUtil.getInstance().postFormalBtcJson(makeBroadcastTxParams002(response));
                 if (tx_response != null) {
                     if (tx_response.isSuccessful()) {
@@ -369,7 +370,7 @@ public class BitcoinTransactionActivity002 extends BaseActivity {
                         mLoadDialog.dismiss();
                     }
                     if (baseEntity != null && !baseEntity.equals(Constant.HTTP_ERROR)) {
-                        Log.i(TAG, "createTxToBroadcastApi: 我们看交易成功后的id是？"+baseEntity);
+                        LogUtil.i(TAG, "createTxToBroadcastApi: 我们看交易成功后的id是？"+baseEntity);
                         ScreenUtils.hideKeyboard(this);
                         Gson gson = new Gson();
                         GetSimpleRpcBean getCreateTransactionBean = gson.fromJson(baseEntity, GetSimpleRpcBean.class);
@@ -409,7 +410,7 @@ public class BitcoinTransactionActivity002 extends BaseActivity {
 
                             new Handler().postDelayed(() -> {
                                 Intent intent = new Intent(this, TransactionRecordActivity.class);
-                                Log.i(TAG, walletBtcFrAddress.getCoin_name() + "createTxToBroadcastApi: 传过去的是啥？" + walletBtcFrAddress.getCoin_id());
+                                LogUtil.i(TAG, walletBtcFrAddress.getCoin_name() + "createTxToBroadcastApi: 传过去的是啥？" + walletBtcFrAddress.getCoin_id());
                                 intent.putExtra(Constants.TRANSACTION_COIN_NAME, walletBtcFrAddress.getCoin_name());
                                 intent.putExtra(Constants.TRANSACTION_COIN_ADDRESS, walletBtcFrAddress.getCoin_address());
                                 intent.putExtra(Constants.TRANSACTION_COIN_ID, walletBtcFrAddress.getCoin_id());
@@ -438,8 +439,8 @@ public class BitcoinTransactionActivity002 extends BaseActivity {
             //如果剩余的金额大于550聪，就加入找零的输出，输出的地址是自己。
             BTCTransaction.Output[] outputs;
             double change_value = total_value - pay_amount - miner_fee_total;
-            Log.i(TAG, total_value + "-----createTransaction: 001我们看自己的找零是多少？" + change_value);
-            Log.i(TAG, pay_amount + "-----createTransaction: 002我们看自己的找零是多少？" + miner_fee_total);
+            LogUtil.i(TAG, total_value + "-----createTransaction: 001我们看自己的找零是多少？" + change_value);
+            LogUtil.i(TAG, pay_amount + "-----createTransaction: 002我们看自己的找零是多少？" + miner_fee_total);
             if (change_value > cushion_fee) {
                 outputs = new BTCTransaction.Output[2];
                 BTCTransaction.Script script = BTCTransaction.Script.buildOutput(etPaymentAddress.getText().toString());  //对方的地址
@@ -583,7 +584,7 @@ public class BitcoinTransactionActivity002 extends BaseActivity {
         // params.add(0);//交易签名数组
         listunspentParams.put("params", params);
 
-        Log.i(TAG, "makeOutputApiParams: 002我们拼接的请求体是？" + new Gson().toJson(listunspentParams));
+        LogUtil.i(TAG, "makeOutputApiParams: 002我们拼接的请求体是？" + new Gson().toJson(listunspentParams));
         return new Gson().toJson(listunspentParams);
     }
 

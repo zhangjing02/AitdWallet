@@ -49,6 +49,7 @@ import com.tianqi.baselib.rxhttp.bean.GetSimpleRpcBean;
 import com.tianqi.baselib.rxhttp.bean.GetUnspentTxBean;
 import com.tianqi.baselib.utils.ButtonUtils;
 import com.tianqi.baselib.utils.Constant;
+import com.tianqi.baselib.utils.LogUtil;
 import com.tianqi.baselib.utils.NetworkUtil;
 import com.tianqi.baselib.utils.digital.AESCipher;
 import com.tianqi.baselib.utils.digital.DataReshape;
@@ -157,14 +158,14 @@ public class EthTransactionActivity extends BaseActivity {
         seekBarMinerCost.setMax(100);
         seekBarMinerCost.setProgress(24);
         walletInfo= WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_ETH);
-        Log.i(TAG, walletInfo.getCoin_CNYPrice()+"------initView: 汇率是多少？"+walletInfo.getCoin_USDPrice());
+        LogUtil.i(TAG, walletInfo.getCoin_CNYPrice()+"------initView: 汇率是多少？"+walletInfo.getCoin_USDPrice());
         setMinerFeeText(0.00105);
 
         seekBarMinerCost.setOnChangeListener(new CustomSeekBar.OnChangeListener() {
             @Override
             public void onProgressChanged(CustomSeekBar seekBar) {
                 int select_miner = (int) (38+seekBar.getProgress()*0.51f);
-                Log.i(TAG, seekBar.getProgress() + "onProgressChanged: 001我们计算的费用是？" + select_miner);
+                LogUtil.i(TAG, seekBar.getProgress() + "onProgressChanged: 001我们计算的费用是？" + select_miner);
                 miner_fee_single = select_miner;
                 setMinerFeeText(select_miner*GAS_LIMITS/1000000000f);
             }
@@ -225,7 +226,7 @@ public class EthTransactionActivity extends BaseActivity {
                         eth_balance= new BigDecimal(data).setScale(8, RoundingMode.HALF_UP).doubleValue();
                         account_balance=eth_balance;
                       //  eth_balance=Double.valueOf(eth_balance);
-                        Log.i(TAG, eth_balance+"onSuccess: 我们看得到的数据是？"+data);
+                        LogUtil.i(TAG, eth_balance+"onSuccess: 我们看得到的数据是？"+data);
                         tvBalance.setText(DataReshape.doubleBig(eth_balance,6));
                     }
                     @Override
@@ -261,10 +262,10 @@ public class EthTransactionActivity extends BaseActivity {
         EthWalletManager.getInstance().loadWallet(this, walletBtcFrAddress, wallet -> {
             initWeb3j("http://192.168.1.16:8545");
            // initWeb3j("https://services.tokenview.com/vipapi/?apikey=AnqHS6Rs2WX0hwFXlrv");
-            Log.i(TAG, walletBtcFrAddress.getCoin_address()+"initData: 001我们看看加载出来的钱包是啥？");
+            LogUtil.i(TAG, walletBtcFrAddress.getCoin_address()+"initData: 001我们看看加载出来的钱包是啥？");
             if (walletBtcFrAddress.getCoin_address().substring(2).toLowerCase().equals(wallet.getAddress())){
                 mWalletFile=wallet;
-                Log.i(TAG, "initData: 002我们看看加载出来的钱包是啥？"+mWalletFile.getAddress());
+                LogUtil.i(TAG, "initData: 002我们看看加载出来的钱包是啥？"+mWalletFile.getAddress());
             }
         });
     }
@@ -328,7 +329,7 @@ public class EthTransactionActivity extends BaseActivity {
                         String fiat_value;
                         UserInformation userInformation = UserInfoManager.getUserInfo();
                         double miner_fee_total=miner_fee_single*GAS_LIMITS/1000000000f;
-                        Log.i(TAG, eth_balance+"----onViewClicked: 002我们看看金额？"+miner_fee_total);
+                        LogUtil.i(TAG, eth_balance+"----onViewClicked: 002我们看看金额？"+miner_fee_total);
                         if (userInformation.getFiatUnit().equals(Constants.FIAT_USD)) {
                             fiat_value = DataReshape.doubleBig(miner_fee_total, 8) + " ≈$"
                                     + DataReshape.doubleBig(miner_fee_total * walletInfo.getCoin_USDPrice(), 2);
@@ -383,7 +384,7 @@ public class EthTransactionActivity extends BaseActivity {
             GetSimpleRpcBean simpleRpcBean=new Gson().fromJson(tx_response.body().string(),GetSimpleRpcBean.class);
             String hex = simpleRpcBean.getResult().substring(2);  //去掉前面的0x
             Integer x = Integer.parseInt(hex,16);
-            Log.i(TAG, hex+"----------createTxToBroadcastApi: 我们看得到数据是？"+x);
+            LogUtil.i(TAG, hex+"----------createTxToBroadcastApi: 我们看得到数据是？"+x);
             emitter.onNext(x);
         }).map(resultBeans -> {
             //把得到的未交易数据，去请求创建交易。得到本次交易的hex。
@@ -419,7 +420,7 @@ public class EthTransactionActivity extends BaseActivity {
         }).map(response -> {
             //把交易的hex，做签名处理。
             if (response != null&&!response.equals(Constant.HTTP_ERROR)) {
-                Log.i(TAG, "createTxToBroadcastApi: 看看签名如何？"+response);
+                LogUtil.i(TAG, "createTxToBroadcastApi: 看看签名如何？"+response);
                 //可以用btc的域名进行请求，请求参数换成eth的就行。
 //                Response tx_response = HttpClientUtil.getInstance().postFormalEthJson(makeBroadcastTxParams002(response));
 //                if (tx_response != null) {
@@ -438,7 +439,7 @@ public class EthTransactionActivity extends BaseActivity {
                         mLoadDialog.dismiss();
                     }
                     if (baseEntity != null && !baseEntity.equals(Constant.HTTP_ERROR)) {
-                        Log.i(TAG, "createTxToBroadcastApi: 我们看交易成功后的id是？"+baseEntity);
+                        LogUtil.i(TAG, "createTxToBroadcastApi: 我们看交易成功后的id是？"+baseEntity);
                         ScreenUtils.hideKeyboard(this);
                         Gson gson = new Gson();
                         GetSimpleRpcBean getCreateTransactionBean = gson.fromJson(baseEntity, GetSimpleRpcBean.class);
@@ -472,7 +473,7 @@ public class EthTransactionActivity extends BaseActivity {
 
                             new Handler().postDelayed(() -> {
                                 Intent intent = new Intent(this, TransactionRecordActivity.class);
-                                Log.i(TAG, walletBtcFrAddress.getCoin_name() + "createTxToBroadcastApi: 传过去的是啥？" + walletBtcFrAddress.getCoin_id());
+                                LogUtil.i(TAG, walletBtcFrAddress.getCoin_name() + "createTxToBroadcastApi: 传过去的是啥？" + walletBtcFrAddress.getCoin_id());
                                 intent.putExtra(Constants.TRANSACTION_COIN_NAME, walletBtcFrAddress.getCoin_name());
                                 intent.putExtra(Constants.TRANSACTION_COIN_ADDRESS, walletBtcFrAddress.getCoin_address());
                                 intent.putExtra(Constants.TRANSACTION_COIN_ID, walletBtcFrAddress.getCoin_id());
@@ -500,7 +501,7 @@ public class EthTransactionActivity extends BaseActivity {
         // params.add(0);//交易签名数组
         listunspentParams.put("params", params);
 
-        Log.i(TAG, "makeOutputApiParams: 002我们拼接的请求体是？" + new Gson().toJson(listunspentParams));
+        LogUtil.i(TAG, "makeOutputApiParams: 002我们拼接的请求体是？" + new Gson().toJson(listunspentParams));
         return new Gson().toJson(listunspentParams);
     }
 
@@ -516,7 +517,7 @@ public class EthTransactionActivity extends BaseActivity {
         // params.add(0);//交易签名数组
         listunspentParams.put("params", params);
 
-        Log.i(TAG, "makeOutputApiParams: 002我们拼接的请求体是？" + new Gson().toJson(listunspentParams));
+        LogUtil.i(TAG, "makeOutputApiParams: 002我们拼接的请求体是？" + new Gson().toJson(listunspentParams));
         return new Gson().toJson(listunspentParams);
     }
 

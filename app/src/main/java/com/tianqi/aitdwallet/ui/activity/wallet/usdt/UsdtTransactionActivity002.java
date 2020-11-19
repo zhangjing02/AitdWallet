@@ -49,6 +49,7 @@ import com.tianqi.baselib.rxhttp.bean.GetSimpleRpcBean;
 import com.tianqi.baselib.rxhttp.bean.GetUnspentTxBean;
 import com.tianqi.baselib.utils.ButtonUtils;
 import com.tianqi.baselib.utils.Constant;
+import com.tianqi.baselib.utils.LogUtil;
 import com.tianqi.baselib.utils.NetworkUtil;
 import com.tianqi.baselib.utils.digital.AESCipher;
 import com.tianqi.baselib.utils.digital.DataReshape;
@@ -155,7 +156,7 @@ public class UsdtTransactionActivity002 extends BaseActivity {
             @Override
             public void onProgressChanged(CustomSeekBar seekBar) {
                 int select_miner = 300 + (5000 - 300) * seekBar.getProgress() / 100;
-                Log.i(TAG, seekBar.getProgress()+"onProgressChanged: 我们计算的费用是？"+select_miner);
+                LogUtil.i(TAG, seekBar.getProgress()+"onProgressChanged: 我们计算的费用是？"+select_miner);
                 miner_fee_single = select_miner / 100000000f;
                 setMinerFeeText(miner_fee_single);
             }
@@ -211,7 +212,7 @@ public class UsdtTransactionActivity002 extends BaseActivity {
 
         @Override
         public void afterTextChanged(Editable editable) {
-            Log.i(TAG, "afterTextChanged: 001我们收到了啥？");
+            LogUtil.i(TAG, "afterTextChanged: 001我们收到了啥？");
             if (!TextUtils.isEmpty(etPaymentAddress.getText().toString()) && !TextUtils.isEmpty(etPaymentAmount.getText().toString())) {
                 btnTransactionSend.setBackground(getResources().getDrawable(R.drawable.bg_blue_round_button));
             } else {
@@ -229,7 +230,7 @@ public class UsdtTransactionActivity002 extends BaseActivity {
 // TODO: 2020/10/7 此处应该用列表里面穿过来的私钥去生成三件套，去进行转账。
         try {
             master = BitCoinECKeyPair.parseWIF(walletBtcFrAddress.getPrivateKey());
-            Log.i(TAG, "initWallet: 我们看私钥是？" + master.getPrivateKey());
+            LogUtil.i(TAG, "initWallet: 我们看私钥是？" + master.getPrivateKey());
         } catch (ValidationException e) {
             e.printStackTrace();
         }

@@ -54,6 +54,7 @@ import com.tianqi.baselib.rxhttp.base.RxHelper;
 import com.tianqi.baselib.rxhttp.bean.GetErc20BalanceBean;
 import com.tianqi.baselib.rxhttp.bean.GetListUnspentBean;
 import com.tianqi.baselib.utils.Constant;
+import com.tianqi.baselib.utils.LogUtil;
 import com.tianqi.baselib.utils.digital.DataReshape;
 import com.tianqi.baselib.utils.display.GlideUtils;
 import com.tianqi.baselib.utils.display.ScreenUtils;
@@ -194,7 +195,7 @@ public class WalletFragment extends BaseFragment {
                 .getSystemService(Context.WINDOW_SERVICE);
         int width = wm.getDefaultDisplay().getWidth();
         int height = wm.getDefaultDisplay().getHeight();
-        Log.i(TAG, "showGuide: 我们看屏幕的高度是？" + height);
+        LogUtil.i(TAG, "showGuide: 我们看屏幕的高度是？" + height);
 
         NewbieGuide.with(this)
                 .setLabel("guide1")
@@ -206,7 +207,7 @@ public class WalletFragment extends BaseFragment {
                     }
                     @Override
                     public void onRemoved(Controller controller) {
-                        Log.i(TAG, new_guide_step_index + "-----onShowed: 002我们看到了啥？" + controller.toString());
+                        LogUtil.i(TAG, new_guide_step_index + "-----onShowed: 002我们看到了啥？" + controller.toString());
                         ivNewGuideStep.setVisibility(View.GONE);
                         tvFiatBalance.setVisibility(View.VISIBLE);
                         ivNewGuideStep4.setVisibility(View.GONE);
@@ -385,7 +386,7 @@ public class WalletFragment extends BaseFragment {
         ViewGroup.LayoutParams layoutParams = ivNewGuideStep4.getLayoutParams();
         layoutParams.height = 253;
         ivNewGuideStep4.setLayoutParams(layoutParams);
-        Log.i(TAG, (height / 3 + 156) + "---------------showGuide: 我们看计算的高度是？" + (height / 3 + 356) + "原始高度是：" + height);
+        LogUtil.i(TAG, (height / 3 + 156) + "---------------showGuide: 我们看计算的高度是？" + (height / 3 + 356) + "原始高度是：" + height);
     }
 
     private void initRecycleView() {
@@ -404,7 +405,7 @@ public class WalletFragment extends BaseFragment {
 
         //刷新
         refreshLayout.setOnRefreshListener(refreshLayout -> {
-            Log.i(TAG, "onRefresh: 慢慢刷新");
+            LogUtil.i(TAG, "onRefresh: 慢慢刷新");
             initWallet();
         });
 
@@ -437,7 +438,7 @@ public class WalletFragment extends BaseFragment {
         }
         //tvBtcBalance.setText("≈" + DataReshape.doubleBig(wallet_balance, 8) + " BTC");
 
-        Log.i(TAG, walletInfo.toString() + "-----showHeadData: 我们计算出来的余额时？" + fait_balance + "有几条数据:" + mWalletBeans.size());
+        LogUtil.i(TAG, walletInfo.toString() + "-----showHeadData: 我们计算出来的余额时？" + fait_balance + "有几条数据:" + mWalletBeans.size());
         if (userInformation.getFiatUnit().equals(Constants.FIAT_USD)) {
             fiat_rate = walletInfo.getCoin_USDPrice();
             tvFiatBalance.setText(DataReshape.doubleBig(fait_balance, 2));
@@ -500,13 +501,13 @@ public class WalletFragment extends BaseFragment {
                 emitter.onNext(-1);
             }
         }).map(index -> {
-            Log.i(TAG, "initWallet: 001");
+            LogUtil.i(TAG, "initWallet: 001");
             if (index>=0){
                 getBtcUtxo(allBtccCoinInfos.get(index));
             }
             return "123";
         }).map((Function<String, String>) s -> {
-            Log.i(TAG, "initWallet: 002");
+            LogUtil.i(TAG, "initWallet: 002");
             allEthcCoinInfos=CoinInfoManager.getSpecCoinInfo(Constant.TRANSACTION_COIN_NAME_ETH);
             if (allEthcCoinInfos!=null&&allEthcCoinInfos.size()>0){
                 eth_quest_count=0;
@@ -516,7 +517,7 @@ public class WalletFragment extends BaseFragment {
             }
             return "456";
         }).map(index -> {
-            Log.i(TAG, "initWallet: 003");
+            LogUtil.i(TAG, "initWallet: 003");
             if (index!=null){
                 allERC20cCoinInfos=CoinInfoManager.getSpecCoinInfo(Constant.TRANSACTION_COIN_NAME_USDT_ERC20);
                 if (allERC20cCoinInfos!=null&&allERC20cCoinInfos.size()>0){
@@ -528,7 +529,7 @@ public class WalletFragment extends BaseFragment {
             }
             return "789";
         }).delay(2, TimeUnit.SECONDS).doOnComplete(() -> {
-            Log.i(TAG, "initWallet: 004");
+            LogUtil.i(TAG, "initWallet: 004");
             //当BTC调完后（但结果未必都返回了，所以要做2S延迟）完成的时候，我们做一个2S的延时，然后去循环调用usdt的余额。
             allusdtCoinInfos = CoinInfoManager.getSpecCoinInfo(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
             if (allusdtCoinInfos!=null&&allusdtCoinInfos.size() > 0) {
@@ -540,7 +541,7 @@ public class WalletFragment extends BaseFragment {
             }
         }).compose(RxHelper.pool_main())
                 .subscribe(baseEntity -> {
-                    Log.i(TAG, "initWallet: 005");
+                    LogUtil.i(TAG, "initWallet: 005");
                     //此处留空，方便后续拓展。
                 });
     }
@@ -562,9 +563,9 @@ public class WalletFragment extends BaseFragment {
                     @Override
                     public void onSuccess(List<GetListUnspentBean> data, String msg) {
                         if (data != null && data.size() > 0) {
-                            Log.i(TAG, data.get(0).getReceive() + "-----onSuccess: 001我们看看余额应该是多少？" + data.get(0).getSpend());
+                            LogUtil.i(TAG, data.get(0).getReceive() + "-----onSuccess: 001我们看看余额应该是多少？" + data.get(0).getSpend());
                             double xxx = Double.valueOf(data.get(0).getReceive()) + Double.valueOf(data.get(0).getSpend());
-                            Log.i(TAG, data.get(0).getReceive() + "-----onSuccess: 002我们看看余额应该是多少？" + xxx);
+                            LogUtil.i(TAG, data.get(0).getReceive() + "-----onSuccess: 002我们看看余额应该是多少？" + xxx);
                             specCoinInfo.setCoin_totalAmount(Double.valueOf(data.get(0).getReceive()) + Double.valueOf(data.get(0).getSpend()));
                             CoinInfoManager.insertOrUpdate(specCoinInfo);
 
@@ -618,7 +619,7 @@ public class WalletFragment extends BaseFragment {
                 .subscribe(new BaseObserver<String>(getActivity()) {
                     @Override
                     public void onSuccess(String data, String msg) {
-                        Log.i(TAG, "onSuccess: 我们看得到的数据是？"+data);
+                        LogUtil.i(TAG, "onSuccess: 我们看得到的数据是？"+data);
                         eth_quest_count++;
                         specCoinInfo.setCoin_totalAmount(Double.valueOf(data));
                         CoinInfoManager.insertOrUpdate(specCoinInfo);
@@ -650,7 +651,7 @@ public class WalletFragment extends BaseFragment {
                             for (int i = 0; i <data.size() ; i++) {
                                 if (data.get(i).getHash().equals(Constant.CONTRACT_ADDRESS)){
                                     erc20_balance=erc20_balance+Double.valueOf(data.get(i).getBalance())/Math.pow(10,Integer.valueOf(data.get(i).getTokenInfo().getD()));
-                                    Log.i(TAG, "onSuccess: 我们看得到的数据是？"+erc20_balance);
+                                    LogUtil.i(TAG, "onSuccess: 我们看得到的数据是？"+erc20_balance);
                                 }
                             }
                         }
@@ -683,12 +684,12 @@ public class WalletFragment extends BaseFragment {
                     }
                     walletInfo.setWalletBalance(wallet_balance);
                     WalletInfoManager.insertOrUpdate(walletInfo);
-                    Log.i(TAG, walletInfo.getWallet_id()+"----updateWaletBalance: 001更新了btc------"+wallet_balance);
+                    LogUtil.i(TAG, walletInfo.getWallet_id()+"----updateWaletBalance: 001更新了btc------"+wallet_balance);
                 }
-                Log.i(TAG, "updateWaletBalance: 002更新了btc----");
+                LogUtil.i(TAG, "updateWaletBalance: 002更新了btc----");
             }
         } else if (coin_type == 1) {
-            Log.i(TAG, usdt_quest_count+"updateWaletBalance: 001更新了usdt-----");
+            LogUtil.i(TAG, usdt_quest_count+"updateWaletBalance: 001更新了usdt-----");
             if (usdt_quest_count >= allusdtCoinInfos.size()) {
                 mMessageBeans = CoinInfoManager.getCoinInfo();
                 for (int i = 0; i < mWalletBeans.size(); i++) {
@@ -702,7 +703,7 @@ public class WalletFragment extends BaseFragment {
                     walletInfo.setWalletBalance(wallet_balance);
                     WalletInfoManager.insertOrUpdate(walletInfo);
                 }
-                Log.i(TAG, "updateWaletBalance: 002更新了usdt----");
+                LogUtil.i(TAG, "updateWaletBalance: 002更新了usdt----");
             }
         }else if (coin_type == 2){
             if (eth_quest_count >= allEthcCoinInfos.size()) {
@@ -718,7 +719,7 @@ public class WalletFragment extends BaseFragment {
                     walletInfo.setWalletBalance(wallet_balance);
                     WalletInfoManager.insertOrUpdate(walletInfo);
                 }
-                Log.i(TAG, "updateWaletBalance: 002更新了usdt----");
+                LogUtil.i(TAG, "updateWaletBalance: 002更新了usdt----");
             }
         }else if (coin_type==3){
             if (erc20_quest_count >= allERC20cCoinInfos.size()) {
@@ -734,7 +735,7 @@ public class WalletFragment extends BaseFragment {
                     walletInfo.setWalletBalance(wallet_balance);
                     WalletInfoManager.insertOrUpdate(walletInfo);
                 }
-                Log.i(TAG, "updateWaletBalance: 002更新了usdt----");
+                LogUtil.i(TAG, "updateWaletBalance: 002更新了usdt----");
             }
         }
         mWalletBeans = WalletInfoManager.getWalletInfoNoHidden(false);

@@ -39,6 +39,7 @@ import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.UserInformation;
 import com.tianqi.baselib.dbManager.UserInfoManager;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
+import com.tianqi.baselib.utils.LogUtil;
 
 import java.lang.reflect.Type;
 import java.security.SecureRandom;
@@ -130,7 +131,7 @@ public class BackupMemoryWordActivity extends BaseActivity {
             return master;
         }).compose(RxHelper.compute_main()).subscribe(ecKeyPair -> {
             String xx=strings.toString().replace(","," ");
-            Log.i(TAG, "initView: 我们看助记词"+xx);
+            LogUtil.i(TAG, "initView: 我们看助记词"+xx);
             mnemonicWordAdapter = new MnemonicWordAdapter(BackupMemoryWordActivity.this, strings,0);
             gvMnemonicWord.setAdapter(mnemonicWordAdapter);
         });

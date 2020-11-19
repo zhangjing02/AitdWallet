@@ -20,6 +20,7 @@ import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.UserInformation;
 import com.tianqi.baselib.dbManager.UserInfoManager;
 import com.tianqi.baselib.utils.ButtonUtils;
+import com.tianqi.baselib.utils.LogUtil;
 import com.tianqi.baselib.utils.display.ToastUtil;
 
 import java.lang.reflect.Type;
@@ -77,7 +78,7 @@ public class VerifyMemoryWordActivity extends BaseActivity {
         userInformation = UserInfoManager.getUserInfo();
         randomNums = getRandomNum(1, 12, 3);
 
-        Log.i(TAG, "initView: 我们看取到的三个随机数。" + randomNums.toString());
+        LogUtil.i(TAG, "initView: 我们看取到的三个随机数。" + randomNums.toString());
 
 
         tvSelectWord1Tag.setText(String.format(getString(R.string.text_select_which_word),randomNums.get(0)));

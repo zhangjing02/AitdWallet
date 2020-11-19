@@ -15,6 +15,7 @@ import com.tianqi.baselib.rxhttp.RetrofitFactory;
 import com.tianqi.baselib.rxhttp.base.BaseObserver;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
 import com.tianqi.baselib.utils.Constant;
+import com.tianqi.baselib.utils.LogUtil;
 import com.tianqi.baselib.utils.display.ToastUtil;
 
 import org.web3j.abi.FunctionEncoder;
@@ -76,7 +77,7 @@ public class EthTransactionTestActivity extends BaseActivity {
                 .subscribe(new BaseObserver<String>(this) {
                     @Override
                     public void onSuccess(String data, String msg) {
-                        Log.i(TAG, "onSuccess: 我们看得到的数据是？"+data);
+                        LogUtil.i(TAG, "onSuccess: 我们看得到的数据是？"+data);
                     }
                     @Override
                     protected void onFailure(int code, String msg) {
@@ -89,10 +90,10 @@ public class EthTransactionTestActivity extends BaseActivity {
     protected void initData() {
         EthWalletManager.getInstance().loadWallet(this, coinEthFrAddress, wallet -> {
             initWeb3j("http://192.168.1.16:8545");
-            Log.i(TAG, coinEthFrAddress.getCoin_address()+"initData: 001我们看看加载出来的钱包是啥？");
+            LogUtil.i(TAG, coinEthFrAddress.getCoin_address()+"initData: 001我们看看加载出来的钱包是啥？");
             if (coinEthFrAddress.getCoin_address().substring(2).toLowerCase().equals(wallet.getAddress())){
                 mWalletFile=wallet;
-                Log.i(TAG, "initData: 002我们看看加载出来的钱包是啥？"+mWalletFile.getAddress());
+                LogUtil.i(TAG, "initData: 002我们看看加载出来的钱包是啥？"+mWalletFile.getAddress());
             }
         });
     }

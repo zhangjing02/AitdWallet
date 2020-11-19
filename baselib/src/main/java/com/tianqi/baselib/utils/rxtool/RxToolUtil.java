@@ -211,7 +211,7 @@ public class RxToolUtil {
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<String> observableEmitter) throws Exception {
-                Log.i(TAG,"current thread : "+Thread.currentThread().getName());
+                LogUtil.i(TAG,"current thread : "+Thread.currentThread().getName());
                 observableEmitter.onNext("123456");
                 observableEmitter.onComplete();
             }
@@ -223,7 +223,7 @@ public class RxToolUtil {
                     }
                     @Override
                     public void onNext(@NonNull String bitmap) {
-                        Log.i(TAG,bitmap+"current thread : "+Thread.currentThread().getName());
+                        LogUtil.i(TAG,bitmap+"current thread : "+Thread.currentThread().getName());
                     }
                     @Override
                     public void onError(@NonNull Throwable e) {
