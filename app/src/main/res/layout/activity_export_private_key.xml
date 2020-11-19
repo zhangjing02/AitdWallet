@@ -70,12 +70,14 @@
             android:textSize="14sp"
             android:textStyle="bold" />
 
-        <TextView
+        <me.grantland.widget.AutofitTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="6dp"
             android:layout_marginRight="12dp"
+            android:maxLines="3"
+            app:minTextSize="8sp"
             android:text="@string/text_back_up_key_warn3"
             android:textColor="@color/text_main_60_black"
             android:textSize="12sp" />

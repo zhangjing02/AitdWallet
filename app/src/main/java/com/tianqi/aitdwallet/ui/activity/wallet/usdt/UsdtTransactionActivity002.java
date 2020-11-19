@@ -505,25 +505,21 @@ public class UsdtTransactionActivity002 extends BaseActivity {
 
         //把负载和omni转账，拼接成一个hex，然后形成一个代表omni转账的特殊output。
         String total_tx_str = create_load_tx.substring(0, create_load_tx.lastIndexOf(tx_cut_str) + 18) + connet_tx_str + omni_str;
-        Log.i("ttttttttttttt", strHex + "---------onViewClicked: 002我们看这个" + total_tx_str);
+      //  Log.i("ttttttttttttt", strHex + "---------onViewClicked: 002我们看这个" + total_tx_str);
         return total_tx_str;
     }
 
     private String createFinalTransaction(String omni_tx_hex) {
         BTCTransaction.Script script = null;  //对方的地址
-        Log.i("ttttttttttttt", "---------onViewClicked: 003我们看这个" + omni_tx_hex);
         try {
             BTCTransaction omni_tx = new BTCTransaction(HexUtils.fromHex(omni_tx_hex));
-            Log.i("ttttttttttttt", "---------onViewClicked: 003---1我们看这个" + omni_tx_hex);
             BTCTransaction.Script script002 = BTCTransaction.Script.buildOutput(master.getAddress());  //自己的地址
-            Log.i("ttttttttttttt", "---------onViewClicked: 003---2我们看这个" + omni_tx_hex);
             BTCTransaction.Input[] inputs = new BTCTransaction.Input[utxo_for_pay.size()];
             for (int i = 0; i < utxo_for_pay.size(); i++) {
                 BTCTransaction.OutPoint outPoint = new BTCTransaction.OutPoint(HexUtils.fromHex(utxo_for_pay.get(i).getTxid()), utxo_for_pay.get(i).getOutput_no());
                 BTCTransaction.Input input = new BTCTransaction.Input(outPoint, script002, 0);
                 inputs[i] = input;
             }
-            Log.i("ttttttttttttt", "---------onViewClicked: 003---3我们看这个" + omni_tx_hex);
             script = BTCTransaction.Script.buildOutput(etPaymentAddress.getText().toString());
             BTCTransaction.Script script003 = BTCTransaction.Script.buildOutput(master.getAddress());
             double change_value = total_listunspent_value - usdt_consume_fee;
@@ -549,13 +545,11 @@ public class UsdtTransactionActivity002 extends BaseActivity {
             BTCTransaction unsignedTransaction = new BTCTransaction(inputs, outputs, 0);
             byte[] sign = unsignedTransaction.sign(master);
             String toHex = HexUtils.toHex(sign);
-            Log.i("tttttttttttttttttttt", master.getAddress() + "------onViewClicked: 我们看签名后的数据是？" + toHex);
+         //   Log.i("tttttttttttttttttttt", master.getAddress() + "------onViewClicked: 我们看签名后的数据是？" + toHex);
             return toHex;
         } catch (BitcoinException e) {
-            Log.i("ttttttttttttt", "---------onViewClicked: 004我们看这个" + e.getMessage());
             e.printStackTrace();
         } catch (ValidationException e) {
-            Log.i("ttttttttttttt", "---------onViewClicked: 005我们看这个" + e.getMessage());
             e.printStackTrace();
         }
         return null;

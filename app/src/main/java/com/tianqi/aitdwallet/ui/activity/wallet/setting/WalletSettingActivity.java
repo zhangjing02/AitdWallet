@@ -82,14 +82,13 @@ public class WalletSettingActivity extends BaseActivity {
 
         tvWalletCoinName.setText(coinFrWalletId.getAlias_name() + "");
         tvCoinAddress.setText(coinFrWalletId.getCoin_address());
-        if (wallet_name.contains(Constant.TRANSACTION_COIN_NAME_ETH)) {
+        if (wallet_name.contains(Constant.TRANSACTION_COIN_NAME_ETH)||wallet_name.contains(Constant.TRANSACTION_COIN_NAME_USDT_ERC20)) {
             tvExportKeystore.setVisibility(View.VISIBLE);
             lineDownKeystore.setVisibility(View.VISIBLE);
         } else {
             tvExportKeystore.setVisibility(View.GONE);
             lineDownKeystore.setVisibility(View.GONE);
         }
-
     }
 
     private void getToolBar() {

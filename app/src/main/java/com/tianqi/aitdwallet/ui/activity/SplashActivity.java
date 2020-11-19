@@ -100,7 +100,6 @@ public class SplashActivity extends BaseActivity {
                         CoinRateInfoManager.insertOrUpdate(coinRateInfo);
 
                         if (walletInfo!=null){
-                            Log.i("tttttttttttttt", coinRateInfo.getPrice_usd()+"----onNext: 我们插入数据的数据是？"+coinRateInfo.getPrice_cny());
                             walletInfo.setCoin_USDPrice(coinRateInfo.getPrice_usd());
                             walletInfo.setCoin_CNYPrice(coinRateInfo.getPrice_cny());
                             WalletInfoManager.insertOrUpdate(walletInfo);
@@ -119,7 +118,6 @@ public class SplashActivity extends BaseActivity {
                         CoinRateInfoManager.insertOrUpdate(coinRateInfo);
 
                         if (walletInfo!=null){
-                            Log.i("tttttttttttttt", coinRateInfo.getPrice_usd()+"----onNext: 我们插入数据的数据是？"+coinRateInfo.getPrice_cny());
                             walletInfo.setCoin_USDPrice(coinRateInfo.getPrice_usd());
                             walletInfo.setCoin_CNYPrice(coinRateInfo.getPrice_cny());
                             WalletInfoManager.insertOrUpdate(walletInfo);

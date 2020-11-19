@@ -49,6 +49,7 @@ import com.tianqi.baselib.rxhttp.bean.GetListUnspentBean;
 import com.tianqi.baselib.rxhttp.bean.GetSimpleRpcBean;
 import com.tianqi.baselib.utils.ButtonUtils;
 import com.tianqi.baselib.utils.Constant;
+import com.tianqi.baselib.utils.LogUtil;
 import com.tianqi.baselib.utils.digital.AESCipher;
 import com.tianqi.baselib.utils.digital.DataReshape;
 import com.tianqi.baselib.utils.display.LoadingDialogUtils;
@@ -443,18 +444,19 @@ public class UsdtTransactionActivity extends BaseActivity {
 
         //把负载和omni转账，拼接成一个hex，然后形成一个代表omni转账的特殊output。
         String total_tx_str = create_load_tx.substring(0, create_load_tx.lastIndexOf(tx_cut_str) + 18) + connet_tx_str + omni_str;
-        Log.i("ttttttttttttt", strHex + "---------onViewClicked: 002我们看这个" + total_tx_str);
+       // Log.i("ttttttttttttt", strHex + "---------onViewClicked: 002我们看这个" + total_tx_str);
+        LogUtil.i("ttttttttttttt", strHex + "---------onViewClicked: 002我们看这个" + total_tx_str);
         return total_tx_str;
     }
 
     private String createFinalTransaction(String omni_tx_hex) {
         BTCTransaction.Script script = null;  //对方的地址
-        Log.i("ttttttttttttt", "---------onViewClicked: 003我们看这个" + omni_tx_hex);
+       // Log.i("ttttttttttttt", "---------onViewClicked: 003我们看这个" + omni_tx_hex);
         try {
             BTCTransaction omni_tx = new BTCTransaction(HexUtils.fromHex(omni_tx_hex));
-            Log.i("ttttttttttttt", "---------onViewClicked: 003---1我们看这个" + omni_tx_hex);
+          //  Log.i("ttttttttttttt", "---------onViewClicked: 003---1我们看这个" + omni_tx_hex);
             BTCTransaction.Script script002 = BTCTransaction.Script.buildOutput(master.getAddress());  //自己的地址
-            Log.i("ttttttttttttt", "---------onViewClicked: 003---2我们看这个" + omni_tx_hex);
+          //  Log.i("ttttttttttttt", "---------onViewClicked: 003---2我们看这个" + omni_tx_hex);
             BTCTransaction.Input[] inputs = new BTCTransaction.Input[utxo_for_pay.size()];
             for (int i = 0; i < utxo_for_pay.size(); i++) {
                 BTCTransaction.OutPoint outPoint = new BTCTransaction.OutPoint(HexUtils.fromHex(utxo_for_pay.get(i).getTxid()), utxo_for_pay.get(i).getOutput_no());

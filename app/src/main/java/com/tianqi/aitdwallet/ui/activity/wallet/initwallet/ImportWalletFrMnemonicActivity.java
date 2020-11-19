@@ -262,7 +262,7 @@ public class ImportWalletFrMnemonicActivity extends BaseActivity {
             //保存一个文件形式，方便加载的时候，能很快加载出钱包。否则每次去生成会很慢。
             // TODO: 2020/11/10 此处写的不太合理，因为是线程在跑，所以，可能此页面一直进行完了，保存钱包的逻辑还没执行完。
             EthWalletManager.getInstance().loadWallet(this, coinInfo, wallet -> {
-                Log.i("ttttttttttttt", coinInfo.getCoin_address()+"onWalletLoaded: 我们看到了自己的eth地址是？"+wallet.getAddress());
+             //   Log.i("ttttttttttttt", coinInfo.getCoin_address()+"onWalletLoaded: 我们看到了自己的eth地址是？"+wallet.getAddress());
             });
             coinInfo.setCoin_fullName(Constant.COIN_FULL_NAME_ETH);
             coinInfo.setCoin_ComeType(Constant.COIN_SOURCE_IMPORT);
@@ -271,7 +271,6 @@ public class ImportWalletFrMnemonicActivity extends BaseActivity {
             coinInfo.setAlias_name(Constant.TRANSACTION_COIN_NAME_ETH);
             coinInfo.setResourceId(R.mipmap.ic_circle_eth);
             UserInformation information = UserInfoManager.getUserInfo();
-            Log.i("tttttttttttt", "insertCoinInfo: 我们得到的密码是？" + information.getPasswordStr());
             String aes_decode_str = AESCipher.decrypt(Constant.PSD_KEY, information.getPasswordStr());
             EthECKeyPair ethECKeyPair = null;
             try {
@@ -300,7 +299,7 @@ public class ImportWalletFrMnemonicActivity extends BaseActivity {
             //保存一个文件形式，方便加载的时候，能很快加载出钱包。否则每次去生成会很慢。
             // TODO: 2020/11/10 此处写的不太合理，因为是线程在跑，所以，可能此页面一直进行完了，保存钱包的逻辑还没执行完。
             EthWalletManager.getInstance().loadWallet(this, coinInfo, wallet -> {
-                Log.i("ttttttttttttt", coinInfo.getCoin_address()+"onWalletLoaded: 我们看到了自己的eth地址是？"+wallet.getAddress());
+           //     Log.i("ttttttttttttt", coinInfo.getCoin_address()+"onWalletLoaded: 我们看到了自己的eth地址是？"+wallet.getAddress());
             });
             coinInfo.setCoin_fullName(Constant.COIN_FULL_NAME_USDT_ERC20);
             coinInfo.setCoin_ComeType(Constant.COIN_SOURCE_IMPORT);
@@ -309,7 +308,6 @@ public class ImportWalletFrMnemonicActivity extends BaseActivity {
             coinInfo.setAlias_name(Constant.TRANSACTION_COIN_NAME_USDT_ERC20);
             coinInfo.setResourceId(R.mipmap.ic_circle_usdt_erc20);
             UserInformation information = UserInfoManager.getUserInfo();
-            Log.i("tttttttttttt", "insertCoinInfo: 我们得到的密码是？" + information.getPasswordStr());
             String aes_decode_str = AESCipher.decrypt(Constant.PSD_KEY, information.getPasswordStr());
             EthECKeyPair ethECKeyPair = null;
             try {

@@ -18,13 +18,16 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 
+import com.quincysx.crypto.ethereum.vm.LogInfo;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.ui.activity.MainActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.importwallet.ImportWalletActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.setting.PrivacyTermsWebActivity;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dao.UserInformation;
+import com.tianqi.baselib.dbManager.CoinInfoManager;
 import com.tianqi.baselib.dbManager.UserInfoManager;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
 import com.tianqi.baselib.utils.ButtonUtils;
@@ -33,6 +36,8 @@ import com.tianqi.baselib.utils.LogUtil;
 import com.tianqi.baselib.utils.digital.AESCipher;
 import com.tianqi.baselib.utils.display.ToastUtil;
 import com.tianqi.baselib.utils.rxtool.RxToolUtil;
+
+import java.util.List;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -340,7 +345,6 @@ public class SetSecurityPsdActivity extends BaseActivity {
             case R.id.btn_create_wallet:
                 if (judgeSelectInput()) {
                     String stringExtra = getIntent().getStringExtra(Constants.INTENT_PUT_TAG);
-                    Log.i(TAG, "onViewClicked: 我们看修改密码的是个啥？"+stringExtra);
                     if (stringExtra!=null&&stringExtra.equals(getString(R.string.tittle_set_new_psd))){
                         UserInformation userInformation = UserInfoManager.getUserInfo();
                         try {
@@ -351,6 +355,15 @@ public class SetSecurityPsdActivity extends BaseActivity {
                             UserInfoManager.insertOrUpdate(userInformation);
                         } catch (Exception e) {
                             e.printStackTrace();
+                        }
+                        //因为更改密码，涉及到keystore的不匹配，所以，我们把原来存储的keystore删除，让他们自己重新生成去。(只有eth以及他的代币才需要keystore)
+                        List<CoinInfo> specCoinFrTypeInfos = CoinInfoManager.getSpecCoinFrTypeInfo(Constant.COIN_BIP_TYPE_ETH);
+                        if (specCoinFrTypeInfos!=null&&specCoinFrTypeInfos.size()>0){
+                            for (int i = 0; i <specCoinFrTypeInfos.size() ; i++) {
+                                CoinInfo coinInfo = specCoinFrTypeInfos.get(i);
+                                coinInfo.setKeystoreStr(null);
+                                CoinInfoManager.insertOrUpdate(coinInfo);
+                            }
                         }
                         Intent intent1=new Intent(this, MainActivity.class);
                         startActivity(intent1);
@@ -440,7 +453,6 @@ public class SetSecurityPsdActivity extends BaseActivity {
      * @param imageView 需要点击的眼睛图标。
      */
     public void showOrHidePsd(EditText editText, EditText etConfirmPassword, ImageView imageView) {
-        LogUtil.d("ttttttt", InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD + "--showOrHidePsd: 键盘" + editText.getInputType());
         if (editText.getInputType() != InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) {
             imageView.setImageResource(R.mipmap.ic_open_eye);
             editText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);

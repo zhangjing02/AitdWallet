@@ -210,4 +210,14 @@ public class CoinInfoManager {
                 .list();
         return list;
     }
+
+    //查询特定的币种通过币种类型。
+    public static List<CoinInfo> getSpecCoinFrTypeInfo(int coin_type) {
+        List<CoinInfo> list = getScaleRecordDao().queryBuilder()
+                .where(CoinInfoDao.Properties.Coin_type.eq(coin_type))//数据筛选，只获取 Name = coin_name 的数据。
+                .build()
+                .list();
+        return list;
+    }
+
 }

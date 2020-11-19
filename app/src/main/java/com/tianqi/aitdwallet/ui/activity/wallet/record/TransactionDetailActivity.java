@@ -131,7 +131,7 @@ public class TransactionDetailActivity extends BaseActivity {
         userInformation= UserInfoManager.getUserInfo();
         String tx_id = getIntent().getStringExtra(Constants.INTENT_PUT_TRANSACTION_ID);
         String coin_id = getIntent().getStringExtra(Constants.INTENT_PUT_COIN_ID);
-        Log.i("ttttttttt", "initData: -----我们看一下这个交易id是？"+tx_id);
+       // Log.i("ttttttttt", "initData: -----我们看一下这个交易id是？"+tx_id);
         txFrId = TransactionRecordManager.getTxFrId(tx_id);
         if (!TextUtils.isEmpty(txFrId.getRemark())){
             tvTransactionNote.setText(txFrId.getRemark()+"");
@@ -156,7 +156,6 @@ public class TransactionDetailActivity extends BaseActivity {
                     .subscribe(new BaseObserver<GetTxDetailBean>(this) {
                         @Override
                         public void onSuccess(GetTxDetailBean data, String msg) {
-                            Log.i("ttttttttttttttt", "onSuccess: "+tx_type);
                             if (data!=null){
                                 tvMinerFee.setText(data.getFee()+"BTC");
                                 if (tx_type== Constant.TRANSACTION_TYPE_SEND){

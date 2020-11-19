@@ -79,7 +79,6 @@ public class WalletSettingFrImportActivity extends BaseActivity {
         CoinInfo coinFrWalletId = CoinInfoManager.getMainCoinFrCoinId(coin_id);
 
 
-        Log.i("tttttttttttttttt", "initView: 我们看获取的币种类型是？" + coinFrWalletId.getCoin_ComeType());
 
         GlideUtils.loadResourceImage(this, coinFrWalletId.getResourceId(), ivWalletCoin);
 

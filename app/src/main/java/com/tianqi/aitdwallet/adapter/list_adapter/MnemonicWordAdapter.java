@@ -111,7 +111,6 @@ public class MnemonicWordAdapter extends BaseAdapter {
 
 
     public void hideWords(int position) {
-        Log.i("tttttttttt", show_index+"-----hideWords: 要隐藏第几个？"+position);
         hide_index = position;
         notifyDataSetChanged();
     }

@@ -70,7 +70,7 @@ public class BtcTransTestActivity extends BaseActivity {
                     BTCTransaction unsignedTransaction = new BTCTransaction(new BTCTransaction.Input[]{input}, new BTCTransaction.Output[]{output, unsignedTransaction002.outputs[0]}, 0);
                     byte[] sign = unsignedTransaction.sign(master);
                     String toHex = HexUtils.toHex(sign);
-                    Log.i("tttttttttttttttttttt", master.getAddress() + "------onViewClicked: 我们看签名后的数据是？" + toHex);
+                  //  Log.i("tttttttttttttttttttt", master.getAddress() + "------onViewClicked: 我们看签名后的数据是？" + toHex);
                 } catch (BitcoinException e) {
                     e.printStackTrace();
                 } catch (ValidationException e) {
@@ -103,11 +103,11 @@ public class BtcTransTestActivity extends BaseActivity {
                     cin.close();
 
                     String omni_str = omni_origal_data.substring(8, omni_origal_data.length() - strHex.length()) + strHex + "00000000";
-                    Log.i("ttttttttttttt", strHex + "---------onViewClicked: 002我们看这个" + omni_str);
+                 //   Log.i("ttttttttttttt", strHex + "---------onViewClicked: 002我们看这个" + omni_str);
 
                     //把负载和omni转账，拼接成一个hex，然后形成out。
                     String total_tx_str = create_load_tx.substring(0, create_load_tx.indexOf(tx_cut_str) + 18) + connet_tx_str + omni_str;
-                    Log.i("ttttttttttttt", "onViewClicked: 003我们看这个" + total_tx_str);
+                  //  Log.i("ttttttttttttt", "onViewClicked: 003我们看这个" + total_tx_str);
                     BTCTransaction unsignedTransaction002 = new BTCTransaction(HexUtils.fromHex(total_tx_str));
 
                 } catch (BitcoinException e) {
@@ -125,7 +125,7 @@ public class BtcTransTestActivity extends BaseActivity {
                 while (cin.hasNext()) {
                     String str = cin.next();
                    String strHex = new BigInteger(str, 10).toString(16);//10进制转换2进制
-                    Log.i("ttttttttttttt", "onViewClicked: 我们看这里交易情况"+strHex);
+                //    Log.i("ttttttttttttt", "onViewClicked: 我们看这里交易情况"+strHex);
                 }
                 cin.close();
                 //02000000029a90632aef66f314fdaca58425a5c15a79fb475bd12a01cddd11977bb6e3dac20000000000ffffffff1b83b1cfd5f7fec08c5bbfd5edfa74f7cf5de9eaeb3f8ef41931049d6e6028680000000000ffffffff0000000000

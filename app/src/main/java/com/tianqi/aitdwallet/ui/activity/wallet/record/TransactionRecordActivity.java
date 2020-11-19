@@ -133,7 +133,6 @@ public class TransactionRecordActivity extends BaseActivity {
         coin_id = getIntent().getStringExtra(Constants.TRANSACTION_COIN_ID);
         walletBtcInfo = CoinInfoManager.getCoinFrAddress(coin_tittle, coin_address);
         walletInfo = WalletInfoManager.getWalletFrName(walletBtcInfo.getCoin_name());
-        Log.i("ttttttttttttt", "initView: 我们看以太坊的私钥是？"+walletBtcInfo.getPrivateKey());
 
         mMessageBeans = TransactionRecordManager.getTxFrAddressAndCoinId(coin_address, coin_id);
         mLayoutManager = new LinearLayoutManager(this,
@@ -653,7 +652,6 @@ public class TransactionRecordActivity extends BaseActivity {
 
     @Override
     public void onDataSynEvent(EventMessage event) {
-        Log.i("ttttttttttttt", event.getType() + "---onDataSynEvent: 有进来了么？" + select_index);
         if (event.getType() == EventMessage.TRANSACTION_RECORD_UPDATE) {
             switch (select_index) {
                 case 1:
@@ -675,7 +673,6 @@ public class TransactionRecordActivity extends BaseActivity {
 //            mMessageBeans.addAll(mMessageBeans02);
 //            mMessageBeans.addAll(mMessageBeans02);
 //            mMessageBeans.addAll(mMessageBeans02);
-            Log.i("ttttttttttttt", "onDataSynEvent: 002有进来了么？" + mMessageBeans.size());
             recordAdapter.setNewData(mMessageBeans);
         } else if (event.getType() == EventMessage.TRANSACTION_RECORD_UPDATE_USDT) {
             switch (select_index) {

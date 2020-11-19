@@ -148,7 +148,6 @@ public class MainActivity extends BaseActivity {
                                 Calendar calendar=Calendar.getInstance();
                                 long time_update=PrefUtils.getLong(MainActivity.this, PrefUtils.APP_UPDATE_TIME,0);
                                 long time_during=calendar.getTimeInMillis()/1000-time_update/1000-86400;
-                                Log.i("ttttttttt", time_during+"-----onSuccess: 我们看上次更新的时间是？"+time_update);
                                 if (data.isForceFlag()){
                                     VersionUpdateDialog shotNoticeDialog = new VersionUpdateDialog(MainActivity.this, R.style.MyDialog2,data.isForceFlag());
                                     shotNoticeDialog.setTittle(getString(R.string.tittle_version_update_tag)+data.getVersion());

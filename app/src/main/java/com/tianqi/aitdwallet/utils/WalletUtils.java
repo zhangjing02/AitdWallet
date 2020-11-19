@@ -38,7 +38,6 @@ public class WalletUtils {
         }.getType();
         List<String> list = gson.fromJson(userInformation.getMnemonicWord(), listType);
         byte[] seed = new SeedCalculator().calculateSeed(list, "");
-        Log.i("ttttttttttttt", "createCoinMaser: 我们看主种子是多少？"+HexUtils.toHex(seed));
         ExtendedKey extendedKey = null;
         try {
             extendedKey = ExtendedKey.create(seed);

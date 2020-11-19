@@ -327,7 +327,6 @@ public class VerifySecurityPsdActivity extends BaseActivity {
      * @param imageView 需要点击的眼睛图标。
      */
     public void showOrHidePsd(EditText editText, ImageView imageView) {
-        LogUtil.d("ttttttt", InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD + "--showOrHidePsd: 键盘" + editText.getInputType());
         if (editText.getInputType() != InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) {
             imageView.setImageResource(R.mipmap.ic_open_eye);
             editText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);

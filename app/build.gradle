@@ -8,7 +8,7 @@ android {
         applicationId "com.tianqi.aitdwallet"
         minSdkVersion 19
         targetSdkVersion 30
-        versionCode 66
+        versionCode 67
         versionName "1.1.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

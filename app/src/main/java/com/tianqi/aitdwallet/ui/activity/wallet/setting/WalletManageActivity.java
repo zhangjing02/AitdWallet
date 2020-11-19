@@ -238,7 +238,6 @@ public class WalletManageActivity extends BaseActivity {
             case R.id.layout_add_import_wallet:
                 switch (select_index) {
                     case TITTLE_CREATE_INDEX:
-                        Log.i("ttttttttttttttttt", "onViewClicked:我们看这是创建么？");
                         Intent intent = new Intent(this, VerifySecurityPsdActivity.class);
                         intent.putExtra(Constants.INTENT_PUT_TAG, getString(R.string.tittle_create_wallet));
                         startActivity(intent);
