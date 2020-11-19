@@ -73,7 +73,6 @@ public class AboutUsActivity extends BaseActivity {
         toolbar.setNavigationOnClickListener(v -> {
             finish();//返回
         });
-
     }
 
 

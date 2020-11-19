@@ -109,4 +109,6 @@ dependencies {
     implementation 'me.grantland:autofittextview:0.2.+'
    // implementation 'com.github.mcxtzhang:SwipeDelMenuLayout:V1.2.1'
     implementation 'com.github.mcxtzhang:SwipeDelMenuLayout:V1.3.0'
+
+    implementation 'q.rorbin:badgeview:1.1.3'
 }

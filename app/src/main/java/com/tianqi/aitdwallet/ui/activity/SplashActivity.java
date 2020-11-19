@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.tianqi.aitdwallet.R;
+import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.CoinRateInfo;
 import com.tianqi.baselib.dao.UserInformation;
@@ -19,6 +20,8 @@ import com.tianqi.baselib.rxhttp.base.BaseObserver;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
 import com.tianqi.baselib.rxhttp.bean.CoinRateBean;
 import com.tianqi.baselib.utils.Constant;
+import com.tianqi.baselib.utils.LogUtil;
+import com.tianqi.baselib.utils.display.LocaleUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,6 +43,19 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void initView() {
         userInfo = UserInfoManager.getUserInfo();
+        if (userInfo!=null){
+            int languageId = userInfo.getLanguageId();
+            if (languageId== Constants.LANGUAGE_CHINA){  //设置语言，如果系统的语言和app设置的语言不统一，我们就设置成app需要的语言。
+                if (LocaleUtils.needUpdateLocale(SplashActivity.this, LocaleUtils.LOCALE_CHINESE)){
+                    LocaleUtils.updateLocale(this, LocaleUtils.LOCALE_CHINESE);
+                }
+            }else if (languageId==Constants.LANGUAGE_ENGLISH){
+                if (LocaleUtils.needUpdateLocale(SplashActivity.this, LocaleUtils.LOCALE_ENGLISH)){
+                    LocaleUtils.updateLocale(this, LocaleUtils.LOCALE_ENGLISH);
+                }
+            }
+        }
+
         //获取各个币种的汇率，存入币种汇率的数据库中。
         Map<String, Object> map = new HashMap<>();
         map.put("apikey", "AnqHS6Rs2WX0hwFXlrv");

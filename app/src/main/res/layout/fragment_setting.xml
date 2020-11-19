@@ -54,7 +54,6 @@
         android:layout_height="55dp"
         android:layout_marginTop="7dp"
         android:background="@color/white"
-        android:visibility="gone"
         android:drawableLeft="@mipmap/ic_setting_my_message"
         android:drawableRight="@mipmap/ic_indicator_grey_right"
         android:drawablePadding="17dp"

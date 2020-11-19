@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/layout_message"
+        android:layout_width="match_parent"
+        android:layout_height="77dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_message_tittle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:singleLine="true"
+            android:text="提示:系统维护已完成"
+            android:textColor="@color/text_main_black"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_message_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginTop="9dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="系统维护停机完成，具体恢复时间为北京时间20..."
+            android:textColor="@color/text_main_40_black"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+
+    <View
+        android:id="@+id/view_line"
+        android:layout_width="match_parent"
+        android:layout_height="0.6dp"
+        android:layout_marginLeft="15dp"
+        android:background="@color/color_line_10_blue"/>
+</LinearLayout>

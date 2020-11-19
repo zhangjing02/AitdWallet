@@ -5,8 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.util.Log;
 
-import com.tianqi.baselib.utils.LogUtil;
-
 import org.greenrobot.greendao.AbstractDaoMaster;
 import org.greenrobot.greendao.database.StandardDatabase;
 import org.greenrobot.greendao.database.Database;
@@ -87,7 +85,7 @@ public class DaoMaster extends AbstractDaoMaster {
 
         @Override
         public void onCreate(Database db) {
-            LogUtil.i("greenDAO", "Creating tables for schema version " + SCHEMA_VERSION);
+            Log.i("greenDAO", "Creating tables for schema version " + SCHEMA_VERSION);
             createAllTables(db, false);
         }
     }
@@ -104,7 +102,7 @@ public class DaoMaster extends AbstractDaoMaster {
 
         @Override
         public void onUpgrade(Database db, int oldVersion, int newVersion) {
-            LogUtil.i("greenDAO", "Upgrading schema from version " + oldVersion + " to " + newVersion + " by dropping all tables");
+            Log.i("greenDAO", "Upgrading schema from version " + oldVersion + " to " + newVersion + " by dropping all tables");
             dropAllTables(db, true);
             onCreate(db);
         }

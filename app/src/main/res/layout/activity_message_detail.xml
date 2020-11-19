@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context=".ui.activity.setting.MessageDetailActivity">
+
+    <include
+        android:id="@+id/toolbar_layout"
+        layout="@layout/toolbar_menu"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/bg_edit_grey"
+        android:layout_width="match_parent"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginTop="30dp"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:id="@+id/tv_message_tittle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="30dp"
+            android:text="消息中心"
+            android:textSize="17sp"
+            android:textColor="@color/text_main_black"/>
+
+        <TextView
+            android:id="@+id/tv_message_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/tv_message_tittle"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginTop="30dp"
+            android:text="热钱包往往是在线钱包的形式。使用热钱包时最好在不同平台设置不同密码，且开启二次认证，以确保自己的资产安全。"
+            android:textSize="14sp"
+            android:textColor="@color/text_main_80_black"/>
+
+        <TextView
+            android:id="@+id/tv_message_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/tv_message_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="30dp"
+            android:text="2020.08.01 08:12:11"
+            android:textSize="12sp"
+            android:layout_marginBottom="30dp"
+            android:textColor="@color/text_main_80_black"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+</LinearLayout>

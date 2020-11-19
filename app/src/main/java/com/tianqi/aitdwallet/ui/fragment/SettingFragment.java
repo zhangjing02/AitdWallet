@@ -11,6 +11,7 @@ import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.ui.activity.address.ContactsAddressManageActivity;
 import com.tianqi.aitdwallet.ui.activity.setting.AboutUsActivity;
 import com.tianqi.aitdwallet.ui.activity.setting.InviteFriendActivity;
+import com.tianqi.aitdwallet.ui.activity.setting.MessageCenterActivity;
 import com.tianqi.aitdwallet.ui.activity.setting.SafeCenterActivity;
 import com.tianqi.aitdwallet.ui.activity.setting.SystemSettingActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.setting.WalletManageActivity;
@@ -76,6 +77,8 @@ public class SettingFragment extends BaseFragment {
                 startActivity(intent);
                 break;
             case R.id.tv_my_message:
+                intent=new Intent(getActivity(), MessageCenterActivity.class);
+                startActivity(intent);
                 break;
             case R.id.tv_invite_friend:
                 intent=new Intent(getActivity(), InviteFriendActivity.class);
