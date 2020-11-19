@@ -18,6 +18,7 @@ import com.tianqi.aitdwallet.adapter.recycle_adapter.SingleCoinAdapter;
 import com.tianqi.aitdwallet.bean.CurrencyCardBean;
 import com.tianqi.aitdwallet.ui.activity.wallet.setting.CoinHiddenActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.setting.WalletSettingActivity;
+import com.tianqi.aitdwallet.ui.activity.wallet.setting.WalletSettingFrImportActivity;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
@@ -246,7 +247,7 @@ public class ImportCoinListActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_collect:
-                Intent intent = new Intent(this, WalletSettingActivity.class);
+                Intent intent = new Intent(this, WalletSettingFrImportActivity.class);
                 intent.putExtra(Constants.TRANSACTION_COIN_NAME, toolbarTitle.getText());
                 intent.putExtra(Constants.INTENT_PUT_COIN_ID, mList.get(select_index).getCoin_icon_id());
                 startActivity(intent);

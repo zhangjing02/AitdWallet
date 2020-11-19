@@ -65,6 +65,12 @@ import butterknife.BindView;
  * @description  交易记录的类，此处还缺少分页加载的逻辑。
  */
 
+/**
+ * @author zhangjing
+ * @date 2020/11/9
+ * @description  交易记录的类，此处还缺少分页加载的逻辑。
+ */
+
 public class TransactionRecordActivity extends BaseActivity {
 
     @BindView(R.id.toolbarTitle)

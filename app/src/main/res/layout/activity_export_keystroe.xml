@@ -33,7 +33,7 @@
     <LinearLayout
         android:id="@+id/layout_export_key_notice"
         android:layout_width="match_parent"
-        android:layout_height="220dp"
+        android:layout_height="230dp"
         android:layout_marginHorizontal="15dp"
         android:layout_marginTop="30dp"
         android:background="@drawable/bg_export_key_notice"
@@ -70,14 +70,16 @@
             android:textSize="14sp"
             android:textStyle="bold" />
 
-        <TextView
+        <me.grantland.widget.AutofitTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="6dp"
             android:layout_marginRight="12dp"
+            android:maxLines="3"
             android:text="@string/text_back_up_key_warn3"
             android:textColor="@color/text_main_60_black"
+            app:minTextSize="8sp"
             android:textSize="12sp" />
 
         <TextView
@@ -105,7 +107,7 @@
     <LinearLayout
         android:id="@+id/layout_export_qr_notice"
         android:layout_width="match_parent"
-        android:layout_height="179dp"
+        android:layout_height="190dp"
         android:layout_marginHorizontal="15dp"
         android:layout_marginTop="30dp"
         android:background="@drawable/bg_export_key_notice"
@@ -123,10 +125,12 @@
             android:textSize="14sp"
             android:textStyle="bold" />
 
-        <TextView
+        <me.grantland.widget.AutofitTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="15dp"
+            android:maxLines="3"
+            app:minTextSize="8sp"
             android:layout_marginTop="6dp"
             android:text="@string/text_copy_qr_warn1"
             android:textColor="@color/text_main_60_black"
