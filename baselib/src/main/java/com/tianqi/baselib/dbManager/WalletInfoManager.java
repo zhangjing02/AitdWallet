@@ -92,4 +92,16 @@ public class WalletInfoManager {
             return null;
         }
     }
+    //查询用户
+    public static WalletInfo getWalletFrId(String wallet_id) {
+        List<WalletInfo> walletInfo = getScaleRecordDao().queryBuilder()
+                .where(WalletInfoDao.Properties.Wallet_id.eq(wallet_id))//数据筛选，只获取 Name = "btc" 的数据。
+                .build()
+                .list();
+        if (walletInfo.size()>0){
+            return walletInfo.get(0);
+        }else {
+            return null;
+        }
+    }
 }

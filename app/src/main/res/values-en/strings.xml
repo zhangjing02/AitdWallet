@@ -262,6 +262,7 @@
 	<string name="notice_address_error">wrong address</string>
 	<string name="notice_balance_not_enough">Balance shortfall</string>
 	<string name="notice_eth_amount_not_enough">The eth balance is not enough support contract transfer</string>
+	<string name="notice_btc_amount_not_enough">The btc balance is not enough support contract transfer</string>
 	<string name="btn_change_safe_psd_text">Change safe password</string>
 	<string name="tittle_safe_center">Safe Center</string>
 	<string name="tittle_change_safe_psd">Change Safe Password</string>

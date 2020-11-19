@@ -79,7 +79,6 @@ public class ExportPrivateKeyActivity extends BaseActivity {
         getToolBar();
         String coin_id = getIntent().getStringExtra(Constants.INTENT_PUT_COIN_ID);
 
-        Log.i("tttttttttt", "initView: 拿到的名字是？"+coin_id);
         mainCoinFrCoinId = CoinInfoManager.getMainCoinFrCoinId(coin_id);
         tvCoinPrivateKey.setText(mainCoinFrCoinId.getPrivateKey());
         Bitmap qrCodeBitmap = CodeEncoder.createImage(mainCoinFrCoinId.getPrivateKey(), ivShowKeyQr.getLayoutParams().width, ivShowKeyQr.getLayoutParams().height, null);

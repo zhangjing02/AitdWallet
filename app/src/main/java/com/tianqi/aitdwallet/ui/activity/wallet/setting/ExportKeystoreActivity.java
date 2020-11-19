@@ -5,17 +5,17 @@ import android.app.Dialog;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.tabs.TabLayout;
-import com.google.gson.Gson;
 import com.quincysx.crypto.bip32.ValidationException;
 import com.quincysx.crypto.ethereum.EthECKeyPair;
 import com.quincysx.crypto.ethereum.keystore.CipherException;
@@ -27,28 +27,16 @@ import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dbManager.CoinInfoManager;
-import com.tianqi.baselib.rxhttp.HttpClientUtil;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
-import com.tianqi.baselib.rxhttp.bean.GetUnspentTxBean;
 import com.tianqi.baselib.utils.Constant;
-import com.tianqi.baselib.utils.digital.DataReshape;
 import com.tianqi.baselib.utils.display.CodeEncoder;
 import com.tianqi.baselib.utils.display.ToastUtil;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
-
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 public class ExportKeystoreActivity extends BaseActivity {
 
@@ -82,16 +70,18 @@ public class ExportKeystoreActivity extends BaseActivity {
     TextView btnHideQrCode;
     @BindView(R.id.iv_show_key_qr)
     ImageView ivShowKeyQr;
+    @BindView(R.id.progressBar1)
+    ProgressBar progressBar1;
 
     private String[] titles;
     private Dialog mLoadDialog;
 
-   // private String select_tittle = TITTLE_PRIVATE_KEY;
+    // private String select_tittle = TITTLE_PRIVATE_KEY;
     private CoinInfo mainCoinFrCoinId;
     private int select_index;
     private static final int TITTLE_PRIVATE_KEY_INDEX = 0;
     private static final int TITTLE_QR_CODE_INDEX = 1;
-    private  String wallet_psd;
+    private String wallet_psd;
 
     @Override
     protected int getContentView() {
@@ -108,15 +98,16 @@ public class ExportKeystoreActivity extends BaseActivity {
 
         mainCoinFrCoinId = CoinInfoManager.getMainCoinFrCoinId(coin_id);
         //一般在创建钱包的时候，都已经存储了keystore，如果没有keystore就自己再生成一遍。
-        if (mainCoinFrCoinId!=null){
-            if (mainCoinFrCoinId.getKeystoreStr()==null||TextUtils.isEmpty(mainCoinFrCoinId.getKeystoreStr())){
+        if (mainCoinFrCoinId != null) {
+            if (mainCoinFrCoinId.getKeystoreStr() == null || TextUtils.isEmpty(mainCoinFrCoinId.getKeystoreStr())) {
+                progressBar1.setVisibility(View.VISIBLE);
                 Observable.create((ObservableOnSubscribe<String>) emitter -> {
                     emitter.onNext(mainCoinFrCoinId.getPrivateKey());
                 }).map(response -> {
                     try {
-                        EthECKeyPair ethECKeyPair=new EthECKeyPair(HexUtils.fromHex(mainCoinFrCoinId.getPrivateKey()));
-                        KeyStoreFile light = KeyStore.createLight(wallet_psd,  ethECKeyPair);
-                        String keystore_str=light.toString();
+                        EthECKeyPair ethECKeyPair = new EthECKeyPair(HexUtils.fromHex(mainCoinFrCoinId.getPrivateKey()));
+                        KeyStoreFile light = KeyStore.createLight(wallet_psd, ethECKeyPair);
+                        String keystore_str = light.toString();
                         mainCoinFrCoinId.setKeystoreStr(keystore_str);
                         CoinInfoManager.insertOrUpdate(mainCoinFrCoinId);
                         return keystore_str;
@@ -128,15 +119,14 @@ public class ExportKeystoreActivity extends BaseActivity {
                     return Constant.HTTP_ERROR;
                 }).compose(RxHelper.pool_main())
                         .subscribe(baseEntity -> {
+                            progressBar1.setVisibility(View.GONE);
                             tvCoinPrivateKey.setText(baseEntity);
                         });
-            }else {
+            } else {
                 tvCoinPrivateKey.setText(mainCoinFrCoinId.getKeystoreStr());
             }
         }
 
-        Bitmap qrCodeBitmap = CodeEncoder.createImage(mainCoinFrCoinId.getKeystoreStr(), ivShowKeyQr.getLayoutParams().width, ivShowKeyQr.getLayoutParams().height, null);
-        ivShowKeyQr.setImageBitmap(qrCodeBitmap);
         for (int i = 0; i < titles.length; i++) {
             tablayout.addTab(tablayout.newTab());
             tablayout.getTabAt(i).setText(titles[i]);
@@ -145,8 +135,8 @@ public class ExportKeystoreActivity extends BaseActivity {
         tablayout.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                select_index=tab.getPosition();
-               // select_tittle = tab.getText().toString();
+                select_index = tab.getPosition();
+                // select_tittle = tab.getText().toString();
                 switch (select_index) {
                     case TITTLE_PRIVATE_KEY_INDEX:
                         layoutKeyQrCode.setVisibility(View.GONE);
@@ -160,6 +150,8 @@ public class ExportKeystoreActivity extends BaseActivity {
                         break;
                     case TITTLE_QR_CODE_INDEX:
                         //  etInputKey.setHint("明文keystore");
+                        Bitmap qrCodeBitmap = CodeEncoder.createImage(mainCoinFrCoinId.getKeystoreStr(), ivShowKeyQr.getLayoutParams().width, ivShowKeyQr.getLayoutParams().height, null);
+                        ivShowKeyQr.setImageBitmap(qrCodeBitmap);
                         layoutKeyQrCode.setVisibility(View.VISIBLE);
                         layoutExportQrNotice.setVisibility(View.VISIBLE);
                         btnShowQrCode.setVisibility(View.VISIBLE);
@@ -220,4 +212,5 @@ public class ExportKeystoreActivity extends BaseActivity {
     @OnClick(R.id.iv_show_key_qr)
     public void onViewClicked() {
     }
+
 }

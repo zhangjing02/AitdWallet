@@ -15,6 +15,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.adapter.list_adapter.ChildCoinAdapter;
 import com.tianqi.aitdwallet.ui.activity.wallet.property.CoinListActivity;
+import com.tianqi.aitdwallet.ui.activity.wallet.property.ImportCoinListActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.record.TransactionRecordActivity;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.baselib.dao.CoinInfo;
@@ -100,11 +101,17 @@ public class HomeWalletAdapter extends BaseQuickAdapter<WalletInfo, BaseViewHold
                     intent.putExtra(Constants.TRANSACTION_COIN_ID, coinFrWalletIds02.get(0).getCoin_id());
                     mContext.startActivity(intent);
                 }else {
-                    Intent intent = new Intent(mContext, TransactionRecordActivity.class);
+                    Intent intent = new Intent(mContext, ImportCoinListActivity.class);
                     intent.putExtra(Constants.TRANSACTION_COIN_NAME, coinFrWalletIds02.get(0).getCoin_name());
                     intent.putExtra(Constants.TRANSACTION_COIN_ADDRESS, coinFrWalletIds02.get(0).getCoin_address());
                     intent.putExtra(Constants.TRANSACTION_COIN_ID, coinFrWalletIds02.get(0).getCoin_id());
                     mContext.startActivity(intent);
+
+//                    Intent intent = new Intent(mContext, TransactionRecordActivity.class);
+//                    intent.putExtra(Constants.TRANSACTION_COIN_NAME, coinFrWalletIds02.get(0).getCoin_name());
+//                    intent.putExtra(Constants.TRANSACTION_COIN_ADDRESS, coinFrWalletIds02.get(0).getCoin_address());
+//                    intent.putExtra(Constants.TRANSACTION_COIN_ID, coinFrWalletIds02.get(0).getCoin_id());
+//                    mContext.startActivity(intent);
                 }
             }
         });

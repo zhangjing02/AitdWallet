@@ -134,6 +134,7 @@ public class UsdtTransactionActivity002 extends BaseActivity {
     private double total_listunspent_value;
     double usdt_consume_fee = 0.00000546;//转账usdt会固定消耗btc546聪到对方账户。
     private  List<TransactionRecord>transactionRecords;
+    private  double btc_balance = 0;
 
     @Override
     protected int getContentView() {
@@ -310,7 +311,7 @@ public class UsdtTransactionActivity002 extends BaseActivity {
                         utxo_list=new ArrayList<>();
                         if (getUnspentTxBean!=null&&getUnspentTxBean.getData()!=null){
                             for (GetUnspentTxBean.DataBean result : getUnspentTxBean.getData()) {
-                                account_balance = account_balance + Double.valueOf(result.getValue());
+                                btc_balance = btc_balance + Double.valueOf(result.getValue());
                                 if (Double.valueOf(result.getValue())>0){
                                     utxo_list.add(result);
                                 }
@@ -347,7 +348,7 @@ public class UsdtTransactionActivity002 extends BaseActivity {
                             account_balance=Double.valueOf(data.get(0).getReceive())+Double.valueOf(data.get(0).getSpend());
                             specCoinInfo.setCoin_totalAmount(account_balance);
                             CoinInfoManager.insertOrUpdate(specCoinInfo);
-                            tvBalance.setText(DataReshape.doubleBig(account_balance, 8)+"");
+                            tvBalance.setText(DataReshape.doubleBig(account_balance, 4)+"");
                         }
                     }
                     @Override
@@ -569,9 +570,7 @@ public class UsdtTransactionActivity002 extends BaseActivity {
                 break;
             case R.id.btn_balance_all:
                 // TODO: 2020/10/27 把余额都添加进去。
-                if (account_balance > 0.000001) {
-                    etPaymentAmount.setText(DataReshape.doubleBig((account_balance - 0.000001), 8));
-                }
+                etPaymentAmount.setText(DataReshape.doubleBig(account_balance , 4));
                 break;
             case R.id.tv_transaction_request:
                 if (ButtonUtils.isFastDoubleClick()) {
@@ -594,10 +593,10 @@ public class UsdtTransactionActivity002 extends BaseActivity {
                         ToastUtil.showToast(this, getString(R.string.network_error));
                         return;
                     }
-                    if (account_balance < 0.000009) {
-                        ToastUtil.showToast(this, getString(R.string.notice_cost_not_enough));
-                        return;
-                    }
+//                    if (account_balance < 0.000009) {
+//                        ToastUtil.showToast(this, getString(R.string.notice_cost_not_enough));
+//                        return;
+//                    }
                   //  createTxApi();
                     String fiat_value;
                     UserInformation userInformation = UserInfoManager.getUserInfo();
@@ -776,6 +775,7 @@ public class UsdtTransactionActivity002 extends BaseActivity {
      * @return 判断输入是否合法
      */
     private boolean judgeSelectInput() {
+        Log.i(TAG, "judgeSelectInput: 我们看用户btc余额时多少？"+btc_balance);
         if (TextUtils.isEmpty(etPaymentAddress.getText().toString())) {
             ToastUtil.showToast(this, getString(R.string.input_receive_address_notice));
             return false;
@@ -784,6 +784,12 @@ public class UsdtTransactionActivity002 extends BaseActivity {
             return false;
         }else if (etPaymentAddress.getText().toString().equals(master.getAddress())){
             ToastUtil.showToast(this, getString(R.string.notice_trans_to_me_refuse));
+            return false;
+        }else if (btc_balance<miner_fee_single){  //此账户对应的btc余额都小于单价手续费，当然就不允许转账了。
+            ToastUtil.showToast(this, getString(R.string.notice_btc_amount_not_enough));
+            return false;
+        }else if (Double.valueOf(etPaymentAmount.getText().toString())<0.0001){
+            ToastUtil.showToast(this, getString(R.string.notice_amount_too_little));
             return false;
         }
         return true;

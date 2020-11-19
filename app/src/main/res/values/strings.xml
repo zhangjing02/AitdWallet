@@ -264,6 +264,7 @@
     <string name="notice_address_error">地址错误</string>
     <string name="notice_balance_not_enough">余额不足</string>
     <string name="notice_eth_amount_not_enough">eth余额不够支持合约转账</string>
+    <string name="notice_btc_amount_not_enough">btc余额不够支持合约转账</string>
     <string name="btn_change_safe_psd_text">修改安全密码</string>
     <string name="tittle_safe_center">安全中心</string>
     <string name="tittle_change_safe_psd">修改安全密码</string>

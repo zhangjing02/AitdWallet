@@ -93,7 +93,7 @@ public class WalletSettingFrImportActivity extends BaseActivity {
         lineDownMnemonic.setVisibility(View.GONE);
 
 
-        if (wallet_name.contains(Constant.TRANSACTION_COIN_NAME_ETH)) {
+        if (wallet_name.contains(Constant.TRANSACTION_COIN_NAME_ETH)||wallet_name.contains(Constant.TRANSACTION_COIN_NAME_USDT_ERC20)) {
             tvExportKeystore.setVisibility(View.VISIBLE);
             lineDownKeystore.setVisibility(View.VISIBLE);
         } else {

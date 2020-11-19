@@ -316,11 +316,12 @@ public class UsdtErc20TransactionActivity extends BaseActivity {
                 break;
             case R.id.btn_balance_all:
                 // TODO: 2020/10/27 把余额都添加进去。
-                if (account_balance > 0.00228) {
-                    etPaymentAmount.setText(DataReshape.doubleBig((account_balance - 0.00228), 6));
-                }else {
-                    ToastUtil.showToast(this,getString(R.string.notice_balance_not_enough));
-                }
+                etPaymentAmount.setText(DataReshape.doubleBig(account_balance, 6));
+//                if (account_balance > 0.00228) {
+//                    etPaymentAmount.setText(DataReshape.doubleBig((account_balance - 0.00228), 6));
+//                }else {
+//                    ToastUtil.showToast(this,getString(R.string.notice_balance_not_enough));
+//                }
                 break;
             case R.id.tv_transaction_request:
                 if (ButtonUtils.isFastDoubleClick()) {
@@ -552,7 +553,7 @@ public class UsdtErc20TransactionActivity extends BaseActivity {
         } else if (eth_balance<0.003){
             ToastUtil.showToast(this, getString(R.string.notice_eth_amount_not_enough));
             return false;
-        }else if (Double.valueOf(etPaymentAmount.getText().toString())>0.000001){
+        }else if (Double.valueOf(etPaymentAmount.getText().toString())<0.000001){
             ToastUtil.showToast(this, getString(R.string.notice_amount_too_little));
             return false;
         }

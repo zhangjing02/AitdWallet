@@ -158,7 +158,7 @@ public class TransactionDetailActivity extends BaseActivity {
                         public void onSuccess(GetTxDetailBean data, String msg) {
                             Log.i("ttttttttttttttt", "onSuccess: "+tx_type);
                             if (data!=null){
-                                tvMinerFee.setText( data.getFee());
+                                tvMinerFee.setText(data.getFee()+"BTC");
                                 if (tx_type== Constant.TRANSACTION_TYPE_SEND){
                                     tvReceiveAddress.setText(data.getOutputs().get(0).getAddress());
                                     tvPaymentAddress.setText(mainCoinFrCoinId.getCoin_address());
@@ -175,7 +175,7 @@ public class TransactionDetailActivity extends BaseActivity {
                                         }
                                     }
 
-                                    SpannableString spannableString = new SpannableString(DataReshape.doubleIntBig(receive_value,8) +" "+ txFrId.getUnit());
+                                    SpannableString spannableString = new SpannableString("-"+DataReshape.doubleIntBig(receive_value,8) +" "+ txFrId.getUnit());
                                     //  SpannableString spannableString = new SpannableString(34.256478222555+" BTC");
                                     ForegroundColorSpan colorSpan = new ForegroundColorSpan(getResources().getColor(R.color.textLightGrey));
                                     spannableString.setSpan(new AbsoluteSizeSpan(DensityUtil.dp2px(10.0f)), spannableString.toString().indexOf(txFrId.getUnit()), spannableString.length(),
@@ -260,7 +260,6 @@ public class TransactionDetailActivity extends BaseActivity {
                     break;
             }
 
-            tvTransactionAmount.setText(DataReshape.doubleIntBig(txFrId.getAmount(),8));
             if (userInformation.getFiatUnit().equals(Constants.FIAT_USD)) {
                 tvTransactionFiat.setText("≈ ¥ " + DataReshape.double2int(wallet_btc.getCoin_USDPrice() * txFrId.getAmount(),2));
             } else {
@@ -270,13 +269,28 @@ public class TransactionDetailActivity extends BaseActivity {
             if (txFrId.getTransType()==Constant.TRANSACTION_TYPE_SEND){
                 tvPaymentAddress.setText(txFrId.getAddress());
                 tvReceiveAddress.setText(txFrId.getTargetAddress());
+                SpannableString spannableString = new SpannableString("-"+DataReshape.doubleIntBig(txFrId.getAmount(),6) +" "+ txFrId.getUnit());
+                //  SpannableString spannableString = new SpannableString(34.256478222555+" BTC");
+                ForegroundColorSpan colorSpan = new ForegroundColorSpan(getResources().getColor(R.color.textLightGrey));
+                spannableString.setSpan(new AbsoluteSizeSpan(DensityUtil.dp2px(10.0f)), spannableString.toString().indexOf(txFrId.getUnit()), spannableString.length(),
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                tvTransactionAmount.setText(spannableString);
+               // tvTransactionAmount.setText("-"+DataReshape.doubleIntBig(txFrId.getAmount(),8));
             }else if (txFrId.getTransType()==Constant.TRANSACTION_TYPE_RECEIVE){
                 tvPaymentAddress.setText(txFrId.getTargetAddress());
                 tvReceiveAddress.setText(txFrId.getAddress());
+             //   tvTransactionAmount.setText(DataReshape.doubleIntBig(txFrId.getAmount(),8));
+
+                SpannableString spannableString = new SpannableString(DataReshape.doubleIntBig(txFrId.getAmount(),6) +" "+ txFrId.getUnit());
+                //  SpannableString spannableString = new SpannableString(34.256478222555+" BTC");
+                ForegroundColorSpan colorSpan = new ForegroundColorSpan(getResources().getColor(R.color.textLightGrey));
+                spannableString.setSpan(new AbsoluteSizeSpan(DensityUtil.dp2px(10.0f)), spannableString.toString().indexOf(txFrId.getUnit()), spannableString.length(),
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                tvTransactionAmount.setText(spannableString);
             }
 
-            tvMinerFee.setText(DataReshape.doubleBig(txFrId.getMiner_fee(),8));
-            tvChainRecord.setText("https://btc.com/"+mainCoinFrCoinId.getCoin_address());
+            tvMinerFee.setText(DataReshape.doubleBig(txFrId.getMiner_fee(),8)+"ETH");
+            tvChainRecord.setText("https://cn.etherscan.com/token/"+mainCoinFrCoinId.getCoin_address());
 
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
 

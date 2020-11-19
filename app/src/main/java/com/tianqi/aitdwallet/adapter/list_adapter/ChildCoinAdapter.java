@@ -13,6 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.ui.activity.wallet.property.CoinListActivity;
+import com.tianqi.aitdwallet.ui.activity.wallet.property.ImportCoinListActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.record.TransactionRecordActivity;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.baselib.dao.CoinInfo;
@@ -117,16 +118,17 @@ public class ChildCoinAdapter extends BaseAdapter {
                 intent.putExtra(Constants.TRANSACTION_COIN_ID, maps.get(position).getCoin_id());
                 mContext.startActivity(intent);
             }else {
+                Intent intent = new Intent(mContext, ImportCoinListActivity.class);
+                intent.putExtra(Constants.TRANSACTION_COIN_NAME, maps.get(position).getWallet_id());
+                intent.putExtra(Constants.TRANSACTION_COIN_ADDRESS, maps.get(position).getCoin_address());
+                intent.putExtra(Constants.TRANSACTION_COIN_ID, maps.get(position).getCoin_id());
+                mContext.startActivity(intent);
+
 //                Intent intent = new Intent(mContext, TransactionRecordActivity.class);
 //                intent.putExtra(Constants.TRANSACTION_COIN_NAME, maps.get(position).getCoin_name());
 //                intent.putExtra(Constants.TRANSACTION_COIN_ADDRESS, maps.get(position).getCoin_address());
 //                intent.putExtra(Constants.TRANSACTION_COIN_ID, maps.get(position).getCoin_id());
 //                mContext.startActivity(intent);
-                Intent intent = new Intent(mContext, TransactionRecordActivity.class);
-                intent.putExtra(Constants.TRANSACTION_COIN_NAME, maps.get(position).getCoin_name());
-                intent.putExtra(Constants.TRANSACTION_COIN_ADDRESS, maps.get(position).getCoin_address());
-                intent.putExtra(Constants.TRANSACTION_COIN_ID, maps.get(position).getCoin_id());
-                mContext.startActivity(intent);
             }
         });
         return view;

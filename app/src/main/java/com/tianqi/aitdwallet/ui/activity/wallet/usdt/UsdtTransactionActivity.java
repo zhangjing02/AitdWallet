@@ -720,7 +720,7 @@ public class UsdtTransactionActivity extends BaseActivity {
         }else if (etPaymentAddress.getText().toString().equals(master.getAddress())){
             ToastUtil.showToast(this, getString(R.string.notice_trans_to_me_refuse));
             return false;
-        }else if (Double.valueOf(etPaymentAmount.getText().toString())>=0.0001){
+        }else if (Double.valueOf(etPaymentAmount.getText().toString())<0.0001){
             ToastUtil.showToast(this, getString(R.string.notice_amount_too_little));
             return false;
         }

@@ -298,8 +298,9 @@ public class EthTransactionActivity extends BaseActivity {
                 break;
             case R.id.btn_balance_all:
                 // TODO: 2020/10/27 把余额都添加进去。
-                if (account_balance > 0.000798) {
-                    etPaymentAmount.setText(DataReshape.doubleBig((account_balance - 0.000798), 6));
+                double all_miner_fee=miner_fee_single*GAS_LIMITS/1000000000f;
+                if (account_balance > all_miner_fee) {
+                    etPaymentAmount.setText(DataReshape.doubleBig((account_balance - all_miner_fee), 6));
                 }else {
                     ToastUtil.showToast(this,getString(R.string.notice_balance_not_enough));
                 }
@@ -538,7 +539,7 @@ public class EthTransactionActivity extends BaseActivity {
         } else if (Double.valueOf(etPaymentAmount.getText().toString())>=eth_balance){
             ToastUtil.showToast(this, getString(R.string.notice_balance_not_enough));
             return false;
-        }else if (Double.valueOf(etPaymentAmount.getText().toString())>0.000001){
+        }else if (Double.valueOf(etPaymentAmount.getText().toString())<0.000001){
             ToastUtil.showToast(this, getString(R.string.notice_amount_too_little));
             return false;
         }

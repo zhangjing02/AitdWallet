@@ -276,7 +276,6 @@ public class TransactionRecordActivity extends BaseActivity {
              initBtcLoadingRecord(walletBtcInfo);
          }else if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_ERC20)){
              initErc20TxRecore(walletBtcInfo);
-
          }
     }
 
@@ -325,7 +324,7 @@ public class TransactionRecordActivity extends BaseActivity {
         calendar.setTimeInMillis(datas.get(i).getTime() * 1000l);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
         tx_record.setTimeStr(format.format(calendar.getTime()));
-        tx_record.setUnit(Constant.COIN_UNIT_ETH);
+        tx_record.setUnit(Constant.COIN_UNIT_USDT);
         // tx_record.setMiner_fee(Double.valueOf(datas.get(i).getFee()));   //此接口没有费用，所以暂时不管。
         TransactionRecordManager.insertOrUpdate(tx_record);
         if (isLast){

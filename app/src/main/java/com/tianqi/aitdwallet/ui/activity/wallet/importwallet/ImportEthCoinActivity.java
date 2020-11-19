@@ -371,22 +371,25 @@ public class ImportEthCoinActivity extends BaseActivity {
                         break;
                     case TITTLE_KEYSTORE:
                         //   通过导入的keystore，生成私钥，公钥，地址。
-                        try {
-                            KeyStoreFile keyStoreFile = KeyStoreFile.parse(etInputKey.getText().toString());
-                            ECKeyPair decrypt = KeyStore.decrypt(etKeystorePsd.getText().toString(), keyStoreFile);
-                            if ( CoinInfoManager.getCoinFrPrivateKey(Constant.TRANSACTION_COIN_NAME_ETH, decrypt.getPrivateKey()).size() > 0){
-                                ToastUtil.showToast(this, getString(R.string.notice_same_keystore_text));
-                            }else {
-                                importSingleCoin(decrypt);
+                        if (judgeKeystoreInput()){
+                            try {
+                                KeyStoreFile keyStoreFile = KeyStoreFile.parse(etInputKey.getText().toString());
+                                ECKeyPair decrypt = KeyStore.decrypt(etKeystorePsd.getText().toString(), keyStoreFile);
+                                if ( CoinInfoManager.getCoinFrPrivateKey(Constant.TRANSACTION_COIN_NAME_ETH, decrypt.getPrivateKey()).size() > 0){
+                                    ToastUtil.showToast(this, getString(R.string.notice_same_keystore_text));
+                                }else {
+                                    importSingleCoin(decrypt);
+                                }
+                            } catch (IOException e) {
+                                ToastUtil.showToast(this, getString(R.string.notice_keystore_error_text));
+                                e.printStackTrace();
+                            } catch (CipherException e) {
+                                ToastUtil.showToast(this, getString(R.string.notice_keystore_psd_error_text));
+                                e.printStackTrace();
+                            } catch (ValidationException e) {
+                                e.printStackTrace();
                             }
-                        } catch (IOException e) {
-                            ToastUtil.showToast(this, getString(R.string.notice_keystore_error_text));
-                            e.printStackTrace();
-                        } catch (CipherException e) {
-                            ToastUtil.showToast(this, getString(R.string.notice_keystore_psd_error_text));
-                            e.printStackTrace();
-                        } catch (ValidationException e) {
-                            e.printStackTrace();
+
                         }
                         break;
                 }
@@ -469,8 +472,22 @@ public class ImportEthCoinActivity extends BaseActivity {
         } else if (select_index == TITTLE_PRIVATE_KEY_INDEX && etInputKey.getText().length() != 64) {
             ToastUtil.showToast(this, getString(R.string.notice_private_key_error));
             return false;
-        } else if (CoinInfoManager.getCoinFrPrivateKey(Constant.TRANSACTION_COIN_NAME_BTC, etInputKey.getText().toString()).size() > 0) {
+        } else if (CoinInfoManager.getCoinFrPrivateKey(Constant.TRANSACTION_COIN_NAME_ETH ,etInputKey.getText().toString()).size() > 0) {
             ToastUtil.showToast(this, getString(R.string.notice_same_private_key));
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * @return 判断输入是否合法
+     */
+    private boolean judgeKeystoreInput() {
+        if (TextUtils.isEmpty(etInputKey.getText().toString())) {
+            ToastUtil.showToast(this, getString(R.string.notice_input_content));
+            return false;
+        } else if (!checkboxReadTerm.isChecked()) {
+            ToastUtil.showToast(this, getString(R.string.notice_agree_terms));
             return false;
         }
         return true;
