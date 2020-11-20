@@ -151,7 +151,7 @@ public class GuidePageActivity extends BaseActivity {
                 break;
             case R.id.btn_import_wallet:
                 if (userInfo != null && !TextUtils.isEmpty(userInfo.getPasswordStr())) {
-                    // TODO: 2020/10/14 进入验证密码的页面。
+                    // 进入验证密码的页面。
                     Intent intent = new Intent(this, VerifySecurityPsdActivity.class);
                     intent.putExtra(Constants.INTENT_PUT_TAG, getString(R.string.tittle_import_wallet));
                     startActivity(intent);

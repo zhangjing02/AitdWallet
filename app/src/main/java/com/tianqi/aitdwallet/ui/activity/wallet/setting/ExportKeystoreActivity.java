@@ -7,7 +7,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -22,6 +24,7 @@ import com.quincysx.crypto.ethereum.keystore.CipherException;
 import com.quincysx.crypto.ethereum.keystore.KeyStore;
 import com.quincysx.crypto.ethereum.keystore.KeyStoreFile;
 import com.quincysx.crypto.utils.HexUtils;
+import com.scwang.smartrefresh.layout.util.DensityUtil;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.baselib.base.BaseActivity;
@@ -29,6 +32,7 @@ import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dbManager.CoinInfoManager;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
 import com.tianqi.baselib.utils.Constant;
+import com.tianqi.baselib.utils.LogUtil;
 import com.tianqi.baselib.utils.display.CodeEncoder;
 import com.tianqi.baselib.utils.display.ToastUtil;
 
@@ -82,6 +86,8 @@ public class ExportKeystoreActivity extends BaseActivity {
     private static final int TITTLE_PRIVATE_KEY_INDEX = 0;
     private static final int TITTLE_QR_CODE_INDEX = 1;
     private String wallet_psd;
+    private int height, width;
+    private double ratio;
 
     @Override
     protected int getContentView() {
@@ -91,6 +97,20 @@ public class ExportKeystoreActivity extends BaseActivity {
     @SuppressLint("CheckResult")
     @Override
     protected void initView() {
+        WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        width = wm.getDefaultDisplay().getWidth();
+        height = wm.getDefaultDisplay().getHeight();
+        ratio = height * 1000 / width / 1000f;
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int densityDpi = metrics.densityDpi;
+        LogUtil.i("ttttttttttttt", width + "showGuide: 我们看屏幕的高度是？" + height + "屏幕密度" + densityDpi);
+        if (height <= 1920 && ratio < 1.7f) {
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) btnKeyCopy.getLayoutParams();
+            layoutParams.setMargins( DensityUtil.dp2px(15f), DensityUtil.dp2px(10f),  DensityUtil.dp2px(15f), 0);
+            btnKeyCopy.setLayoutParams(layoutParams);
+        }
+
         titles = new String[]{getString(R.string.tittle_keystore_text), getString(R.string.tittle_qr_code_text)};
         getToolBar();
         String coin_id = getIntent().getStringExtra(Constants.INTENT_PUT_COIN_ID);

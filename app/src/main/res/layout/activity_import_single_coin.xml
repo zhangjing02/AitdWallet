@@ -29,192 +29,201 @@
         app:tabTextAppearance="@style/TabLayoutTextStyle"
         app:tabTextColor="@color/textLightGrey" />
 
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    app:layout_constraintTop_toBottomOf="@+id/tablayout"
+    app:layout_constraintBottom_toBottomOf="parent">
 
     <LinearLayout
-        android:id="@+id/layout_import_keystore_notice"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:background="@drawable/bg_set_psd_notice"
-        app:layout_constraintTop_toBottomOf="@+id/tablayout"
-        android:paddingHorizontal="15dp"
-        android:layout_marginHorizontal="15dp"
-        android:layout_marginTop="30dp"
-        android:visibility="gone"
-        android:paddingVertical="12dp"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:src="@mipmap/ic_yellow_reminder"/>
-
-        <TextView
-            android:id="@+id/tv_import_keystore_notice"
+        <LinearLayout
+            android:id="@+id/layout_import_keystore_notice"
             android:layout_width="match_parent"
-            android:layout_marginLeft="7dp"
-            android:text="@string/text_copy_keystore__notice"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
+            android:layout_height="75dp"
+            android:background="@drawable/bg_set_psd_notice"
+            app:layout_constraintTop_toTopOf="parent"
+            android:paddingHorizontal="15dp"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginTop="20dp"
+            android:visibility="gone"
+            android:paddingVertical="12dp"
+            android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/et_input_key"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/bg_pager_grey"
-        android:gravity="top"
-        android:paddingLeft="20dp"
-        android:paddingTop="15dp"
-        android:textSize="12sp"
-        android:textColor="@color/text_main_black"
-        android:textColorHint="@color/text_main_30_grey"
-        app:layout_constraintTop_toBottomOf="@+id/layout_import_keystore_notice" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:src="@mipmap/ic_yellow_reminder"/>
 
-    <EditText
-        android:id="@+id/et_keystore_psd"
-        android:layout_width="match_parent"
-        android:layout_height="47dp"
-        app:layout_constraintTop_toBottomOf="@+id/et_input_key"
-        android:layout_marginTop="15dp"
-        style="@style/bg_edit_grey"
-        android:hint="@string/text_input_psd_hint"
-        android:inputType="textPassword"
-        android:visibility="gone"
-        android:textColorHint="@color/text_main_30_grey"
-        android:textColor="@color/text_main_black"
-        android:paddingLeft="15dp"
-        android:layout_marginHorizontal="15dp"/>
+            <me.grantland.widget.AutofitTextView
+                android:id="@+id/tv_import_keystore_notice"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="7dp"
+                android:textSize="12sp"
+                android:maxLines="2"
+                app:minTextSize="10sp"
+                android:text="@string/text_copy_keystore__notice"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
 
-
-    <ImageView
-        android:id="@+id/iv_psd_show"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
-        android:src="@mipmap/ic_close_eye"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/et_keystore_psd"
-        app:layout_constraintRight_toRightOf="@+id/et_keystore_psd"
-        app:layout_constraintTop_toTopOf="@+id/et_keystore_psd" />
-
-
-    <GridView
-        android:id="@+id/gv_mnemonic_word"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="10dp"
-        android:columnWidth="70dp"
-        android:horizontalSpacing="6dp"
-        android:numColumns="4"
-        android:padding="5dp"
-        android:visibility="gone"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="6dp"
-        android:gravity="left"
-        app:layout_constraintTop_toBottomOf="@+id/et_input_key" />
-
-    <TextView
-        android:id="@+id/tv_input_error_notice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@+id/gv_mnemonic_word"
-        app:layout_constraintLeft_toLeftOf="@+id/gv_mnemonic_word"
-        android:text="当前助记词输入错误，请检查"
-        android:textColor="@color/color_notice_red"
-        android:textSize="11sp"
-        android:drawableLeft="@drawable/vector_red_warning"
-        android:visibility="gone"
-        />
-
-
-<!--    <CheckBox-->
-<!--        android:id="@+id/checkbox_read_term"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginBottom="40dp"-->
-<!--        android:button="@drawable/chk_agree_provision_background"-->
-<!--        android:text="我已仔细阅读并同意 服务及隐私条款"-->
-<!--        android:textColor="@color/textGrey"-->
-<!--        android:textSize="12sp"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/btn_import_wallet"-->
-<!--        app:layout_constraintLeft_toLeftOf="parent"-->
-<!--        app:layout_constraintRight_toRightOf="parent" />-->
-
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/btn_import_wallet">
-
-        <CheckBox
-            android:id="@+id/checkbox_read_term"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:button="@drawable/chk_agree_provision_background"
-            android:text="@string/text_read_and_agree_terms"
+        <EditText
+            android:id="@+id/et_input_key"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/bg_pager_grey"
+            android:gravity="top"
+            android:paddingLeft="20dp"
+            android:paddingTop="15dp"
+            android:textSize="12sp"
             android:textColor="@color/text_main_black"
-            android:textSize="12sp" />
+            android:textColorHint="@color/text_main_30_grey"
+            app:layout_constraintTop_toBottomOf="@+id/layout_import_keystore_notice" />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/et_keystore_psd"
+                android:layout_width="match_parent"
+                android:layout_height="47dp"
+                android:layout_marginTop="15dp"
+                style="@style/bg_edit_grey"
+                android:hint="@string/text_input_psd_hint"
+                android:inputType="textPassword"
+                android:visibility="gone"
+                android:layout_centerVertical="true"
+                android:textColorHint="@color/text_main_30_grey"
+                android:textColor="@color/text_main_black"
+                android:paddingLeft="15dp"
+                android:layout_marginHorizontal="15dp"/>
+
+            <ImageView
+                android:id="@+id/iv_psd_show"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="30dp"
+                android:src="@mipmap/ic_close_eye"
+                android:visibility="gone"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                app:layout_constraintBottom_toBottomOf="@+id/et_keystore_psd"
+                app:layout_constraintRight_toRightOf="@+id/et_keystore_psd"
+                app:layout_constraintTop_toTopOf="@+id/et_keystore_psd" />
+
+        </RelativeLayout>
+
+
+        <GridView
+            android:id="@+id/gv_mnemonic_word"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginTop="10dp"
+            android:columnWidth="70dp"
+            android:horizontalSpacing="6dp"
+            android:numColumns="4"
+            android:padding="5dp"
+            android:visibility="gone"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="6dp"
+            android:gravity="left"
+            app:layout_constraintTop_toBottomOf="@+id/et_input_key" />
 
         <TextView
-            android:id="@+id/tv_service_privacy_terms"
+            android:id="@+id/tv_input_error_notice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/text_service_privacy_terms"
-            android:textColor="@color/text_light_blue"
+            app:layout_constraintTop_toTopOf="@+id/gv_mnemonic_word"
+            app:layout_constraintLeft_toLeftOf="@+id/gv_mnemonic_word"
+            android:text="@string/notice_mnemonic_error_text"
+            android:textColor="@color/color_notice_red"
+            android:textSize="11sp"
+            android:drawableLeft="@drawable/vector_red_warning"
+            android:visibility="gone"/>
+
+        <LinearLayout
+            android:id="@+id/layout_privacy_term"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_gravity="center"
+            android:layout_marginTop="260dp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_import_wallet">
+
+            <CheckBox
+                android:id="@+id/checkbox_read_term"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@drawable/chk_agree_provision_background"
+                android:text="@string/text_read_and_agree_terms"
+                android:textColor="@color/text_main_black"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_service_privacy_terms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_service_privacy_terms"
+                android:textColor="@color/text_light_blue"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/checkbox_read_term"
+                app:layout_constraintLeft_toRightOf="@+id/checkbox_read_term"
+                app:layout_constraintTop_toTopOf="@+id/checkbox_read_term" />
+
+        </LinearLayout>
+
+
+        <!--    <TextView-->
+        <!--        android:id="@+id/btn_import_wallet"-->
+        <!--        style="@style/bg_button_grey"-->
+        <!--        android:layout_width="150dp"-->
+        <!--        android:layout_height="40dp"-->
+        <!--        android:layout_marginBottom="140dp"-->
+        <!--        android:text="开始导入"-->
+        <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--        app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--        app:layout_constraintRight_toRightOf="parent" />-->
+
+        <TextView
+            android:id="@+id/btn_import_wallet"
+            style="@style/bg_button_20_grey"
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="15dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/btn_start_import_wallet"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_gravity="bottom"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_explain_private_key"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:text="@string/btn_what_is_private_key_text"
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@+id/checkbox_read_term"
-            app:layout_constraintLeft_toRightOf="@+id/checkbox_read_term"
-            app:layout_constraintTop_toTopOf="@+id/checkbox_read_term" />
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/text_light_blue"
+            android:drawableLeft="@mipmap/ic_blue_question"
+            android:drawablePadding="6dp"
+            android:layout_marginBottom="30dp"
+            android:layout_marginTop="15dp" />
 
     </LinearLayout>
 
-
-
-
-<!--    <TextView-->
-<!--        android:id="@+id/btn_import_wallet"-->
-<!--        style="@style/bg_button_grey"-->
-<!--        android:layout_width="150dp"-->
-<!--        android:layout_height="40dp"-->
-<!--        android:layout_marginBottom="140dp"-->
-<!--        android:text="开始导入"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintLeft_toLeftOf="parent"-->
-<!--        app:layout_constraintRight_toRightOf="parent" />-->
-
-    <TextView
-        android:id="@+id/btn_import_wallet"
-        style="@style/bg_button_20_grey"
-        android:layout_width="match_parent"
-        android:layout_marginHorizontal="15dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="45dp"
-        android:text="@string/btn_start_import_wallet"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginBottom="140dp"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
-    <TextView
-        android:id="@+id/tv_explain_private_key"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/btn_import_wallet"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:text="@string/btn_what_is_private_key_text"
-        android:textSize="12sp"
-        android:textColor="@color/text_light_blue"
-        android:drawableLeft="@mipmap/ic_blue_question"
-        android:drawablePadding="6dp"
-        android:layout_marginTop="15dp" />
-
-
+</ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,29 +2,29 @@ package com.tianqi.aitdwallet.ui.activity.wallet.importwallet;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.os.Bundle;
 import android.text.Editable;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.text.style.ForegroundColorSpan;
-import android.util.Log;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.tabs.TabLayout;
-import com.google.gson.Gson;
 import com.quincysx.crypto.CoinTypes;
 import com.quincysx.crypto.ECKeyPair;
+import com.scwang.smartrefresh.layout.util.DensityUtil;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.adapter.list_adapter.MnemonicWordAdapter;
 import com.tianqi.aitdwallet.ui.activity.MainActivity;
@@ -33,7 +33,6 @@ import com.tianqi.aitdwallet.ui.activity.wallet.setting.PrivacyTermsWebActivity;
 import com.tianqi.aitdwallet.utils.MnemonicUtils;
 import com.tianqi.aitdwallet.utils.WalletUtils;
 import com.tianqi.aitdwallet.widget.dialog.ExplainPrivateKeyDialog;
-import com.tianqi.aitdwallet.widget.dialog.ForgetPsdNoticeDialog;
 import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dao.CoinRateInfo;
@@ -43,7 +42,6 @@ import com.tianqi.baselib.dbManager.CoinInfoManager;
 import com.tianqi.baselib.dbManager.CoinRateInfoManager;
 import com.tianqi.baselib.dbManager.UserInfoManager;
 import com.tianqi.baselib.dbManager.WalletInfoManager;
-import com.tianqi.baselib.rxhttp.HttpClientUtil;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
 import com.tianqi.baselib.utils.ButtonUtils;
 import com.tianqi.baselib.utils.Constant;
@@ -56,15 +54,13 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
-import okhttp3.Response;
 
 public class ImportBtcCoinActivity extends BaseActivity {
 
@@ -90,10 +86,12 @@ public class ImportBtcCoinActivity extends BaseActivity {
     TextView tvExplainPrivateKey;
     @BindView(R.id.tv_input_error_notice)
     TextView tvInputErrorNotice;
+    @BindView(R.id.layout_privacy_term)
+    LinearLayout layoutPrivacyTerm;
 
     private String[] titles;
 
-   // private String select_tittle = TITTLE_PRIVATE_KEY;
+    // private String select_tittle = TITTLE_PRIVATE_KEY;
     private Dialog mLoadDialog;
     private List<String> list, select_list, show_list;
     private MnemonicWordAdapter mnemonicWordAdapter;
@@ -101,6 +99,8 @@ public class ImportBtcCoinActivity extends BaseActivity {
     private int select_index;
     private static final int TITTLE_PRIVATE_KEY_INDEX = 0;
     private static final int TITTLE_MNEMONIC_WORD_INDEX = 1;
+    private int height, width;
+    private double ratio;
 
     @Override
     protected int getContentView() {
@@ -109,6 +109,20 @@ public class ImportBtcCoinActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        width = wm.getDefaultDisplay().getWidth();
+        height = wm.getDefaultDisplay().getHeight();
+        ratio = height * 1000 / width / 1000f;
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int densityDpi = metrics.densityDpi;
+        LogUtil.i("ttttttttttttt", width + "showGuide: 我们看屏幕的高度是？" + height + "屏幕密度" + densityDpi);
+        if (height <= 1920 && ratio < 1.7f) {
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layoutPrivacyTerm.getLayoutParams();
+            layoutParams.setMargins(0, DensityUtil.dp2px(160f), 0, 0);
+            layoutPrivacyTerm.setLayoutParams(layoutParams);
+        }
+
         titles = new String[]{getString(R.string.tittle_private_key_text), getString(R.string.tittle_mnemonic_word_text)};
         getToolBar();
         list = MnemonicUtils.populateWordList();
@@ -130,16 +144,21 @@ public class ImportBtcCoinActivity extends BaseActivity {
     }
 
 
-    TabLayout.BaseOnTabSelectedListener onTabSelectedListener= new TabLayout.BaseOnTabSelectedListener() {
+    TabLayout.BaseOnTabSelectedListener onTabSelectedListener = new TabLayout.BaseOnTabSelectedListener() {
         @Override
         public void onTabSelected(TabLayout.Tab tab) {
-            select_index=tab.getPosition();
-          //  select_tittle = tab.getText().toString();
+            select_index = tab.getPosition();
+            //  select_tittle = tab.getText().toString();
             switch (select_index) {
                 case TITTLE_PRIVATE_KEY_INDEX:
                     gvMnemonicWord.setVisibility(View.GONE);
                     etInputKey.setHint(R.string.input_private_key_hint);
                     etInputKey.setText("");
+                    if (height<=1920&&ratio<1.7f){
+                        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layoutPrivacyTerm.getLayoutParams();
+                        layoutParams.setMargins(0,DensityUtil.dp2px(50f),0,0);
+                        layoutPrivacyTerm.setLayoutParams(layoutParams);
+                    }
                     break;
 //                case TITTLE_KEYSTORE:
 //                    etInputKey.setHint(R.string.input_keystore_hint);
@@ -148,9 +167,15 @@ public class ImportBtcCoinActivity extends BaseActivity {
                     gvMnemonicWord.setVisibility(View.VISIBLE);
                     etInputKey.setHint(R.string.input_mnemonic_word_hint);
                     etInputKey.setText("");
+                    if (height<=1920&&ratio<1.7f){
+                        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layoutPrivacyTerm.getLayoutParams();
+                        layoutParams.setMargins(0,DensityUtil.dp2px(150f),0,0);
+                        layoutPrivacyTerm.setLayoutParams(layoutParams);
+                    }
                     break;
             }
         }
+
         @Override
         public void onTabUnselected(TabLayout.Tab tab) {
         }
@@ -160,7 +185,7 @@ public class ImportBtcCoinActivity extends BaseActivity {
         }
     };
 
-    TextWatcher textWatcher= new TextWatcher() {
+    TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -169,7 +194,7 @@ public class ImportBtcCoinActivity extends BaseActivity {
         @SuppressLint("CheckResult")
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            if (select_index==TITTLE_MNEMONIC_WORD_INDEX) {
+            if (select_index == TITTLE_MNEMONIC_WORD_INDEX) {
                 //创建被观察者
                 select_list.clear();
                 Observable.fromIterable(list).filter(s -> {    //对集合数据进行过滤,只发送符合条件的事件
@@ -204,9 +229,9 @@ public class ImportBtcCoinActivity extends BaseActivity {
                 case TITTLE_MNEMONIC_WORD_INDEX:
                     String[] mn_words = editable.toString().split("\\s+");
                     // String[] mn_words2 = editable.toString().split(" ");
-                    if (judeMnwordsCorrect(mn_words)&&checkboxReadTerm.isChecked()){
+                    if (judeMnwordsCorrect(mn_words) && checkboxReadTerm.isChecked()) {
                         btnImportWallet.setBackground(getResources().getDrawable(R.drawable.bg_blue_round_button));
-                    }else {
+                    } else {
                         btnImportWallet.setBackground(getResources().getDrawable(R.drawable.bg_grey_round_button));
                     }
                     break;
@@ -214,26 +239,26 @@ public class ImportBtcCoinActivity extends BaseActivity {
         }
     };
 
-    CompoundButton.OnCheckedChangeListener onCheckedChangeListener=new CompoundButton.OnCheckedChangeListener() {
+    CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                switch (select_index) {
-                    case TITTLE_PRIVATE_KEY_INDEX:
-                        if (!TextUtils.isEmpty(etInputKey.getText().toString()) && etInputKey.getText().toString().length() == 52 && checkboxReadTerm.isChecked()) {
-                            btnImportWallet.setBackground(getResources().getDrawable(R.drawable.bg_blue_round_button));
-                        } else {
-                            btnImportWallet.setBackground(getResources().getDrawable(R.drawable.bg_grey_round_button));
-                        }
-                        break;
-                    case TITTLE_MNEMONIC_WORD_INDEX:
-                        String[] mn_words = etInputKey.getText().toString().split("\\s+");
-                        if (judeMnwordsCorrect(mn_words)&&checkboxReadTerm.isChecked()){
-                            btnImportWallet.setBackground(getResources().getDrawable(R.drawable.bg_blue_round_button));
-                        }else {
-                            btnImportWallet.setBackground(getResources().getDrawable(R.drawable.bg_grey_round_button));
-                        }
-                        break;
-                }
+            switch (select_index) {
+                case TITTLE_PRIVATE_KEY_INDEX:
+                    if (!TextUtils.isEmpty(etInputKey.getText().toString()) && etInputKey.getText().toString().length() == 52 && checkboxReadTerm.isChecked()) {
+                        btnImportWallet.setBackground(getResources().getDrawable(R.drawable.bg_blue_round_button));
+                    } else {
+                        btnImportWallet.setBackground(getResources().getDrawable(R.drawable.bg_grey_round_button));
+                    }
+                    break;
+                case TITTLE_MNEMONIC_WORD_INDEX:
+                    String[] mn_words = etInputKey.getText().toString().split("\\s+");
+                    if (judeMnwordsCorrect(mn_words) && checkboxReadTerm.isChecked()) {
+                        btnImportWallet.setBackground(getResources().getDrawable(R.drawable.bg_blue_round_button));
+                    } else {
+                        btnImportWallet.setBackground(getResources().getDrawable(R.drawable.bg_grey_round_button));
+                    }
+                    break;
+            }
         }
     };
 
@@ -249,13 +274,13 @@ public class ImportBtcCoinActivity extends BaseActivity {
     @Override
     protected void initData() {
         gvMnemonicWord.setOnItemClickListener((adapterView, view, i, l) -> {
-            String before_str=etInputKey.getText().toString();
-            String tem_str="";
-            if (before_str.contains(" ")&&before_str.length()>1){
+            String before_str = etInputKey.getText().toString();
+            String tem_str = "";
+            if (before_str.contains(" ") && before_str.length() > 1) {
                 tem_str = before_str.substring(0, etInputKey.getText().toString().lastIndexOf(" "));
-                etInputKey.setText(tem_str+" "+show_list.get(i)+" ");
-            }else {
-                etInputKey.setText(show_list.get(i)+" ");
+                etInputKey.setText(tem_str + " " + show_list.get(i) + " ");
+            } else {
+                etInputKey.setText(show_list.get(i) + " ");
             }
             etInputKey.setSelection(etInputKey.getText().toString().length());
             show_list.clear();
@@ -271,7 +296,7 @@ public class ImportBtcCoinActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.btn_collect, R.id.btn_import_wallet,R.id.tv_explain_private_key,R.id.tv_service_privacy_terms})
+    @OnClick({R.id.btn_collect, R.id.btn_import_wallet, R.id.tv_explain_private_key, R.id.tv_service_privacy_terms})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_collect:
@@ -282,7 +307,7 @@ public class ImportBtcCoinActivity extends BaseActivity {
                 startActivityForResult(intent, 25);
                 break;
             case R.id.tv_service_privacy_terms:
-                 intent = new Intent(this, PrivacyTermsWebActivity.class);
+                intent = new Intent(this, PrivacyTermsWebActivity.class);
 //                intent.setAction("android.intent.action.VIEW");
 //                Uri content_url = Uri.parse("http://mine-pool.aitdcoin.com/aitd-coin.html ");
 //                intent.setData(content_url);
@@ -292,34 +317,34 @@ public class ImportBtcCoinActivity extends BaseActivity {
                 if (ButtonUtils.isFastDoubleClick()) {
                     return;
                 }
-                ExplainPrivateKeyDialog shotNoticeDialog=new ExplainPrivateKeyDialog(this,R.style.MyDialog2);
+                ExplainPrivateKeyDialog shotNoticeDialog = new ExplainPrivateKeyDialog(this, R.style.MyDialog2);
                 shotNoticeDialog.show();
                 break;
             case R.id.btn_import_wallet:
                 if (ButtonUtils.isFastDoubleClick()) {
                     return;
                 }
-                    switch (select_index) {
-                        case TITTLE_PRIVATE_KEY_INDEX:
-                            if (judgeSelectInput()){
-                                mLoadDialog = LoadingDialogUtils.createLoadingDialog(this, "");
-                                ECKeyPair ecKeyPair = WalletUtils.importCoinMaser(CoinTypes.Bitcoin, etInputKey.getText().toString());
-                                importSingleCoin(ecKeyPair);
-                            }
+                switch (select_index) {
+                    case TITTLE_PRIVATE_KEY_INDEX:
+                        if (judgeSelectInput()) {
+                            mLoadDialog = LoadingDialogUtils.createLoadingDialog(this, "");
+                            ECKeyPair ecKeyPair = WalletUtils.importCoinMaser(CoinTypes.Bitcoin, etInputKey.getText().toString());
+                            importSingleCoin(ecKeyPair);
+                        }
 
-                            break;
+                        break;
 //                        case TITTLE_KEYSTORE:
 //                            break;
-                        case TITTLE_MNEMONIC_WORD_INDEX:
-                            String[] mn_words = etInputKey.getText().toString().split("\\s+");
-                            if (judeMnwordsCorrect(mn_words)&& checkboxReadTerm.isChecked()){
-                                ECKeyPair ecKeyPair02 = WalletUtils.importCoinMaser(CoinTypes.Bitcoin, Arrays.asList(mn_words));
-                                importSingleCoin(ecKeyPair02);
-                            }else {
-                                ToastUtil.showToast(this,getString(R.string.notice_mnemonic_wore_error));
-                            }
-                            break;
-                    }
+                    case TITTLE_MNEMONIC_WORD_INDEX:
+                        String[] mn_words = etInputKey.getText().toString().split("\\s+");
+                        if (judeMnwordsCorrect(mn_words) && checkboxReadTerm.isChecked()) {
+                            ECKeyPair ecKeyPair02 = WalletUtils.importCoinMaser(CoinTypes.Bitcoin, Arrays.asList(mn_words));
+                            importSingleCoin(ecKeyPair02);
+                        } else {
+                            ToastUtil.showToast(this, getString(R.string.notice_mnemonic_wore_error));
+                        }
+                        break;
+                }
                 break;
         }
     }
@@ -332,8 +357,8 @@ public class ImportBtcCoinActivity extends BaseActivity {
         }).map(master -> {  //解析网络请求，并且拼接交易对象，再把交易对象签名成hex。
             //钱包数据库,目前先只拿名字是BTC的，钱包。
             WalletInfo walletInfo = WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_BTC);
-            if (walletInfo==null){
-                walletInfo=  createWalletInfo(Constant.TRANSACTION_COIN_NAME_BTC);
+            if (walletInfo == null) {
+                walletInfo = createWalletInfo(Constant.TRANSACTION_COIN_NAME_BTC);
             }
 
             CoinRateInfo btc_rate = CoinRateInfoManager.getWalletBtcFrCoinId(Constant.COIN_RATE_BTC);
@@ -341,7 +366,7 @@ public class ImportBtcCoinActivity extends BaseActivity {
             //币种数据库
             CoinInfo coinInfo = new CoinInfo();
             coinInfo.setCoin_address(master.getAddress());
-            if (btc_rate != null&&walletInfo!=null) {
+            if (btc_rate != null && walletInfo != null) {
                 walletInfo.setCoin_CNYPrice(btc_rate.getPrice_cny());
                 walletInfo.setCoin_USDPrice(btc_rate.getPrice_usd());
             }
@@ -394,10 +419,10 @@ public class ImportBtcCoinActivity extends BaseActivity {
         } else if (!checkboxReadTerm.isChecked()) {
             ToastUtil.showToast(this, getString(R.string.notice_agree_terms));
             return false;
-        } else if (select_index==TITTLE_PRIVATE_KEY_INDEX && etInputKey.getText().length() != 52) {
+        } else if (select_index == TITTLE_PRIVATE_KEY_INDEX && etInputKey.getText().length() != 52) {
             ToastUtil.showToast(this, getString(R.string.notice_private_key_error));
             return false;
-        }else if (CoinInfoManager.getCoinFrPrivateKey(Constant.TRANSACTION_COIN_NAME_BTC, etInputKey.getText().toString()).size() > 0) {
+        } else if (CoinInfoManager.getCoinFrPrivateKey(Constant.TRANSACTION_COIN_NAME_BTC, etInputKey.getText().toString()).size() > 0) {
             ToastUtil.showToast(this, getString(R.string.notice_same_private_key));
             return false;
         }
@@ -419,7 +444,7 @@ public class ImportBtcCoinActivity extends BaseActivity {
     private WalletInfo createWalletInfo(String wallet_id) {
         //钱包数据库。
 
-        CoinRateInfo coinRateInfo=CoinRateInfoManager.getWalletBtcFrCoinId(Constant.TRANSACTION_COIN_NAME_BTC);
+        CoinRateInfo coinRateInfo = CoinRateInfoManager.getWalletBtcFrCoinId(Constant.TRANSACTION_COIN_NAME_BTC);
         UserInformation userInfo = UserInfoManager.getUserInfo();
         WalletInfo walletInfo = new WalletInfo();
         walletInfo.setUserId(userInfo.getUserId());
@@ -447,4 +472,10 @@ public class ImportBtcCoinActivity extends BaseActivity {
         return walletInfo;
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }
