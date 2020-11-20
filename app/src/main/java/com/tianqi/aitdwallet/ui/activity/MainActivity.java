@@ -25,6 +25,7 @@ import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.ui.fragment.Fragment1;
 import com.tianqi.aitdwallet.ui.fragment.SettingFragment;
 import com.tianqi.aitdwallet.ui.fragment.WalletFragment;
+import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.aitdwallet.utils.statusbar.StatusBarCompat;
 import com.tianqi.aitdwallet.widget.dialog.FunctionNotOpenDialog;
 import com.tianqi.aitdwallet.widget.dialog.ScreenShotNoticeDialog;
@@ -33,6 +34,7 @@ import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.UserInformation;
 import com.tianqi.baselib.dao.WalletInfo;
 import com.tianqi.baselib.dbManager.PrefUtils;
+import com.tianqi.baselib.dbManager.UserInfoManager;
 import com.tianqi.baselib.rxhttp.RetrofitFactory;
 import com.tianqi.baselib.rxhttp.base.BaseObserver;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
@@ -208,9 +210,15 @@ public class MainActivity extends BaseActivity {
                 }
                 FunctionNotOpenDialog shotNoticeDialog = new FunctionNotOpenDialog(this, R.style.MyDialog2);
                 shotNoticeDialog.show();
-                if (getResources().getConfiguration().locale.getCountry().equals("US")){
+
+                UserInformation userInformation= UserInfoManager.getUserInfo();
+                if(userInformation.getLanguageId()== Constants.LANGUAGE_ENGLISH){
                     shotNoticeDialog.setImageView(R.mipmap.ic_function_not_open_en);
                 }
+
+//                if (getResources().getConfiguration().locale.getCountry().equals("US")){
+//                    shotNoticeDialog.setImageView(R.mipmap.ic_function_not_open_en);
+//                }
 
 //                StatusBarCompat.translucentStatusBar(MainActivity.this, false);
 //                StatusBarCompat.setStatusBarColor(MainActivity.this, getResources().getColor(R.color.white_transparent));

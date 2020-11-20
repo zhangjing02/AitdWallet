@@ -58,7 +58,7 @@ public class MessageCenterActivity extends BaseActivity {
     @Override
     protected void initView() {
         getToolBar();
-        titles = new String[]{"转账消息", "系统消息"};
+        titles = new String[]{getString(R.string.tittle_transfer_message), getString(R.string.tittle_system_message)};
         TabLayout.Tab tab;
         for (int i = 0; i < titles.length; i++) {
             tab = tablayout.newTab();
@@ -70,6 +70,7 @@ public class MessageCenterActivity extends BaseActivity {
             }else if (i==1){
                 tv_tab_title2 = tab.getCustomView().findViewById(R.id.tv_tab_title);
                 tv_tab_title2.setText(titles[i]);
+                tv_tab_title2.setTextColor(getResources().getColor(R.color.text_main_60_black));
             }
             tablayout.addTab(tab);
         }
@@ -92,12 +93,12 @@ public class MessageCenterActivity extends BaseActivity {
     }
 
     private void getToolBar() {
-        toolbarTitle.setText("消息中心");
+        toolbarTitle.setText(R.string.tittle_message_center);
         toolbar.setNavigationOnClickListener(v -> {
             finish();//返回
         });
         btnFinish.setVisibility(View.VISIBLE);
-        btnFinish.setText("全部已读");
+        btnFinish.setText(R.string.btn_all_read_text);
         btnFinish.setTextColor(getResources().getColor(R.color.text_light_blue));
         btnFinish.setTextSize(16);
 
@@ -112,12 +113,15 @@ public class MessageCenterActivity extends BaseActivity {
     TabLayout.BaseOnTabSelectedListener onTabSelectedListener = new TabLayout.BaseOnTabSelectedListener() {
         @Override
         public void onTabSelected(TabLayout.Tab tab) {
-
+            // TODO: 2020/11/19 选中和未选中字体颜色值变化
+            TextView textView = tab.getCustomView().findViewById(R.id.tv_tab_title);
+            textView.setTextColor(getResources().getColor(R.color.text_main_black));
         }
 
         @Override
         public void onTabUnselected(TabLayout.Tab tab) {
-
+            TextView textView = tab.getCustomView().findViewById(R.id.tv_tab_title);
+            textView.setTextColor(getResources().getColor(R.color.text_main_60_black));
         }
 
         @Override

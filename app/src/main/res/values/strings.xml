@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AITD Coin Beta</string>
+    <string name="app_name">AITD Coin</string>
     <string name="listview_header_hint_normal">下拉刷新</string>
     <string name="listview_header_hint_release">释放立即刷新</string>
     <string name="refreshing">正在刷新...</string>
@@ -297,4 +297,8 @@
     <string name="tittle_record_receive">转入</string>
     <string name="tittle_record_failure">失败</string>
     <string name="text_remark_tag">备注</string>
+    <string name="tittle_transfer_message">转账消息</string>
+    <string name="tittle_system_message">系统消息</string>
+    <string name="tittle_message_center">消息中心</string>
+    <string name="btn_all_read_text">全部已读</string>
 </resources>

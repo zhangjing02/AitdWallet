@@ -11,6 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.tianqi.aitdwallet.R;
+import com.tianqi.aitdwallet.utils.Constants;
+import com.tianqi.baselib.dao.UserInformation;
+import com.tianqi.baselib.dbManager.UserInfoManager;
 import com.tianqi.baselib.utils.display.GlideUtils;
 
 import butterknife.BindView;
@@ -44,11 +47,17 @@ public class NewGuideEndDialog extends Dialog {
         DialogSizeUtli.dialogSize(this, 1, "width");
         DialogSizeUtli.dialogSize(this, 1, "height");
         if (!context.isFinishing()){
-            if (context.getResources().getConfiguration().locale.getCountry().equals("US")){
+          UserInformation userInformation= UserInfoManager.getUserInfo();
+            if(userInformation.getLanguageId()== Constants.LANGUAGE_ENGLISH){
                 GlideUtils.loadResourceImage(context,R.drawable.ic_new_guide_end_en,ivShotWarning);
             }else {
                 GlideUtils.loadResourceImage(context,R.drawable.ic_new_guide_end,ivShotWarning);
             }
+//            if (context.getResources().getConfiguration().locale.getCountry().equals("US")){
+//                GlideUtils.loadResourceImage(context,R.drawable.ic_new_guide_end_en,ivShotWarning);
+//            }else {
+//                GlideUtils.loadResourceImage(context,R.drawable.ic_new_guide_end,ivShotWarning);
+//            }
         }
         btnINew.setOnClickListener(view1 -> {
             // mOnDialogClickListener.onItemClick(view1, "", DIALOG_CONFIRM);

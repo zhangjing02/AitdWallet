@@ -41,7 +41,7 @@ public class MessageDetailActivity extends BaseActivity {
     }
 
     private void getToolBar() {
-        toolbarTitle.setText("消息中心");
+        toolbarTitle.setText(R.string.tittle_message_center);
         toolbar.setNavigationOnClickListener(v -> {
             finish();//返回
         });
