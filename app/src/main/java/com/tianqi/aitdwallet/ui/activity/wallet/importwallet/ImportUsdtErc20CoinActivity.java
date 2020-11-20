@@ -120,6 +120,11 @@ public class ImportUsdtErc20CoinActivity extends BaseActivity {
     private static final int TITTLE_KEYSTORE = 1;
     private int height, width;
     private double ratio;
+    private ECKeyPair decrypt;
+    private static final int KEYSTORE_SAME_ERROR = 1;
+    private static final int KEYSTORE_FORMAT_ERROR = 2;
+    private static final int KEYSTORE_PASSWORD_ERROR = 3;
+    private static final int KEYSTORE_PASSWORD_OK = 5;
 
     @Override
     protected int getContentView() {
@@ -424,48 +429,66 @@ public class ImportUsdtErc20CoinActivity extends BaseActivity {
                     case TITTLE_KEYSTORE:
                         //   通过导入的keystore，生成私钥，公钥，地址。
                         if (judgeKeystoreInput()) {
-                            mLoadDialog = LoadingDialogUtils.createLoadingDialog(this, "");
-                            try {
-                                String xx = etInputKey.getText().toString().toLowerCase();
-                                if (xx.contains("x-ethers")) {  //兼容ios给的keystore数据，如果有这个就截取掉，不要。
-                                    int star_index = xx.indexOf("{", 2) - 11;
-                                    int end_index = xx.indexOf("}", 1) + 2;
-                                    String yy = xx.substring(star_index, end_index);
-                                    xx = xx.replace(yy, "");
-                                }
-                                KeyStoreFile keyStoreFile = KeyStoreFile.parse(xx);
-                                ECKeyPair decrypt = KeyStore.decrypt(etKeystorePsd.getText().toString(), keyStoreFile);
-                                if (CoinInfoManager.getCoinFrPrivateKey(Constant.TRANSACTION_COIN_NAME_USDT_ERC20, decrypt.getPrivateKey()).size() > 0) {
-                                    ToastUtil.showToast(this, getString(R.string.notice_same_keystore_text));
-                                    if (mLoadDialog != null) {
-                                        mLoadDialog.dismiss();
-                                    }
-                                } else {
-                                    importSingleCoin(decrypt);
-                                }
-                            } catch (IOException e) {
-                                ToastUtil.showToast(this, getString(R.string.notice_keystore_error_text));
-                                if (mLoadDialog != null) {
-                                    mLoadDialog.dismiss();
-                                }
-                                e.printStackTrace();
-                            } catch (CipherException e) {
-                                ToastUtil.showToast(this, getString(R.string.notice_keystore_psd_error_text));
-                                if (mLoadDialog != null) {
-                                    mLoadDialog.dismiss();
-                                }
-                                e.printStackTrace();
-                            } catch (ValidationException e) {
-                                if (mLoadDialog != null) {
-                                    mLoadDialog.dismiss();
-                                }
-                                e.printStackTrace();
-                            }
+                            importKestoreForEth();
                         }
                         break;
                 }
                 break;
         }
+    }
+
+    @SuppressLint("CheckResult")
+    private void importKestoreForEth() {
+        mLoadDialog = LoadingDialogUtils.createLoadingDialog(this, "");
+        Observable.create((ObservableOnSubscribe<Integer>) emitter -> {
+            try {
+                String xx = etInputKey.getText().toString().toLowerCase();
+                if (xx.contains("x-ethers")) {  //兼容ios给的keystore数据，如果有这个就截取掉，不要。
+                    int star_index = xx.indexOf("{", 2) - 11;
+                    int end_index = xx.indexOf("}", 1) + 2;
+                    String yy = xx.substring(star_index, end_index);
+                    xx = xx.replace(yy, "");
+                }
+                KeyStoreFile keyStoreFile = KeyStoreFile.parse(xx);
+                decrypt = KeyStore.decrypt(etKeystorePsd.getText().toString(), keyStoreFile);
+                if (CoinInfoManager.getCoinFrPrivateKey(Constant.TRANSACTION_COIN_NAME_ETH, decrypt.getPrivateKey()).size() > 0) {
+                    emitter.onNext(KEYSTORE_SAME_ERROR);
+                } else {
+                    emitter.onNext(KEYSTORE_PASSWORD_OK);
+                }
+            } catch (IOException e) {
+                emitter.onNext(KEYSTORE_FORMAT_ERROR);
+                e.printStackTrace();
+            } catch (CipherException e) {
+                emitter.onNext(KEYSTORE_PASSWORD_ERROR);
+                e.printStackTrace();
+            }
+        }).compose(RxHelper.pool_main())
+                .subscribe(baseEntity -> {
+                    switch (baseEntity) {
+                        case KEYSTORE_SAME_ERROR:
+                            ToastUtil.showToast(this, getString(R.string.notice_same_keystore_text));
+                            if (mLoadDialog != null) {
+                                mLoadDialog.dismiss();
+                            }
+                            break;
+                        case KEYSTORE_FORMAT_ERROR:
+                            if (mLoadDialog != null) {
+                                mLoadDialog.dismiss();
+                            }
+                            ToastUtil.showToast(this, getString(R.string.notice_keystore_error_text));
+                            break;
+                        case KEYSTORE_PASSWORD_ERROR:
+                            if (mLoadDialog != null) {
+                                mLoadDialog.dismiss();
+                            }
+                            ToastUtil.showToast(this, getString(R.string.notice_keystore_psd_error_text));
+                            break;
+                        case KEYSTORE_PASSWORD_OK:
+                            importSingleCoin(decrypt);
+                            break;
+                    }
+                });
     }
 
     @SuppressLint("CheckResult")

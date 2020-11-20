@@ -71,6 +71,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.functions.Function;
 
 public class ImportEthCoinActivity extends BaseActivity {
 
@@ -120,8 +121,13 @@ public class ImportEthCoinActivity extends BaseActivity {
     private static final int TITTLE_PRIVATE_KEY_INDEX = 0;
     private static final int TITTLE_MNEMONIC_WORD_INDEX = 2;
     private static final int TITTLE_KEYSTORE = 1;
-    private int height,width;
+    private int height, width;
     private double ratio;
+    private ECKeyPair decrypt;
+    private static final int KEYSTORE_SAME_ERROR = 1;
+    private static final int KEYSTORE_FORMAT_ERROR = 2;
+    private static final int KEYSTORE_PASSWORD_ERROR = 3;
+    private static final int KEYSTORE_PASSWORD_OK = 5;
 
     @Override
     protected int getContentView() {
@@ -133,14 +139,14 @@ public class ImportEthCoinActivity extends BaseActivity {
         WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         width = wm.getDefaultDisplay().getWidth();
         height = wm.getDefaultDisplay().getHeight();
-        ratio=height*1000/width/1000f;
-        DisplayMetrics metrics = new DisplayMetrics() ;
-        getWindowManager().getDefaultDisplay().getMetrics(metrics) ;
+        ratio = height * 1000 / width / 1000f;
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
         int densityDpi = metrics.densityDpi;
-        LogUtil.i("ttttttttttttt", width+"showGuide: 我们看屏幕的高度是？" + height+"屏幕密度"+densityDpi);
-        if (height<=1920&&ratio<1.7f){
+        LogUtil.i("ttttttttttttt", width + "showGuide: 我们看屏幕的高度是？" + height + "屏幕密度" + densityDpi);
+        if (height <= 1920 && ratio < 1.7f) {
             LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layoutPrivacyTerm.getLayoutParams();
-            layoutParams.setMargins(0,DensityUtil.dp2px(160f),0,0);
+            layoutParams.setMargins(0, DensityUtil.dp2px(160f), 0, 0);
             layoutPrivacyTerm.setLayoutParams(layoutParams);
         }
 
@@ -179,14 +185,14 @@ public class ImportEthCoinActivity extends BaseActivity {
                     etKeystorePsd.setVisibility(View.GONE);
                     ivPsdShow.setVisibility(View.GONE);
 
-                    LogUtil.i("tttttttttttt",ratio+"我们看转换的尺寸"+ DensityUtil.dp2px(10f));
-                    if (height<=1920&&ratio<1.7f){
+                    LogUtil.i("tttttttttttt", ratio + "我们看转换的尺寸" + DensityUtil.dp2px(10f));
+                    if (height <= 1920 && ratio < 1.7f) {
                         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layoutPrivacyTerm.getLayoutParams();
-                        layoutParams.setMargins(0,DensityUtil.dp2px(160f),0,0);
+                        layoutParams.setMargins(0, DensityUtil.dp2px(160f), 0, 0);
                         layoutPrivacyTerm.setLayoutParams(layoutParams);
-                    }else {
+                    } else {
                         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layoutPrivacyTerm.getLayoutParams();
-                        layoutParams.setMargins(0,DensityUtil.dp2px(260f),0,0);
+                        layoutParams.setMargins(0, DensityUtil.dp2px(260f), 0, 0);
                         layoutPrivacyTerm.setLayoutParams(layoutParams);
                     }
                     break;
@@ -200,13 +206,13 @@ public class ImportEthCoinActivity extends BaseActivity {
                     etKeystorePsd.setVisibility(View.VISIBLE);
                     ivPsdShow.setVisibility(View.VISIBLE);
 
-                    if (height<=1920&&ratio<1.7f){
+                    if (height <= 1920 && ratio < 1.7f) {
                         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layoutPrivacyTerm.getLayoutParams();
-                        layoutParams.setMargins(0,DensityUtil.dp2px(50f),0,0);
+                        layoutParams.setMargins(0, DensityUtil.dp2px(50f), 0, 0);
                         layoutPrivacyTerm.setLayoutParams(layoutParams);
-                    }else {
+                    } else {
                         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layoutPrivacyTerm.getLayoutParams();
-                        layoutParams.setMargins(0,DensityUtil.dp2px(210f),0,0);
+                        layoutParams.setMargins(0, DensityUtil.dp2px(210f), 0, 0);
                         layoutPrivacyTerm.setLayoutParams(layoutParams);
                     }
                     break;
@@ -220,13 +226,13 @@ public class ImportEthCoinActivity extends BaseActivity {
                     tvImportKeystoreNotice.setVisibility(View.GONE);
                     etKeystorePsd.setVisibility(View.GONE);
                     ivPsdShow.setVisibility(View.GONE);
-                    if (height<=1920&&ratio<1.7f){
+                    if (height <= 1920 && ratio < 1.7f) {
                         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layoutPrivacyTerm.getLayoutParams();
-                        layoutParams.setMargins(0,DensityUtil.dp2px(150f),0,0);
+                        layoutParams.setMargins(0, DensityUtil.dp2px(150f), 0, 0);
                         layoutPrivacyTerm.setLayoutParams(layoutParams);
-                    }else {
+                    } else {
                         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layoutPrivacyTerm.getLayoutParams();
-                        layoutParams.setMargins(0,DensityUtil.dp2px(260f),0,0);
+                        layoutParams.setMargins(0, DensityUtil.dp2px(260f), 0, 0);
                         layoutPrivacyTerm.setLayoutParams(layoutParams);
                     }
                     break;
@@ -367,6 +373,7 @@ public class ImportEthCoinActivity extends BaseActivity {
         }
     }
 
+    @SuppressLint("CheckResult")
     @OnClick({R.id.btn_collect, R.id.btn_import_wallet, R.id.tv_explain_private_key, R.id.tv_service_privacy_terms, R.id.iv_psd_show})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -406,8 +413,6 @@ public class ImportEthCoinActivity extends BaseActivity {
                             importSingleCoin(ecKeyPair);
                         }
                         break;
-//                        case TITTLE_KEYSTORE:
-//                            break;
                     case TITTLE_MNEMONIC_WORD_INDEX:
                         String[] mn_words = etInputKey.getText().toString().split("\\s+");
                         if (judeMnwordsCorrect(mn_words) && checkboxReadTerm.isChecked()) {
@@ -424,49 +429,66 @@ public class ImportEthCoinActivity extends BaseActivity {
                     case TITTLE_KEYSTORE:
                         //   通过导入的keystore，生成私钥，公钥，地址。
                         if (judgeKeystoreInput()) {
-                            LogUtil.i("ttttttttttt","是否有进来呢？");
-                            mLoadDialog = LoadingDialogUtils.createLoadingDialog(this, "");
-                            try {
-                                String xx = etInputKey.getText().toString().toLowerCase();
-                                if (xx.contains("x-ethers")) {  //兼容ios给的keystore数据，如果有这个就截取掉，不要。
-                                    int star_index = xx.indexOf("{", 2) - 11;
-                                    int end_index = xx.indexOf("}", 1) + 2;
-                                    String yy = xx.substring(star_index, end_index);
-                                    xx = xx.replace(yy, "");
-                                }
-                                KeyStoreFile keyStoreFile = KeyStoreFile.parse(xx);
-                                ECKeyPair decrypt = KeyStore.decrypt(etKeystorePsd.getText().toString(), keyStoreFile);
-                                if (CoinInfoManager.getCoinFrPrivateKey(Constant.TRANSACTION_COIN_NAME_ETH, decrypt.getPrivateKey()).size() > 0) {
-                                    ToastUtil.showToast(this, getString(R.string.notice_same_keystore_text));
-                                    if (mLoadDialog != null) {
-                                        mLoadDialog.dismiss();
-                                    }
-                                } else {
-                                    importSingleCoin(decrypt);
-                                }
-                            } catch (IOException e) {
-                                if (mLoadDialog != null) {
-                                    mLoadDialog.dismiss();
-                                }
-                                ToastUtil.showToast(this, getString(R.string.notice_keystore_error_text));
-                                e.printStackTrace();
-                            } catch (CipherException e) {
-                                if (mLoadDialog != null) {
-                                    mLoadDialog.dismiss();
-                                }
-                                ToastUtil.showToast(this, getString(R.string.notice_keystore_psd_error_text));
-                                e.printStackTrace();
-                            } catch (ValidationException e) {
-                                if (mLoadDialog != null) {
-                                    mLoadDialog.dismiss();
-                                }
-                                e.printStackTrace();
-                            }
+                            importKestoreForEth();
                         }
                         break;
                 }
                 break;
         }
+    }
+
+    @SuppressLint("CheckResult")
+    private void importKestoreForEth() {
+        mLoadDialog = LoadingDialogUtils.createLoadingDialog(this, "");
+        Observable.create((ObservableOnSubscribe<Integer>) emitter -> {
+            try {
+                String xx = etInputKey.getText().toString().toLowerCase();
+                if (xx.contains("x-ethers")) {  //兼容ios给的keystore数据，如果有这个就截取掉，不要。
+                    int star_index = xx.indexOf("{", 2) - 11;
+                    int end_index = xx.indexOf("}", 1) + 2;
+                    String yy = xx.substring(star_index, end_index);
+                    xx = xx.replace(yy, "");
+                }
+                KeyStoreFile keyStoreFile = KeyStoreFile.parse(xx);
+                decrypt = KeyStore.decrypt(etKeystorePsd.getText().toString(), keyStoreFile);
+                if (CoinInfoManager.getCoinFrPrivateKey(Constant.TRANSACTION_COIN_NAME_ETH, decrypt.getPrivateKey()).size() > 0) {
+                    emitter.onNext(KEYSTORE_SAME_ERROR);
+                } else {
+                    emitter.onNext(KEYSTORE_PASSWORD_OK);
+                }
+            } catch (IOException e) {
+                emitter.onNext(KEYSTORE_FORMAT_ERROR);
+                e.printStackTrace();
+            } catch (CipherException e) {
+                emitter.onNext(KEYSTORE_PASSWORD_ERROR);
+                e.printStackTrace();
+            }
+        }).compose(RxHelper.pool_main())
+                .subscribe(baseEntity -> {
+                    switch (baseEntity) {
+                        case KEYSTORE_SAME_ERROR:
+                            ToastUtil.showToast(this, getString(R.string.notice_same_keystore_text));
+                            if (mLoadDialog != null) {
+                                mLoadDialog.dismiss();
+                            }
+                            break;
+                        case KEYSTORE_FORMAT_ERROR:
+                            if (mLoadDialog != null) {
+                                mLoadDialog.dismiss();
+                            }
+                            ToastUtil.showToast(this, getString(R.string.notice_keystore_error_text));
+                            break;
+                        case KEYSTORE_PASSWORD_ERROR:
+                            if (mLoadDialog != null) {
+                                mLoadDialog.dismiss();
+                            }
+                            ToastUtil.showToast(this, getString(R.string.notice_keystore_psd_error_text));
+                            break;
+                        case KEYSTORE_PASSWORD_OK:
+                            importSingleCoin(decrypt);
+                            break;
+                    }
+                });
     }
 
     @SuppressLint("CheckResult")
