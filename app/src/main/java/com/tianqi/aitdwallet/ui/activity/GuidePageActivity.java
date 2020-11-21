@@ -33,8 +33,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class GuidePageActivity extends BaseActivity {
-    UserInformation userInformation;
-    List<WalletInfo> walletInfos;
     @BindView(R.id.tv_guide_tittle)
     TextView tvGuideTittle;
     @BindView(R.id.btn_create_wallet)
@@ -65,13 +63,22 @@ public class GuidePageActivity extends BaseActivity {
         mList = new ArrayList<>();
         mList.add(R.drawable.ic_guide_page2);
         mList.add(R.drawable.ic_guide_page1);
-        if (getResources().getConfiguration().locale.getCountry().equals("US")) {
-            mList.add(R.drawable.ic_guide_page3_en);
+        userInfo = UserInfoManager.getUserInfo();
+        if (userInfo != null) {
+            if (userInfo.getLanguageId() == Constants.LANGUAGE_ENGLISH) {
+                mList.add(R.drawable.ic_guide_page3_en);
+            } else {
+                mList.add(R.drawable.ic_guide_page3_cn);
+            }
         } else {
-            mList.add(R.drawable.ic_guide_page3_cn);
+            if (getResources().getConfiguration().locale.getCountry().equals("US")) {
+                mList.add(R.drawable.ic_guide_page3_en);
+            } else {
+                mList.add(R.drawable.ic_guide_page3_cn);
+            }
         }
 
-        pageAdapter = new GuidePageViewPageAdapter02(this, mList,ivGuideLogo);
+        pageAdapter = new GuidePageViewPageAdapter02(this, mList, ivGuideLogo);
 
         ivGuideLogo.setAdapter(pageAdapter);
 
@@ -87,10 +94,11 @@ public class GuidePageActivity extends BaseActivity {
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels);
             }
+
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                switch (position){
+                switch (position) {
                     case 0:
                         tvGuideTittle.setText(getString(R.string.tittle_guide_page_text1));
                         break;
@@ -102,6 +110,7 @@ public class GuidePageActivity extends BaseActivity {
                         break;
                 }
             }
+
             @Override
             public void onPageScrollStateChanged(int state) {
                 super.onPageScrollStateChanged(state);
@@ -142,7 +151,7 @@ public class GuidePageActivity extends BaseActivity {
                 break;
             case R.id.btn_import_wallet:
                 if (userInfo != null && !TextUtils.isEmpty(userInfo.getPasswordStr())) {
-                    // TODO: 2020/10/14 进入验证密码的页面。
+                    // 进入验证密码的页面。
                     Intent intent = new Intent(this, VerifySecurityPsdActivity.class);
                     intent.putExtra(Constants.INTENT_PUT_TAG, getString(R.string.tittle_import_wallet));
                     startActivity(intent);
@@ -155,5 +164,4 @@ public class GuidePageActivity extends BaseActivity {
                 break;
         }
     }
-
 }

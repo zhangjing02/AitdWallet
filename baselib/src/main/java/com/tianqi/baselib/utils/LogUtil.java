@@ -13,7 +13,7 @@ public class LogUtil {
     /**
      * 是否打印日志
      */
-    public static boolean isDMLog = true;
+    public static boolean isDMLog = true;   //正式发版的时候，此处改成false。
 
     private static boolean VERBOSE = true;
 

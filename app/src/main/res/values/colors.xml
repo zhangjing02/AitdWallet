@@ -42,8 +42,10 @@
 
 
     <color name="text_main_black">#FF161A27</color>
+    <color name="text_main_40_black">#66161A27</color>
     <color name="text_main_70_black">#FF161A27</color>
     <color name="text_main_60_black">#99161A27</color>
+    <color name="text_main_80_black">#CC161A27</color>
     <color name="text_main_90_black">#E6161A27</color>
     <color name="text_main2_black">#FF1E1F31</color>
     <color name="text_main_60_grey">#991E1F31</color>

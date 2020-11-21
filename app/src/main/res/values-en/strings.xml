@@ -191,7 +191,7 @@
 	<string name="text_no_data">No data</string>
 	<string name="text_property_head">Property</string>
 	<string name="text_dialog_import_wallet">Import</string>
-	<string name="text_dialog_wallet_manage">Manage</string>
+	<string name="text_dialog_wallet_manage">Management</string>
 	<string name="text_create_coin_alias_name">Existing %s address</string>
 	<string name="text_import_coin_alias_name">Imported %s address</string>
 	<string name="text_transaction_state_fail">Failure</string>
@@ -295,4 +295,8 @@
 	<string name="tittle_record_receive">Receive</string>
 	<string name="tittle_record_failure">Failure</string>
 	<string name="text_remark_tag">Remark</string>
+    <string name="tittle_transfer_message">transfer Message</string>
+	<string name="tittle_system_message">System Message</string>
+	<string name="tittle_message_center">Message Center</string>
+	<string name="btn_all_read_text">All Read</string>
 </resources>

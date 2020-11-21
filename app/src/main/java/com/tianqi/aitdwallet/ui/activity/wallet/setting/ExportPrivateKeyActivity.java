@@ -5,8 +5,10 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -14,11 +16,13 @@ import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.tabs.TabLayout;
+import com.scwang.smartrefresh.layout.util.DensityUtil;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dbManager.CoinInfoManager;
+import com.tianqi.baselib.utils.LogUtil;
 import com.tianqi.baselib.utils.display.CodeEncoder;
 import com.tianqi.baselib.utils.display.ToastUtil;
 
@@ -67,7 +71,6 @@ public class ExportPrivateKeyActivity extends BaseActivity {
     private int select_index;
     private static final int TITTLE_PRIVATE_KEY_INDEX = 0;
     private static final int TITTLE_QR_CODE_INDEX = 1;
-
     @Override
     protected int getContentView() {
         return R.layout.activity_export_private_key;
@@ -75,6 +78,7 @@ public class ExportPrivateKeyActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+
         titles = new String[]{getString(R.string.tittle_private_key_text), getString(R.string.tittle_qr_code_text)};
         getToolBar();
         String coin_id = getIntent().getStringExtra(Constants.INTENT_PUT_COIN_ID);

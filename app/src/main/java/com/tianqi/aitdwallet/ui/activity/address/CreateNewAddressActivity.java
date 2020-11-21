@@ -143,10 +143,10 @@ public class CreateNewAddressActivity extends BaseActivity {
                             break;
                     }
                     ContactsInfo contactsInfo=new ContactsInfo();
-                    contactsInfo.setContactsID(coinName+etInputAddressName.getText().toString()+etInputAddress.getText().toString());
-                    contactsInfo.setContactsName(etInputAddressName.getText().toString());
+                    contactsInfo.setContactsID(coinName+etInputAddressName.getText().toString().trim()+etInputAddress.getText().toString().trim());
+                    contactsInfo.setContactsName(etInputAddressName.getText().toString().trim());
                     contactsInfo.setContactsCoinName(coinName) ;
-                    contactsInfo.setContactsCoinAddress(etInputAddress.getText().toString());
+                    contactsInfo.setContactsCoinAddress(etInputAddress.getText().toString().trim());
                     contactsInfo.setCoinResourceId(resource_id);
                     ContactsInfoManager.insertOrUpdate(contactsInfo);
                     ToastUtil.showToast(this,getString(R.string.notice_create_success));
@@ -164,7 +164,7 @@ public class CreateNewAddressActivity extends BaseActivity {
      * @return 判断输入是否合法
      */
     private boolean judgeSelectInput() {
-        List<ContactsInfo> coinFrIdInfo = ContactsInfoManager.getCoinFrIdInfo(coinName + etInputAddressName.getText().toString() + etInputAddress.getText().toString());
+        List<ContactsInfo> coinFrIdInfo = ContactsInfoManager.getCoinFrIdInfo(coinName + etInputAddressName.getText().toString().trim() + etInputAddress.getText().toString().trim());
         if (TextUtils.isEmpty(etInputAddressName.getText().toString())) {
             ToastUtil.showToast(this, getString(R.string.notice_input_address_name));
             return false;

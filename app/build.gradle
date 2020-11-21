@@ -8,7 +8,7 @@ android {
         applicationId "com.tianqi.aitdwallet"
         minSdkVersion 19
         targetSdkVersion 30
-        versionCode 67
+        versionCode 76
         versionName "1.1.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -109,4 +109,6 @@ dependencies {
     implementation 'me.grantland:autofittextview:0.2.+'
    // implementation 'com.github.mcxtzhang:SwipeDelMenuLayout:V1.2.1'
     implementation 'com.github.mcxtzhang:SwipeDelMenuLayout:V1.3.0'
+
+    implementation 'q.rorbin:badgeview:1.1.3'
 }

@@ -380,13 +380,14 @@ public class SetSecurityPsdActivity extends BaseActivity {
                             //解密
                             String aes_decode_str = AESCipher.decrypt(Constant.PSD_KEY,accountPwd);
                             // Log.i(TAG, "onViewClicked: 002存入的密码是？  "+aes_decode_str);
+                            //此处不变化，当用户第一次进来时，如果系统语言时英语，用户信息就设定成英语，没毛病。
                             if (getResources().getConfiguration().locale.getCountry().equals("US")){
                                 userInformation.setLanguageId(Constants.LANGUAGE_ENGLISH);
                             }else {
                                 userInformation.setLanguageId(Constants.LANGUAGE_CHINA);
                             }
                             userInformation.setNoCenter(true);
-                            // TODO: 2020/10/29 此处加入一些判语言和币种单位的逻辑。
+                            // 用户第一次进来时，用户系统语言时英语，那币种就默认设定成usd。
                             if (getResources().getConfiguration().locale.getCountry().equals("US")) {
                                 userInformation.setFiatUnit(Constants.FIAT_USD);
                             } else {

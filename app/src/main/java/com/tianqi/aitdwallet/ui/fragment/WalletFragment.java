@@ -29,6 +29,7 @@ import com.app.hubert.guide.listener.OnLayoutInflatedListener;
 import com.app.hubert.guide.model.GuidePage;
 import com.app.hubert.guide.model.HighLight;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.util.DensityUtil;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.adapter.recycle_adapter.HomeWalletAdapter;
 import com.tianqi.aitdwallet.ui.activity.wallet.property.SelectCoinToTransActivity;
@@ -87,14 +88,6 @@ public class WalletFragment extends BaseFragment {
     TextView tvFiatBalance;
     @BindView(R.id.tv_btc_balance)
     TextView tvBtcBalance;
-    //    @BindView(R.id.btn_transaction_receive)
-//    TextView tvAvailableCapitalTag;
-//    @BindView(R.id.tv_available_capital)
-//    TextView tvAvailableCapital;
-//    @BindView(R.id.btn_transaction_send)
-//    TextView tvFrozenCapitalTag;
-    //    @BindView(R.id.tv_frozen_capital)
-//    TextView tvFrozenCapital;
     @BindView(R.id.tv_fiat_hide)
     TextView tvFiatHide;
 
@@ -147,6 +140,8 @@ public class WalletFragment extends BaseFragment {
     private int btc_quest_count, usdt_quest_count,eth_quest_count,erc20_quest_count;
     private List<CoinInfo> allBtccCoinInfos, allusdtCoinInfos,allEthcCoinInfos,allERC20cCoinInfos;
     private List<Disposable> disposableList;
+    private UserInformation userInformation;
+
    // private boolean is_request_btc,is_request_usdt;
 
     @Override
@@ -164,16 +159,13 @@ public class WalletFragment extends BaseFragment {
         StatusBarCompat.translucentStatusBar(getActivity(), true);
 
         int first_open = PrefUtils.getInt(getActivity(), PrefUtils.FIRST_START_APP, -1);
-        if (first_open <0) {
+        if (first_open < 0) {
             NewGuideStartDialog shotNoticeDialog = new NewGuideStartDialog(getActivity(), R.style.MyDialog2);
             shotNoticeDialog.setOnDialogClickListener((view1, password, type) -> {
                 showGuide();
             });
-            shotNoticeDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialogInterface) {
-                    PrefUtils.setInt(getActivity(), PrefUtils.FIRST_START_APP, 2);
-                }
+            shotNoticeDialog.setOnDismissListener(dialogInterface -> {
+                PrefUtils.setInt(getActivity(), PrefUtils.FIRST_START_APP, 2);
             });
             shotNoticeDialog.show();
         }
@@ -261,25 +253,42 @@ public class WalletFragment extends BaseFragment {
                         // .addHighLight(ivNewGuideStep)
                         .addHighLightWithOptions(ivNewGuideStep, HighLight.Shape.ROUND_RECTANGLE, 600,
                                 0, HighlightOptionsUtils.createTransparentOptions())
-                        .setLayoutRes(R.layout.view_guide1, R.id.textView4).setOnLayoutInflatedListener(new OnLayoutInflatedListener() {
-                            @Override
-                            public void onLayoutInflated(View view, Controller controller) {
-                                ImageView imageView = view.findViewById(R.id.iv_indicator);
-                                TextView textView3 = view.findViewById(R.id.textView3);
-                                // TextView textView2 = view.findViewById(R.id.textView2);
-                                TextView textView4 = view.findViewById(R.id.textView4);
-                                SpannableString spannableString = new SpannableString(textView3.getText().toString());
-                                int end=3;
-                                if (getResources().getConfiguration().locale.getCountry().equals("US")){
-                                    end=12;
-                                }
-                                spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.text_main_yellow)), 0, end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                                textView3.setText(spannableString);
-                                if (height <= 1920) {
-//                                    ViewGroup.LayoutParams layoutParams = textView3.getLayoutParams();
-//                                    layoutParams.height=60;
-//                                    textView3.setLayoutParams(layoutParams);
+                        .setLayoutRes(R.layout.view_guide1, R.id.textView4).setOnLayoutInflatedListener((view, controller) -> {
+                            ImageView imageView = view.findViewById(R.id.iv_indicator);
+                            TextView textView3 = view.findViewById(R.id.textView3);
+                            // TextView textView2 = view.findViewById(R.id.textView2);
+                            TextView textView4 = view.findViewById(R.id.textView4);
+                            SpannableString spannableString = new SpannableString(textView3.getText().toString());
+                            int end=3;
+
+                            userInformation=UserInfoManager.getUserInfo();
+                            if (userInformation.getLanguageId()==Constants.LANGUAGE_ENGLISH){
+                                end=12;
+                            }
+//                                if (getResources().getConfiguration().locale.getCountry().equals("US")){
+//                                    end=12;
+//                                }
+                            spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.text_main_yellow)), 0, end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                            textView3.setText(spannableString);
+                            if (height <= 1920) {  // TODO: 2020/11/20 此处还需要用几款小手机做一下适配。
+
+                                double ratio = height * 1000 / width / 1000f;
+                                if (ratio<1.7f){  //只针对小手机中的特别宽和矮的手机（华为）做了微调。
+                                    LinearLayout.LayoutParams layoutParams001 = (LinearLayout.LayoutParams) imageView.getLayoutParams();
+                                    layoutParams001.setMargins(0, 0, 0, DensityUtil.dp2px(10f));
+                                    imageView.setLayoutParams(layoutParams001);
+
+                                    LinearLayout.LayoutParams layoutParams002 = (LinearLayout.LayoutParams) textView3.getLayoutParams();
+                                    layoutParams002.setMargins(0, 0, 0, DensityUtil.dp2px(30f));
+                                    textView3.setLayoutParams(layoutParams002);
+//                                    LinearLayout.LayoutParams layoutParams003 = (LinearLayout.LayoutParams) textView4.getLayoutParams();
+//                                    layoutParams003.setMargins(0, 0, 0, -DensityUtil.dp2px(30f));
+//                                    textView4.setLayoutParams(layoutParams003);
+                                }else {
                                     int xx = (1920 - height) / 3;
+                                    LinearLayout.LayoutParams layoutParams001 = (LinearLayout.LayoutParams) imageView.getLayoutParams();
+                                    layoutParams001.setMargins(0, 0, 0, 131 - xx);
+                                    textView3.setLayoutParams(layoutParams001);
 
                                     LinearLayout.LayoutParams layoutParams002 = (LinearLayout.LayoutParams) textView3.getLayoutParams();
                                     layoutParams002.setMargins(0, 0, 0, 150 - xx);
@@ -803,10 +812,10 @@ public class WalletFragment extends BaseFragment {
                     getActivity().getWindow().setAttributes(lp1);
                 });
 
-//                // 设置PopupWindow是否能响应外部点击事件
-//                mPopWindowTop.setFocusable(true);
-//                mPopWindowTop.setOutsideTouchable(true);
-//                mPopWindowTop.update();
+//              设置PopupWindow是否能响应外部点击事件
+//              mPopWindowTop.setFocusable(true);
+                mPopWindowTop.setOutsideTouchable(true);
+//              mPopWindowTop.update();
 
                 break;
             case R.id.iv_balance_hide:

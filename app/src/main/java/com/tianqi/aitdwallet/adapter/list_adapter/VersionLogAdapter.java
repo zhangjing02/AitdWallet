@@ -16,7 +16,9 @@ import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dao.ContactsInfo;
+import com.tianqi.baselib.dao.UserInformation;
 import com.tianqi.baselib.dbManager.ContactsInfoManager;
+import com.tianqi.baselib.dbManager.UserInfoManager;
 import com.tianqi.baselib.rxhttp.bean.GetVersionLogBean;
 import com.tianqi.baselib.utils.Constant;
 import com.tianqi.baselib.utils.display.GlideUtils;
@@ -78,11 +80,18 @@ public class VersionLogAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
         viewHolder.tv_version_log_tittle.setText(maps.get(position).getVersion());
-        if (mContext.getResources().getConfiguration().locale.getCountry().equals("US")){
+
+        UserInformation userInformation=UserInfoManager.getUserInfo();
+        if(userInformation.getLanguageId()==Constants.LANGUAGE_ENGLISH){
             viewHolder.tv_version_log_content.setText(maps.get(position).getContentEn().replace("\\n", "\n"));
         }else {
             viewHolder.tv_version_log_content.setText(maps.get(position).getContent().replace("\\n", "\n"));
         }
+//        if (mContext.getResources().getConfiguration().locale.getCountry().equals("US")){
+//            viewHolder.tv_version_log_content.setText(maps.get(position).getContentEn().replace("\\n", "\n"));
+//        }else {
+//            viewHolder.tv_version_log_content.setText(maps.get(position).getContent().replace("\\n", "\n"));
+//        }
         return view;
     }
 
