@@ -42,8 +42,6 @@
             app:layout_constraintTop_toTopOf="@+id/tv_wallet_tittle"
             android:visibility="gone" />
 
-
-
         <TextView
             android:id="@+id/tv_currency_saving_tag"
             android:layout_width="wrap_content"
@@ -105,29 +103,6 @@
             android:textColor="@color/white"
             android:textSize="24sp"/>
 
-        <TextView
-            android:id="@+id/tv_btc_balance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:text="$59121362"
-            android:textColor="#FFFFFFFF"
-            android:textSize="15sp"
-            android:visibility="gone"
-            app:layout_constraintLeft_toLeftOf="@+id/tv_wallet_tittle"
-            app:layout_constraintTop_toBottomOf="@+id/tv_fiat_balance" />
-
-
-<!--        <TextView-->
-<!--            android:id="@+id/tv_available_capital"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="@dimen/dp_10"-->
-<!--            android:text="123456"-->
-<!--            android:textColor="@color/white"-->
-<!--            android:textSize="15sp"-->
-<!--            app:layout_constraintLeft_toLeftOf="@+id/tv_currency_saving_tag"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/tv_available_capital_tag" />-->
 
         <TextView
             android:id="@+id/tv_hide_available_capital"

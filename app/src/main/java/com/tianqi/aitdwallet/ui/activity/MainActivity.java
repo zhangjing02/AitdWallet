@@ -25,6 +25,7 @@ import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.ui.fragment.Fragment1;
 import com.tianqi.aitdwallet.ui.fragment.SettingFragment;
 import com.tianqi.aitdwallet.ui.fragment.WalletFragment;
+import com.tianqi.aitdwallet.ui.fragment.WalletFragment002;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.aitdwallet.utils.statusbar.StatusBarCompat;
 import com.tianqi.aitdwallet.widget.dialog.FunctionNotOpenDialog;
@@ -40,6 +41,7 @@ import com.tianqi.baselib.rxhttp.base.BaseObserver;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
 import com.tianqi.baselib.rxhttp.bean.GetFormalUtxoBean;
 import com.tianqi.baselib.rxhttp.bean.GetNewVersionBean;
+import com.tianqi.baselib.utils.LogUtil;
 import com.tianqi.baselib.utils.digital.DataReshape;
 import com.tianqi.baselib.utils.display.ToastUtil;
 import com.tianqi.baselib.utils.widget.NoScrollViewPager;
@@ -69,7 +71,7 @@ public class MainActivity extends BaseActivity {
 
     private String[] titles;
     private ArrayList<Fragment> fragments = new ArrayList<>();
-    private  WalletFragment fragment1;
+    private WalletFragment002 fragment1;
 
     @Override
     protected int getContentView() {
@@ -80,7 +82,7 @@ public class MainActivity extends BaseActivity {
     protected void initView() {
         titles = new String[]{getString(R.string.tittle_property), getString(R.string.tittle_financial), getString(R.string.tittle_browse), getString(R.string.tittle_setting)};
         StatusBarCompat.translucentStatusBar(MainActivity.this, true);
-        fragment1 = new WalletFragment();
+        fragment1 = new WalletFragment002();
         fragments.add(fragment1);
         for (int i = 0; i < titles.length - 2; i++) {
             Fragment1 fragment2 = new Fragment1();
@@ -286,9 +288,19 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
      if  (fragment1!=null){
+         LogUtil.i("ttttttttttt", "onTouchEvent: 001点击了外部么？");
          fragment1.hiddenPopWindow();
         }
         return super.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if  (fragment1!=null){
+            LogUtil.i("ttttttttttt", "onTouchEvent: 001----2点击了外部么？");
+            fragment1.hiddenPopWindow();
+        }
+        return super.dispatchTouchEvent(ev);
     }
 
 }

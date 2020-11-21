@@ -88,14 +88,6 @@ public class WalletFragment extends BaseFragment {
     TextView tvFiatBalance;
     @BindView(R.id.tv_btc_balance)
     TextView tvBtcBalance;
-    //    @BindView(R.id.btn_transaction_receive)
-//    TextView tvAvailableCapitalTag;
-//    @BindView(R.id.tv_available_capital)
-//    TextView tvAvailableCapital;
-//    @BindView(R.id.btn_transaction_send)
-//    TextView tvFrozenCapitalTag;
-    //    @BindView(R.id.tv_frozen_capital)
-//    TextView tvFrozenCapital;
     @BindView(R.id.tv_fiat_hide)
     TextView tvFiatHide;
 

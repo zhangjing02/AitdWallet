@@ -410,8 +410,6 @@ public class ImportUsdtErc20CoinActivity extends BaseActivity {
                         }
 
                         break;
-//                        case TITTLE_KEYSTORE:
-//                            break;
                     case TITTLE_MNEMONIC_WORD_INDEX:
                         String[] mn_words = etInputKey.getText().toString().split("\\s+");
                         if (judeMnwordsCorrect(mn_words) && checkboxReadTerm.isChecked()) {
@@ -419,7 +417,6 @@ public class ImportUsdtErc20CoinActivity extends BaseActivity {
                             ECKeyPair ecKeyPair02 = WalletUtils.importCoinMaser(CoinTypes.Ethereum, Arrays.asList(mn_words));
                             importSingleCoin(ecKeyPair02);
                         } else {
-
                             if (mLoadDialog != null) {
                                 mLoadDialog.dismiss();
                             }

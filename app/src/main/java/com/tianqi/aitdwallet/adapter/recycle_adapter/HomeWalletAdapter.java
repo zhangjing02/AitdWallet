@@ -52,6 +52,8 @@ public class HomeWalletAdapter extends BaseQuickAdapter<WalletInfo, BaseViewHold
         WrapListView lv_coin_detail=helper.getView(R.id.lv_coin_detail);
         ConstraintLayout layout_virtual_currency=helper.getView(R.id.layout_virtual_currency);
 
+        expand_coin.collapse();
+
         GlideUtils.loadResourceImage(mContext,listBean.getResource_id(),iv_coin);
         tv_coin_name.setText(listBean.getWalletName());
 
@@ -80,7 +82,6 @@ public class HomeWalletAdapter extends BaseQuickAdapter<WalletInfo, BaseViewHold
         }else {
             iv_coin_indicator.setVisibility(View.GONE);
         }
-
         layout_virtual_currency.setOnClickListener(view -> {
             String wallet_id02 = listBean.getWallet_id();
             List<CoinInfo> coinFrWalletIds02 = CoinInfoManager.getCoinFrWalletId(wallet_id02);
