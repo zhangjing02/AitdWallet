@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.tabs.TabLayout;
+import com.quincysx.crypto.ethereum.vm.LogInfo;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.adapter.recycle_adapter.TransRecordAdapter;
@@ -48,6 +49,7 @@ import com.tianqi.baselib.rxhttp.bean.GetEthTxRecordBean;
 import com.tianqi.baselib.rxhttp.bean.GetListUnspentBean;
 import com.tianqi.baselib.rxhttp.bean.GetLoadingTxBean;
 import com.tianqi.baselib.utils.Constant;
+import com.tianqi.baselib.utils.LogUtil;
 import com.tianqi.baselib.utils.digital.DataReshape;
 import com.tianqi.baselib.utils.display.GlideUtils;
 import com.tianqi.baselib.utils.eventbus.EventMessage;
@@ -191,7 +193,7 @@ public class TransactionRecordActivity extends BaseActivity {
             service.getTxRecordData(coin_id);
         });
         if (mMessageBeans.size()<=0){
-            refreshLayout.autoRefresh();
+            refreshLayout.autoRefresh(500);
         }
         Intent intent = new Intent(this, DataManageService.class);
         intent.putExtra(Constants.TRANSACTION_COIN_ID, coin_id);

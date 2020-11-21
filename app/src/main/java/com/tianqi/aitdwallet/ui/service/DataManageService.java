@@ -2,7 +2,7 @@ package com.tianqi.aitdwallet.ui.service;
 
 /**
  * Create by zhangjing on 2020/11/21.
- * Describe :
+ * Describe :数据中台，用户需要耗时操作的数据获取，存储，和发送通知。
  */
 
 import android.annotation.SuppressLint;
@@ -97,6 +97,11 @@ public class DataManageService extends Service {
         return false;
     }
 
+    /**
+     * 此处是交易记录，请求接口和数据存储的逻辑。
+     *
+     */
+
     public void getTxRecordData(String coin_id) {
         txCoinInfo = CoinInfoManager.getMainCoinFrCoinId(coin_id);
         if (txCoinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_ETH)) {
@@ -114,7 +119,7 @@ public class DataManageService extends Service {
         Map<String, Object> map = new HashMap<>();
         map.put("apikey", "AnqHS6Rs2WX0hwFXlrv");
         RetrofitFactory.getInstence(this).API()
-                .getEthTxRecord("eth", mAddress, map).compose(RxHelper.io_io())
+                .getEthTxRecord("eth", mAddress, map).compose(RxHelper.pool_io())
                 .subscribe(new BaseObserver<GetEthTxRecordBean>(this) {
                     @Override
                     public void onSuccess(GetEthTxRecordBean data, String msg) {
@@ -127,11 +132,17 @@ public class DataManageService extends Service {
                                     insertEthTxRecord(data.getTxs().get(i), coinInfo, i >= data.getTxs().size() - 1);
                                 }
                             }
+                        }else {
+                            EventMessage eventMessage = new EventMessage();
+                            eventMessage.setType(EventMessage.TRANSACTION_RECORD_UPDATE);
+                            EventBus.getDefault().post(eventMessage);
                         }
                     }
-
                     @Override
                     protected void onFailure(int code, String msg) {
+                        EventMessage eventMessage = new EventMessage();
+                        eventMessage.setType(EventMessage.TRANSACTION_RECORD_UPDATE);
+                        EventBus.getDefault().post(eventMessage);
                     }
                 });
     }
@@ -181,7 +192,7 @@ public class DataManageService extends Service {
             Map<String, Object> map = new HashMap<>();
             map.put("apikey", "AnqHS6Rs2WX0hwFXlrv");
             RetrofitFactory.getInstence(this).API()
-                    .getBtcAddressBalance(coin_type_params, coinInfo.getCoin_address(), "1/50", map).compose(RxHelper.io_io())
+                    .getBtcAddressBalance(coin_type_params, coinInfo.getCoin_address(), "1/50", map).compose(RxHelper.pool_io())
                     .subscribe(new BaseObserver<List<GetListUnspentBean>>(this) {
                         @Override
                         public void onSuccess(List<GetListUnspentBean> data, String msg) {
@@ -280,7 +291,7 @@ public class DataManageService extends Service {
         Map<String, Object> map = new HashMap<>();
         map.put("apikey", "AnqHS6Rs2WX0hwFXlrv");
         RetrofitFactory.getInstence(this).API()
-                .getLoadingTx(coin_type_params, coinInfo.getCoin_address(), map).compose(RxHelper.io_main())
+                .getLoadingTx(coin_type_params, coinInfo.getCoin_address(), map).compose(RxHelper.pool_io())
                 .subscribe(new BaseObserver<List<GetLoadingTxBean>>(this) {
                     @Override
                     public void onSuccess(List<GetLoadingTxBean> data, String msg) {
@@ -359,7 +370,7 @@ public class DataManageService extends Service {
         Map<String, Object> map = new HashMap<>();
         map.put("apikey", "AnqHS6Rs2WX0hwFXlrv");
         RetrofitFactory.getInstence(this).API()
-                .getErc20TxRecord(mAddress, Constant.CONTRACT_ADDRESS, "1/50", map).compose(RxHelper.io_io())
+                .getErc20TxRecord(mAddress, Constant.CONTRACT_ADDRESS, "1/50", map).compose(RxHelper.pool_io())
                 .subscribe(new BaseObserver<List<GetErc20TxRecordBean>>(this) {
                     @Override
                     public void onSuccess(List<GetErc20TxRecordBean> datas, String msg) {
@@ -373,7 +384,6 @@ public class DataManageService extends Service {
                             EventBus.getDefault().post(eventMessage);
                         }
                     }
-
                     @Override
                     protected void onFailure(int code, String msg) {
                         EventMessage eventMessage = new EventMessage();
@@ -416,6 +426,10 @@ public class DataManageService extends Service {
         }
     }
 
+    /**
+     * 此处是钱包首页，刷新钱包余额，和币种余额的接口，和数据存储。
+     *
+     */
 
     @SuppressLint("CheckResult")
     public void getWalletBalance() {
@@ -485,7 +499,7 @@ public class DataManageService extends Service {
         Map<String, Object> map = new HashMap<>();
         map.put("apikey", "AnqHS6Rs2WX0hwFXlrv");
         RetrofitFactory.getInstence(this).API()
-                .getBtcAddressBalance(coin_type_params, specCoinInfo.getCoin_address(), "1/1", map).compose(RxHelper.io_main())
+                .getBtcAddressBalance(coin_type_params, specCoinInfo.getCoin_address(), "1/1", map).compose(RxHelper.pool_io())
                 .subscribe(new BaseObserver<List<GetListUnspentBean>>(this) {
                     @Override
                     public void onSuccess(List<GetListUnspentBean> data, String msg) {
@@ -539,7 +553,7 @@ public class DataManageService extends Service {
         Map<String, Object> map = new HashMap<>();
         map.put("apikey", "AnqHS6Rs2WX0hwFXlrv");
         RetrofitFactory.getInstence(this).API()
-                .getEthAddressBalance("eth", mAddress, map).compose(RxHelper.io_main())
+                .getEthAddressBalance("eth", mAddress, map).compose(RxHelper.pool_io())
                 .subscribe(new BaseObserver<String>(this) {
                     @Override
                     public void onSuccess(String data, String msg) {
@@ -567,7 +581,7 @@ public class DataManageService extends Service {
         Map<String, Object> map = new HashMap<>();
         map.put("apikey", "AnqHS6Rs2WX0hwFXlrv");
         RetrofitFactory.getInstence(this).API()
-                .getErc20AddressBalance("eth",mAddress, map).compose(RxHelper.io_main())
+                .getErc20AddressBalance("eth",mAddress, map).compose(RxHelper.pool_io())
                 .subscribe(new BaseObserver<List<GetErc20BalanceBean>>(this) {
                     @Override
                     public void onSuccess(List<GetErc20BalanceBean> data, String msg) {
