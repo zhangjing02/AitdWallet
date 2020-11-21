@@ -98,6 +98,8 @@
             android:windowSoftInputMode="adjustNothing" />
         <activity android:name=".ui.activity.wallet.usdt.UsdtErc20TransactionActivity" />
         <activity android:name=".ui.activity.wallet.property.ImportCoinListActivity" />
+
+        <service android:name=".ui.service.DataManageService" />
     </application>
 
 </manifest>

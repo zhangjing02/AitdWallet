@@ -1,22 +1,21 @@
 package com.tianqi.aitdwallet.ui.fragment;
 
-import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Typeface;
+import android.os.IBinder;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,6 +35,7 @@ import com.tianqi.aitdwallet.ui.activity.wallet.property.SelectCoinToTransActivi
 import com.tianqi.aitdwallet.ui.activity.wallet.setting.VerifySecurityPsdActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.setting.WalletHiddenActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.setting.WalletManageActivity;
+import com.tianqi.aitdwallet.ui.service.DataManageService;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.aitdwallet.utils.HighlightOptionsUtils;
 import com.tianqi.aitdwallet.utils.statusbar.StatusBarCompat;
@@ -49,11 +49,6 @@ import com.tianqi.baselib.dbManager.CoinInfoManager;
 import com.tianqi.baselib.dbManager.PrefUtils;
 import com.tianqi.baselib.dbManager.UserInfoManager;
 import com.tianqi.baselib.dbManager.WalletInfoManager;
-import com.tianqi.baselib.rxhttp.RetrofitFactory;
-import com.tianqi.baselib.rxhttp.base.BaseObserver;
-import com.tianqi.baselib.rxhttp.base.RxHelper;
-import com.tianqi.baselib.rxhttp.bean.GetErc20BalanceBean;
-import com.tianqi.baselib.rxhttp.bean.GetListUnspentBean;
 import com.tianqi.baselib.utils.Constant;
 import com.tianqi.baselib.utils.LogUtil;
 import com.tianqi.baselib.utils.digital.DataReshape;
@@ -65,14 +60,10 @@ import com.tianqi.baselib.widget.RoundRectImageView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import io.reactivex.Observable;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Function;
+
+import static android.content.Context.BIND_AUTO_CREATE;
 
 public class WalletFragment002 extends BaseFragment implements View.OnClickListener {
     @BindView(R.id.refreshLayout)
@@ -107,11 +98,10 @@ public class WalletFragment002 extends BaseFragment implements View.OnClickListe
 
     private PopupWindow mPopWindow,mPopWindowTop;
     private int new_guide_step_index;
-    private int btc_quest_count, usdt_quest_count,eth_quest_count,erc20_quest_count;
-    private List<CoinInfo> allBtccCoinInfos, allusdtCoinInfos,allEthcCoinInfos,allERC20cCoinInfos;
-    private List<Disposable> disposableList;
     private View fragment_wallet_header;
     private UserInformation userInformation;
+    private DataManageService service = null;
+    private boolean isBind = false;
 
     @Override
     protected int setLayoutResourceID() {
@@ -133,15 +123,29 @@ public class WalletFragment002 extends BaseFragment implements View.OnClickListe
             shotNoticeDialog.setOnDialogClickListener((view1, password, type) -> {
                 showGuide();
             });
-            shotNoticeDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialogInterface) {
-                    PrefUtils.setInt(getActivity(), PrefUtils.FIRST_START_APP, 2);
-                }
+            shotNoticeDialog.setOnDismissListener(dialogInterface -> {
+                PrefUtils.setInt(getActivity(), PrefUtils.FIRST_START_APP, 2);
             });
             shotNoticeDialog.show();
         }
+
+        Intent intent = new Intent(getActivity(), DataManageService.class);
+        getActivity().bindService(intent, conn, BIND_AUTO_CREATE);
     }
+
+    private ServiceConnection conn = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder binder) {
+            isBind = true;
+            DataManageService.MyBinder myBinder = (DataManageService.MyBinder) binder;
+            service = myBinder.getService();
+            service.getWalletBalance();
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            isBind = false;
+        }
+    };
 
     /**
      * 新手引导层 只有第一次使用 APP 才显示
@@ -373,7 +377,6 @@ public class WalletFragment002 extends BaseFragment implements View.OnClickListe
 
     private void initRecycleView() {
         mWalletBeans = WalletInfoManager.getWalletInfoNoHidden(false);//不隐藏的。
-
         for (int i = 0; i < 10; i++) {
             mWalletBeans.addAll(WalletInfoManager.getWalletInfoNoHidden(false));
         }
@@ -383,17 +386,15 @@ public class WalletFragment002 extends BaseFragment implements View.OnClickListe
         homeWalletAdapter = new HomeWalletAdapter(R.layout.layout_adapter_home_wallet_for_shadow, mWalletBeans);
         rcvHomeWallet.setAdapter(homeWalletAdapter);
         adapterAddHeader();
-
         //刷新
         refreshLayout.setOnRefreshListener(refreshLayout -> {
-            initWallet();
+           // initWallet();
+            service.getWalletBalance();
         });
 
         mllManager = new LinearLayoutManager(getActivity());
         rcvHomeWallet.setLayoutManager(mllManager);
-
         typeFace = Typeface.createFromAsset(getActivity().getAssets(), Constant.FONT_PATH);
-
         showHeadData();
     }
 
@@ -467,307 +468,37 @@ public class WalletFragment002 extends BaseFragment implements View.OnClickListe
         }
     }
 
-
     @Override
     protected void initData() {
-        initWallet();
+      //  initWallet();
     }
 
     @Override
     public void onDataSynEvent(EventMessage event) {
         if (event.getType() == EventMessage.DELETE_CREATE_COIN_UPDATE) {
             mWalletBeans = WalletInfoManager.getWalletInfoNoHidden(false);
-//            homeWalletAdapter = new HomeWalletAdapter(R.layout.layout_adapter_home_wallet_for_shadow, mWalletBeans);
-//            rcvHomeWallet.setAdapter(homeWalletAdapter);
-//            adapterAddHeader();
             homeWalletAdapter.setNewData(mWalletBeans);
         } else if (event.getType() == EventMessage.HIDDEN_WALLET_UPDATE) {
             mWalletBeans = WalletInfoManager.getWalletInfoNoHidden(false);
             homeWalletAdapter.setNewData(mWalletBeans);
         } else if (event.getType() == EventMessage.DELETE_IMPORT_COIN_UPDATE) {
             mWalletBeans = WalletInfoManager.getWalletInfoNoHidden(false);
-//            homeWalletAdapter = new HomeWalletAdapter(R.layout.layout_adapter_home_wallet_for_shadow, mWalletBeans);
-//            rcvHomeWallet.setAdapter(homeWalletAdapter);
-//            adapterAddHeader();
             homeWalletAdapter.setNewData(mWalletBeans);
         } else if (event.getType() == EventMessage.NEW_COIN_UPDATE) {
-            // TODO: 2020/11/2 导入了币种，不知道该更新点啥？
             mWalletBeans = WalletInfoManager.getWalletInfoNoHidden(false);
-//            homeWalletAdapter = new HomeWalletAdapter(R.layout.layout_adapter_home_wallet_for_shadow, mWalletBeans);
-//            rcvHomeWallet.setAdapter(homeWalletAdapter);
-//            adapterAddHeader();
             homeWalletAdapter.setNewData(mWalletBeans);
-
+        }else if (event.getType()==EventMessage.HOME_WALLET_BALANCE_UPDATE){
+            mWalletBeans = WalletInfoManager.getWalletInfoNoHidden(false);
+            homeWalletAdapter.setNewData(mWalletBeans);
+            refreshLayout.finishRefresh();
+            showHeadData();
         }
-    }
-
-    @SuppressLint("CheckResult")
-    private void initWallet() {
-        //通过币种的rpc接口信息，给钱包的总金额赋值。
-        disposableList = new ArrayList<>();
-        Observable.create((ObservableOnSubscribe<Integer>) emitter -> {
-            allBtccCoinInfos = CoinInfoManager.getSpecCoinInfo(Constant.TRANSACTION_COIN_NAME_BTC);
-            //先按照顺序，调取btc的余额。如果调取完成，或原数据为空，就走完成逻辑。
-            if (allBtccCoinInfos!=null&&allBtccCoinInfos.size()>0){
-                for (int i = 0; i < allBtccCoinInfos.size(); i++) {
-                    emitter.onNext(i);
-                    if (i==allBtccCoinInfos.size()-1){
-                        emitter.onComplete(); }
-                }
-            }else {
-                // emitter.onComplete();
-                emitter.onNext(-1);
-            }
-        }).map(index -> {
-            LogUtil.i(TAG, "initWallet: 001");
-            if (index>=0){
-                getBtcUtxo(allBtccCoinInfos.get(index));
-            }
-            return "123";
-        }).map((Function<String, String>) s -> {
-            LogUtil.i(TAG, "initWallet: 002");
-            allEthcCoinInfos=CoinInfoManager.getSpecCoinInfo(Constant.TRANSACTION_COIN_NAME_ETH);
-            if (allEthcCoinInfos!=null&&allEthcCoinInfos.size()>0){
-                eth_quest_count=0;
-                for (int i = 0; i <allEthcCoinInfos.size() ; i++) {
-                    getEthBalance(allEthcCoinInfos.get(i));
-                }
-            }
-            return "456";
-        }).map(index -> {
-            LogUtil.i(TAG, "initWallet: 003");
-            if (index!=null){
-                allERC20cCoinInfos=CoinInfoManager.getSpecCoinInfo(Constant.TRANSACTION_COIN_NAME_USDT_ERC20);
-                if (allERC20cCoinInfos!=null&&allERC20cCoinInfos.size()>0){
-                    erc20_quest_count=0;
-                    for (int i = 0; i <allERC20cCoinInfos.size() ; i++) {
-                        getErc20Balance(allERC20cCoinInfos.get(i));
-                    }
-                }
-            }
-            return "789";
-        }).delay(2, TimeUnit.SECONDS).doOnComplete(() -> {
-            LogUtil.i(TAG, "initWallet: 004");
-            //当BTC调完后（但结果未必都返回了，所以要做2S延迟）完成的时候，我们做一个2S的延时，然后去循环调用usdt的余额。
-            allusdtCoinInfos = CoinInfoManager.getSpecCoinInfo(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
-            if (allusdtCoinInfos!=null&&allusdtCoinInfos.size() > 0) {
-                usdt_quest_count = 0;
-                for (int i = 0; i < allusdtCoinInfos.size(); i++) {
-                    // getUsdtBalance(usdtCoinInfo.get(i));
-                    getBtcUtxo(allusdtCoinInfos.get(i));
-                }
-            }
-        }).compose(RxHelper.pool_main())
-                .subscribe(baseEntity -> {
-                    LogUtil.i(TAG, "initWallet: 005");
-                    //此处留空，方便后续拓展。
-                });
-    }
-
-    String coin_type_params = null;
-
-    @SuppressLint("CheckResult")
-    private void getBtcUtxo(CoinInfo specCoinInfo) {
-        if (specCoinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_BTC)) {
-            coin_type_params = "btc";
-        } else if (specCoinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_OMNI)) {
-            coin_type_params = "usdt";
-        }
-        Map<String, Object> map = new HashMap<>();
-        map.put("apikey", "AnqHS6Rs2WX0hwFXlrv");
-        RetrofitFactory.getInstence(getActivity()).API()
-                .getBtcAddressBalance(coin_type_params, specCoinInfo.getCoin_address(), "1/1", map).compose(RxHelper.io_main())
-                .subscribe(new BaseObserver<List<GetListUnspentBean>>(getActivity()) {
-                    @Override
-                    public void onSuccess(List<GetListUnspentBean> data, String msg) {
-                        if (data != null && data.size() > 0) {
-                            double xxx = Double.valueOf(data.get(0).getReceive()) + Double.valueOf(data.get(0).getSpend());
-                            specCoinInfo.setCoin_totalAmount(Double.valueOf(data.get(0).getReceive()) + Double.valueOf(data.get(0).getSpend()));
-                            CoinInfoManager.insertOrUpdate(specCoinInfo);
-
-                            if (data.get(0).getNetwork().equals(Constant.COIN_UNIT_BTC)) {
-                                btc_quest_count++;
-                                //判断是最后一个btc，就去把数据，整合到钱包数据库，并刷新页面。
-                                updateWaletBalance(0);
-                            } else if (data.get(0).getNetwork().equals(Constant.COIN_UNIT_USDT)) {
-                                usdt_quest_count++;
-                                //判断是最后一个btc，就去把数据，整合到钱包数据库，并刷新页面。
-                                updateWaletBalance(1);
-                            }
-                        } else {
-                            if (coin_type_params != null && coin_type_params.equals("btc")) {
-                                btc_quest_count++;
-                                //判断是最后一个btc，就去把数据，整合到钱包数据库，并刷新页面。
-                                updateWaletBalance(0);
-                            } else if (coin_type_params != null && coin_type_params.equals("usdt")) {
-                                usdt_quest_count++;
-                                //判断是最后一个btc，就去把数据，整合到钱包数据库，并刷新页面。
-                                updateWaletBalance(1);
-                            }
-                        }
-                    }
-
-                    @Override
-                    protected void onFailure(int code, String msg) {
-                        if (coin_type_params != null && coin_type_params.equals("btc")) {
-                            btc_quest_count++;
-                            //判断是最后一个btc，就去把数据，整合到钱包数据库，并刷新页面。
-                            updateWaletBalance(0);
-                        } else if (coin_type_params != null && coin_type_params.equals("usdt")) {
-                            usdt_quest_count++;
-                            //判断是最后一个btc，就去把数据，整合到钱包数据库，并刷新页面。
-                            updateWaletBalance(1);
-                        }
-                    }
-
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        disposableList.add(d);
-                    }
-                });
-
-    }
-
-    private void updateWaletBalance(int coin_type) {
-        if (coin_type == 0) {
-            if (btc_quest_count >= allBtccCoinInfos.size()) {
-                for (int i = 0; i < mWalletBeans.size(); i++) {
-                    WalletInfo walletInfo = mWalletBeans.get(i);
-                    String wallet_id = walletInfo.getWallet_id();
-                    List<CoinInfo> coinFrWalletIds = CoinInfoManager.getCoinFrWalletId(wallet_id);
-                    double wallet_balance = 0;
-                    for (int j = 0; j < coinFrWalletIds.size(); j++) {
-                        wallet_balance = wallet_balance + coinFrWalletIds.get(j).getCoin_totalAmount();
-                    }
-                    walletInfo.setWalletBalance(wallet_balance);
-                    WalletInfoManager.insertOrUpdate(walletInfo);
-                }
-            }
-        } else if (coin_type == 1) {
-            if (usdt_quest_count >= allusdtCoinInfos.size()) {
-                for (int i = 0; i < mWalletBeans.size(); i++) {
-                    WalletInfo walletInfo = mWalletBeans.get(i);
-                    String wallet_id = walletInfo.getWallet_id();
-                    List<CoinInfo> coinFrWalletIds = CoinInfoManager.getCoinFrWalletId(wallet_id);
-                    double wallet_balance = 0;
-                    for (int j = 0; j < coinFrWalletIds.size(); j++) {
-                        wallet_balance = wallet_balance + coinFrWalletIds.get(j).getCoin_totalAmount();
-                    }
-                    walletInfo.setWalletBalance(wallet_balance);
-                    WalletInfoManager.insertOrUpdate(walletInfo);
-                }
-            }
-        }else if (coin_type == 2){
-            if (eth_quest_count >= allEthcCoinInfos.size()) {
-                for (int i = 0; i < mWalletBeans.size(); i++) {
-                    WalletInfo walletInfo = mWalletBeans.get(i);
-                    String wallet_id = walletInfo.getWallet_id();
-                    List<CoinInfo> coinFrWalletIds = CoinInfoManager.getCoinFrWalletId(wallet_id);
-                    double wallet_balance = 0;
-                    for (int j = 0; j < coinFrWalletIds.size(); j++) {
-                        wallet_balance = wallet_balance + coinFrWalletIds.get(j).getCoin_totalAmount();
-                    }
-                    walletInfo.setWalletBalance(wallet_balance);
-                    WalletInfoManager.insertOrUpdate(walletInfo);
-                }
-            }
-        }else if (coin_type==3){
-            if (erc20_quest_count >= allERC20cCoinInfos.size()) {
-                for (int i = 0; i < mWalletBeans.size(); i++) {
-                    WalletInfo walletInfo = mWalletBeans.get(i);
-                    String wallet_id = walletInfo.getWallet_id();
-                    List<CoinInfo> coinFrWalletIds = CoinInfoManager.getCoinFrWalletId(wallet_id);
-                    double wallet_balance = 0;
-                    for (int j = 0; j < coinFrWalletIds.size(); j++) {
-                        wallet_balance = wallet_balance + coinFrWalletIds.get(j).getCoin_totalAmount();
-                    }
-                    walletInfo.setWalletBalance(wallet_balance);
-                    WalletInfoManager.insertOrUpdate(walletInfo);
-                }
-            }
-        }
-        mWalletBeans = WalletInfoManager.getWalletInfoNoHidden(false);
-
-        //暂时用，重新创建adapter的方法，否则用刷新方法，会导致展开的数据，错乱显示。
-//        homeWalletAdapter = new HomeWalletAdapter(R.layout.layout_adapter_home_wallet_for_shadow, mWalletBeans);
-//        rcvHomeWallet.setAdapter(homeWalletAdapter);
-//        homeWalletAdapter.removeAllHeaderView();
-//        adapterAddHeader();
-
-        homeWalletAdapter.setNewData(mWalletBeans);
-
-        refreshLayout.finishRefresh();
-        //获取了新的余额，去更新头部的卡片的余额数值。
-        showHeadData();
-    }
-
-    private void getEthBalance(CoinInfo specCoinInfo){
-        String mAddress=specCoinInfo.getCoin_address().startsWith("0x")?specCoinInfo.getCoin_address().toLowerCase():Constants.HEX_PREFIX+specCoinInfo.getCoin_address().toLowerCase();
-        Map<String, Object> map = new HashMap<>();
-        map.put("apikey", "AnqHS6Rs2WX0hwFXlrv");
-        RetrofitFactory.getInstence(getActivity()).API()
-                .getEthAddressBalance("eth",mAddress, map).compose(RxHelper.io_main())
-                .subscribe(new BaseObserver<String>(getActivity()) {
-                    @Override
-                    public void onSuccess(String data, String msg) {
-                        eth_quest_count++;
-                        specCoinInfo.setCoin_totalAmount(Double.valueOf(data));
-                        CoinInfoManager.insertOrUpdate(specCoinInfo);
-                        updateWaletBalance(2);
-                    }
-                    @Override
-                    protected void onFailure(int code, String msg) {
-                        refreshLayout.finishRefresh();
-                    }
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        disposableList.add(d);
-                    }
-                });
-    }
-
-    private void getErc20Balance(CoinInfo specCoinInfo){
-        String mAddress=specCoinInfo.getCoin_address().startsWith("0x")?specCoinInfo.getCoin_address().toLowerCase():Constants.HEX_PREFIX+specCoinInfo.getCoin_address().toLowerCase();
-        Map<String, Object> map = new HashMap<>();
-        map.put("apikey", "AnqHS6Rs2WX0hwFXlrv");
-        RetrofitFactory.getInstence(getActivity()).API()
-                .getErc20AddressBalance("eth",mAddress, map).compose(RxHelper.io_main())
-                .subscribe(new BaseObserver<List<GetErc20BalanceBean>>(getActivity()) {
-                    @Override
-                    public void onSuccess(List<GetErc20BalanceBean> data, String msg) {
-                        erc20_quest_count++;
-                        double erc20_balance=0;
-                        if (data!=null&&data.size()>0){
-                            for (int i = 0; i <data.size() ; i++) {
-                                if (data.get(i).getHash().equals(Constant.CONTRACT_ADDRESS)){
-                                    erc20_balance=erc20_balance+Double.valueOf(data.get(i).getBalance())/Math.pow(10,Integer.valueOf(data.get(i).getTokenInfo().getD()));
-                                    LogUtil.i(TAG, "onSuccess: 我们看得到的数据是？"+erc20_balance);
-                                }
-                            }
-                        }
-                        specCoinInfo.setCoin_totalAmount(erc20_balance);
-                        CoinInfoManager.insertOrUpdate(specCoinInfo);
-                        updateWaletBalance(3);
-                    }
-                    @Override
-                    protected void onFailure(int code, String msg) {
-                        refreshLayout.finishRefresh();
-                    }
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        disposableList.add(d);
-                    }
-                });
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (disposableList.size() > 0) {
-            for (int i = 0; i < disposableList.size(); i++) {
-                disposableList.get(i).dispose();
-            }
-        }
+        service.unbindService(conn);
     }
 
     public void hiddenPopWindow() {
