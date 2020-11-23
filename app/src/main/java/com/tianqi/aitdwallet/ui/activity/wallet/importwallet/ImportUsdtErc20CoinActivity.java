@@ -2,9 +2,11 @@ package com.tianqi.aitdwallet.ui.activity.wallet.importwallet;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -24,7 +26,6 @@ import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.tabs.TabLayout;
 import com.quincysx.crypto.CoinTypes;
 import com.quincysx.crypto.ECKeyPair;
-import com.quincysx.crypto.bip32.ValidationException;
 import com.quincysx.crypto.ethereum.keystore.CipherException;
 import com.quincysx.crypto.ethereum.keystore.KeyStore;
 import com.quincysx.crypto.ethereum.keystore.KeyStoreFile;
@@ -34,10 +35,10 @@ import com.tianqi.aitdwallet.adapter.list_adapter.MnemonicWordAdapter;
 import com.tianqi.aitdwallet.ui.activity.MainActivity;
 import com.tianqi.aitdwallet.ui.activity.tool.ScanActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.setting.PrivacyTermsWebActivity;
+import com.tianqi.aitdwallet.ui.service.DataManageService;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.aitdwallet.utils.MnemonicUtils;
 import com.tianqi.aitdwallet.utils.WalletUtils;
-import com.tianqi.aitdwallet.utils.eth.EthWalletManager;
 import com.tianqi.aitdwallet.widget.dialog.ExplainPrivateKeyDialog;
 import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
@@ -65,7 +66,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
@@ -126,6 +126,9 @@ public class ImportUsdtErc20CoinActivity extends BaseActivity {
     private static final int KEYSTORE_PASSWORD_ERROR = 3;
     private static final int KEYSTORE_PASSWORD_OK = 5;
 
+    private DataManageService service = null;
+    private boolean isBind = false;
+
     @Override
     protected int getContentView() {
         return R.layout.activity_import_single_coin;
@@ -166,7 +169,24 @@ public class ImportUsdtErc20CoinActivity extends BaseActivity {
         tablayout.addOnTabSelectedListener(onTabSelectedListener);
         etInputKey.addTextChangedListener(textWatcher);
         checkboxReadTerm.setOnCheckedChangeListener(onCheckedChangeListener);
+
+        Intent intent = new Intent(this, DataManageService.class);
+        bindService(intent, conn, BIND_AUTO_CREATE);
     }
+
+
+    private ServiceConnection conn = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder binder) {
+            isBind = true;
+            DataManageService.MyBinder myBinder = (DataManageService.MyBinder) binder;
+            service = myBinder.getService();
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            isBind = false;
+        }
+    };
 
 
     TabLayout.BaseOnTabSelectedListener onTabSelectedListener = new TabLayout.BaseOnTabSelectedListener() {
@@ -194,7 +214,6 @@ public class ImportUsdtErc20CoinActivity extends BaseActivity {
                         layoutParams.setMargins(0,DensityUtil.dp2px(260f),0,0);
                         layoutPrivacyTerm.setLayoutParams(layoutParams);
                     }
-
                     break;
                 case TITTLE_KEYSTORE:
                     gvMnemonicWord.setVisibility(View.GONE);
@@ -426,7 +445,7 @@ public class ImportUsdtErc20CoinActivity extends BaseActivity {
                     case TITTLE_KEYSTORE:
                         //   通过导入的keystore，生成私钥，公钥，地址。
                         if (judgeKeystoreInput()) {
-                            importKestoreForEth();
+                            importKeystoreForEth();
                         }
                         break;
                 }
@@ -435,18 +454,24 @@ public class ImportUsdtErc20CoinActivity extends BaseActivity {
     }
 
     @SuppressLint("CheckResult")
-    private void importKestoreForEth() {
+    private void importKeystoreForEth() {
         mLoadDialog = LoadingDialogUtils.createLoadingDialog(this, "");
         Observable.create((ObservableOnSubscribe<Integer>) emitter -> {
             try {
-                String xx = etInputKey.getText().toString().toLowerCase();
-                if (xx.contains("x-ethers")) {  //兼容ios给的keystore数据，如果有这个就截取掉，不要。
-                    int star_index = xx.indexOf("{", 2) - 11;
-                    int end_index = xx.indexOf("}", 1) + 2;
-                    String yy = xx.substring(star_index, end_index);
-                    xx = xx.replace(yy, "");
+                String content = etInputKey.getText().toString().toLowerCase().trim().replace(" ","");
+                if (content.contains("x-ethers")) {  //兼容ios给的keystore数据，如果有这个就截取掉，不要。
+                    int star_index = content.indexOf("{", content.indexOf("x-ethers")) - 11;
+                    int end_index;
+                    if (content.indexOf(",", content.indexOf("}", content.indexOf("x-ethers"))) > 0) {
+                        end_index = content.indexOf("}", content.indexOf("x-ethers")) + 2;
+                    } else {
+                        star_index = content.indexOf("{", content.indexOf("x-ethers")) - 13;
+                        end_index = content.indexOf("}", content.indexOf("x-ethers")) + 1;
+                    }
+                    String yy = content.substring(star_index, end_index);
+                    content = content.replace(yy, "");
                 }
-                KeyStoreFile keyStoreFile = KeyStoreFile.parse(xx);
+                KeyStoreFile keyStoreFile = KeyStoreFile.parse(content);
                 decrypt = KeyStore.decrypt(etKeystorePsd.getText().toString(), keyStoreFile);
                 if (CoinInfoManager.getCoinFrPrivateKey(Constant.TRANSACTION_COIN_NAME_ETH, decrypt.getPrivateKey()).size() > 0) {
                     emitter.onNext(KEYSTORE_SAME_ERROR);
@@ -516,11 +541,7 @@ public class ImportUsdtErc20CoinActivity extends BaseActivity {
             coinInfo.setCoin_id(Constant.IMPORT_USDT_ERC20_ID + walletBtcInfo.size());
             // coinInfo.setIsCollect();
             coinInfo.setPrivateKey(master.getPrivateKey());
-            //保存一个文件形式，方便加载的时候，能很快加载出钱包。否则每次去生成会很慢。
-            // TODO: 2020/11/10 此处写的不太合理，因为是线程在跑，所以，可能此页面一直进行完了，保存钱包的逻辑还没执行完。
-            EthWalletManager.getInstance().loadWallet(this, coinInfo, wallet -> {
 
-            });
             coinInfo.setCoin_name(Constant.TRANSACTION_COIN_NAME_USDT_ERC20);
             coinInfo.setCoin_type(Constant.COIN_BIP_TYPE_ETH);
             if (select_index == TITTLE_KEYSTORE) {
@@ -534,7 +555,10 @@ public class ImportUsdtErc20CoinActivity extends BaseActivity {
 
             //  coinInfo.setWalletLimit();  //不需要限制。
             CoinInfoManager.insertOrUpdate(coinInfo);
-
+            //保存一个文件形式，方便加载的时候，能很快加载出钱包。否则每次去生成会很慢。
+            if (isBind){
+                service.createEthWallet(coinInfo);
+            }
             return coinInfo;
         }).delay(2, TimeUnit.SECONDS).compose(RxHelper.pool_main())
                 .subscribe(baseEntity -> {

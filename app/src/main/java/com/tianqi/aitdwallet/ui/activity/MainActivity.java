@@ -288,7 +288,6 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
      if  (fragment1!=null){
-         LogUtil.i("ttttttttttt", "onTouchEvent: 001点击了外部么？");
          fragment1.hiddenPopWindow();
         }
         return super.onTouchEvent(event);
@@ -297,10 +296,8 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if  (fragment1!=null){
-            LogUtil.i("ttttttttttt", "onTouchEvent: 001----2点击了外部么？");
             fragment1.hiddenPopWindow();
         }
         return super.dispatchTouchEvent(ev);
     }
-
 }

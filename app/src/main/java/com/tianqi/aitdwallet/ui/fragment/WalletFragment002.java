@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Typeface;
+import android.os.Handler;
 import android.os.IBinder;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -377,9 +378,9 @@ public class WalletFragment002 extends BaseFragment implements View.OnClickListe
 
     private void initRecycleView() {
         mWalletBeans = WalletInfoManager.getWalletInfoNoHidden(false);//不隐藏的。
-        for (int i = 0; i < 10; i++) {
-            mWalletBeans.addAll(WalletInfoManager.getWalletInfoNoHidden(false));
-        }
+//        for (int i = 0; i < 10; i++) {
+//            mWalletBeans.addAll(WalletInfoManager.getWalletInfoNoHidden(false));
+//        }
         rcvHomeWallet.setLayoutManager(new LinearLayoutManager(getActivity(),
                 LinearLayoutManager.VERTICAL, false));
 
@@ -473,26 +474,45 @@ public class WalletFragment002 extends BaseFragment implements View.OnClickListe
       //  initWallet();
     }
 
+    boolean isFresh;
     @Override
     public void onDataSynEvent(EventMessage event) {
         if (event.getType() == EventMessage.DELETE_CREATE_COIN_UPDATE) {
-            mWalletBeans = WalletInfoManager.getWalletInfoNoHidden(false);
-            homeWalletAdapter.setNewData(mWalletBeans);
+            if (!isFresh){
+                isFresh=true;
+                mWalletBeans = WalletInfoManager.getWalletInfoNoHidden(false);
+                homeWalletAdapter.setNewData(mWalletBeans);
+            }
         } else if (event.getType() == EventMessage.HIDDEN_WALLET_UPDATE) {
-            mWalletBeans = WalletInfoManager.getWalletInfoNoHidden(false);
-            homeWalletAdapter.setNewData(mWalletBeans);
+            if (!isFresh){
+                isFresh=true;
+                mWalletBeans = WalletInfoManager.getWalletInfoNoHidden(false);
+                homeWalletAdapter.setNewData(mWalletBeans);
+            }
         } else if (event.getType() == EventMessage.DELETE_IMPORT_COIN_UPDATE) {
-            mWalletBeans = WalletInfoManager.getWalletInfoNoHidden(false);
-            homeWalletAdapter.setNewData(mWalletBeans);
+            if (!isFresh){
+                isFresh=true;
+                mWalletBeans = WalletInfoManager.getWalletInfoNoHidden(false);
+                homeWalletAdapter.setNewData(mWalletBeans);
+            }
         } else if (event.getType() == EventMessage.NEW_COIN_UPDATE) {
-            mWalletBeans = WalletInfoManager.getWalletInfoNoHidden(false);
-            homeWalletAdapter.setNewData(mWalletBeans);
+            if (!isFresh){
+                isFresh=true;
+                mWalletBeans = WalletInfoManager.getWalletInfoNoHidden(false);
+                homeWalletAdapter.setNewData(mWalletBeans);
+            }
         }else if (event.getType()==EventMessage.HOME_WALLET_BALANCE_UPDATE){
-            mWalletBeans = WalletInfoManager.getWalletInfoNoHidden(false);
-            homeWalletAdapter.setNewData(mWalletBeans);
+            if (!isFresh){
+                isFresh=true;
+                mWalletBeans = WalletInfoManager.getWalletInfoNoHidden(false);
+                homeWalletAdapter.setNewData(mWalletBeans);
+            }
             refreshLayout.finishRefresh();
-            showHeadData();
         }
+        new Handler().postDelayed(() -> {
+            isFresh=false;
+        },2000);
+        showHeadData();
     }
 
     @Override
@@ -590,6 +610,5 @@ public class WalletFragment002 extends BaseFragment implements View.OnClickListe
                 break;
         }
     }
-
 }
 

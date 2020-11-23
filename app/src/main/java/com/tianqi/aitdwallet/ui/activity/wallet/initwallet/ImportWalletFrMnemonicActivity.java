@@ -24,6 +24,7 @@ import com.quincysx.crypto.utils.HexUtils;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.adapter.list_adapter.WalletCoinAdapter;
 import com.tianqi.aitdwallet.ui.activity.MainActivity;
+import com.tianqi.aitdwallet.ui.service.DataManageService;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.aitdwallet.utils.WalletUtils;
 import com.tianqi.aitdwallet.utils.eth.EthWalletManager;
@@ -79,6 +80,8 @@ public class ImportWalletFrMnemonicActivity extends BaseActivity {
     private ObjectMapper objectMapper = new ObjectMapper();
     private List<CoinRateInfo> coinRateBeans;
     private Gson gson;
+    private DataManageService service = null;
+    private boolean isBind = false;
 
     @Override
     protected int getContentView() {
@@ -260,29 +263,29 @@ public class ImportWalletFrMnemonicActivity extends BaseActivity {
             List<CoinInfo> walletBtcInfo = CoinInfoManager.getCoinEthImportInfo();
             coinInfo.setCoin_id(Constant.TRANSACTION_COIN_NAME_ETH+walletBtcInfo.size());
             coinInfo.setCoin_address(Constants.HEX_PREFIX + master.getAddress());
-            //保存一个文件形式，方便加载的时候，能很快加载出钱包。否则每次去生成会很慢。
-            // TODO: 2020/11/10 此处写的不太合理，因为是线程在跑，所以，可能此页面一直进行完了，保存钱包的逻辑还没执行完。
-            EthWalletManager.getInstance().loadWallet(this, coinInfo, wallet -> {
-             //   Log.i("ttttttttttttt", coinInfo.getCoin_address()+"onWalletLoaded: 我们看到了自己的eth地址是？"+wallet.getAddress());
-            });
             coinInfo.setCoin_fullName(Constant.COIN_FULL_NAME_ETH);
             coinInfo.setCoin_ComeType(Constant.COIN_SOURCE_IMPORT);
             coinInfo.setCoin_name(Constant.TRANSACTION_COIN_NAME_ETH);
             coinInfo.setCoin_type(Constant.COIN_BIP_TYPE_ETH);
             coinInfo.setAlias_name(Constant.TRANSACTION_COIN_NAME_ETH);
             coinInfo.setResourceId(R.mipmap.ic_circle_eth);
-            UserInformation information = UserInfoManager.getUserInfo();
-            String aes_decode_str = AESCipher.decrypt(Constant.PSD_KEY, information.getPasswordStr());
-            EthECKeyPair ethECKeyPair = null;
-            try {
-                ethECKeyPair = new EthECKeyPair(HexUtils.fromHex(master.getPrivateKey()));
-                KeyStoreFile light = KeyStore.createLight(aes_decode_str, ethECKeyPair);
-                String keystore_str = light.toString();
-                coinInfo.setKeystoreStr(keystore_str);
-            } catch (ValidationException e) {
-                e.printStackTrace();
-            } catch (CipherException e) {
-                e.printStackTrace();
+//            UserInformation information = UserInfoManager.getUserInfo();
+//            String aes_decode_str = AESCipher.decrypt(Constant.PSD_KEY, information.getPasswordStr());
+//            EthECKeyPair ethECKeyPair = null;
+//            try {
+//                ethECKeyPair = new EthECKeyPair(HexUtils.fromHex(master.getPrivateKey()));
+//                KeyStoreFile light = KeyStore.createLight(aes_decode_str, ethECKeyPair);
+//                String keystore_str = light.toString();
+//                coinInfo.setKeystoreStr(keystore_str);
+//            } catch (ValidationException e) {
+//                e.printStackTrace();
+//            } catch (CipherException e) {
+//                e.printStackTrace();
+//            }
+            //保存一个文件形式，方便加载的时候，能很快加载出钱包。否则每次去生成会很慢。
+            //把keystore的生成，放到服务后台去生成，不用在此浪费加载时间。
+            if (isBind){
+                service.createEthWallet(coinInfo);
             }
         } else if (walletInfo.getWallet_id().equals(Constant.TRANSACTION_COIN_NAME_USDT_OMNI)) {
             List<CoinInfo> walletUsdtInfo = CoinInfoManager.getWalletUsdtInfo();
@@ -297,37 +300,35 @@ public class ImportWalletFrMnemonicActivity extends BaseActivity {
             List<CoinInfo> walletBtcInfo = CoinInfoManager.getCoinEthImportInfo();
             coinInfo.setCoin_id(Constant.TRANSACTION_COIN_NAME_USDT_ERC20+walletBtcInfo.size());
             coinInfo.setCoin_address(Constants.HEX_PREFIX + master.getAddress());
-            //保存一个文件形式，方便加载的时候，能很快加载出钱包。否则每次去生成会很慢。
-            // TODO: 2020/11/10 此处写的不太合理，因为是线程在跑，所以，可能此页面一直进行完了，保存钱包的逻辑还没执行完。
-            EthWalletManager.getInstance().loadWallet(this, coinInfo, wallet -> {
-           //     Log.i("ttttttttttttt", coinInfo.getCoin_address()+"onWalletLoaded: 我们看到了自己的eth地址是？"+wallet.getAddress());
-            });
             coinInfo.setCoin_fullName(Constant.COIN_FULL_NAME_USDT_ERC20);
             coinInfo.setCoin_ComeType(Constant.COIN_SOURCE_IMPORT);
             coinInfo.setCoin_name(Constant.TRANSACTION_COIN_NAME_USDT_ERC20);
             coinInfo.setCoin_type(Constant.COIN_BIP_TYPE_ETH);
             coinInfo.setAlias_name(Constant.TRANSACTION_COIN_NAME_USDT_ERC20);
             coinInfo.setResourceId(R.mipmap.ic_circle_usdt_erc20);
-            UserInformation information = UserInfoManager.getUserInfo();
-            String aes_decode_str = AESCipher.decrypt(Constant.PSD_KEY, information.getPasswordStr());
-            EthECKeyPair ethECKeyPair = null;
-            try {
-                ethECKeyPair = new EthECKeyPair(HexUtils.fromHex(master.getPrivateKey()));
-                KeyStoreFile light = KeyStore.createLight(aes_decode_str, ethECKeyPair);
-                String keystore_str = light.toString();
-                coinInfo.setKeystoreStr(keystore_str);
-            } catch (ValidationException e) {
-                e.printStackTrace();
-            } catch (CipherException e) {
-                e.printStackTrace();
+//            UserInformation information = UserInfoManager.getUserInfo();
+//            String aes_decode_str = AESCipher.decrypt(Constant.PSD_KEY, information.getPasswordStr());
+//            EthECKeyPair ethECKeyPair = null;
+//            try {
+//                ethECKeyPair = new EthECKeyPair(HexUtils.fromHex(master.getPrivateKey()));
+//                KeyStoreFile light = KeyStore.createLight(aes_decode_str, ethECKeyPair);
+//                String keystore_str = light.toString();
+//                coinInfo.setKeystoreStr(keystore_str);
+//            } catch (ValidationException e) {
+//                e.printStackTrace();
+//            } catch (CipherException e) {
+//                e.printStackTrace();
+//            }
+            if (isBind){
+                service.createEthWallet(coinInfo);
             }
+
         }
         // coinInfo.setIsCollect();
         //  coinInfo.setWalletLimit();  //不需要限制。
         LogUtil.i("WalletFragment", "insertBtcCoinInfo: 我们看插入的币种信息是？" + coinInfo.toString());
         CoinInfoManager.insertOrUpdate(coinInfo);
     }
-
 
 
     @OnClick(R.id.btn_create_wallet)

@@ -11,15 +11,25 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.quincysx.crypto.bip32.ValidationException;
+import com.quincysx.crypto.ethereum.EthECKeyPair;
+import com.quincysx.crypto.ethereum.keystore.CipherException;
+import com.quincysx.crypto.ethereum.keystore.KeyStore;
+import com.quincysx.crypto.ethereum.keystore.KeyStoreFile;
+import com.quincysx.crypto.utils.HexUtils;
 import com.tianqi.aitdwallet.utils.Constants;
+import com.tianqi.aitdwallet.utils.eth.EthWalletManager;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dao.TransactionRecord;
+import com.tianqi.baselib.dao.UserInformation;
 import com.tianqi.baselib.dao.WalletInfo;
 import com.tianqi.baselib.dbManager.CoinInfoManager;
 import com.tianqi.baselib.dbManager.TransactionRecordManager;
+import com.tianqi.baselib.dbManager.UserInfoManager;
 import com.tianqi.baselib.dbManager.WalletInfoManager;
 import com.tianqi.baselib.rxhttp.RetrofitFactory;
 import com.tianqi.baselib.rxhttp.base.BaseObserver;
@@ -30,6 +40,8 @@ import com.tianqi.baselib.rxhttp.bean.GetEthTxRecordBean;
 import com.tianqi.baselib.rxhttp.bean.GetListUnspentBean;
 import com.tianqi.baselib.rxhttp.bean.GetLoadingTxBean;
 import com.tianqi.baselib.utils.Constant;
+import com.tianqi.baselib.utils.LogUtil;
+import com.tianqi.baselib.utils.digital.AESCipher;
 import com.tianqi.baselib.utils.eventbus.EventMessage;
 
 import org.greenrobot.eventbus.EventBus;
@@ -673,5 +685,33 @@ public class DataManageService extends Service {
                 EventBus.getDefault().post(eventMessage);
             }
         }
+    }
+    
+    /**
+     * 此处是eth，导入时，
+     * 1.生成钱包file，方便转账的时候，快速的加载出钱包对象。
+     * 2.生成keystore，耗时操作，让服务来执行，即使活动已退出，此逻辑也可以后天走完。
+     */
+    public void createEthWallet(CoinInfo coinInfo){
+        EthWalletManager.getInstance().loadWallet(this, coinInfo, wallet -> {
+          // Thread mThread = Thread.currentThread();
+            UserInformation userInformation= UserInfoManager.getUserInfo();
+            userInformation.getPasswordStr();
+            String aes_decode_str = AESCipher.decrypt(Constant.PSD_KEY,userInformation.getPasswordStr());
+            if (TextUtils.isEmpty(coinInfo.getKeystoreStr())){
+                EthECKeyPair ethECKeyPair = null;
+                try {
+                    ethECKeyPair = new EthECKeyPair(HexUtils.fromHex(coinInfo.getPrivateKey()));
+                    KeyStoreFile light = KeyStore.createLight(aes_decode_str, ethECKeyPair);
+                    String keystore_str = light.toString();
+                    coinInfo.setKeystoreStr(keystore_str);
+                    CoinInfoManager.insertOrUpdate(coinInfo);
+                } catch (ValidationException e) {
+                    e.printStackTrace();
+                } catch (CipherException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }
