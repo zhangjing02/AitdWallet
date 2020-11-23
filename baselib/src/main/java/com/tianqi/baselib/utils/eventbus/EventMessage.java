@@ -21,6 +21,8 @@ public class EventMessage {
     public static final int GOTO_TAKE_MONEY_PAGER= 701;//跳转到提币界面
 
     public static final int TRANSACTION_RECORD_UPDATE = 601;//更新交易记录的通知。
+    public static final int TRANSACTION_RECORD_ERROR = 6012;//交易记录获取报错
+    public static final int TRANSACTION_RECORD_NO_DATA = 6013;//更新交易记录无数据。
     public static final int TRANSACTION_RECORD_UPDATE_USDT = 6001;//更新USDT交易记录的通知。
     public static final int NEW_COIN_UPDATE = 701;//有新的币种的通知。
     public static final int DELETE_CREATE_COIN_UPDATE = 602;//被创建的币种的有被删除了，需要更新。

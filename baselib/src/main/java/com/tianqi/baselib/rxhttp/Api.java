@@ -115,8 +115,9 @@ public interface Api {
     /**
      *  获取ETH钱包地址交易历史
      */
-    @GET("/vipapi/{coin_type}/address/{eth_address}/?")
-    Observable<BaseEntity<GetEthTxRecordBean>> getEthTxRecord(@Path("coin_type") String coin_type, @Path("eth_address") String btc_address , @QueryMap Map<String, Object> map);
+    @GET("/vipapi/{coin_type}/address/normal/{eth_address}/{page}?")
+    Observable<BaseEntity<List<GetEthTxRecordBean>>> getEthTxRecord(@Path("coin_type") String coin_type, @Path("eth_address") String eth_address ,
+                                                              @Path("page") String page ,@QueryMap Map<String, Object> map);
 
 
     /**

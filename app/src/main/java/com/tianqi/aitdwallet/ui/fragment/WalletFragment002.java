@@ -497,6 +497,9 @@ public class WalletFragment002 extends BaseFragment implements View.OnClickListe
             }
         } else if (event.getType() == EventMessage.NEW_COIN_UPDATE) {
             if (!isFresh){
+                if (isBind){
+                   service.getWalletBalance();
+                }
                 isFresh=true;
                 mWalletBeans = WalletInfoManager.getWalletInfoNoHidden(false);
                 homeWalletAdapter.setNewData(mWalletBeans);

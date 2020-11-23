@@ -128,6 +128,8 @@ public abstract class BaseObserver<T> implements Observer<BaseEntity<T>> {
                 onFailure(-1, e.getMessage());
                 onError(e.getMessage());
             } else {
+                LogUtil.d(HttpConfig.ZJ_HTTP, "--006onFailure:其他问题 " + e.getMessage());
+                onFailure(-1, "" + e.getMessage());
                 if (e instanceof JsonParseException
                         || e instanceof JSONException
                         || e instanceof ParseException) {
@@ -137,8 +139,6 @@ public abstract class BaseObserver<T> implements Observer<BaseEntity<T>> {
                 } else {
                     ToastUtil.showToast(mContext, mContext.getString(R.string.network_error));
                 }
-                LogUtil.d(HttpConfig.ZJ_HTTP, "--006onFailure:其他问题 " + e.getMessage());
-                onFailure(-1, "" + e.getMessage());
             }
         } catch (Exception e1) {
             e1.printStackTrace();

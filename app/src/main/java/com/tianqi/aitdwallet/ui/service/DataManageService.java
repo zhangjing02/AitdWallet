@@ -59,10 +59,6 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 
-/**
- * Created by Kathy on 17-2-6.
- */
-
 public class DataManageService extends Service {
 
     private CoinInfo txCoinInfo;
@@ -132,35 +128,36 @@ public class DataManageService extends Service {
         Map<String, Object> map = new HashMap<>();
         map.put("apikey", "AnqHS6Rs2WX0hwFXlrv");
         RetrofitFactory.getInstence(this).API()
-                .getEthTxRecord("eth", mAddress, map).compose(RxHelper.pool_io())
-                .subscribe(new BaseObserver<GetEthTxRecordBean>(this) {
+                .getEthTxRecord("eth", mAddress, "1/50",map).compose(RxHelper.pool_io())
+                .subscribe(new BaseObserver<List<GetEthTxRecordBean>>(this) {
                     @Override
-                    public void onSuccess(GetEthTxRecordBean data, String msg) {
-                        if (data != null && data.getTxs() != null && data.getTxs().size() > 0) {
-                            btc_account_balance = Double.valueOf(data.getSpend()) + Double.valueOf(data.getReceive());
-                            coinInfo.setCoin_totalAmount(btc_account_balance);
-                            CoinInfoManager.insertOrUpdate(coinInfo);
-                            for (int i = 0; i < data.getTxs().size(); i++) {
-                                if (Double.valueOf(data.getTxs().get(i).getValue()) > 0) {
-                                    insertEthTxRecord(data.getTxs().get(i), coinInfo, i >= data.getTxs().size() - 1);
+                    public void onSuccess(List<GetEthTxRecordBean> data, String msg) {
+                        if (data != null && data.size() > 0) {
+//                            btc_account_balance = Double.valueOf(data.getSpend()) + Double.valueOf(data.getReceive());
+//                            coinInfo.setCoin_totalAmount(btc_account_balance);
+//                            CoinInfoManager.insertOrUpdate(coinInfo);
+                            for (int i = 0; i < data.size(); i++) {
+                                if (Double.valueOf(data.get(i).getValue()) > 0) {
+                                    insertEthTxRecord(data.get(i), coinInfo, i >= data.size() - 1);
                                 }
                             }
                         }else {
                             EventMessage eventMessage = new EventMessage();
-                            eventMessage.setType(EventMessage.TRANSACTION_RECORD_UPDATE);
+                            eventMessage.setType(EventMessage.TRANSACTION_RECORD_NO_DATA);
                             EventBus.getDefault().post(eventMessage);
                         }
                     }
                     @Override
                     protected void onFailure(int code, String msg) {
                         EventMessage eventMessage = new EventMessage();
-                        eventMessage.setType(EventMessage.TRANSACTION_RECORD_UPDATE);
+                        eventMessage.setType(EventMessage.TRANSACTION_RECORD_ERROR);
+                        eventMessage.setMsg(msg);
                         EventBus.getDefault().post(eventMessage);
                     }
                 });
     }
 
-    private void insertEthTxRecord(GetEthTxRecordBean.TxsBean txsBean, CoinInfo eth_coinInfo, boolean isLast) {
+    private void insertEthTxRecord(GetEthTxRecordBean txsBean, CoinInfo eth_coinInfo, boolean isLast) {
         //创建（转出）数据库交易，存入数据库
         TransactionRecord tx_record = new TransactionRecord();
         tx_record.setAddress(eth_coinInfo.getCoin_address());
@@ -226,7 +223,7 @@ public class DataManageService extends Service {
                                 }
                             } else {
                                 EventMessage eventMessage = new EventMessage();
-                                eventMessage.setType(EventMessage.TRANSACTION_RECORD_UPDATE);
+                                eventMessage.setType(EventMessage.TRANSACTION_RECORD_NO_DATA);
                                 EventBus.getDefault().post(eventMessage);
                             }
                         }
@@ -234,7 +231,8 @@ public class DataManageService extends Service {
                         @Override
                         protected void onFailure(int code, String msg) {
                             EventMessage eventMessage = new EventMessage();
-                            eventMessage.setType(EventMessage.TRANSACTION_RECORD_UPDATE);
+                            eventMessage.setType(EventMessage.TRANSACTION_RECORD_ERROR);
+                            eventMessage.setMsg(msg);
                             EventBus.getDefault().post(eventMessage);
                         }
                     });
@@ -331,7 +329,7 @@ public class DataManageService extends Service {
                             }
                         } else {
                             EventMessage eventMessage = new EventMessage();
-                            eventMessage.setType(EventMessage.TRANSACTION_RECORD_UPDATE);
+                            eventMessage.setType(EventMessage.TRANSACTION_RECORD_NO_DATA);
                             EventBus.getDefault().post(eventMessage);
                         }
                     }
@@ -339,7 +337,8 @@ public class DataManageService extends Service {
                     @Override
                     protected void onFailure(int code, String msg) {
                         EventMessage eventMessage = new EventMessage();
-                        eventMessage.setType(EventMessage.TRANSACTION_RECORD_UPDATE);
+                        eventMessage.setType(EventMessage.TRANSACTION_RECORD_ERROR);
+                        eventMessage.setMsg(msg);
                         EventBus.getDefault().post(eventMessage);
                     }
                 });
@@ -393,14 +392,15 @@ public class DataManageService extends Service {
                             }
                         } else {
                             EventMessage eventMessage = new EventMessage();
-                            eventMessage.setType(EventMessage.TRANSACTION_RECORD_UPDATE);
+                            eventMessage.setType(EventMessage.TRANSACTION_RECORD_NO_DATA);
                             EventBus.getDefault().post(eventMessage);
                         }
                     }
                     @Override
                     protected void onFailure(int code, String msg) {
                         EventMessage eventMessage = new EventMessage();
-                        eventMessage.setType(EventMessage.TRANSACTION_RECORD_UPDATE);
+                        eventMessage.setType(EventMessage.TRANSACTION_RECORD_ERROR);
+                        eventMessage.setMsg(msg);
                         EventBus.getDefault().post(eventMessage);
                     }
                 });
@@ -690,7 +690,7 @@ public class DataManageService extends Service {
     /**
      * 此处是eth，导入时，
      * 1.生成钱包file，方便转账的时候，快速的加载出钱包对象。
-     * 2.生成keystore，耗时操作，让服务来执行，即使活动已退出，此逻辑也可以后天走完。
+     * 2.生成keystore，耗时操作，让服务来执行，即使活动已退出，此逻辑也可以后台走完。
      */
     public void createEthWallet(CoinInfo coinInfo){
         EthWalletManager.getInstance().loadWallet(this, coinInfo, wallet -> {
