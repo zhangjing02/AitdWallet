@@ -129,9 +129,6 @@ public class WalletFragment002 extends BaseFragment implements View.OnClickListe
             });
             shotNoticeDialog.show();
         }
-
-        Intent intent = new Intent(getActivity(), DataManageService.class);
-        getActivity().bindService(intent, conn, BIND_AUTO_CREATE);
     }
 
     private ServiceConnection conn = new ServiceConnection() {
@@ -472,6 +469,8 @@ public class WalletFragment002 extends BaseFragment implements View.OnClickListe
     @Override
     protected void initData() {
       //  initWallet();
+        Intent intent = new Intent(getActivity(), DataManageService.class);
+        getActivity().bindService(intent, conn, BIND_AUTO_CREATE);
     }
 
     boolean isFresh;

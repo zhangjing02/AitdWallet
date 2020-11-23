@@ -302,8 +302,20 @@ public class ImportUsdtErc20CoinActivity extends BaseActivity {
         public void afterTextChanged(Editable editable) {
             switch (select_index) {
                 case TITTLE_PRIVATE_KEY_INDEX:
-                    if (!TextUtils.isEmpty(editable.toString()) && editable.toString().length() == 64 && checkboxReadTerm.isChecked()) {
-                        btnImportWallet.setBackground(getResources().getDrawable(R.drawable.bg_blue_round_button));
+                    if (!TextUtils.isEmpty(editable.toString()) && checkboxReadTerm.isChecked()) {
+                        if (etInputKey.getText().toString().trim().startsWith("0x")){
+                            if (etInputKey.getText().toString().length() == 66){
+                                btnImportWallet.setBackground(getResources().getDrawable(R.drawable.bg_blue_round_button));
+                            }else {
+                                btnImportWallet.setBackground(getResources().getDrawable(R.drawable.bg_grey_round_button));
+                            }
+                        }else {
+                            if (etInputKey.getText().toString().length() == 64){
+                                btnImportWallet.setBackground(getResources().getDrawable(R.drawable.bg_blue_round_button));
+                            }else {
+                                btnImportWallet.setBackground(getResources().getDrawable(R.drawable.bg_grey_round_button));
+                            }
+                        }
                     } else {
                         btnImportWallet.setBackground(getResources().getDrawable(R.drawable.bg_grey_round_button));
                     }
@@ -333,8 +345,20 @@ public class ImportUsdtErc20CoinActivity extends BaseActivity {
         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
             switch (select_index) {
                 case TITTLE_PRIVATE_KEY_INDEX:
-                    if (!TextUtils.isEmpty(etInputKey.getText().toString()) && etInputKey.getText().toString().length() == 64 && checkboxReadTerm.isChecked()) {
-                        btnImportWallet.setBackground(getResources().getDrawable(R.drawable.bg_blue_round_button));
+                    if (!TextUtils.isEmpty(etInputKey.getText().toString()) && checkboxReadTerm.isChecked()) {
+                        if (etInputKey.getText().toString().trim().startsWith("0x")){
+                            if (etInputKey.getText().toString().length() == 66){
+                                btnImportWallet.setBackground(getResources().getDrawable(R.drawable.bg_blue_round_button));
+                            }else {
+                                btnImportWallet.setBackground(getResources().getDrawable(R.drawable.bg_grey_round_button));
+                            }
+                        }else {
+                            if (etInputKey.getText().toString().length() == 64){
+                                btnImportWallet.setBackground(getResources().getDrawable(R.drawable.bg_blue_round_button));
+                            }else {
+                                btnImportWallet.setBackground(getResources().getDrawable(R.drawable.bg_grey_round_button));
+                            }
+                        }
                     } else {
                         btnImportWallet.setBackground(getResources().getDrawable(R.drawable.bg_grey_round_button));
                     }
@@ -424,7 +448,9 @@ public class ImportUsdtErc20CoinActivity extends BaseActivity {
                     case TITTLE_PRIVATE_KEY_INDEX:
                         if (judgeSelectInput()) {
                             mLoadDialog = LoadingDialogUtils.createLoadingDialog(this, "");
-                            ECKeyPair ecKeyPair = WalletUtils.importCoinMaser(CoinTypes.Ethereum, etInputKey.getText().toString());
+                            ECKeyPair ecKeyPair = WalletUtils.importCoinMaser(CoinTypes.Ethereum,
+                                    etInputKey.getText().toString().trim().startsWith("0x")?etInputKey.getText().toString().trim().substring(2):
+                                            etInputKey.getText().toString().trim());
                             importSingleCoin(ecKeyPair);
                         }
 
@@ -585,9 +611,19 @@ public class ImportUsdtErc20CoinActivity extends BaseActivity {
         } else if (!checkboxReadTerm.isChecked()) {
             ToastUtil.showToast(this, getString(R.string.notice_agree_terms));
             return false;
-        } else if (select_index == TITTLE_PRIVATE_KEY_INDEX && etInputKey.getText().length() != 64) {
-            ToastUtil.showToast(this, getString(R.string.notice_private_key_error));
-            return false;
+        }  else if (select_index == TITTLE_PRIVATE_KEY_INDEX ) {
+            if (etInputKey.getText().toString().trim().startsWith("0x")){
+                if (etInputKey.getText().toString().trim().length() != 66){
+                    ToastUtil.showToast(this, getString(R.string.notice_private_key_error));
+                    return false;
+                }
+            }else {
+                if (etInputKey.getText().toString().trim().length() != 64){
+                    ToastUtil.showToast(this, getString(R.string.notice_private_key_error));
+                    return false;
+                }
+            }
+            return true;
         } else if (CoinInfoManager.getCoinFrPrivateKey(Constant.TRANSACTION_COIN_NAME_USDT_ERC20, etInputKey.getText().toString()).size() > 0) {
             ToastUtil.showToast(this, getString(R.string.notice_same_private_key));
             return false;
