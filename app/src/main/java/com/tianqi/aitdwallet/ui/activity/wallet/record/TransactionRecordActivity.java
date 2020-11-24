@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -21,7 +19,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.tabs.TabLayout;
-import com.quincysx.crypto.ethereum.vm.LogInfo;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.adapter.recycle_adapter.TransRecordAdapter;
@@ -30,7 +27,7 @@ import com.tianqi.aitdwallet.ui.activity.wallet.eth.EthTransactionActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.property.CoinAddressQrActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.usdt.UsdtErc20TransactionActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.usdt.UsdtTransactionActivity002;
-import com.tianqi.aitdwallet.ui.service.DataManageService;
+import com.tianqi.aitdwallet.service.DataManageService;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
@@ -41,13 +38,6 @@ import com.tianqi.baselib.dbManager.CoinInfoManager;
 import com.tianqi.baselib.dbManager.TransactionRecordManager;
 import com.tianqi.baselib.dbManager.UserInfoManager;
 import com.tianqi.baselib.dbManager.WalletInfoManager;
-import com.tianqi.baselib.rxhttp.RetrofitFactory;
-import com.tianqi.baselib.rxhttp.base.BaseObserver;
-import com.tianqi.baselib.rxhttp.base.RxHelper;
-import com.tianqi.baselib.rxhttp.bean.GetErc20TxRecordBean;
-import com.tianqi.baselib.rxhttp.bean.GetEthTxRecordBean;
-import com.tianqi.baselib.rxhttp.bean.GetListUnspentBean;
-import com.tianqi.baselib.rxhttp.bean.GetLoadingTxBean;
 import com.tianqi.baselib.utils.Constant;
 import com.tianqi.baselib.utils.LogUtil;
 import com.tianqi.baselib.utils.digital.DataReshape;
@@ -55,14 +45,7 @@ import com.tianqi.baselib.utils.display.GlideUtils;
 import com.tianqi.baselib.utils.display.ToastUtil;
 import com.tianqi.baselib.utils.eventbus.EventMessage;
 
-import org.greenrobot.eventbus.EventBus;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 import butterknife.BindView;
 

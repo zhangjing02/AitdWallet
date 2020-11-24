@@ -36,7 +36,7 @@ import com.tianqi.aitdwallet.ui.activity.wallet.property.SelectCoinToTransActivi
 import com.tianqi.aitdwallet.ui.activity.wallet.setting.VerifySecurityPsdActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.setting.WalletHiddenActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.setting.WalletManageActivity;
-import com.tianqi.aitdwallet.ui.service.DataManageService;
+import com.tianqi.aitdwallet.service.DataManageService;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.aitdwallet.utils.HighlightOptionsUtils;
 import com.tianqi.aitdwallet.utils.statusbar.StatusBarCompat;
@@ -59,7 +59,6 @@ import com.tianqi.baselib.utils.eventbus.EventMessage;
 import com.tianqi.baselib.widget.RoundRectImageView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -520,7 +519,9 @@ public class WalletFragment002 extends BaseFragment implements View.OnClickListe
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        service.unbindService(conn);
+//        if (isBind&&service!=null&&conn!=null){
+//            service.unbindService(conn);
+//        }
     }
 
     public void hiddenPopWindow() {

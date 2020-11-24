@@ -16,6 +16,8 @@ import com.tencent.bugly.crashreport.CrashReport;
 import com.tianqi.baselib.dbManager.DaoManager;
 import com.tianqi.baselib.utils.LogUtil;
 
+import cn.jpush.android.api.JPushInterface;
+
 public class MyApplication extends Application {
 
     @Override
@@ -25,6 +27,9 @@ public class MyApplication extends Application {
 
         CrashReport.initCrashReport(getApplicationContext(), "3c51c83f91", false);
         LogUtil.setLogAtt(isApkInDebug(this));
+
+        JPushInterface.setDebugMode(isApkInDebug(this)); 	// 设置开启日志,发布时请关闭日志
+        JPushInterface.init(this);     		// 初始化 JPush
 
     }
 

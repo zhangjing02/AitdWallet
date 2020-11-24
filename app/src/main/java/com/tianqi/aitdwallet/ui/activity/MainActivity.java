@@ -72,6 +72,7 @@ public class MainActivity extends BaseActivity {
     private String[] titles;
     private ArrayList<Fragment> fragments = new ArrayList<>();
     private WalletFragment002 fragment1;
+    public static boolean isForeground = false;
 
     @Override
     protected int getContentView() {
@@ -126,6 +127,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onResume() {
+        isForeground = true;
         super.onResume();
 //        VersionUpdateDialog shotNoticeDialog = new VersionUpdateDialog(MainActivity.this, R.style.MyDialog2,false);
 //        shotNoticeDialog.show();
@@ -191,6 +193,13 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+    }
+
+
+    @Override
+    protected void onPause() {
+        isForeground = false;
+        super.onPause();
     }
 
     @OnClick({R.id.rb_property, R.id.rb_exchange, R.id.rb_financial, R.id.rb_setting})

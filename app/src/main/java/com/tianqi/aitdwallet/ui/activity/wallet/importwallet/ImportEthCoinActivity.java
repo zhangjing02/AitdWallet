@@ -36,7 +36,7 @@ import com.tianqi.aitdwallet.adapter.list_adapter.MnemonicWordAdapter;
 import com.tianqi.aitdwallet.ui.activity.MainActivity;
 import com.tianqi.aitdwallet.ui.activity.tool.ScanActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.setting.PrivacyTermsWebActivity;
-import com.tianqi.aitdwallet.ui.service.DataManageService;
+import com.tianqi.aitdwallet.service.DataManageService;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.aitdwallet.utils.MnemonicUtils;
 import com.tianqi.aitdwallet.utils.WalletUtils;

@@ -1,4 +1,4 @@
-package com.tianqi.aitdwallet.ui.service;
+package com.tianqi.aitdwallet.service;
 
 /**
  * Create by zhangjing on 2020/11/21.
@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.text.TextUtils;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -40,7 +39,6 @@ import com.tianqi.baselib.rxhttp.bean.GetEthTxRecordBean;
 import com.tianqi.baselib.rxhttp.bean.GetListUnspentBean;
 import com.tianqi.baselib.rxhttp.bean.GetLoadingTxBean;
 import com.tianqi.baselib.utils.Constant;
-import com.tianqi.baselib.utils.LogUtil;
 import com.tianqi.baselib.utils.digital.AESCipher;
 import com.tianqi.baselib.utils.eventbus.EventMessage;
 
