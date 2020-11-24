@@ -52,6 +52,7 @@ import com.tianqi.baselib.utils.Constant;
 import com.tianqi.baselib.utils.LogUtil;
 import com.tianqi.baselib.utils.digital.DataReshape;
 import com.tianqi.baselib.utils.display.GlideUtils;
+import com.tianqi.baselib.utils.display.ToastUtil;
 import com.tianqi.baselib.utils.eventbus.EventMessage;
 
 import org.greenrobot.eventbus.EventBus;
@@ -426,6 +427,12 @@ public class TransactionRecordActivity extends BaseActivity {
             }
             recordAdapter.setNewData(mMessageBeans);
             refreshLayout.finishRefresh();
+        }else if (event.getType()==EventMessage.TRANSACTION_RECORD_ERROR){
+            refreshLayout.finishRefresh();
+            ToastUtil.showToast(this,event.getMsg());
+        }else if (event.getType()==EventMessage.TRANSACTION_RECORD_NO_DATA){
+            refreshLayout.finishRefresh();
+           LogUtil.i("ttttttttt","没有数据？");
         }
         if (mMessageBeans.size() <= 0) {
             recordAdapter.addHeaderView(record_empty);

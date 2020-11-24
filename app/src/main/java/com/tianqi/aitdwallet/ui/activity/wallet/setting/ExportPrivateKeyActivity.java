@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,11 +18,14 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.tabs.TabLayout;
 import com.scwang.smartrefresh.layout.util.DensityUtil;
+import com.scwang.smartrefresh.layout.util.DesignUtil;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
+import com.tianqi.baselib.dao.UserInformation;
 import com.tianqi.baselib.dbManager.CoinInfoManager;
+import com.tianqi.baselib.dbManager.UserInfoManager;
 import com.tianqi.baselib.utils.LogUtil;
 import com.tianqi.baselib.utils.display.CodeEncoder;
 import com.tianqi.baselib.utils.display.ToastUtil;
@@ -71,6 +75,7 @@ public class ExportPrivateKeyActivity extends BaseActivity {
     private int select_index;
     private static final int TITTLE_PRIVATE_KEY_INDEX = 0;
     private static final int TITTLE_QR_CODE_INDEX = 1;
+    private UserInformation userInfo;
     @Override
     protected int getContentView() {
         return R.layout.activity_export_private_key;
@@ -92,6 +97,17 @@ public class ExportPrivateKeyActivity extends BaseActivity {
             tablayout.getTabAt(i).setText(titles[i]);
         }
 
+        userInfo = UserInfoManager.getUserInfo();
+        int languageId = userInfo.getLanguageId();
+        if (languageId==Constants.LANGUAGE_ENGLISH){
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layoutExportKeyNotice.getLayoutParams();
+            layoutParams.height=  DensityUtil.dp2px(230f);
+            layoutExportKeyNotice.setLayoutParams(layoutParams);
+
+            LinearLayout.LayoutParams layoutParams002 = (LinearLayout.LayoutParams) layoutExportQrNotice.getLayoutParams();
+            layoutParams002.height=  DensityUtil.dp2px(190f);
+            layoutExportQrNotice.setLayoutParams(layoutParams002);
+        }
 
         tablayout.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
             @Override
