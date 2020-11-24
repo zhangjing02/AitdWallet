@@ -130,6 +130,9 @@ public class WalletFragment002 extends BaseFragment implements View.OnClickListe
         }
     }
 
+    /**
+     * 开启服务，去获取钱包，和币种的余额，获取成功后，发消息给本页去刷新。
+     */
     private ServiceConnection conn = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder binder) {
