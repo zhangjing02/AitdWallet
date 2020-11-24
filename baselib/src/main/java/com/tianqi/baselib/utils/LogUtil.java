@@ -1,5 +1,7 @@
 package com.tianqi.baselib.utils;
 
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.util.Log;
 
 
@@ -121,5 +123,7 @@ public class LogUtil {
         if (ERROR && isDMLog)
             Log.e(LogUtil.ISTAG, msg, null);
     }
+
+
 
 }
