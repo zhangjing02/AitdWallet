@@ -350,8 +350,7 @@ public class BitcoinTransactionActivity002 extends BaseActivity {
         }).map(response -> {
             //把交易的hex，做签名处理。
             if (response != null) {
-                //把得到的签名hex，去掉接口广播出去。
-               // Response tx_response = HttpClientUtil.getInstance().postBtcJson(makeBroadcastTxParams(response));
+                //把得到的签名hex，去调接口广播出去。
                 LogUtil.i(TAG, "createTxToBroadcastApi: 看看签名如何？"+response);
                 Response tx_response = HttpClientUtil.getInstance().postFormalBtcJson(makeBroadcastTxParams002(response));
                 if (tx_response != null) {
@@ -375,7 +374,7 @@ public class BitcoinTransactionActivity002 extends BaseActivity {
                         Gson gson = new Gson();
                         GetSimpleRpcBean getCreateTransactionBean = gson.fromJson(baseEntity, GetSimpleRpcBean.class);
                         if (getCreateTransactionBean.getResult()!=null){
-                            // TODO: 2020/9/23  把交易详情存入数据库中。
+                            // 把交易详情存入数据库中。
                             TransactionRecord tx_record = new TransactionRecord();
                             tx_record.setAddress(walletBtcFrAddress.getCoin_address());
                             tx_record.setAmount(Double.valueOf(etPaymentAmount.getText().toString()));
@@ -529,7 +528,7 @@ public class BitcoinTransactionActivity002 extends BaseActivity {
                                     userInfo.getPasswordStr();
                                     String aes_decode_str = null;
                                     try {
-                                        aes_decode_str = AESCipher.decrypt(Constant.PSD_KEY,password);
+                                        aes_decode_str = AESCipher.encrypt(Constant.PSD_KEY,password);
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
@@ -601,7 +600,7 @@ public class BitcoinTransactionActivity002 extends BaseActivity {
         }else if (etPaymentAddress.getText().toString().equals(master.getAddress())){
             ToastUtil.showToast(this, getString(R.string.notice_trans_to_me_refuse));
             return false;
-        }else if (Double.valueOf(etPaymentAmount.getText().toString())>=0.00000001){
+        }else if (Double.valueOf(etPaymentAmount.getText().toString())<0.00000001){
             ToastUtil.showToast(this, getString(R.string.notice_amount_too_little));
             return false;
         }

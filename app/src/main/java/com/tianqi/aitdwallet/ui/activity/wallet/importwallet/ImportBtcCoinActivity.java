@@ -361,7 +361,7 @@ public class ImportBtcCoinActivity extends BaseActivity {
                 walletInfo = createWalletInfo(Constant.TRANSACTION_COIN_NAME_BTC);
             }
 
-            CoinRateInfo btc_rate = CoinRateInfoManager.getWalletBtcFrCoinId(Constant.COIN_RATE_BTC);
+            CoinRateInfo btc_rate = CoinRateInfoManager.getCoinRatefoFrCoinId(Constant.COIN_RATE_BTC);
 
             //币种数据库
             CoinInfo coinInfo = new CoinInfo();
@@ -444,7 +444,7 @@ public class ImportBtcCoinActivity extends BaseActivity {
     private WalletInfo createWalletInfo(String wallet_id) {
         //钱包数据库。
 
-        CoinRateInfo coinRateInfo = CoinRateInfoManager.getWalletBtcFrCoinId(Constant.TRANSACTION_COIN_NAME_BTC);
+        CoinRateInfo coinRateInfo = CoinRateInfoManager.getCoinRatefoFrCoinId(Constant.TRANSACTION_COIN_NAME_BTC);
         UserInformation userInfo = UserInfoManager.getUserInfo();
         WalletInfo walletInfo = new WalletInfo();
         walletInfo.setUserId(userInfo.getUserId());
@@ -456,12 +456,12 @@ public class ImportBtcCoinActivity extends BaseActivity {
         walletInfo.setCoin_USDPrice(coinRateInfo.getPrice_usd());
         walletInfo.setIsImportToCreate(true);
         if (wallet_id.equals(Constant.TRANSACTION_COIN_NAME_BTC)) {
-            CoinRateInfo bitcoin_rate = CoinRateInfoManager.getWalletBtcFrCoinId(Constant.COIN_RATE_BTC);
+            CoinRateInfo bitcoin_rate = CoinRateInfoManager.getCoinRatefoFrCoinId(Constant.COIN_RATE_BTC);
             if (bitcoin_rate != null) {
                 walletInfo.setCoin_CNYPrice(bitcoin_rate.getPrice_cny());
                 walletInfo.setCoin_USDPrice(bitcoin_rate.getPrice_usd());
             } else {
-                CoinRateInfo walletBtcFrCoinId = CoinRateInfoManager.getWalletBtcFrCoinId(Constant.TRANSACTION_COIN_NAME_BTC);
+                CoinRateInfo walletBtcFrCoinId = CoinRateInfoManager.getCoinRatefoFrCoinId(Constant.TRANSACTION_COIN_NAME_BTC);
                 walletInfo.setCoin_CNYPrice(walletBtcFrCoinId.getPrice_cny());
                 walletInfo.setCoin_USDPrice(walletBtcFrCoinId.getPrice_usd());
 

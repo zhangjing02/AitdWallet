@@ -38,7 +38,7 @@ public class CoinRateInfoManager {
         getScaleRecordDao().delete(scaleRecord);
     }
 
-    public static CoinRateInfo getWalletBtcFrCoinId(String coin_id) {
+    public static CoinRateInfo getCoinRatefoFrCoinId(String coin_id) {
         List<CoinRateInfo> coinInfos= getScaleRecordDao().queryBuilder()
                 //.offset(1)//偏移量，相当于 SQL 语句中的 skip
                 // .limit(3)//只获取结果集的前 3 个数据

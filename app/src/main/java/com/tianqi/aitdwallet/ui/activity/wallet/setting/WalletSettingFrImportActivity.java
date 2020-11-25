@@ -78,8 +78,6 @@ public class WalletSettingFrImportActivity extends BaseActivity {
         //WalletInfo wallet_info = WalletInfoManager.getWalletFrName(wallet_name);
         CoinInfo coinFrWalletId = CoinInfoManager.getMainCoinFrCoinId(coin_id);
 
-
-
         GlideUtils.loadResourceImage(this, coinFrWalletId.getResourceId(), ivWalletCoin);
 
         tvWalletCoinName.setText(coinFrWalletId.getAlias_name() + "");
@@ -91,15 +89,18 @@ public class WalletSettingFrImportActivity extends BaseActivity {
         tvDeleteWallet.setVisibility(View.VISIBLE);
         lineDownMnemonic.setVisibility(View.GONE);
 
-
         if (wallet_name.contains(Constant.TRANSACTION_COIN_NAME_ETH)||wallet_name.contains(Constant.TRANSACTION_COIN_NAME_USDT_ERC20)) {
-            tvExportKeystore.setVisibility(View.VISIBLE);
-            lineDownKeystore.setVisibility(View.VISIBLE);
+            if (coinFrWalletId.getCoin_ComeType()==Constant.COIN_SOURCE_CREATE){  //只有创建的钱包，才让他有导出keystore功能，否则会有密码错乱的可能性。
+                tvExportKeystore.setVisibility(View.VISIBLE);
+                lineDownKeystore.setVisibility(View.VISIBLE);
+            }else {
+                tvExportKeystore.setVisibility(View.GONE);
+                lineDownKeystore.setVisibility(View.GONE);
+            }
         } else {
             tvExportKeystore.setVisibility(View.GONE);
             lineDownKeystore.setVisibility(View.GONE);
         }
-
     }
 
     private void getToolBar() {

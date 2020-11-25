@@ -547,8 +547,14 @@ public class WalletFragment002 extends BaseFragment implements View.OnClickListe
                 }
                 mPopWindowTop = new PopupWindow(contentView);
                 //130和112是设计尺寸。
-                mPopWindowTop.setWidth(ScreenUtils.dip2px(getActivity(), 130));
-                mPopWindowTop.setHeight(ScreenUtils.dip2px(getActivity(), 112));
+                userInformation=UserInfoManager.getUserInfo();
+                if (userInformation.getLanguageId()==Constants.LANGUAGE_ENGLISH){
+                    mPopWindowTop.setWidth(ScreenUtils.dip2px(getActivity(), 150));
+                    mPopWindowTop.setHeight(ScreenUtils.dip2px(getActivity(), 112));
+                }else {
+                    mPopWindowTop.setWidth(ScreenUtils.dip2px(getActivity(), 130));
+                    mPopWindowTop.setHeight(ScreenUtils.dip2px(getActivity(), 112));
+                }
 
                 TextView tv_share_facebook = contentView.findViewById(R.id.tv_import_wallet);
                 TextView tv_share_other = contentView.findViewById(R.id.tv_wallet_manage);
