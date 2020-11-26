@@ -1,6 +1,5 @@
 package com.tianqi.aitdwallet.ui.activity.wallet.initwallet;
 
-
 import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -44,6 +43,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -157,7 +157,7 @@ public class ImportWalletFrMnemonicActivity extends BaseActivity {
             //此处的文件夹只做临时存储，便于后两个页面获取wallet，正式的wallet存储文件夹，不用这个。
             ECKeyPair master = WalletUtils.importCoinMaser(CoinTypes.Bitcoin, list);
             emitter.onNext(master);
-        }).map(master -> {
+        }).delay(2000, TimeUnit.MILLISECONDS).map(master -> {
             //1.创建btc币种。
             //钱包数据库
             WalletInfo walletInfo = createWalletInfo(master.getAddress(), Constant.TRANSACTION_COIN_NAME_BTC);
@@ -168,7 +168,7 @@ public class ImportWalletFrMnemonicActivity extends BaseActivity {
                 walletCoinAdapter.loadingIndex(index_loading);
             });
             return walletInfo;
-        }).map(walletInfo -> {
+        }).delay(2000, TimeUnit.MILLISECONDS).map(walletInfo -> {
                     //创建ETH币种。
                     //钱包数据库
                     ECKeyPair master = WalletUtils.importCoinMaser(CoinTypes.Ethereum, list);
@@ -182,7 +182,7 @@ public class ImportWalletFrMnemonicActivity extends BaseActivity {
                         walletCoinAdapter.loadingIndex(index_loading);
                     });
                     return eht_walletInfo;
-        }).map(walletInfo -> {
+        }).delay(2000, TimeUnit.MILLISECONDS).map(walletInfo -> {
             //创建USDT币种。
             //币种数据库,USDT用的东西都是比特币那一套，所以都用bitcoin的方式创建
             ECKeyPair master = WalletUtils.importCoinMaser(CoinTypes.Bitcoin,list);
@@ -194,7 +194,7 @@ public class ImportWalletFrMnemonicActivity extends BaseActivity {
                 walletCoinAdapter.loadingIndex(index_loading);
             });
             return usdt_walletInfo;
-        }).map(walletInfo -> {
+        }).delay(2000, TimeUnit.MILLISECONDS).map(walletInfo -> {
             //创建ETH的代币---usdt-erc20。
             //钱包数据库
             ECKeyPair master = WalletUtils.importCoinMaser(CoinTypes.Ethereum, list);

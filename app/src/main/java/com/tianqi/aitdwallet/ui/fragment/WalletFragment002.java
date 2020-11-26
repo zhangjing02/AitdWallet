@@ -111,7 +111,6 @@ public class WalletFragment002 extends BaseFragment implements View.OnClickListe
     @Override
     protected void initView() {
         StatusBarCompat.translucentStatusBar(getActivity(), true);
-        LogUtil.i("ttttttttt","initView？");
         walletInfo = WalletInfoManager.getHdWalletInfo();
         if (walletInfo == null) {
             walletInfo = WalletInfoManager.getWalletInfo().get(0);
@@ -137,7 +136,6 @@ public class WalletFragment002 extends BaseFragment implements View.OnClickListe
             shotNoticeDialog.show();
         }
     }
-
 
     /**
      * 开启服务，去获取钱包，和币种的余额，获取成功后，发消息给本页去刷新。
@@ -228,7 +226,6 @@ public class WalletFragment002 extends BaseFragment implements View.OnClickListe
                 // TODO: 2020/11/21 把数据更新为无，方便展示新手指引
                 mGuideWalletBeans=new ArrayList<>();
                 homeWalletAdapter.setNewData(mGuideWalletBeans);
-
 
                 ivNewGuideStep4.setVisibility(View.VISIBLE);
                 ivNewGuideStep2.setVisibility(View.GONE);

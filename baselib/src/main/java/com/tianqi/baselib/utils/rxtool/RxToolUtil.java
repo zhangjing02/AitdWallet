@@ -12,6 +12,7 @@ package com.tianqi.baselib.utils.rxtool;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.Log;
 
 
@@ -262,7 +263,12 @@ public class RxToolUtil {
         void doNext(String number);
     }
 
-
+    public static String getDeviceIdIMEI(Context context) {
+        String androidId = Settings.Secure.getString(context.getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+        //TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        return androidId;
+    }
 
 
 

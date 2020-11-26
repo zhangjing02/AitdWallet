@@ -32,6 +32,7 @@ public class UserInformationDao extends AbstractDao<UserInformation, Long> {
         public final static Property PasswordTip = new Property(5, String.class, "passwordTip", false, "PASSWORD_TIP");
         public final static Property FiatUnit = new Property(6, String.class, "fiatUnit", false, "FIAT_UNIT");
         public final static Property LanguageId = new Property(7, int.class, "languageId", false, "LANGUAGE_ID");
+        public final static Property SeedPublicKey = new Property(8, String.class, "seedPublicKey", false, "SEED_PUBLIC_KEY");
     }
 
 
@@ -54,7 +55,8 @@ public class UserInformationDao extends AbstractDao<UserInformation, Long> {
                 "\"NO_CENTER\" INTEGER NOT NULL ," + // 4: noCenter
                 "\"PASSWORD_TIP\" TEXT," + // 5: passwordTip
                 "\"FIAT_UNIT\" TEXT," + // 6: fiatUnit
-                "\"LANGUAGE_ID\" INTEGER NOT NULL );"); // 7: languageId
+                "\"LANGUAGE_ID\" INTEGER NOT NULL ," + // 7: languageId
+                "\"SEED_PUBLIC_KEY\" TEXT);"); // 8: seedPublicKey
         // Add Indexes
         db.execSQL("CREATE UNIQUE INDEX " + constraint + "IDX_USER_INFORMATION_USER_ID ON \"USER_INFORMATION\"" +
                 " (\"USER_ID\" ASC);");
@@ -101,6 +103,11 @@ public class UserInformationDao extends AbstractDao<UserInformation, Long> {
             stmt.bindString(7, fiatUnit);
         }
         stmt.bindLong(8, entity.getLanguageId());
+ 
+        String seedPublicKey = entity.getSeedPublicKey();
+        if (seedPublicKey != null) {
+            stmt.bindString(9, seedPublicKey);
+        }
     }
 
     @Override
@@ -138,6 +145,11 @@ public class UserInformationDao extends AbstractDao<UserInformation, Long> {
             stmt.bindString(7, fiatUnit);
         }
         stmt.bindLong(8, entity.getLanguageId());
+ 
+        String seedPublicKey = entity.getSeedPublicKey();
+        if (seedPublicKey != null) {
+            stmt.bindString(9, seedPublicKey);
+        }
     }
 
     @Override
@@ -155,7 +167,8 @@ public class UserInformationDao extends AbstractDao<UserInformation, Long> {
             cursor.getShort(offset + 4) != 0, // noCenter
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // passwordTip
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // fiatUnit
-            cursor.getInt(offset + 7) // languageId
+            cursor.getInt(offset + 7), // languageId
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8) // seedPublicKey
         );
         return entity;
     }
@@ -170,6 +183,7 @@ public class UserInformationDao extends AbstractDao<UserInformation, Long> {
         entity.setPasswordTip(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setFiatUnit(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setLanguageId(cursor.getInt(offset + 7));
+        entity.setSeedPublicKey(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
      }
     
     @Override

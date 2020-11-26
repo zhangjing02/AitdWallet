@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -31,6 +32,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.tianqi.baselib.R;
+import com.tianqi.baselib.utils.LogUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -104,10 +106,6 @@ public class GlideUtils {
      * 从资源文件加载图片
      */
     public static void loadGiftResourceImage(Context context, int resourceId, ImageView imageView) {
-        RequestOptions requestOptions = new RequestOptions()
-                .placeholder(imageView.getDrawable() == null ? context.getApplicationContext().getResources().getDrawable(R.mipmap.animator_splash_logo) : imageView.getDrawable()).
-                        error(R.mipmap.animator_splash_logo);
-
         Glide.with(context).asGif().load(resourceId).listener(new RequestListener<GifDrawable>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<GifDrawable> target, boolean isFirstResource) {

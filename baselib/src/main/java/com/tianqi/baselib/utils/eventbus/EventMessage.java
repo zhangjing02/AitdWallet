@@ -19,6 +19,7 @@ public class EventMessage {
     public static final int BIND_BANK_CARD_CHANGE =501; //用户的银行卡数量有变化（可能添加绑定，也可能解除绑定）
 
     public static final int GOTO_TAKE_MONEY_PAGER= 701;//跳转到提币界面
+    public static final int CLOSE_ACTIVITY = 702;//关闭页面
 
     public static final int TRANSACTION_RECORD_UPDATE = 601;//更新交易记录的通知。
     public static final int TRANSACTION_RECORD_ERROR = 6012;//交易记录获取报错
@@ -33,6 +34,8 @@ public class EventMessage {
     public static final int ADD_ADDRESS_UPDATE = 607;//添加了通讯录地址
     public static final int SELECT_ADDRESS_UPDATE = 608;//选择了一个地址。
     public static final int HOME_WALLET_BALANCE_UPDATE = 609;//主页余额刷新。
+
+
 
     private int type;
     private Object object;

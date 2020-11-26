@@ -20,7 +20,6 @@ import com.tianqi.aitdwallet.ui.fragment.Fragment1;
 import com.tianqi.aitdwallet.ui.fragment.SettingFragment;
 import com.tianqi.aitdwallet.ui.fragment.WalletFragment002;
 import com.tianqi.aitdwallet.utils.Constants;
-import com.tianqi.aitdwallet.utils.statusbar.StatusBarCompat;
 import com.tianqi.aitdwallet.widget.dialog.FunctionNotOpenDialog;
 import com.tianqi.aitdwallet.widget.dialog.VersionUpdateDialog;
 import com.tianqi.baselib.base.BaseActivity;
@@ -33,13 +32,15 @@ import com.tianqi.baselib.rxhttp.base.RxHelper;
 import com.tianqi.baselib.rxhttp.bean.GetNewVersionBean;
 import com.tianqi.baselib.utils.display.GlideUtils;
 import com.tianqi.baselib.utils.display.ToastUtil;
+import com.tianqi.baselib.utils.eventbus.EventMessage;
 import com.tianqi.baselib.utils.widget.NoScrollViewPager;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivityForTab extends BaseActivity {
@@ -111,7 +112,9 @@ public class MainActivityForTab extends BaseActivity {
             }
         };
         secondViewPager.setAdapter(adapter);
-
+        EventMessage eventMessage=new EventMessage();
+        eventMessage.setType(EventMessage.CLOSE_ACTIVITY);
+        EventBus.getDefault().post(eventMessage);
     }
 
     private String getVersionCode() {
@@ -253,7 +256,7 @@ public class MainActivityForTab extends BaseActivity {
     private void setCheck(int position) {
         switch (position) {
             case 0:
-                GlideUtils.loadGiftResourceImage(this,R.mipmap.ainmator_main_tab_property,ivProperty);
+                GlideUtils.loadGiftResourceImage(this,R.mipmap.animator_main_tab_property,ivProperty);
                 tvProperty.setTextColor(getResources().getColor(R.color.text_main_blue));
                 GlideUtils.loadResourceImage(this,R.mipmap.ic_main_tab_setting_grey,ivSetting);
                 tvSetting.setTextColor(getResources().getColor(R.color.text_main2_black));

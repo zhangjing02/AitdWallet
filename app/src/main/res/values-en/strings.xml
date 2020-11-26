@@ -137,7 +137,7 @@
 	<string name="text_psd_rules1">At least 1 uppercase letter</string>
 	<string name="text_psd_rules2">At least 1 lowercase letter</string>
 	<string name="text_psd_rules3">At least 1 number</string>
-	<string name="text_psd_rules4">8-32 words</string>
+	<string name="text_psd_rules4">At least 8 characters</string>
 	<string name="notice_psd_repeat_hint">Repeat password</string>
 	<string name="notice_psd_remind_hint">password hint</string>
 	<string name="btn_create_text">Create</string>

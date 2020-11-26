@@ -66,7 +66,7 @@ public class AboutUsActivity extends BaseActivity {
     @Override
     protected void initView() {
         getToolBar();
-        GlideUtils.loadGiftResourceImage(this,R.mipmap.animator_splash_logo,ivLogo);
+       // GlideUtils.loadGiftResourceImage(this,R.mipmap.animator_splash_logo,ivLogo);
     }
 
     private void getToolBar() {

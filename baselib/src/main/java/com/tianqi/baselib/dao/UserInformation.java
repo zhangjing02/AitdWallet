@@ -19,10 +19,11 @@ public class UserInformation {
     private String passwordTip;
     private String fiatUnit;
     private int  languageId;
-    @Generated(hash = 1575669783)
+    private String seedPublicKey;
+    @Generated(hash = 636160721)
     public UserInformation(Long id, String userId, String mnemonicWord,
             String passwordStr, boolean noCenter, String passwordTip,
-            String fiatUnit, int languageId) {
+            String fiatUnit, int languageId, String seedPublicKey) {
         this.id = id;
         this.userId = userId;
         this.mnemonicWord = mnemonicWord;
@@ -31,6 +32,7 @@ public class UserInformation {
         this.passwordTip = passwordTip;
         this.fiatUnit = fiatUnit;
         this.languageId = languageId;
+        this.seedPublicKey = seedPublicKey;
     }
     @Generated(hash = 1920987651)
     public UserInformation() {
@@ -83,6 +85,12 @@ public class UserInformation {
     public void setLanguageId(int languageId) {
         this.languageId = languageId;
     }
+    public String getSeedPublicKey() {
+        return this.seedPublicKey;
+    }
+    public void setSeedPublicKey(String seedPublicKey) {
+        this.seedPublicKey = seedPublicKey;
+    }
 
     @Override
     public String toString() {
@@ -95,6 +103,7 @@ public class UserInformation {
                 ", passwordTip='" + passwordTip + '\'' +
                 ", fiatUnit='" + fiatUnit + '\'' +
                 ", languageId=" + languageId +
+                ", seedPublicKey='" + seedPublicKey + '\'' +
                 '}';
     }
 }

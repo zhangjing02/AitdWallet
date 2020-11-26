@@ -16,6 +16,9 @@ import com.tianqi.aitdwallet.adapter.recycle_adapter.HomeWalletAdapter;
 import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.WalletInfo;
 import com.tianqi.baselib.dbManager.WalletInfoManager;
+import com.tianqi.baselib.utils.eventbus.EventMessage;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +61,9 @@ public class WalletHiddenActivity extends BaseActivity {
     private void getToolBar() {
         toolbarTitle.setText(R.string.tittle_hidden_coin);
         toolbar.setNavigationOnClickListener(v -> {
+            EventMessage eventMessage=new EventMessage();
+            eventMessage.setType(EventMessage.HOME_WALLET_BALANCE_UPDATE);
+            EventBus.getDefault().post(eventMessage);
             finish();//返回
         });
     }

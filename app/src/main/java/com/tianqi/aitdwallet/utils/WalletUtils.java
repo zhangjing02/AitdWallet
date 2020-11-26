@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.quincysx.crypto.CoinTypes;
 import com.quincysx.crypto.ECKeyPair;
+import com.quincysx.crypto.Key;
 import com.quincysx.crypto.bip32.ExtendedKey;
 import com.quincysx.crypto.bip32.ValidationException;
 import com.quincysx.crypto.bip39.MnemonicGenerator;
@@ -21,6 +22,7 @@ import com.quincysx.crypto.ethereum.EthECKeyPair;
 import com.quincysx.crypto.utils.HexUtils;
 import com.tianqi.baselib.dao.UserInformation;
 import com.tianqi.baselib.dbManager.UserInfoManager;
+import com.tianqi.baselib.utils.LogUtil;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -32,7 +34,7 @@ import java.util.List;
 public class WalletUtils {
 
     public static ECKeyPair createCoinMaser(CoinTypes coinTypes) {
-        UserInformation  userInformation = UserInfoManager.getUserInfo();
+        UserInformation userInformation = UserInfoManager.getUserInfo();
         Gson gson = new Gson();
         Type listType = new TypeToken<List<String>>() {
         }.getType();
@@ -41,6 +43,11 @@ public class WalletUtils {
         ExtendedKey extendedKey = null;
         try {
             extendedKey = ExtendedKey.create(seed);
+            Key master1 = extendedKey.getMaster();
+
+            userInformation.setSeedPublicKey(HexUtils.toHex(master1.getRawPublicKey(true)));
+            UserInfoManager.insertOrUpdate(userInformation);
+
             AddressIndex address = BIP44.m().purpose44()
                     .coinType(coinTypes)
                     .account(0)
@@ -54,6 +61,7 @@ public class WalletUtils {
         }
         return null;
     }
+
     public static ECKeyPair createCoinMaserRandom(CoinTypes coinTypes) {
         byte[] random = RandomSeed.random(WordCount.TWELVE);
         List<String> strings = new MnemonicGenerator(English.INSTANCE).createMnemonic(random);
@@ -75,18 +83,18 @@ public class WalletUtils {
         return null;
     }
 
-    public static ECKeyPair importCoinMaser(CoinTypes coinTypes,String private_key) {
-        ECKeyPair master=null;
-        if (coinTypes==CoinTypes.Bitcoin){
+    public static ECKeyPair importCoinMaser(CoinTypes coinTypes, String private_key) {
+        ECKeyPair master = null;
+        if (coinTypes == CoinTypes.Bitcoin) {
             try {
                 master = BitCoinECKeyPair.parseWIF(private_key);
             } catch (ValidationException e) {
                 e.printStackTrace();
             }
-        }else if (coinTypes==CoinTypes.Ethereum){
+        } else if (coinTypes == CoinTypes.Ethereum) {
             try {
-                EthECKeyPair ethECKeyPair=new EthECKeyPair(HexUtils.fromHex(private_key));
-                master=ethECKeyPair;
+                EthECKeyPair ethECKeyPair = new EthECKeyPair(HexUtils.fromHex(private_key));
+                master = ethECKeyPair;
             } catch (ValidationException e) {
                 e.printStackTrace();
             }
@@ -94,7 +102,7 @@ public class WalletUtils {
         return master;
     }
 
-    public static ECKeyPair importCoinMaser(CoinTypes coinTypes,List<String> mnemonic_words) {
+    public static ECKeyPair importCoinMaser(CoinTypes coinTypes, List<String> mnemonic_words) {
         byte[] seed = new SeedCalculator().calculateSeed(mnemonic_words, "");
         ExtendedKey extendedKey = null;
         try {

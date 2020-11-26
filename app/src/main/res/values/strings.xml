@@ -136,7 +136,7 @@
     <string name="text_psd_rules1">至少1个大写字母</string>
     <string name="text_psd_rules2">至少1个小写字母</string>
     <string name="text_psd_rules3">至少1个数字</string>
-    <string name="text_psd_rules4">8-32个字</string>
+    <string name="text_psd_rules4">至少8个字符</string>
     <string name="notice_psd_repeat_hint">重复密码</string>
     <string name="notice_psd_remind_hint">密码提示</string>
     <string name="btn_create_text">创建</string>

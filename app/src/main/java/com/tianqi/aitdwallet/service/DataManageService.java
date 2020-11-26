@@ -20,19 +20,25 @@ import com.quincysx.crypto.ethereum.keystore.CipherException;
 import com.quincysx.crypto.ethereum.keystore.KeyStore;
 import com.quincysx.crypto.ethereum.keystore.KeyStoreFile;
 import com.quincysx.crypto.utils.HexUtils;
+import com.tianqi.aitdwallet.ui.activity.GuidePageActivity;
+import com.tianqi.aitdwallet.ui.activity.MainActivityForTab;
+import com.tianqi.aitdwallet.ui.activity.SplashActivity;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.aitdwallet.utils.eth.EthWalletManager;
 import com.tianqi.baselib.dao.CoinInfo;
+import com.tianqi.baselib.dao.CoinRateInfo;
 import com.tianqi.baselib.dao.TransactionRecord;
 import com.tianqi.baselib.dao.UserInformation;
 import com.tianqi.baselib.dao.WalletInfo;
 import com.tianqi.baselib.dbManager.CoinInfoManager;
+import com.tianqi.baselib.dbManager.CoinRateInfoManager;
 import com.tianqi.baselib.dbManager.TransactionRecordManager;
 import com.tianqi.baselib.dbManager.UserInfoManager;
 import com.tianqi.baselib.dbManager.WalletInfoManager;
 import com.tianqi.baselib.rxhttp.RetrofitFactory;
 import com.tianqi.baselib.rxhttp.base.BaseObserver;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
+import com.tianqi.baselib.rxhttp.bean.CoinRateBean;
 import com.tianqi.baselib.rxhttp.bean.GetErc20BalanceBean;
 import com.tianqi.baselib.rxhttp.bean.GetErc20TxRecordBean;
 import com.tianqi.baselib.rxhttp.bean.GetEthTxRecordBean;
@@ -54,6 +60,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 
@@ -109,7 +116,7 @@ public class DataManageService extends Service {
      *
      */
 
-    public void getTxRecordData(String coin_id) {
+    public synchronized void getTxRecordData(String coin_id) {
         txCoinInfo = CoinInfoManager.getMainCoinFrCoinId(coin_id);
         if (txCoinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_ETH)) {
             postEthTxRecord(txCoinInfo);
@@ -121,7 +128,7 @@ public class DataManageService extends Service {
         }
     }
 
-    private void postEthTxRecord(CoinInfo coinInfo) {
+    private synchronized void postEthTxRecord(CoinInfo coinInfo) {
         String mAddress = coinInfo.getCoin_address().startsWith("0x") ? coinInfo.getCoin_address().toLowerCase() : Constants.HEX_PREFIX + coinInfo.getCoin_address().toLowerCase();
         Map<String, Object> map = new HashMap<>();
         map.put("apikey", "AnqHS6Rs2WX0hwFXlrv");
@@ -155,7 +162,7 @@ public class DataManageService extends Service {
                 });
     }
 
-    private void insertEthTxRecord(GetEthTxRecordBean txsBean, CoinInfo eth_coinInfo, boolean isLast) {
+    private synchronized void insertEthTxRecord(GetEthTxRecordBean txsBean, CoinInfo eth_coinInfo, boolean isLast) {
         //创建（转出）数据库交易，存入数据库
         TransactionRecord tx_record = new TransactionRecord();
         tx_record.setAddress(eth_coinInfo.getCoin_address());
@@ -188,7 +195,7 @@ public class DataManageService extends Service {
         }
     }
 
-    private void postBtcTxRecord(CoinInfo coinInfo) {
+    private synchronized void postBtcTxRecord(CoinInfo coinInfo) {
         String coin_type_params = null;
         if (coinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_BTC)) {
             coin_type_params = "btc";
@@ -237,7 +244,7 @@ public class DataManageService extends Service {
         }
     }
 
-    private void insertTxRecord(List<GetListUnspentBean> data, int i, int j, int type, CoinInfo coinInfo) {
+    private synchronized void insertTxRecord(List<GetListUnspentBean> data, int i, int j, int type, CoinInfo coinInfo) {
         double spend_value = 0;
         for (int k = 0; k < data.get(i).getTxs().get(j).getOutputs().size(); k++) {  //输出循环中
             if (type == Constant.TRANSACTION_TYPE_SEND) {
@@ -290,7 +297,7 @@ public class DataManageService extends Service {
         }
     }
 
-    private void postBtcLoadingRecord(CoinInfo coinInfo) {
+    private synchronized void postBtcLoadingRecord(CoinInfo coinInfo) {
         String coin_type_params = null;
         if (coinInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_BTC)) {
             coin_type_params = "btc";
@@ -342,7 +349,7 @@ public class DataManageService extends Service {
                 });
     }
 
-    private void insertLoadingTx(List<GetLoadingTxBean> data, int i, int k, int transactionTypeReceive) {
+    private synchronized void insertLoadingTx(List<GetLoadingTxBean> data, int i, int k, int transactionTypeReceive) {
         double receive_value;
         receive_value = Double.valueOf(data.get(i).getOutputs().get(k).getValue());
         //创建（转出）数据库交易，存入数据库
@@ -375,7 +382,7 @@ public class DataManageService extends Service {
         }
     }
 
-    private void postErc20TxRecore(CoinInfo coinInfo) {
+    private synchronized void postErc20TxRecore(CoinInfo coinInfo) {
         String mAddress = coinInfo.getCoin_address().startsWith("0x") ? coinInfo.getCoin_address().toLowerCase() : Constants.HEX_PREFIX + coinInfo.getCoin_address().toLowerCase();
         Map<String, Object> map = new HashMap<>();
         map.put("apikey", "AnqHS6Rs2WX0hwFXlrv");
@@ -404,7 +411,7 @@ public class DataManageService extends Service {
                 });
     }
 
-    private void insertErc20TxRecord(List<GetErc20TxRecordBean> datas, int i, CoinInfo coinInfo, boolean isLast) {
+    private synchronized void insertErc20TxRecord(List<GetErc20TxRecordBean> datas, int i, CoinInfo coinInfo, boolean isLast) {
         //创建（转出）数据库交易，存入数据库
         TransactionRecord tx_record = new TransactionRecord();
         tx_record.setAddress(coinInfo.getCoin_address());
@@ -443,7 +450,7 @@ public class DataManageService extends Service {
      */
 
     @SuppressLint("CheckResult")
-    public void getWalletBalance() {
+    public synchronized void getWalletBalance() {
         //通过币种的rpc接口信息，给钱包的总金额赋值。
         Observable.create((ObservableOnSubscribe<Integer>) emitter -> {
             allBtccCoinInfos = CoinInfoManager.getSpecCoinInfo(Constant.TRANSACTION_COIN_NAME_BTC);
@@ -621,7 +628,7 @@ public class DataManageService extends Service {
                 });
     }
 
-    private void updateWalletBalance(int coin_type) {
+    private synchronized void updateWalletBalance(int coin_type) {
         if (coin_type == 0) {
             if (btc_quest_count >= allBtccCoinInfos.size()) {
                 WalletInfo walletInfo = WalletInfoManager.getWalletFrId(Constant.TRANSACTION_COIN_NAME_BTC);
@@ -711,5 +718,110 @@ public class DataManageService extends Service {
                 }
             }
         });
+    }
+
+
+    /**
+     * 此处是启动页
+     * 1.获取币种汇率的接口的逻辑。
+     */
+
+    public synchronized void getCoinRateData() {
+        //获取各个币种的汇率，存入币种汇率的数据库中。
+        Map<String, Object> map = new HashMap<>();
+        map.put("apikey", "AnqHS6Rs2WX0hwFXlrv");
+        //获取各个币种的汇率，存入币种汇率的数据库中。
+        RetrofitFactory.getInstence(this).API()
+                .getCoinRate(map).compose(RxHelper.io_main())
+                .subscribe(new Observer<CoinRateBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(CoinRateBean coinRateBean) {
+                        WalletInfo walletInfo = WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_BTC);
+                        CoinRateInfo coinRateInfo = new CoinRateInfo();
+                        coinRateInfo.setId(Constant.TRANSACTION_COIN_NAME_BTC);
+                        coinRateInfo.setPrice_usd(coinRateBean.getBtc());
+                        double value1, value2, value3;
+                        value1 = coinRateBean.getBtccny1();
+                        value2 = coinRateBean.getBtccny2();
+                        value3 = coinRateBean.getBtccny3();
+                        coinRateInfo.setPrice_cny((value1 + value2 + value3) / 3f);
+
+                        CoinRateInfoManager.insertOrUpdate(coinRateInfo);
+
+                        if (walletInfo != null) {
+                            walletInfo.setCoin_USDPrice(coinRateInfo.getPrice_usd());
+                            walletInfo.setCoin_CNYPrice(coinRateInfo.getPrice_cny());
+                            WalletInfoManager.insertOrUpdate(walletInfo);
+                        }
+
+                        walletInfo = WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_ETH);
+                        coinRateInfo = new CoinRateInfo();
+                        coinRateInfo.setId(Constant.TRANSACTION_COIN_NAME_ETH);
+                        coinRateInfo.setPrice_usd(coinRateBean.getEth());
+
+                        value1 = coinRateBean.getEthcny1();
+                        value2 = coinRateBean.getEthcny2();
+                        value3 = coinRateBean.getEthcny3();
+                        coinRateInfo.setPrice_cny((value1 + value2 + value3) / 3f);
+
+                        CoinRateInfoManager.insertOrUpdate(coinRateInfo);
+
+                        if (walletInfo != null) {
+                            walletInfo.setCoin_USDPrice(coinRateInfo.getPrice_usd());
+                            walletInfo.setCoin_CNYPrice(coinRateInfo.getPrice_cny());
+                            WalletInfoManager.insertOrUpdate(walletInfo);
+                        }
+
+                        walletInfo = WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
+                        coinRateInfo = new CoinRateInfo();
+                        coinRateInfo.setId(Constant.TRANSACTION_COIN_NAME_USDT_OMNI);
+                        coinRateInfo.setPrice_usd(coinRateBean.getUsdt());
+
+                        value1 = coinRateBean.getUsdtcny1();
+                        value2 = coinRateBean.getUsdtcny2();
+                        value3 = coinRateBean.getUsdtcny3();
+                        coinRateInfo.setPrice_cny(value1 + value2 + value3 / 3f);
+                        ;
+
+                        CoinRateInfoManager.insertOrUpdate(coinRateInfo);
+
+                        if (walletInfo != null) {
+                            walletInfo.setCoin_USDPrice(coinRateInfo.getPrice_usd());
+                            walletInfo.setCoin_CNYPrice(coinRateInfo.getPrice_cny());
+                            WalletInfoManager.insertOrUpdate(walletInfo);
+                        }
+
+                        walletInfo = WalletInfoManager.getWalletFrName(Constant.TRANSACTION_COIN_NAME_USDT_ERC20);
+                        coinRateInfo = new CoinRateInfo();
+                        coinRateInfo.setId(Constant.TRANSACTION_COIN_NAME_USDT_ERC20);
+                        coinRateInfo.setPrice_usd(coinRateBean.getUsdt());
+
+                        value1 = coinRateBean.getUsdtcny1();
+                        value2 = coinRateBean.getUsdtcny2();
+                        value3 = coinRateBean.getUsdtcny3();
+                        coinRateInfo.setPrice_cny(value1 + value2 + value3 / 3f);
+                        ;
+
+                        CoinRateInfoManager.insertOrUpdate(coinRateInfo);
+
+                        if (walletInfo != null) {
+                            walletInfo.setCoin_USDPrice(coinRateInfo.getPrice_usd());
+                            walletInfo.setCoin_CNYPrice(coinRateInfo.getPrice_cny());
+                            WalletInfoManager.insertOrUpdate(walletInfo);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
     }
 }

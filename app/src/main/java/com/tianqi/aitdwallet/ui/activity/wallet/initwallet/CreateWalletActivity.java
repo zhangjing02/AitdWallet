@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -152,7 +153,7 @@ public class CreateWalletActivity extends BaseActivity {
             //此处的文件夹只做临时存储，便于后两个页面获取wallet，正式的wallet存储文件夹，不用这个。
             ECKeyPair master = WalletUtils.createCoinMaser(CoinTypes.Bitcoin);
             emitter.onNext(master);
-        }).map(master -> {
+        }).delay(2000, TimeUnit.MILLISECONDS).map(master -> {
             //获取各个币种的汇率，存入币种汇率的数据库中。
             //1.创建btc币种。
             //钱包数据库
@@ -164,7 +165,7 @@ public class CreateWalletActivity extends BaseActivity {
                 walletCoinAdapter.loadingIndex(index_loading);
             });
             return walletInfo;
-        }).map(walletInfo -> {
+        }).delay(2000, TimeUnit.MILLISECONDS).map(walletInfo -> {
                     //创建ETH币种。
                     //钱包数据库
                     ECKeyPair master = WalletUtils.createCoinMaser(CoinTypes.Ethereum);
@@ -178,7 +179,7 @@ public class CreateWalletActivity extends BaseActivity {
                         walletCoinAdapter.loadingIndex(index_loading);
                     });
                     return eht_walletInfo;
-                })
+                }).delay(2000, TimeUnit.MILLISECONDS)
                 .map(walletInfo -> {
                     //创建USDT币种。
                     //币种数据库,USDT用的东西都是比特币那一套，所以都用bitcoin的方式创建
@@ -191,7 +192,7 @@ public class CreateWalletActivity extends BaseActivity {
                         walletCoinAdapter.loadingIndex(index_loading);
                     });
                     return usdt_walletInfo;
-                })
+                }).delay(2000, TimeUnit.MILLISECONDS)
                 .map(walletInfo -> {
                     //创建ETH币种。
                     //钱包数据库

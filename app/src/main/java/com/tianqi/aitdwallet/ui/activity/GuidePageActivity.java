@@ -21,6 +21,7 @@ import com.tianqi.baselib.dao.UserInformation;
 import com.tianqi.baselib.dao.WalletInfo;
 import com.tianqi.baselib.dbManager.UserInfoManager;
 import com.tianqi.baselib.dbManager.WalletInfoManager;
+import com.tianqi.baselib.utils.eventbus.EventMessage;
 import com.zhpan.indicator.IndicatorView;
 import com.zhpan.indicator.enums.IndicatorSlideMode;
 import com.zhpan.indicator.enums.IndicatorStyle;
@@ -147,7 +148,7 @@ public class GuidePageActivity extends BaseActivity {
                     //Intent intent=new Intent(this, SelectWalletTypeActivity.class);
                     startActivity(intent);
                 }
-                finish();
+                //   finish();
                 break;
             case R.id.btn_import_wallet:
                 if (userInfo != null && !TextUtils.isEmpty(userInfo.getPasswordStr())) {
@@ -160,8 +161,15 @@ public class GuidePageActivity extends BaseActivity {
                     intent.putExtra(Constants.INTENT_PUT_TAG, getString(R.string.tittle_import_wallet));
                     startActivity(intent);
                 }
-                finish();
+                // finish();
                 break;
+        }
+    }
+
+    @Override
+    public void onDataSynEvent(EventMessage event) {
+        if (event.getType() == EventMessage.CLOSE_ACTIVITY) {
+            finish();
         }
     }
 }

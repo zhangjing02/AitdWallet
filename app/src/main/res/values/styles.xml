@@ -277,7 +277,8 @@
     </style>
 
     <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:windowBackground">@drawable/bg_splash_activity02</item>
+        <item name="android:windowBackground">@drawable/bitmap_splash002</item>
+
 <!--        <item name="android:windowBackground">@color/white</item>-->
 <!--        <item name="android:windowBackground">@color/white_transparent</item>-->
         <item name="android:windowFullscreen">true</item>

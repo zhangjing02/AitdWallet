@@ -444,6 +444,7 @@ public class ImportUsdtErc20CoinActivity extends BaseActivity {
                 if (ButtonUtils.isFastDoubleClick()) {
                     return;
                 }
+                LogUtil.i("ttttttttt","我们点击的啥？"+select_index);
                 switch (select_index) {
                     case TITTLE_PRIVATE_KEY_INDEX:
                         if (judgeSelectInput()) {
@@ -499,7 +500,7 @@ public class ImportUsdtErc20CoinActivity extends BaseActivity {
                 }
                 KeyStoreFile keyStoreFile = KeyStoreFile.parse(content);
                 decrypt = KeyStore.decrypt(etKeystorePsd.getText().toString(), keyStoreFile);
-                if (CoinInfoManager.getCoinFrPrivateKey(Constant.TRANSACTION_COIN_NAME_ETH, decrypt.getPrivateKey()).size() > 0) {
+                if (CoinInfoManager.getCoinFrPrivateKey(Constant.TRANSACTION_COIN_NAME_USDT_ERC20, decrypt.getPrivateKey()).size() > 0) {
                     emitter.onNext(KEYSTORE_SAME_ERROR);
                 } else {
                     emitter.onNext(KEYSTORE_PASSWORD_OK);

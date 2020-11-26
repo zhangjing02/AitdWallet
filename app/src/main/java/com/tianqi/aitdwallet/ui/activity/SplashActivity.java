@@ -1,10 +1,13 @@
 package com.tianqi.aitdwallet.ui.activity;
 
 import android.animation.Animator;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -52,6 +55,7 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected int getContentView() {
+    //    this.getWindow().getDecorView().setBackground(null);
         return R.layout.activity_splash;
     }
 
