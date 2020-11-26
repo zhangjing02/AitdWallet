@@ -12,6 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.ui.activity.MainActivity;
+import com.tianqi.aitdwallet.ui.activity.MainActivityForTab;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.UserInformation;
@@ -95,7 +96,7 @@ public class LanguageSettingActivity extends BaseActivity {
      */
     private void restartAct() {
         finish();
-        Intent _Intent = new Intent(this, MainActivity.class);
+        Intent _Intent = new Intent(this, MainActivityForTab.class);
         startActivity(_Intent);
         //清除Activity退出和进入的动画
         overridePendingTransition(0, 0);

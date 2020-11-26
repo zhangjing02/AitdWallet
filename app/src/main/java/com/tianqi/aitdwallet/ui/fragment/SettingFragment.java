@@ -15,6 +15,7 @@ import com.tianqi.aitdwallet.ui.activity.setting.MessageCenterActivity;
 import com.tianqi.aitdwallet.ui.activity.setting.SafeCenterActivity;
 import com.tianqi.aitdwallet.ui.activity.setting.SystemSettingActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.setting.WalletManageActivity;
+import com.tianqi.aitdwallet.utils.statusbar.StatusBarCompat;
 import com.tianqi.baselib.base.BaseFragment;
 
 import butterknife.BindView;
@@ -47,6 +48,7 @@ public class SettingFragment extends BaseFragment {
 
     @Override
     protected void initView() {
+       // StatusBarCompat.translucentStatusBar(getActivity(), false);
         getToolBar();
     }
 

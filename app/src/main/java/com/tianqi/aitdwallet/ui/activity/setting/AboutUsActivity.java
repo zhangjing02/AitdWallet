@@ -13,6 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.tianqi.aitdwallet.R;
 import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.baselib.utils.display.GlideUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -65,7 +66,7 @@ public class AboutUsActivity extends BaseActivity {
     @Override
     protected void initView() {
         getToolBar();
-
+        GlideUtils.loadGiftResourceImage(this,R.mipmap.animator_splash_logo,ivLogo);
     }
 
     private void getToolBar() {

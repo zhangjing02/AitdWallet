@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.IBinder;
 import android.view.View;
 import android.widget.GridView;
@@ -19,7 +20,7 @@ import com.quincysx.crypto.CoinTypes;
 import com.quincysx.crypto.ECKeyPair;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.adapter.list_adapter.WalletCoinAdapter;
-import com.tianqi.aitdwallet.ui.activity.MainActivity;
+import com.tianqi.aitdwallet.ui.activity.MainActivityForTab;
 import com.tianqi.aitdwallet.service.DataManageService;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.aitdwallet.utils.WalletUtils;
@@ -75,6 +76,7 @@ public class CreateWalletActivity extends BaseActivity {
     private Gson gson;
     private DataManageService service = null;
     private boolean isBind = false;
+    private AnimationDrawable animationDrawable;
 
     @Override
     protected int getContentView() {
@@ -86,6 +88,13 @@ public class CreateWalletActivity extends BaseActivity {
         getToolBar();
         Intent intent = new Intent(this, DataManageService.class);
         bindService(intent, conn, BIND_AUTO_CREATE);
+
+        ivCreateWalletTittle.setBackground(null);
+        ivCreateWalletTittle.setImageResource(R.drawable.anim_create_wallet);
+        animationDrawable = (AnimationDrawable) ivCreateWalletTittle.getDrawable();
+        if(!animationDrawable.isRunning()){
+            animationDrawable.start();
+        }
     }
 
     private void initLoadingCoin() {
@@ -200,7 +209,15 @@ public class CreateWalletActivity extends BaseActivity {
                 .compose(RxHelper.pool_main())
                 .subscribe(baseEntity -> {
                     tvCreateWalletNotice.setText(R.string.notice_create_success);
-                    GlideUtils.loadResourceImage(this, R.mipmap.ic_create_wallet_finish, ivCreateWalletTittle);
+                 //   GlideUtils.loadResourceImage(this, R.mipmap.ic_create_wallet_finish, ivCreateWalletTittle);
+                    if (animationDrawable.isRunning()){
+                        animationDrawable.stop();
+                    }
+                    ivCreateWalletTittle.setImageResource(R.drawable.anim_create_wallet_successful);
+                    animationDrawable = (AnimationDrawable) ivCreateWalletTittle.getDrawable();
+                    if(!animationDrawable.isRunning()){
+                        animationDrawable.start();
+                    }
                     RxToolUtil.cancel();
                     btnCreateWallet.setVisibility(View.VISIBLE);
                 });
@@ -336,7 +353,7 @@ public class CreateWalletActivity extends BaseActivity {
 
     @OnClick(R.id.btn_create_wallet)
     public void onViewClicked() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, MainActivityForTab.class);
         startActivity(intent);
         finish();
     }

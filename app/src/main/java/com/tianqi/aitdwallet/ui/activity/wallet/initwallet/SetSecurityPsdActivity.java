@@ -20,7 +20,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.quincysx.crypto.ethereum.vm.LogInfo;
 import com.tianqi.aitdwallet.R;
-import com.tianqi.aitdwallet.ui.activity.MainActivity;
+import com.tianqi.aitdwallet.ui.activity.MainActivityForTab;
 import com.tianqi.aitdwallet.ui.activity.wallet.importwallet.ImportWalletActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.setting.PrivacyTermsWebActivity;
 import com.tianqi.aitdwallet.utils.Constants;
@@ -365,7 +365,7 @@ public class SetSecurityPsdActivity extends BaseActivity {
                                 CoinInfoManager.insertOrUpdate(coinInfo);
                             }
                         }
-                        Intent intent1=new Intent(this, MainActivity.class);
+                        Intent intent1=new Intent(this, MainActivityForTab.class);
                         startActivity(intent1);
                         finish();
                     }else {

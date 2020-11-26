@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    tools:context=".ui.activity.GuideWalletActivity">
+
+    <com.tianqi.baselib.utils.widget.NoScrollViewPager
+        android:id="@+id/secondViewPager"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="9" />
+
+<!--    <com.google.android.material.tabs.TabLayout-->
+<!--        android:id="@+id/secondTabLayout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="49dp"-->
+<!--        app:tabIndicatorHeight="0dp" />-->
+    <RadioGroup
+        android:id="@+id/relativeLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+<!--        <RadioButton-->
+<!--            android:id="@+id/rb_property"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="49dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:background="@color/white"-->
+<!--            android:button="@null"-->
+<!--            android:checked="true"-->
+<!--            android:drawableTop="@drawable/tab_property_selector"-->
+<!--            android:gravity="center"-->
+<!--            android:text="@string/tittle_property"-->
+<!--            android:paddingTop="6dp"-->
+<!--            android:paddingBottom="1dp"-->
+<!--            android:drawablePadding="3dp"-->
+<!--            android:textColor="@drawable/main_btn_select"-->
+<!--            android:textSize="10sp" />-->
+        
+        
+        <LinearLayout
+            android:id="@+id/rb_property"
+            android:layout_width="0dp"
+            android:layout_height="49dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            >
+
+            <ImageView
+                android:id="@+id/iv_property"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_main_tab_property_blue" />
+
+            <TextView
+                android:id="@+id/tv_property"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_main_blue"
+                android:layout_marginTop="3dp"
+                android:text="@string/tittle_property"
+                android:textSize="10sp"/>
+        </LinearLayout>
+        
+
+<!--        <RadioButton-->
+<!--            android:id="@+id/rb_financial"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="49dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:background="@color/white"-->
+<!--            android:button="@null"-->
+<!--            android:drawableTop="@drawable/tab_financial_selector"-->
+<!--            android:gravity="center"-->
+<!--            android:paddingTop="6dp"-->
+<!--            android:paddingBottom="1dp"-->
+<!--            android:text="@string/tittle_financial"-->
+<!--            android:drawablePadding="3dp"-->
+<!--            android:textColor="@drawable/main_btn_select"-->
+<!--            android:textSize="10sp" />-->
+
+        <LinearLayout
+            android:id="@+id/rb_financial"
+            android:layout_width="0dp"
+            android:layout_height="49dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            >
+            <ImageView
+                android:id="@+id/iv_financial"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@mipmap/ic_main_tab_financial_grey"/>
+
+            <TextView
+                android:id="@+id/tv_financial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@drawable/main_btn_select"
+                android:layout_marginTop="3dp"
+                android:text="@string/tittle_financial"
+                android:textSize="10sp"/>
+        </LinearLayout>
+
+
+<!--        <RadioButton-->
+<!--            android:id="@+id/rb_exchange"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="49dp"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:layout_weight="1"-->
+<!--            android:background="@color/white"-->
+<!--            android:button="@null"-->
+<!--            android:drawableTop="@drawable/tab_browse_selector"-->
+<!--            android:gravity="center"-->
+<!--            android:drawablePadding="3dp"-->
+<!--            android:paddingTop="6dp"-->
+<!--            android:paddingBottom="1dp"-->
+<!--            android:text="@string/tittle_browse"-->
+<!--            android:textColor="@drawable/main_btn_select"-->
+<!--            android:textSize="10sp" />-->
+
+
+        <LinearLayout
+            android:id="@+id/rb_exchange"
+            android:layout_width="0dp"
+            android:layout_height="49dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            >
+            <ImageView
+                android:id="@+id/iv_exchange"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@mipmap/ic_main_tab_browse_grey"/>
+
+            <TextView
+                android:id="@+id/tv_exchange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@drawable/main_btn_select"
+                android:layout_marginTop="3dp"
+                android:text="@string/tittle_browse"
+                android:textSize="10sp"/>
+        </LinearLayout>
+
+<!--        <RadioButton-->
+<!--            android:id="@+id/rb_setting"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="49dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:background="@color/white"-->
+<!--            android:button="@null"-->
+<!--            android:drawableTop="@drawable/tab_setting_selector"-->
+<!--            android:gravity="center"-->
+<!--            android:text="@string/tittle_setting"-->
+<!--            android:paddingTop="6dp"-->
+<!--            android:paddingBottom="1dp"-->
+<!--            android:drawablePadding="3dp"-->
+<!--            android:textColor="@drawable/main_btn_select"-->
+<!--            android:textSize="10sp" />-->
+
+        <LinearLayout
+            android:id="@+id/rb_setting"
+            android:layout_width="0dp"
+            android:layout_height="49dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            >
+            <ImageView
+                android:id="@+id/iv_setting"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@mipmap/ic_main_tab_setting_grey"/>
+
+            <TextView
+                android:id="@+id/tv_setting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@drawable/main_btn_select"
+                android:layout_marginTop="3dp"
+                android:text="@string/tittle_setting"
+                android:textSize="10sp"/>
+        </LinearLayout>
+
+
+    </RadioGroup>
+</LinearLayout>

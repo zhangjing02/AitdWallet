@@ -127,7 +127,7 @@ public class GuidePageActivity extends BaseActivity {
                 if (WalletInfoManager.getWalletInfo().size() > 0) {
                     WalletInfo walletInfo = WalletInfoManager.getWalletInfo().get(0);
                     if (walletInfo != null && walletInfo.getWalletType() >= 0 && !walletInfo.getIsImportToCreate()) {
-                        Intent intent = new Intent(this, MainActivity.class);
+                        Intent intent = new Intent(this, MainActivityForTab.class);
                         startActivity(intent);
                     } else if (userInfo != null && !TextUtils.isEmpty(userInfo.getPasswordStr())) {
                         Intent intent = new Intent(this, BackupMemoryWordActivity.class);

@@ -110,12 +110,20 @@ public class WalletFragment002 extends BaseFragment implements View.OnClickListe
 
     @Override
     protected void initView() {
+        StatusBarCompat.translucentStatusBar(getActivity(), true);
+        LogUtil.i("ttttttttt","initView？");
         walletInfo = WalletInfoManager.getHdWalletInfo();
         if (walletInfo == null) {
             walletInfo = WalletInfoManager.getWalletInfo().get(0);
         }
         initRecycleView();
-        StatusBarCompat.translucentStatusBar(getActivity(), true);
+    }
+
+    @Override
+    protected void initData() {
+        //  initWallet();
+        Intent intent = new Intent(getActivity(), DataManageService.class);
+        getActivity().bindService(intent, conn, BIND_AUTO_CREATE);
 
         int first_open = PrefUtils.getInt(getActivity(), PrefUtils.FIRST_START_APP, -1);
         if (first_open < 0) {
@@ -129,6 +137,7 @@ public class WalletFragment002 extends BaseFragment implements View.OnClickListe
             shotNoticeDialog.show();
         }
     }
+
 
     /**
      * 开启服务，去获取钱包，和币种的余额，获取成功后，发消息给本页去刷新。
@@ -468,13 +477,6 @@ public class WalletFragment002 extends BaseFragment implements View.OnClickListe
         }
     }
 
-    @Override
-    protected void initData() {
-      //  initWallet();
-        Intent intent = new Intent(getActivity(), DataManageService.class);
-        getActivity().bindService(intent, conn, BIND_AUTO_CREATE);
-    }
-
     boolean isFresh;
     @Override
     public void onDataSynEvent(EventMessage event) {
@@ -517,14 +519,6 @@ public class WalletFragment002 extends BaseFragment implements View.OnClickListe
             isFresh=false;
         },2000);
         showHeadData();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-//        if (isBind&&service!=null&&conn!=null){
-//            service.unbindService(conn);
-//        }
     }
 
     public void hiddenPopWindow() {

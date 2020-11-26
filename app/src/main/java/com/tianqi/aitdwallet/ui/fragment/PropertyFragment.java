@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.tianqi.aitdwallet.R;
-import com.tianqi.aitdwallet.ui.activity.MainActivity;
+import com.tianqi.aitdwallet.ui.activity.MainActivityForTab;
 import com.tianqi.aitdwallet.ui.activity.wallet.setting.VerifySecurityPsdActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.initwallet.SelectWalletTypeActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.initwallet.SetSecurityPsdActivity;
@@ -62,7 +62,7 @@ public class PropertyFragment extends BaseFragment {
                 if (WalletInfoManager.getWalletInfo().size()>0){
                     WalletInfo walletInfo = WalletInfoManager.getWalletInfo().get(0);
                     if (walletInfo!=null&&walletInfo.getWalletType()>=0){
-                        Intent intent=new Intent(getActivity(), MainActivity.class);
+                        Intent intent=new Intent(getActivity(), MainActivityForTab.class);
                         startActivity(intent);
                     }
                 }else {

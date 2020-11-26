@@ -15,12 +15,21 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 
+
+import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
+import com.bumptech.glide.request.RequestFutureTarget;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.tianqi.baselib.R;
 
 import java.io.File;
@@ -89,6 +98,30 @@ public class GlideUtils {
                         error(R.mipmap.head_default);
 
         Glide.with(context).load(resourceId).apply(requestOptions).dontAnimate().into(imageView);
+    }
+
+    /**
+     * 从资源文件加载图片
+     */
+    public static void loadGiftResourceImage(Context context, int resourceId, ImageView imageView) {
+        RequestOptions requestOptions = new RequestOptions()
+                .placeholder(imageView.getDrawable() == null ? context.getApplicationContext().getResources().getDrawable(R.mipmap.animator_splash_logo) : imageView.getDrawable()).
+                        error(R.mipmap.animator_splash_logo);
+
+        Glide.with(context).asGif().load(resourceId).listener(new RequestListener<GifDrawable>() {
+            @Override
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
+                if (resource instanceof GifDrawable) {
+                    resource.setLoopCount(1);//只播放一次
+                }
+                return false;
+            }
+        }).into(imageView);
     }
 
     public static void loadResourceImageForGuide(Context context, int resourceId, ImageView imageView) {

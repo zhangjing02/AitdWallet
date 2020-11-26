@@ -34,6 +34,7 @@ import com.scwang.smartrefresh.layout.util.DensityUtil;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.adapter.list_adapter.MnemonicWordAdapter;
 import com.tianqi.aitdwallet.ui.activity.MainActivity;
+import com.tianqi.aitdwallet.ui.activity.MainActivityForTab;
 import com.tianqi.aitdwallet.ui.activity.tool.ScanActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.setting.PrivacyTermsWebActivity;
 import com.tianqi.aitdwallet.service.DataManageService;
@@ -593,7 +594,7 @@ public class ImportEthCoinActivity extends BaseActivity {
                         mLoadDialog.dismiss();
                     }
                     ToastUtil.showToast(this, getString(R.string.notice_import_success));
-                    Intent intent = new Intent(this, MainActivity.class);
+                    Intent intent = new Intent(this, MainActivityForTab.class);
                     startActivity(intent);
                     EventMessage eventMessage = new EventMessage();
                     eventMessage.setType(EventMessage.NEW_COIN_UPDATE);

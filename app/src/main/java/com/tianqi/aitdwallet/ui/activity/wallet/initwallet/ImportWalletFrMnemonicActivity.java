@@ -2,7 +2,11 @@ package com.tianqi.aitdwallet.ui.activity.wallet.initwallet;
 
 
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.graphics.drawable.AnimationDrawable;
+import android.os.IBinder;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -16,7 +20,7 @@ import com.quincysx.crypto.CoinTypes;
 import com.quincysx.crypto.ECKeyPair;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.adapter.list_adapter.WalletCoinAdapter;
-import com.tianqi.aitdwallet.ui.activity.MainActivity;
+import com.tianqi.aitdwallet.ui.activity.MainActivityForTab;
 import com.tianqi.aitdwallet.service.DataManageService;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.aitdwallet.utils.WalletUtils;
@@ -73,6 +77,7 @@ public class ImportWalletFrMnemonicActivity extends BaseActivity {
     private Gson gson;
     private DataManageService service = null;
     private boolean isBind = false;
+    private AnimationDrawable animationDrawable;
 
     @Override
     protected int getContentView() {
@@ -82,7 +87,28 @@ public class ImportWalletFrMnemonicActivity extends BaseActivity {
     @Override
     protected void initView() {
         getToolBar();
+        Intent intent = new Intent(this, DataManageService.class);
+        bindService(intent, conn, BIND_AUTO_CREATE);
+        ivCreateWalletTittle.setBackground(null);
+        ivCreateWalletTittle.setImageResource(R.drawable.anim_create_wallet);
+        animationDrawable = (AnimationDrawable) ivCreateWalletTittle.getDrawable();
+        if(!animationDrawable.isRunning()){
+            animationDrawable.start();
+        }
     }
+
+    private ServiceConnection conn = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder binder) {
+            isBind = true;
+            DataManageService.MyBinder myBinder = (DataManageService.MyBinder) binder;
+            service = myBinder.getService();
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            isBind = false;
+        }
+    };
 
     private void initLoadingCoin() {
         coin_list = new ArrayList<>();
@@ -185,7 +211,15 @@ public class ImportWalletFrMnemonicActivity extends BaseActivity {
         }).compose(RxHelper.pool_main())
                 .subscribe(baseEntity -> {
                     tvCreateWalletNotice.setText(R.string.notice_create_success);
-                    GlideUtils.loadResourceImage(this, R.mipmap.ic_create_wallet_finish, ivCreateWalletTittle);
+
+                    if (animationDrawable.isRunning()){
+                        animationDrawable.stop();
+                    }
+                    ivCreateWalletTittle.setImageResource(R.drawable.anim_create_wallet_successful);
+                    animationDrawable = (AnimationDrawable) ivCreateWalletTittle.getDrawable();
+                    if(!animationDrawable.isRunning()){
+                        animationDrawable.start();
+                    }
                     RxToolUtil.cancel();
                     btnCreateWallet.setVisibility(View.VISIBLE);
                 });
@@ -324,7 +358,7 @@ public class ImportWalletFrMnemonicActivity extends BaseActivity {
 
     @OnClick(R.id.btn_create_wallet)
     public void onViewClicked() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, MainActivityForTab.class);
         startActivity(intent);
         finish();
     }

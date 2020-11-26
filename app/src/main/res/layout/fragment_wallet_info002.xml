@@ -17,17 +17,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+<!-- 如果viewpager改成0缓存的话，此处的列表布局会多出头部，此处的ConstraintLayout布局需要改成别的布局去钱包，改成线性布局是
+可以消除多出来的头部的，但是下面的新手指引的控件，位置需要重新摆放，或者用相对布局，会好点。-->
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:orientation="vertical"
             android:background="@color/white_transparent">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcv_home_wallet"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_weight="1"
                 app:layout_constraintHeight_percent="1"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_bias="0"
                 app:layout_constraintTop_toTopOf="@+id/toolbar_layout"
                 android:background="@color/white"/>
 
@@ -41,6 +47,7 @@
                 android:layout_marginHorizontal="15dp"
                 app:layout_constraintTop_toTopOf="@+id/rcv_home_wallet"
                 android:src="@mipmap/ic_new_guide_step3" />
+
             <ImageView
                 android:id="@+id/iv_new_guide_step3"
                 android:layout_width="42dp"
