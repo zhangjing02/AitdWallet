@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.leeiidesu.permission.PermissionHelper;
 import com.leeiidesu.permission.callback.OnPermissionResultListener;
 import com.tianqi.aitdwallet.R;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 import com.tianqi.baselib.utils.display.ToastUtil;
 import com.tianqi.baselib.utils.eventbus.EventMessage;
 

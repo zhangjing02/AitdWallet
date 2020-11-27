@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.adapter.recycle_adapter.HiddenCoinAdapter;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dbManager.CoinInfoManager;
 import com.tianqi.baselib.widget.CustomClearEditText;

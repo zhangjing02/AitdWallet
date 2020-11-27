@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,14 +23,14 @@ import com.google.android.material.tabs.TabLayout;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.adapter.recycle_adapter.TransRecordAdapter;
+import com.tianqi.aitdwallet.service.DataManageService;
 import com.tianqi.aitdwallet.ui.activity.wallet.btc.BitcoinTransactionActivity002;
 import com.tianqi.aitdwallet.ui.activity.wallet.eth.EthTransactionActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.property.CoinAddressQrActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.usdt.UsdtErc20TransactionActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.usdt.UsdtTransactionActivity002;
-import com.tianqi.aitdwallet.service.DataManageService;
 import com.tianqi.aitdwallet.utils.Constants;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dao.TransactionRecord;
 import com.tianqi.baselib.dao.UserInformation;
@@ -48,11 +49,12 @@ import com.tianqi.baselib.utils.eventbus.EventMessage;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * @author zhangjing
  * @date 2020/11/9
- * @description  交易记录的类，此处还缺少分页加载的逻辑。
+ * @description 交易记录的类，此处还缺少分页加载的逻辑。
  */
 
 public class TransactionRecordActivity extends BaseActivity {
@@ -69,6 +71,8 @@ public class TransactionRecordActivity extends BaseActivity {
     TabLayout tablayoutOut;
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout refreshLayout;
+    LinearLayout layoutSend;
+    LinearLayout layoutReceive;
 
     private String[] titles;
     List<Fragment> fragments;
@@ -90,7 +94,7 @@ public class TransactionRecordActivity extends BaseActivity {
     private LinearLayoutManager mLayoutManager;
 
     private TextView btnTransactionSend, btnTransactionReceive;
-    private  int mCurrentCounter;
+    private int mCurrentCounter;
     private boolean isErr;
     private DataManageService service = null;
     private boolean isBind = false;
@@ -119,19 +123,19 @@ public class TransactionRecordActivity extends BaseActivity {
         record_header = getLayoutInflater().inflate(R.layout.activity_transcation_record_header, (ViewGroup) rcvTransactionRecord.getParent(), false);
         record_header02 = getLayoutInflater().inflate(R.layout.activity_transcation_record_header02, (ViewGroup) rcvTransactionRecord.getParent(), false);
         record_empty = getLayoutInflater().inflate(R.layout.adapter_empty_view, (ViewGroup) rcvTransactionRecord.getParent(), false);
-        ImageView iv_no_data=record_empty.findViewById(R.id.iv_no_data);
+        ImageView iv_no_data = record_empty.findViewById(R.id.iv_no_data);
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) iv_no_data.getLayoutParams();
 
-        WindowManager wm = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
+        WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         int height = wm.getDefaultDisplay().getHeight();
-        if (height<=1920){
-            layoutParams.setMargins(0,40,0,0);
+        if (height <= 1920) {
+            layoutParams.setMargins(0, 40, 0, 0);
             iv_no_data.setLayoutParams(layoutParams);
         }
         recordAdapter.addHeaderView(record_header);
         recordAdapter.addHeaderView(record_header02);
 
-        if (mMessageBeans.size()<=0){
+        if (mMessageBeans.size() <= 0) {
             recordAdapter.addHeaderView(record_empty);
         }
         ImageView ivWalletCoin = record_header.findViewById(R.id.iv_wallet_coin);
@@ -139,6 +143,9 @@ public class TransactionRecordActivity extends BaseActivity {
         TextView tvFiatBalance = record_header.findViewById(R.id.tv_fiat_balance);
         btnTransactionSend = record_header.findViewById(R.id.btn_transaction_send);
         btnTransactionReceive = record_header.findViewById(R.id.btn_transaction_receive);
+        layoutSend = record_header.findViewById(R.id.layout_send);
+        layoutReceive = record_header.findViewById(R.id.layout_receive);
+
         View lineMiddle = record_header.findViewById(R.id.line_middle);
         tablayout = record_header02.findViewById(R.id.tablayout);
         titles = new String[]{getString(R.string.titttle_record_all), getString(R.string.tittle_record_send), getString(R.string.tittle_record_receive), getString(R.string.tittle_record_failure)};
@@ -156,12 +163,12 @@ public class TransactionRecordActivity extends BaseActivity {
         GlideUtils.loadResourceImage(this, walletBtcInfo.getResourceId(), ivWalletCoin);
 
         if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_BTC)) {
-            tvCurrencyBalance.setText(DataReshape.doubleAll(walletBtcInfo.getCoin_totalAmount(), 8 ));
+            tvCurrencyBalance.setText(DataReshape.doubleAll(walletBtcInfo.getCoin_totalAmount(), 8));
         } else if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_OMNI)) {
             tvCurrencyBalance.setText(DataReshape.doubleAll(walletBtcInfo.getCoin_totalAmount(), 4));
-        }else if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_ETH)) {
+        } else if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_ETH)) {
             tvCurrencyBalance.setText(DataReshape.doubleAll(walletBtcInfo.getCoin_totalAmount(), 6));
-        }else if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_ERC20)){
+        } else if (walletBtcInfo.getCoin_name().equals(Constant.TRANSACTION_COIN_NAME_USDT_ERC20)) {
             tvCurrencyBalance.setText(DataReshape.doubleAll(walletBtcInfo.getCoin_totalAmount(), 6));
         }
         UserInformation userInformation = UserInfoManager.getUserInfo();
@@ -173,10 +180,10 @@ public class TransactionRecordActivity extends BaseActivity {
         setListener();
         //刷新
         refreshLayout.setOnRefreshListener(refreshLayout -> {
-          //  initData();
+            //  initData();
             service.getTxRecordData(coin_id);
         });
-        if (mMessageBeans.size()<=0){
+        if (mMessageBeans.size() <= 0) {
             refreshLayout.autoRefresh(500);
         }
         Intent intent = new Intent(this, DataManageService.class);
@@ -260,6 +267,7 @@ public class TransactionRecordActivity extends BaseActivity {
             service = myBinder.getService();
             service.getTxRecordData(coin_id);
         }
+
         @Override
         public void onServiceDisconnected(ComponentName name) {
             isBind = false;
@@ -310,7 +318,7 @@ public class TransactionRecordActivity extends BaseActivity {
             }
         });
 
-        btnTransactionSend.setOnClickListener(view -> {
+        layoutSend.setOnClickListener(view -> {
             switch (coin_tittle) {
                 case Constant.TRANSACTION_COIN_NAME_BTC:
                     // Intent intent=new Intent(this, BitcoinTransactionNativeActivity.class);
@@ -335,7 +343,7 @@ public class TransactionRecordActivity extends BaseActivity {
                     break;
             }
         });
-        btnTransactionReceive.setOnClickListener(view -> {
+        layoutReceive.setOnClickListener(view -> {
             Intent intent = new Intent(this, CoinAddressQrActivity.class);
             intent.putExtra(Constants.TRANSACTION_COIN_ADDRESS, coin_address);
             intent.putExtra(Constants.TRANSACTION_COIN_NAME, walletBtcInfo.getCoin_name());
@@ -410,17 +418,24 @@ public class TransactionRecordActivity extends BaseActivity {
             }
             recordAdapter.setNewData(mMessageBeans);
             refreshLayout.finishRefresh();
-        }else if (event.getType()==EventMessage.TRANSACTION_RECORD_ERROR){
+        } else if (event.getType() == EventMessage.TRANSACTION_RECORD_ERROR) {
             refreshLayout.finishRefresh();
-            ToastUtil.showToast(this,event.getMsg());
-        }else if (event.getType()==EventMessage.TRANSACTION_RECORD_NO_DATA){
+            ToastUtil.showToast(this, event.getMsg());
+        } else if (event.getType() == EventMessage.TRANSACTION_RECORD_NO_DATA) {
             refreshLayout.finishRefresh();
-           LogUtil.i("ttttttttt","没有数据？");
+            LogUtil.i("ttttttttt", "没有数据？");
         }
         if (mMessageBeans.size() <= 0) {
             recordAdapter.addHeaderView(record_empty);
         } else {
             recordAdapter.removeHeaderView(record_empty);
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 }

@@ -10,7 +10,6 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,7 +19,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.scwang.smartrefresh.layout.util.DensityUtil;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.utils.Constants;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dao.TransactionRecord;
 import com.tianqi.baselib.dao.UserInformation;
@@ -35,7 +34,6 @@ import com.tianqi.baselib.rxhttp.base.RxHelper;
 import com.tianqi.baselib.rxhttp.bean.GetTxDetailBean;
 import com.tianqi.baselib.utils.Constant;
 import com.tianqi.baselib.utils.digital.DataReshape;
-import com.tianqi.baselib.utils.display.GlideUtils;
 import com.tianqi.baselib.utils.display.ToastUtil;
 
 import java.text.SimpleDateFormat;
@@ -187,7 +185,7 @@ public class TransactionDetailActivity extends BaseActivity {
                                         tvTransactionFiat.setText("≈ ¥ " + DataReshape.double2int(wallet_btc.getCoin_CNYPrice() * receive_value,2));
                                     }
 
-                                    tvChainRecord.setText("https://btc.com/"+mainCoinFrCoinId.getCoin_address());
+                                    tvChainRecord.setText("https://btc.tokenview.com/cn/address/"+mainCoinFrCoinId.getCoin_address().toLowerCase());
                                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
 
                                     calendar.setTimeInMillis(data.getTime()*1000l);
@@ -225,7 +223,7 @@ public class TransactionDetailActivity extends BaseActivity {
                                         tvTransactionFiat.setText("≈ ¥ " + DataReshape.double2int(wallet_btc.getCoin_CNYPrice() * receive_value,2));
                                     }
 
-                                    tvChainRecord.setText("https://btc.com/"+mainCoinFrCoinId.getCoin_address());
+                                    tvChainRecord.setText("https://btc.tokenview.com/cn/address/"+mainCoinFrCoinId.getCoin_address().toLowerCase());
                                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
 
                                     calendar.setTimeInMillis(data.getTime()*1000l);
@@ -289,7 +287,7 @@ public class TransactionDetailActivity extends BaseActivity {
             }
 
             tvMinerFee.setText(DataReshape.doubleBig(txFrId.getMiner_fee(),8)+"ETH");
-            tvChainRecord.setText("https://cn.etherscan.com/token/"+mainCoinFrCoinId.getCoin_address());
+            tvChainRecord.setText("https://eth.tokenview.com/cn/address/"+mainCoinFrCoinId.getCoin_address().toLowerCase());
 
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
 

@@ -31,7 +31,7 @@ import com.tianqi.aitdwallet.widget.dialog.BottomDialog;
 import com.tianqi.aitdwallet.widget.dialog.ExplainTxMinerFeeDialog;
 import com.tianqi.aitdwallet.widget.dialog.PaymentDialog;
 import com.tianqi.aitdwallet.widget.dialog.SuccessDialog;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dao.TransactionRecord;
 import com.tianqi.baselib.dao.UserInformation;
@@ -59,9 +59,6 @@ import com.tianqi.baselib.utils.display.ToastUtil;
 import com.tianqi.baselib.utils.eventbus.EventMessage;
 import com.tianqi.baselib.widget.CustomSeekBar;
 
-import org.bitcoinj.core.Coin;
-import org.bitcoinj.core.Utils;
-import org.bitcoinj.script.Script;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
@@ -421,6 +418,8 @@ public class UsdtTransactionActivity002 extends BaseActivity {
                         tx_record.setAddress(walletBtcFrAddress.getCoin_address());
                         tx_record.setAmount(Double.valueOf(etPaymentAmount.getText().toString()));
                         tx_record.setTxid(getCreateTransactionBean.getResult());
+                        tx_record.setTargetAddress(etPaymentAddress.getText().toString());
+                        tx_record.setMiner_fee(miner_fee_total);
                         //  tx_record.setId(0);
                         tx_record.setCoin_type(Constant.TRANSACTION_COIN_USDT);//0代表比特币。
                         tx_record.setStatus(Constant.TRANSACTION_STATE_WAITING);

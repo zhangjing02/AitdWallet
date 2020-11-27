@@ -8,7 +8,6 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,7 +23,7 @@ import com.tianqi.aitdwallet.ui.activity.wallet.initwallet.BackupMemoryWordActiv
 import com.tianqi.aitdwallet.ui.activity.wallet.initwallet.SetSecurityPsdActivity;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.aitdwallet.widget.dialog.ForgetPsdNoticeDialog;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dao.UserInformation;
 import com.tianqi.baselib.dao.WalletInfo;

@@ -278,11 +278,14 @@
 
     <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/bitmap_splash002</item>
-
 <!--        <item name="android:windowBackground">@color/white</item>-->
 <!--        <item name="android:windowBackground">@color/white_transparent</item>-->
         <item name="android:windowFullscreen">true</item>
         <item name="windowNoTitle">true</item>
+
+<!--        下面是透明启动应用-->
+<!--        <item name="android:windowIsTranslucent">true</item>-->
+<!--        <item name="android:windowNoTitle">true</item>-->
     </style>
 
 </resources>

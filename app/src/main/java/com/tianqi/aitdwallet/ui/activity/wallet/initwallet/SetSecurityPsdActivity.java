@@ -8,7 +8,6 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -18,13 +17,12 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 
-import com.quincysx.crypto.ethereum.vm.LogInfo;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.ui.activity.MainActivityForTab;
 import com.tianqi.aitdwallet.ui.activity.wallet.importwallet.ImportWalletActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.setting.PrivacyTermsWebActivity;
 import com.tianqi.aitdwallet.utils.Constants;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dao.UserInformation;
 import com.tianqi.baselib.dbManager.CoinInfoManager;
@@ -38,9 +36,6 @@ import com.tianqi.baselib.utils.display.ToastUtil;
 import com.tianqi.baselib.utils.rxtool.RxToolUtil;
 
 import java.util.List;
-
-import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
 
 import butterknife.BindView;
 import butterknife.OnClick;

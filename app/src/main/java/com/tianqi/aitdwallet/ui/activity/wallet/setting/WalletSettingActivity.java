@@ -4,7 +4,6 @@ package com.tianqi.aitdwallet.ui.activity.wallet.setting;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,7 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.utils.Constants;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dbManager.CoinInfoManager;
 import com.tianqi.baselib.utils.Constant;
@@ -22,7 +21,6 @@ import com.tianqi.baselib.utils.display.ToastUtil;
 import com.tianqi.baselib.utils.eventbus.EventMessage;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class WalletSettingActivity extends BaseActivity {

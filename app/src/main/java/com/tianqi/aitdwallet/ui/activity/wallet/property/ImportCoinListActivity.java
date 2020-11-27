@@ -1,7 +1,6 @@
 package com.tianqi.aitdwallet.ui.activity.wallet.property;
 
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,10 +16,9 @@ import com.tianqi.aitdwallet.adapter.pager_adapter.ViewPagerCardAdapter;
 import com.tianqi.aitdwallet.adapter.recycle_adapter.SingleCoinAdapter;
 import com.tianqi.aitdwallet.bean.CurrencyCardBean;
 import com.tianqi.aitdwallet.ui.activity.wallet.setting.CoinHiddenActivity;
-import com.tianqi.aitdwallet.ui.activity.wallet.setting.WalletSettingActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.setting.WalletSettingFrImportActivity;
 import com.tianqi.aitdwallet.utils.Constants;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dao.UserInformation;
 import com.tianqi.baselib.dao.WalletInfo;
@@ -99,8 +97,8 @@ public class ImportCoinListActivity extends BaseActivity {
 
         //刷新
         refreshLayout.setOnRefreshListener(refreshLayout -> {
-            List<CoinInfo> coinFrName = CoinInfoManager.getNoHiddenSpecHdCoinInfo(mList.get(select_index).getCoin_name());
-            mAdapter.setNewData(coinFrName);
+//            List<CoinInfo> coinFrName = CoinInfoManager.getNoHiddenSpecHdCoinInfo(mList.get(select_index).getCoin_name());
+//            mAdapter.setNewData(coinFrName);
             refreshLayout.finishRefresh();
             // initWallet();
         });

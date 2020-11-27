@@ -1,7 +1,5 @@
 package com.tianqi.aitdwallet.ui.activity.wallet.btc;
 
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -13,14 +11,13 @@ import com.quincysx.crypto.bitcoin.BitCoinECKeyPair;
 import com.quincysx.crypto.bitcoin.BitcoinException;
 import com.quincysx.crypto.utils.HexUtils;
 import com.tianqi.aitdwallet.R;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 import com.tianqi.baselib.utils.digital.DataReshape;
 
 import java.math.BigInteger;
 import java.util.Scanner;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class BtcTransTestActivity extends BaseActivity {

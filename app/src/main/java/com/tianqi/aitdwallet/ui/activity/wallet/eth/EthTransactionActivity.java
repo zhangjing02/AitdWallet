@@ -16,11 +16,6 @@ import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.gson.Gson;
-import com.quincysx.crypto.bip32.ValidationException;
-import com.quincysx.crypto.bitcoin.BTCTransaction;
-import com.quincysx.crypto.bitcoin.BitCoinECKeyPair;
-import com.quincysx.crypto.bitcoin.BitcoinException;
-import com.quincysx.crypto.utils.HexUtils;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.ui.activity.address.ContactsAddressManageActivity;
 import com.tianqi.aitdwallet.ui.activity.tool.ScanActivity;
@@ -31,7 +26,7 @@ import com.tianqi.aitdwallet.widget.dialog.BottomDialog;
 import com.tianqi.aitdwallet.widget.dialog.ExplainTxMinerFeeDialog;
 import com.tianqi.aitdwallet.widget.dialog.PaymentDialog;
 import com.tianqi.aitdwallet.widget.dialog.SuccessDialog;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dao.TransactionRecord;
 import com.tianqi.baselib.dao.UserInformation;
@@ -44,9 +39,7 @@ import com.tianqi.baselib.rxhttp.HttpClientUtil;
 import com.tianqi.baselib.rxhttp.RetrofitFactory;
 import com.tianqi.baselib.rxhttp.base.BaseObserver;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
-import com.tianqi.baselib.rxhttp.bean.GetLoadingTxBean;
 import com.tianqi.baselib.rxhttp.bean.GetSimpleRpcBean;
-import com.tianqi.baselib.rxhttp.bean.GetUnspentTxBean;
 import com.tianqi.baselib.utils.ButtonUtils;
 import com.tianqi.baselib.utils.Constant;
 import com.tianqi.baselib.utils.LogUtil;
@@ -60,7 +53,6 @@ import com.tianqi.baselib.utils.eventbus.EventMessage;
 import com.tianqi.baselib.widget.CustomSeekBar;
 
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONObject;
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.ECKeyPair;
@@ -75,7 +67,6 @@ import org.web3j.protocol.http.HttpService;
 import org.web3j.utils.Convert;
 import org.web3j.utils.Numeric;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
@@ -422,15 +413,15 @@ public class EthTransactionActivity extends BaseActivity {
             if (response != null&&!response.equals(Constant.HTTP_ERROR)) {
                 LogUtil.i(TAG, "createTxToBroadcastApi: 看看签名如何？"+response);
                 //可以用btc的域名进行请求，请求参数换成eth的就行。
-//                Response tx_response = HttpClientUtil.getInstance().postFormalEthJson(makeBroadcastTxParams002(response));
-//                if (tx_response != null) {
-//                    if (tx_response.isSuccessful()) {
-//                        ResponseBody body = tx_response.body();
-//                        if (body != null) {
-//                            return body.string();
-//                        }
-//                    }
-//                }
+                Response tx_response = HttpClientUtil.getInstance().postFormalEthJson(makeBroadcastTxParams002(response));
+                if (tx_response != null) {
+                    if (tx_response.isSuccessful()) {
+                        ResponseBody body = tx_response.body();
+                        if (body != null) {
+                            return body.string();
+                        }
+                    }
+                }
             }
             return Constant.HTTP_ERROR;
         }).compose(RxHelper.pool_main())
@@ -448,6 +439,10 @@ public class EthTransactionActivity extends BaseActivity {
                             TransactionRecord tx_record = new TransactionRecord();
                             tx_record.setAddress(walletBtcFrAddress.getCoin_address());
                             tx_record.setAmount(Double.valueOf(etPaymentAmount.getText().toString()));
+                            tx_record.setTargetAddress(etPaymentAddress.getText().toString());
+
+                            double miner_fee=miner_fee_single*GAS_LIMITS/1000000000f;
+                            tx_record.setMiner_fee(miner_fee);
 
                             //  tx_record.setId(0);
                             tx_record.setCoin_type(Constant.TRANSACTION_COIN_ETH);//0代表比特币。

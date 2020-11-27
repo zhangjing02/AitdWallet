@@ -2,7 +2,6 @@ package com.tianqi.aitdwallet.ui.activity.setting;
 
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -10,17 +9,20 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 
+import com.tianqi.aitdwallet.MyApplication;
 import com.tianqi.aitdwallet.R;
-import com.tianqi.aitdwallet.ui.activity.MainActivity;
 import com.tianqi.aitdwallet.ui.activity.MainActivityForTab;
+import com.tianqi.aitdwallet.ui.activity.SplashActivity;
 import com.tianqi.aitdwallet.utils.Constants;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 import com.tianqi.baselib.dao.UserInformation;
 import com.tianqi.baselib.dbManager.UserInfoManager;
-import com.tianqi.baselib.utils.display.LocaleUtils;
+import com.tianqi.aitdwallet.utils.LocaleUtils;
+import com.tianqi.baselib.utils.eventbus.EventMessage;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class LanguageSettingActivity extends BaseActivity {
@@ -95,7 +97,8 @@ public class LanguageSettingActivity extends BaseActivity {
      * 重启当前Activity
      */
     private void restartAct() {
-        finish();
+       finish();
+        // 杀掉进程
         Intent _Intent = new Intent(this, MainActivityForTab.class);
         startActivity(_Intent);
         //清除Activity退出和进入的动画
@@ -110,8 +113,8 @@ public class LanguageSettingActivity extends BaseActivity {
                 switch (languageId) {
                     case Constants.LANGUAGE_CHINA:
                         rbSelectSimpleChinese.setChecked(true);
-                        if (LocaleUtils.needUpdateLocale(this, LocaleUtils.LOCALE_CHINESE)) {
-                            LocaleUtils.updateLocale(this, LocaleUtils.LOCALE_CHINESE);
+                        if (LocaleUtils.needUpdateLocale(getApplication(), LocaleUtils.LOCALE_CHINESE)) {
+                            LocaleUtils.updateLocale(MyApplication.getmContext(), LocaleUtils.LOCALE_CHINESE);
                             userInformation.setLanguageId(Constants.LANGUAGE_CHINA);
                             UserInfoManager.insertOrUpdate(userInformation);
                             restartAct();
@@ -119,8 +122,8 @@ public class LanguageSettingActivity extends BaseActivity {
                         break;
                     case Constants.LANGUAGE_ENGLISH:
                         rbSelectEnglish.setChecked(true);
-                        if (LocaleUtils.needUpdateLocale(this, LocaleUtils.LOCALE_ENGLISH)) {
-                            LocaleUtils.updateLocale(this, LocaleUtils.LOCALE_ENGLISH);
+                        if (LocaleUtils.needUpdateLocale(getApplication(), LocaleUtils.LOCALE_ENGLISH)) {
+                            LocaleUtils.updateLocale(MyApplication.getmContext(), LocaleUtils.LOCALE_ENGLISH);
                             userInformation.setLanguageId(Constants.LANGUAGE_ENGLISH);
                             UserInfoManager.insertOrUpdate(userInformation);
                             restartAct();

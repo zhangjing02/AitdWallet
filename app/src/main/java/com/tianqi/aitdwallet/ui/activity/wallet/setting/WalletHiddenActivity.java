@@ -1,8 +1,5 @@
 package com.tianqi.aitdwallet.ui.activity.wallet.setting;
 
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,19 +9,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.adapter.recycle_adapter.HiddenWalletAdapter;
-import com.tianqi.aitdwallet.adapter.recycle_adapter.HomeWalletAdapter;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 import com.tianqi.baselib.dao.WalletInfo;
 import com.tianqi.baselib.dbManager.WalletInfoManager;
 import com.tianqi.baselib.utils.eventbus.EventMessage;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class WalletHiddenActivity extends BaseActivity {
 

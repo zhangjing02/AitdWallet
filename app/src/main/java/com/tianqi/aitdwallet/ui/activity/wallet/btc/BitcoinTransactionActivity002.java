@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -31,7 +30,7 @@ import com.tianqi.aitdwallet.widget.dialog.BottomDialog;
 import com.tianqi.aitdwallet.widget.dialog.ExplainTxMinerFeeDialog;
 import com.tianqi.aitdwallet.widget.dialog.PaymentDialog;
 import com.tianqi.aitdwallet.widget.dialog.SuccessDialog;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dao.TransactionRecord;
 import com.tianqi.baselib.dao.UserInformation;
@@ -378,7 +377,8 @@ public class BitcoinTransactionActivity002 extends BaseActivity {
                             TransactionRecord tx_record = new TransactionRecord();
                             tx_record.setAddress(walletBtcFrAddress.getCoin_address());
                             tx_record.setAmount(Double.valueOf(etPaymentAmount.getText().toString()));
-
+                            tx_record.setTargetAddress(etPaymentAddress.getText().toString());
+                            tx_record.setMiner_fee(miner_fee_total);
                             //  tx_record.setId(0);
                             tx_record.setCoin_type(Constant.TRANSACTION_COIN_BTC);//0代表比特币。
                             tx_record.setStatus(Constant.TRANSACTION_STATE_WAITING);

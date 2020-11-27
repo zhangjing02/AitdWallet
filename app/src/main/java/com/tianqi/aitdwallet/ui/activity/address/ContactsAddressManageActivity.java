@@ -1,6 +1,5 @@
 package com.tianqi.aitdwallet.ui.activity.address;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -12,7 +11,7 @@ import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.adapter.list_adapter.ContactsAddressAdapter;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.aitdwallet.widget.dialog.SelectCoinDialog;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dao.ContactsInfo;
 import com.tianqi.baselib.dbManager.ContactsInfoManager;

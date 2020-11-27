@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.aitdwallet.utils.eth.EthWalletManager;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dbManager.CoinInfoManager;
 import com.tianqi.baselib.rxhttp.RetrofitFactory;

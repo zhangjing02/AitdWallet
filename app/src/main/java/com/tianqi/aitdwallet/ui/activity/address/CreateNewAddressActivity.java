@@ -14,7 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.ui.activity.tool.ScanActivity;
 import com.tianqi.aitdwallet.utils.Constants;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 import com.tianqi.baselib.dao.ContactsInfo;
 import com.tianqi.baselib.dbManager.ContactsInfoManager;
 import com.tianqi.baselib.utils.Constant;
@@ -121,7 +121,7 @@ public class CreateNewAddressActivity extends BaseActivity {
                     switch (coinName){
                         case Constant.TRANSACTION_COIN_NAME_BTC:
                         case Constant.TRANSACTION_COIN_NAME_USDT_OMNI:
-                            if (etInputAddress.getText().toString().length()!=34){
+                            if (etInputAddress.getText().toString().trim().length()!=34){
                                 ToastUtil.showToast(this,getString(R.string.notice_address_length_error));
                                 return;
                             }else if (!isBTCValidAddress(etInputAddress.getText().toString())){
@@ -131,7 +131,7 @@ public class CreateNewAddressActivity extends BaseActivity {
                             break;
                         case Constant.TRANSACTION_COIN_NAME_ETH:
                         case Constant.TRANSACTION_COIN_NAME_USDT_ERC20:
-                            if (etInputAddress.getText().toString().length()!=42){
+                            if (etInputAddress.getText().toString().trim().length()!=42){
                                 ToastUtil.showToast(this,getString(R.string.notice_address_length_error));
                                 return;
                             }if (!isValidAddress(etInputAddress.getText().toString())||!isETHValidAddress(etInputAddress.getText().toString())){

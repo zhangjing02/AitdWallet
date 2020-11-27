@@ -18,7 +18,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.utils.Constants;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 import com.tianqi.baselib.utils.Constant;
 import com.tianqi.baselib.utils.display.CodeEncoder;
 import com.tianqi.baselib.utils.display.GlideUtils;

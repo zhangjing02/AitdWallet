@@ -1,22 +1,18 @@
 package com.tianqi.aitdwallet.ui.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.tianqi.aitdwallet.R;
-import com.tianqi.aitdwallet.adapter.pager_adapter.GuidePageViewPageAdapter;
 import com.tianqi.aitdwallet.adapter.pager_adapter.GuidePageViewPageAdapter02;
 import com.tianqi.aitdwallet.ui.activity.wallet.initwallet.BackupMemoryWordActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.initwallet.SetSecurityPsdActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.setting.VerifySecurityPsdActivity;
 import com.tianqi.aitdwallet.utils.Constants;
-import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.UserInformation;
 import com.tianqi.baselib.dao.WalletInfo;
 import com.tianqi.baselib.dbManager.UserInfoManager;
@@ -30,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class GuidePageActivity extends BaseActivity {

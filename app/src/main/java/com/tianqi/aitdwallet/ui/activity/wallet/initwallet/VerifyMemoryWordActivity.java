@@ -3,7 +3,6 @@ package com.tianqi.aitdwallet.ui.activity.wallet.initwallet;
 
 import android.content.Intent;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -16,7 +15,7 @@ import com.google.gson.reflect.TypeToken;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.adapter.list_adapter.VerifyMnemonicWordAdapter;
 import com.tianqi.aitdwallet.bean.MnemonicWordBean;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 import com.tianqi.baselib.dao.UserInformation;
 import com.tianqi.baselib.dbManager.UserInfoManager;
 import com.tianqi.baselib.utils.ButtonUtils;

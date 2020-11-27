@@ -93,20 +93,24 @@
         <activity android:name=".ui.activity.GuidePageActivity" />
         <activity android:name=".ui.activity.wallet.record.TransactionRecordScrollActivity" />
         <activity android:name=".ui.activity.wallet.setting.PrivacyTermsWebActivity" />
-        <activity android:name=".ui.activity.wallet.btc.BitcoinTransactionActivity002" />
-        <activity android:name=".ui.activity.wallet.usdt.UsdtTransactionActivity002" />
+        <activity android:name=".ui.activity.wallet.btc.BitcoinTransactionActivity002"
+            android:windowSoftInputMode="adjustNothing"/>
+        <activity android:name=".ui.activity.wallet.usdt.UsdtTransactionActivity002"
+            android:windowSoftInputMode="adjustNothing"/>
         <activity android:name=".ui.activity.wallet.record.TransactionRecordActivity" />
         <activity android:name=".ui.activity.wallet.setting.ExportKeystoreActivity" />
         <activity
             android:name=".ui.activity.wallet.importwallet.ImportEthCoinActivity"
             android:windowSoftInputMode="adjustNothing" />
         <activity android:name=".ui.activity.wallet.eth.EthTransactionNativeActivity" />
-        <activity android:name=".ui.activity.wallet.eth.EthTransactionActivity" />
+        <activity android:name=".ui.activity.wallet.eth.EthTransactionActivity"
+            android:windowSoftInputMode="adjustNothing"/>
         <activity android:name=".ui.activity.setting.LanguageSettingActivity" />
         <activity
             android:name=".ui.activity.wallet.importwallet.ImportUsdtErc20CoinActivity"
             android:windowSoftInputMode="adjustNothing" />
-        <activity android:name=".ui.activity.wallet.usdt.UsdtErc20TransactionActivity" />
+        <activity android:name=".ui.activity.wallet.usdt.UsdtErc20TransactionActivity"
+            android:windowSoftInputMode="adjustNothing"/>
         <activity android:name=".ui.activity.wallet.property.ImportCoinListActivity" />
 
         <service android:name=".service.DataManageService" />

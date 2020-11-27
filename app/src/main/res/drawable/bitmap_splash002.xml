@@ -6,9 +6,8 @@
         </shape>
     </item>
     <item
-        android:bottom="160dp"
-        >
+        android:bottom="140dp">
         <bitmap android:src="@mipmap/ic_splash_start_logo"
-            android:gravity="center"/>
+            android:tileMode="disabled" android:gravity="center"/>
     </item>
 </layer-list>

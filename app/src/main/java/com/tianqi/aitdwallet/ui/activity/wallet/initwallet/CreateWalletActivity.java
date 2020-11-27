@@ -24,7 +24,7 @@ import com.tianqi.aitdwallet.ui.activity.MainActivityForTab;
 import com.tianqi.aitdwallet.service.DataManageService;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.aitdwallet.utils.WalletUtils;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dao.CoinRateInfo;
 import com.tianqi.baselib.dao.UserInformation;
@@ -36,7 +36,6 @@ import com.tianqi.baselib.dbManager.WalletInfoManager;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
 import com.tianqi.baselib.utils.Constant;
 import com.tianqi.baselib.utils.LogUtil;
-import com.tianqi.baselib.utils.display.GlideUtils;
 import com.tianqi.baselib.utils.rxtool.RxToolUtil;
 
 import java.util.ArrayList;

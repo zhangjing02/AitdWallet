@@ -11,7 +11,6 @@ import com.tianqi.aitdwallet.ui.activity.wallet.setting.VerifySecurityPsdActivit
 import com.tianqi.aitdwallet.ui.activity.wallet.initwallet.BackupMemoryWordActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.initwallet.SetSecurityPsdActivity;
 import com.tianqi.aitdwallet.utils.Constants;
-import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.UserInformation;
 import com.tianqi.baselib.dao.WalletInfo;
 import com.tianqi.baselib.dbManager.UserInfoManager;

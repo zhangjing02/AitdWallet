@@ -45,6 +45,7 @@
         android:layout_marginTop="40dp"
         android:text="@string/text_version_log_tag"
         android:textSize="15sp"
+        android:visibility="gone"
         android:textColor="@color/text_main_black"
         android:gravity="center_vertical"
         android:drawableRight="@mipmap/ic_indicator_grey_right"

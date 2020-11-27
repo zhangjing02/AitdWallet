@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.net.Uri;
-import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,16 +13,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.tianqi.aitdwallet.R;
-import com.tianqi.aitdwallet.ui.activity.wallet.property.CoinAddressQrActivity;
 import com.tianqi.aitdwallet.utils.statusbar.StatusBarCompat;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 import com.tianqi.baselib.utils.display.CodeEncoder;
 import com.tianqi.baselib.utils.display.GlideUtils;
 
 import java.util.Calendar;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.Observer;

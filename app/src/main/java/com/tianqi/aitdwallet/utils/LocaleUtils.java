@@ -1,12 +1,14 @@
-package com.tianqi.baselib.utils.display;
+package com.tianqi.aitdwallet.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Build;
 import android.util.DisplayMetrics;
 
 import com.google.gson.Gson;
+import com.tianqi.aitdwallet.MyApplication;
 
 import java.util.Locale;
 
@@ -107,6 +109,8 @@ public class LocaleUtils {
             pContext.getResources().updateConfiguration(_Configuration, _DisplayMetrics);
             saveUserLocale(pContext, pNewUserLocale);
         }
+
+        MyApplication.setmContext(pContext);
     }
     /**
      * 判断需不需要更新

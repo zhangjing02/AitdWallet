@@ -19,7 +19,7 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar_layout"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginLeft="15dp"
-        android:text="名称"
+        android:text="@string/text_addraess_name_tag"
         android:textSize="16sp"
         android:textColor="@color/text_main_black"
         android:layout_marginTop="20dp"/>
@@ -44,7 +44,7 @@
         app:layout_constraintTop_toBottomOf="@+id/et_input_address_name"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginLeft="15dp"
-        android:text="地址"
+        android:text="@string/text_address_content_tag"
         android:textSize="16sp"
         android:textColor="@color/text_main_black"
         android:layout_marginTop="20dp"/>

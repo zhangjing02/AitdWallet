@@ -43,6 +43,7 @@
 
 
     <LinearLayout
+        android:id="@+id/layout_send"
         android:layout_width="0dp"
         android:layout_height="47dp"
         app:layout_constraintWidth_percent="0.4"

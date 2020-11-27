@@ -1,6 +1,5 @@
 package com.tianqi.aitdwallet.ui.activity.wallet.setting;
 
-import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
@@ -11,15 +10,12 @@ import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 
 import com.tianqi.aitdwallet.R;
-import com.tianqi.aitdwallet.utils.Constants;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 import com.tianqi.baselib.dao.UserInformation;
 import com.tianqi.baselib.dbManager.UserInfoManager;
 import com.tianqi.baselib.utils.ButtonUtils;
-import com.tianqi.baselib.utils.LogUtil;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class PasswordPromptActivity extends BaseActivity {

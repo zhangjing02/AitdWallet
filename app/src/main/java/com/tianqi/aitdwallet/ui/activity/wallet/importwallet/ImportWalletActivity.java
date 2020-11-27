@@ -1,7 +1,6 @@
 package com.tianqi.aitdwallet.ui.activity.wallet.importwallet;
 
 
-import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,18 +10,15 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.tabs.TabLayout;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.adapter.pager_adapter.FragmentAdapter;
-import com.tianqi.aitdwallet.ui.fragment.Fragment1;
 import com.tianqi.aitdwallet.ui.fragment.importwallet.ImportBulkWalletFragment;
 import com.tianqi.aitdwallet.ui.fragment.importwallet.ImportSingleWalletFragment;
-import com.tianqi.aitdwallet.utils.Constants;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 import com.tianqi.baselib.utils.widget.NoScrollViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class ImportWalletActivity extends BaseActivity {
 

@@ -16,7 +16,7 @@ import com.tianqi.aitdwallet.ui.activity.wallet.eth.EthTransactionActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.usdt.UsdtErc20TransactionActivity;
 import com.tianqi.aitdwallet.ui.activity.wallet.usdt.UsdtTransactionActivity002;
 import com.tianqi.aitdwallet.utils.Constants;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dbManager.CoinInfoManager;
 import com.tianqi.baselib.utils.Constant;

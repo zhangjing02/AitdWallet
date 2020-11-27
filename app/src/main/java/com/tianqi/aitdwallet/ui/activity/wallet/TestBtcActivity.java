@@ -25,7 +25,7 @@ import com.quincysx.crypto.bip44.CoinPairDerive;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.bean.GetUtxoBean;
 import com.tianqi.baselib.rxhttp.HttpClientUtil;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
 import com.tianqi.baselib.utils.LogUtil;
 

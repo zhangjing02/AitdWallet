@@ -1,8 +1,6 @@
 package com.tianqi.aitdwallet.ui.activity.wallet.setting;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,7 +14,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.adapter.recycle_adapter.WalletManageAdapter;
 import com.tianqi.aitdwallet.utils.Constants;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dbManager.CoinInfoManager;
 import com.tianqi.baselib.utils.eventbus.EventMessage;
@@ -24,7 +22,6 @@ import com.tianqi.baselib.utils.eventbus.EventMessage;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class WalletManageActivity extends BaseActivity {

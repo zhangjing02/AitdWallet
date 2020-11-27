@@ -10,16 +10,13 @@ import androidx.appcompat.widget.Toolbar;
 import com.google.gson.Gson;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.adapter.list_adapter.VersionLogAdapter;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 import com.tianqi.baselib.rxhttp.HttpClientUtil;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
-import com.tianqi.baselib.rxhttp.bean.GetUnspentTxBean;
 import com.tianqi.baselib.rxhttp.bean.GetVersionLogBean;
 import com.tianqi.baselib.utils.Constant;
-import com.tianqi.baselib.utils.digital.DataReshape;
 import com.tianqi.baselib.utils.display.ToastUtil;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 

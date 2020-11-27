@@ -57,8 +57,8 @@
 
             <ImageView
                 android:id="@+id/iv_property"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:src="@mipmap/ic_main_tab_property_blue" />
 
             <TextView

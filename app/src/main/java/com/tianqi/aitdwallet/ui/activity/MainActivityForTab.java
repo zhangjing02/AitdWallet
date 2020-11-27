@@ -22,7 +22,6 @@ import com.tianqi.aitdwallet.ui.fragment.WalletFragment002;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.aitdwallet.widget.dialog.FunctionNotOpenDialog;
 import com.tianqi.aitdwallet.widget.dialog.VersionUpdateDialog;
-import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.UserInformation;
 import com.tianqi.baselib.dbManager.PrefUtils;
 import com.tianqi.baselib.dbManager.UserInfoManager;
@@ -78,6 +77,7 @@ public class MainActivityForTab extends BaseActivity {
     private ArrayList<Fragment> fragments = new ArrayList<>();
     private WalletFragment002 fragment1;
     public static boolean isForeground = false;
+    private int bottom_bar_index;
 
     @Override
     protected int getContentView() {
@@ -87,7 +87,7 @@ public class MainActivityForTab extends BaseActivity {
     @Override
     protected void initView() {
         titles = new String[]{getString(R.string.tittle_property), getString(R.string.tittle_financial), getString(R.string.tittle_browse), getString(R.string.tittle_setting)};
-       // StatusBarCompat.translucentStatusBar(MainActivityForTab.this, true);
+        // StatusBarCompat.translucentStatusBar(MainActivityForTab.this, true);
         fragment1 = new WalletFragment002();
         fragments.add(fragment1);
         for (int i = 0; i < titles.length - 2; i++) {
@@ -112,7 +112,7 @@ public class MainActivityForTab extends BaseActivity {
             }
         };
         secondViewPager.setAdapter(adapter);
-        EventMessage eventMessage=new EventMessage();
+        EventMessage eventMessage = new EventMessage();
         eventMessage.setType(EventMessage.CLOSE_ACTIVITY);
         EventBus.getDefault().post(eventMessage);
     }
@@ -215,6 +215,7 @@ public class MainActivityForTab extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rb_property:
+                bottom_bar_index = 0;
                 setCheck(0);
                 secondViewPager.setCurrentItem(0, false);
                 //   StatusBarCompat.translucentStatusBar(MainActivity.this, true);
@@ -245,6 +246,7 @@ public class MainActivityForTab extends BaseActivity {
                 //   ToastUtil.showSimpleToast(this,getString(R.string.notice_function_not_open));
                 break;
             case R.id.rb_setting:
+                bottom_bar_index = 3;
                 setCheck(3);
                 secondViewPager.setCurrentItem(3, false);
                 //  StatusBarCompat.translucentStatusBar(MainActivity.this, false);
@@ -256,9 +258,9 @@ public class MainActivityForTab extends BaseActivity {
     private void setCheck(int position) {
         switch (position) {
             case 0:
-                GlideUtils.loadGiftResourceImage(this,R.mipmap.animator_main_tab_property,ivProperty);
+                GlideUtils.loadGiftResourceImage(this, R.mipmap.animator_main_tab_property, ivProperty);
                 tvProperty.setTextColor(getResources().getColor(R.color.text_main_blue));
-                GlideUtils.loadResourceImage(this,R.mipmap.ic_main_tab_setting_grey,ivSetting);
+                GlideUtils.loadResourceImage(this, R.mipmap.ic_main_tab_setting_grey, ivSetting);
                 tvSetting.setTextColor(getResources().getColor(R.color.text_main2_black));
 
                 break;
@@ -279,14 +281,30 @@ public class MainActivityForTab extends BaseActivity {
 //                rbExchange.setChecked(false);
 //                rbFinancial.setChecked(false);
 //                rbSetting.setChecked(true);
-                GlideUtils.loadGiftResourceImage(this,R.mipmap.animator_main_tab_setting,ivSetting);
+                GlideUtils.loadGiftResourceImage(this, R.mipmap.animator_main_tab_setting, ivSetting);
                 tvSetting.setTextColor(getResources().getColor(R.color.text_main_blue));
 
-                GlideUtils.loadResourceImage(this,R.mipmap.ic_main_tab_property_grey,ivProperty);
+                GlideUtils.loadResourceImage(this, R.mipmap.ic_main_tab_property_grey, ivProperty);
                 tvProperty.setTextColor(getResources().getColor(R.color.text_main2_black));
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    public void onDataSynEvent(EventMessage event) {
+        if (event.getType() == EventMessage.GLIDE_GIF_FINISH) {
+            switch (bottom_bar_index) {
+                case 0:
+                    GlideUtils.loadResourceImage(this, R.mipmap.ic_main_tab_property_blue, ivProperty);
+                    break;
+                case 3:
+                    GlideUtils.loadResourceImage(this, R.mipmap.ic_main_tab_setting_blue, ivSetting);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -325,6 +343,5 @@ public class MainActivityForTab extends BaseActivity {
         }
         return super.dispatchTouchEvent(ev);
     }
-
 
 }

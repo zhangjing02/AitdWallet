@@ -1,4 +1,4 @@
-package com.tianqi.baselib.base;
+package com.tianqi.aitdwallet.ui.activity;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -12,6 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
+import com.tianqi.aitdwallet.R;
 import com.tianqi.baselib.utils.display.LoadingDialogUtils;
 import com.tianqi.baselib.utils.eventbus.EventMessage;
 
@@ -71,6 +73,15 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //this.getWindow().getDecorView().setBackground(null);
+
+        ClassicsHeader classicsHeader = new ClassicsHeader(this);//.setTimeFormat(new DynamicTimeFormat("更新于 %s"));//指定为经典Header，默认是 贝塞尔雷达Header
+        ClassicsHeader.REFRESH_HEADER_PULLING = getString(R.string.srl_header_pulling);
+        ClassicsHeader.REFRESH_HEADER_REFRESHING = getString(R.string.srl_header_refreshing);
+        ClassicsHeader.REFRESH_HEADER_RELEASE = getString(R.string.srl_header_release);
+        ClassicsHeader.REFRESH_HEADER_FINISH = getString(R.string.srl_header_finish);
+        ClassicsHeader.REFRESH_HEADER_FAILED = getString(R.string.srl_header_failed);
+        ClassicsHeader.REFRESH_HEADER_UPDATE = getString(R.string.srl_header_update);
+
         if (isAllowFullScreen) {
             setFullScreen();
         }

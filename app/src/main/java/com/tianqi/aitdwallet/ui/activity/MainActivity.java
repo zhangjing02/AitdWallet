@@ -1,57 +1,41 @@
 package com.tianqi.aitdwallet.ui.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.app.hubert.guide.NewbieGuide;
-import com.app.hubert.guide.model.GuidePage;
-import com.google.android.material.tabs.TabLayout;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.ui.fragment.Fragment1;
 import com.tianqi.aitdwallet.ui.fragment.SettingFragment;
-import com.tianqi.aitdwallet.ui.fragment.WalletFragment;
 import com.tianqi.aitdwallet.ui.fragment.WalletFragment002;
 import com.tianqi.aitdwallet.utils.Constants;
 import com.tianqi.aitdwallet.utils.statusbar.StatusBarCompat;
 import com.tianqi.aitdwallet.widget.dialog.FunctionNotOpenDialog;
-import com.tianqi.aitdwallet.widget.dialog.ScreenShotNoticeDialog;
 import com.tianqi.aitdwallet.widget.dialog.VersionUpdateDialog;
-import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.UserInformation;
-import com.tianqi.baselib.dao.WalletInfo;
 import com.tianqi.baselib.dbManager.PrefUtils;
 import com.tianqi.baselib.dbManager.UserInfoManager;
 import com.tianqi.baselib.rxhttp.RetrofitFactory;
 import com.tianqi.baselib.rxhttp.base.BaseObserver;
 import com.tianqi.baselib.rxhttp.base.RxHelper;
-import com.tianqi.baselib.rxhttp.bean.GetFormalUtxoBean;
 import com.tianqi.baselib.rxhttp.bean.GetNewVersionBean;
-import com.tianqi.baselib.utils.LogUtil;
-import com.tianqi.baselib.utils.digital.DataReshape;
 import com.tianqi.baselib.utils.display.ToastUtil;
 import com.tianqi.baselib.utils.widget.NoScrollViewPager;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity {
@@ -309,4 +293,6 @@ public class MainActivity extends BaseActivity {
         }
         return super.dispatchTouchEvent(ev);
     }
+
+
 }

@@ -1,22 +1,19 @@
 package com.tianqi.aitdwallet.ui.activity;
 
-import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
-import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.utils.Constants;
-import com.tianqi.baselib.base.BaseActivity;
 import com.tianqi.baselib.dao.CoinRateInfo;
 import com.tianqi.baselib.dao.UserInformation;
 import com.tianqi.baselib.dao.WalletInfo;
@@ -28,15 +25,13 @@ import com.tianqi.baselib.rxhttp.base.RxHelper;
 import com.tianqi.baselib.rxhttp.bean.CoinRateBean;
 import com.tianqi.baselib.utils.Constant;
 import com.tianqi.baselib.utils.LogUtil;
-import com.tianqi.baselib.utils.display.GlideUtils;
-import com.tianqi.baselib.utils.display.LocaleUtils;
+import com.tianqi.aitdwallet.utils.LocaleUtils;
 import com.tianqi.baselib.widget.GifView;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
@@ -48,14 +43,14 @@ public class SplashActivity extends BaseActivity {
     ImageView ivStartLogo;
     @BindView(R.id.layout_splash)
     ConstraintLayout layoutSplash;
-//    @BindView(R.id.lottie_logo)
+    //    @BindView(R.id.lottie_logo)
 //    LottieAnimationView lottieLogo;
     private UserInformation userInfo;
     private int duration;
 
     @Override
     protected int getContentView() {
-    //    this.getWindow().getDecorView().setBackground(null);
+        //    this.getWindow().getDecorView().setBackground(null);
         return R.layout.activity_splash;
     }
 
@@ -66,10 +61,11 @@ public class SplashActivity extends BaseActivity {
         duration = ivLogo.getMovie().duration();
         ivLogo.getMovie().isOpaque();
         ivStartLogo.setVisibility(View.GONE);
-       //  GlideUtils.loadGiftResourceImage(this, R.drawable.animator_splash_logo, ivLogo);
+        //  GlideUtils.loadGiftResourceImage(this, R.drawable.animator_splash_logo, ivLogo);
         userInfo = UserInfoManager.getUserInfo();
         if (userInfo != null) {
             int languageId = userInfo.getLanguageId();
+            Log.i("tttttttttt", "initView:我们看要设置成啥？"+languageId);
             if (languageId == Constants.LANGUAGE_CHINA) {  //设置语言，如果系统的语言和app设置的语言不统一，我们就设置成app需要的语言。
                 if (LocaleUtils.needUpdateLocale(SplashActivity.this, LocaleUtils.LOCALE_CHINESE)) {
                     LocaleUtils.updateLocale(this, LocaleUtils.LOCALE_CHINESE);
@@ -240,7 +236,31 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-
+        WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        // LogUtil.i("ttttttttt","是否全名屏？"+getStatusBarHeight(this));
+        getWindow().getDecorView().post(mRunnable);
     }
 
+
+    public static int getStatusBarHeight(Context context) {
+        int result = 0;
+        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = context.getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
+    private Runnable mRunnable = new Runnable() {
+        @Override
+        public void run() {
+            int decorViewHeight = getWindow().getDecorView().getHeight();
+            DisplayMetrics dm = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(dm);
+            int useableScreenHeight = dm.heightPixels;
+            boolean hasNavigation = decorViewHeight != useableScreenHeight;
+            LogUtil.i("ttttttttt", "002是否全名屏？" + hasNavigation);
+        }
+
+    };
 }

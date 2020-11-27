@@ -60,6 +60,7 @@
         android:paddingLeft="22dp"
         android:paddingRight="20dp"
         android:text="@string/btn_my_message_text"
+        android:visibility="gone"
         android:textColor="@color/text_main_black"
         android:textSize="15sp"
         app:layout_constraintTop_toBottomOf="@+id/tv_address_manage" />

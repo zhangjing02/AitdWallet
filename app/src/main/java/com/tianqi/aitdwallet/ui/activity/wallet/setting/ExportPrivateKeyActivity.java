@@ -4,12 +4,7 @@ import android.app.Dialog;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,20 +13,17 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.tabs.TabLayout;
 import com.scwang.smartrefresh.layout.util.DensityUtil;
-import com.scwang.smartrefresh.layout.util.DesignUtil;
 import com.tianqi.aitdwallet.R;
 import com.tianqi.aitdwallet.utils.Constants;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dao.UserInformation;
 import com.tianqi.baselib.dbManager.CoinInfoManager;
 import com.tianqi.baselib.dbManager.UserInfoManager;
-import com.tianqi.baselib.utils.LogUtil;
 import com.tianqi.baselib.utils.display.CodeEncoder;
 import com.tianqi.baselib.utils.display.ToastUtil;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class ExportPrivateKeyActivity extends BaseActivity {
@@ -105,7 +97,7 @@ public class ExportPrivateKeyActivity extends BaseActivity {
             layoutExportKeyNotice.setLayoutParams(layoutParams);
 
             LinearLayout.LayoutParams layoutParams002 = (LinearLayout.LayoutParams) layoutExportQrNotice.getLayoutParams();
-            layoutParams002.height=  DensityUtil.dp2px(190f);
+            layoutParams002.height=  DensityUtil.dp2px(200f);
             layoutExportQrNotice.setLayoutParams(layoutParams002);
         }
 

@@ -34,6 +34,7 @@ public class EventMessage {
     public static final int ADD_ADDRESS_UPDATE = 607;//添加了通讯录地址
     public static final int SELECT_ADDRESS_UPDATE = 608;//选择了一个地址。
     public static final int HOME_WALLET_BALANCE_UPDATE = 609;//主页余额刷新。
+    public static final int GLIDE_GIF_FINISH = 610;//gif加载完成。
 
 
 

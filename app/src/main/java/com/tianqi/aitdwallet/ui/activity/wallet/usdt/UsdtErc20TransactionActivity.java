@@ -26,7 +26,7 @@ import com.tianqi.aitdwallet.widget.dialog.BottomDialog;
 import com.tianqi.aitdwallet.widget.dialog.ExplainTxMinerFeeDialog;
 import com.tianqi.aitdwallet.widget.dialog.PaymentDialog;
 import com.tianqi.aitdwallet.widget.dialog.SuccessDialog;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dao.TransactionRecord;
 import com.tianqi.baselib.dao.UserInformation;
@@ -289,7 +289,7 @@ public class UsdtErc20TransactionActivity extends BaseActivity {
     }
 
     private void getToolBar() {
-        toolbarTitle.setText(R.string.eth_transaction_tittle);
+        toolbarTitle.setText(R.string.erc20_transaction_tittle);
         toolbar.setNavigationOnClickListener(v -> {
             finish();//返回
         });
@@ -461,6 +461,7 @@ public class UsdtErc20TransactionActivity extends BaseActivity {
                             TransactionRecord tx_record = new TransactionRecord();
                             tx_record.setAddress(walletBtcFrAddress.getCoin_address());
                             tx_record.setAmount(Double.valueOf(etPaymentAmount.getText().toString()));
+                            tx_record.setTargetAddress(etPaymentAddress.getText().toString());
 
                             //  tx_record.setId(0);
                             tx_record.setCoin_type(Constant.TRANSACTION_COIN_ETH);//0代表比特币。
@@ -475,6 +476,8 @@ public class UsdtErc20TransactionActivity extends BaseActivity {
                             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
                             tx_record.setTimeStr(format.format(calendar.getTime()));
 
+                            double miner_fee=miner_fee_single*GAS_LIMITS/1000000000f;
+                            tx_record.setMiner_fee(miner_fee);
                             tx_record.setUnit(Constant.COIN_UNIT_USDT);
                             TransactionRecordManager.insertOrUpdate(tx_record);
                             EventMessage message = new EventMessage();

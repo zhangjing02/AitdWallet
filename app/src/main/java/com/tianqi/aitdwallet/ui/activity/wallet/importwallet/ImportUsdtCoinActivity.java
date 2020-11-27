@@ -33,7 +33,7 @@ import com.tianqi.aitdwallet.ui.activity.wallet.setting.PrivacyTermsWebActivity;
 import com.tianqi.aitdwallet.utils.MnemonicUtils;
 import com.tianqi.aitdwallet.utils.WalletUtils;
 import com.tianqi.aitdwallet.widget.dialog.ExplainPrivateKeyDialog;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 import com.tianqi.baselib.dao.CoinInfo;
 import com.tianqi.baselib.dao.CoinRateInfo;
 import com.tianqi.baselib.dao.UserInformation;

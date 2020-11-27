@@ -13,6 +13,7 @@
 	<string name="btc_transaction_tittle">BTC Transfer</string>
 	<string name="usdt_transaction_tittle">USDT Transfer</string>
 	<string name="eth_transaction_tittle">ETH Transfer</string>
+	<string name="erc20_transaction_tittle">USDT-ERC20 Transfer</string>
 	<string name="input_receive_address_notice">Please enter the address </string>
 	<string name="input_transaction_amount">Please enter the transfer amount</string>
 	<string name="notice_trans_to_me_refuse">Please don\'t transfer money to yourself</string>
@@ -299,4 +300,19 @@
 	<string name="tittle_system_message">System Message</string>
 	<string name="tittle_message_center">Message Center</string>
 	<string name="btn_all_read_text">All Read</string>
+
+	<string name="srl_header_pulling">Drop down to refresh</string>
+	<string name="srl_header_refreshing">Refreshing...</string>
+	<string name="srl_header_release">Release to refresh now</string>
+	<string name="srl_header_finish">Refresh Completed</string>
+	<string name="srl_header_failed">Refresh Failed</string>
+	<string name="srl_header_update">\'Last Update\' M-d HH:mm</string>
+	<string name="srl_footer_pulling">Pull up to load more</string>
+	<string name="srl_footer_release">Release to load now</string>
+	<string name="srl_footer_loading">Loading ...</string>
+	<string name="srl_footer_finish">Loading Completed</string>
+	<string name="srl_footer_failed">Loading Failed</string>
+	<string name="srl_footer_nothing">No more data</string>
+	<string name="text_addraess_name_tag">Name</string>
+	<string name="text_address_content_tag">Address</string>
 </resources>

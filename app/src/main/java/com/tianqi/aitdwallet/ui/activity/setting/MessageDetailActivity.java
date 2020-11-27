@@ -1,17 +1,14 @@
 package com.tianqi.aitdwallet.ui.activity.setting;
 
-import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 
 import com.tianqi.aitdwallet.R;
-import com.tianqi.baselib.base.BaseActivity;
+import com.tianqi.aitdwallet.ui.activity.BaseActivity;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class MessageDetailActivity extends BaseActivity {
 
